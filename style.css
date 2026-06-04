@@ -6,7 +6,7 @@
   --ink: #1a1a1a;
   --ink-muted: #666;
   --accent: #FF5E32;
-  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
   --serif: 'Newsreader', Georgia, serif;
   --page-max: 375px;
   --gap: 1.5rem;
@@ -34,7 +34,12 @@ body {
 }
 
 /* ─── Typography ─────────────────────────────────────────── */
-h1, h2, .mono {
+h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+h2, .mono {
   font-family: var(--mono);
   font-weight: 400;
 }
