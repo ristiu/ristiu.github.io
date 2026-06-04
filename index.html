@@ -81,37 +81,15 @@
   <script src="data/projects.js"></script>
   <script>
     const list = document.getElementById('portfolio-list');
-    const items = [];
-
-    // First project is top-level; the rest are nested under it
-    projects.forEach((p, i) => {
-      const isFirst = i === 0;
-      const isLast  = i === projects.length - 1;
-
-      if (isFirst) {
-        items.push(`<li>
-          <span class="branch">├──</span>
-          <a href="project.html?id=${p.id}">${p.title}</a>
-        </li>`);
-        if (p.subtitle) items.push(`<li>
-          <span class="branch" style="opacity:.35;">│</span>
-          <span class="tree-sub">&nbsp;&nbsp;${p.subtitle}</span>
-        </li>`);
-      } else {
-        const childPrefix = isLast ? '└──' : '├──';
-        const childPipe   = isLast ? '&nbsp;&nbsp;&nbsp;' : '│';
-        items.push(`<li>
-          <span class="branch" style="opacity:.35;">│</span>
-          <span class="branch">&nbsp;&nbsp;${childPrefix}</span>
-          <a href="project.html?id=${p.id}">${p.title}</a>
-        </li>`);
-        if (p.subtitle) items.push(`<li>
-          <span class="branch" style="opacity:.35;">│&nbsp;&nbsp;${childPipe}</span>
-          <span class="tree-sub">&nbsp;&nbsp;${p.subtitle}</span>
-        </li>`);
-      }
+    const items = projects.map((p, i) => {
+      const isLast = i === projects.length - 1;
+      const prefix = isLast ? '└──' : '├──';
+      const label  = p.subtitle ? `${p.title} ${p.subtitle}` : p.title;
+      return `<li>
+        <span class="branch">${prefix}</span>
+        <a href="project.html?id=${p.id}">${label}</a>
+      </li>`;
     });
-
     list.innerHTML = items.join('');
   </script>
 </body>
