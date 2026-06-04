@@ -246,12 +246,11 @@ a:hover { color: var(--accent); }
 
 /* ─── Illustration placeholder ───────────────────────────── */
 .illustration {
-  width: 180px;
-  height: 160px;
-  margin: 2rem auto;
+  width: 160px;
+  height: auto;
+  margin: 2rem 0 2rem -50px;
   display: block;
   object-fit: contain;
-  opacity: 0.85;
 }
 
 .illustration-placeholder {
