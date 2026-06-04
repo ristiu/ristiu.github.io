@@ -34,6 +34,7 @@ body {
 }
 
 .hero-card {
+  position: relative;
   width: 100%;
   max-width: 340px;
   height: calc(100vh - 4rem);
@@ -49,6 +50,13 @@ body {
     max-height: calc(500px * 16 / 9);
     height: calc(100vh - 4rem);
   }
+  .hero-text {
+    padding-top: 150px;
+  }
+}
+
+.hero-text {
+  padding-top: 100px;
 }
 
 .hero-text p { margin-bottom: 0.75rem; }
@@ -306,23 +314,44 @@ a:hover { color: var(--accent); }
 
 /* ─── Back link ──────────────────────────────────────────── */
 .back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   font-family: var(--mono);
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 1.65;
-  width: 2rem;
-  height: 2rem;
+  line-height: 1;
   text-decoration: none;
   color: var(--ink);
   margin-bottom: 2.5rem;
-  border: 1.5px solid var(--ink-muted);
-  border-radius: 2px;
 }
 
 .back:hover { color: var(--accent); }
+
+/* ─── Scroll hint arrow ──────────────────────────────────── */
+.scroll-hint {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--accent);
+  text-decoration: none;
+  opacity: 0.8;
+  animation: nudge 2s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+  z-index: 100;
+}
+
+.scroll-hint.hidden { opacity: 0; pointer-events: none; }
+.scroll-hint:hover { opacity: 1; }
+
+@media (min-width: 600px) {
+  .scroll-hint { right: calc(50% - 250px); }
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
 
 /* ─── Project detail ─────────────────────────────────────── */
 .project-title {
