@@ -150,6 +150,111 @@
         rafId = requestAnimationFrame(animate);
       });
     }
+
+    // ── Audio engine ─────────────────────────────────────────
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    // Swoosh: filtered noise burst, volume scales with proximity
+    let swooshNode = null;
+    let swooshGain = null;
+
+    function startSwoosh() {
+      const ctx = getAudioCtx();
+      if (swooshNode) return;
+
+      const bufferSize = ctx.sampleRate * 0.5;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+      swooshNode = ctx.createBufferSource();
+      swooshNode.buffer = buffer;
+      swooshNode.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 800;
+      filter.Q.value = 0.8;
+
+      swooshGain = ctx.createGain();
+      swooshGain.gain.value = 0;
+
+      swooshNode.connect(filter);
+      filter.connect(swooshGain);
+      swooshGain.connect(ctx.destination);
+      swooshNode.start();
+    }
+
+    function setSwooshVolume(vol) {
+      if (!swooshGain) return;
+      swooshGain.gain.setTargetAtTime(vol * 0.12, audioCtx.currentTime, 0.05);
+    }
+
+    function stopSwoosh() {
+      if (!swooshGain) return;
+      swooshGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+      setTimeout(() => {
+        if (swooshNode) { try { swooshNode.stop(); } catch(e){} swooshNode = null; swooshGain = null; }
+      }, 400);
+    }
+
+    // Wire swoosh to leaf proximity
+    if (leaf) {
+      document.addEventListener('mousemove', (e) => {
+        const rect = leaf.getBoundingClientRect();
+        const lx = rect.left + rect.width / 2;
+        const ly = rect.top + rect.height / 2;
+        const dx = e.clientX - lx;
+        const dy = e.clientY - ly;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = 160;
+
+        if (dist < radius) {
+          startSwoosh();
+          setSwooshVolume(1 - dist / radius);
+        } else {
+          stopSwoosh();
+        }
+      });
+    }
+
+    // UI tick: short sine blip on hover of links/buttons
+    let lastTickTarget = null;
+
+    function playTick() {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.08);
+
+      gain.gain.setValueAtTime(0.07, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.08);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    }
+
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target.closest('a, button');
+      if (target && target !== lastTickTarget) {
+        lastTickTarget = target;
+        playTick();
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest('a, button')) lastTickTarget = null;
+    });
   </script>
 </body>
 </html>
