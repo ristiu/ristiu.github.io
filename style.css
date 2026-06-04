@@ -20,14 +20,49 @@ body {
   font-family: var(--mono);
   font-size: 1rem;
   line-height: 1.65;
-  padding: 2.5rem 1.25rem 4rem;
+  padding: 0;
   text-align: left;
 }
 
+/* ─── Hero section ───────────────────────────────────────── */
+.hero-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1.25rem;
+}
+
+.hero-card {
+  width: 100%;
+  max-width: 340px;
+  height: calc(100vh - 4rem);
+  max-height: calc(340px * 16 / 9);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (min-width: 600px) {
+  .hero-card {
+    max-width: 500px;
+    max-height: calc(500px * 16 / 9);
+    height: calc(100vh - 4rem);
+  }
+}
+
+.hero-text p { margin-bottom: 0.75rem; }
+.hero-text p:last-child { margin-bottom: 0; }
+
 /* ─── Layout ─────────────────────────────────────────────── */
 .page {
-  max-width: var(--page-max);
+  max-width: 340px;
   margin: 0 auto;
+  padding: 0 1.25rem 5rem;
+}
+
+@media (min-width: 600px) {
+  .page { max-width: 500px; }
 }
 
 .section {
@@ -246,11 +281,11 @@ a:hover { color: var(--accent); }
 
 /* ─── Illustration placeholder ───────────────────────────── */
 .illustration {
-  width: 160px;
+  width: 280px;
   height: auto;
-  margin: 2rem 0 2rem -50px;
   display: block;
   object-fit: contain;
+  margin-left: -60px;
 }
 
 .illustration-placeholder {
@@ -273,12 +308,18 @@ a:hover { color: var(--accent); }
 .back {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
   font-family: var(--mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.65;
+  width: 2rem;
+  height: 2rem;
   text-decoration: none;
-  color: var(--ink-muted);
+  color: var(--ink);
   margin-bottom: 2.5rem;
+  border: 1.5px solid var(--ink-muted);
+  border-radius: 2px;
 }
 
 .back:hover { color: var(--accent); }
@@ -454,8 +495,4 @@ ol li, ul li {
 
 
 /* ─── Responsive tweaks ──────────────────────────────────── */
-@media (min-width: 700px) {
-  body { padding: 3.5rem 2rem 5rem; }
-  h1 { font-size: 1.25rem; }
-  .project-title { font-size: 1.2rem; }
-}
+/* font size stays consistent across all viewports */

@@ -11,21 +11,26 @@
 </head>
 <body>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
+
+  <!-- Hero: full-viewport centred wrapper -->
+  <div class="hero-wrapper">
+    <div class="hero-card">
+      <!-- Bio at top -->
+      <div class="hero-text">
+        <p>
+          Hello, I describe myself as a <span class="accent">product builder</span>, with expertise in
+          design and research.
+        </p>
+        <p>
+          In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
+        </p>
+      </div>
+      <!-- Illustration at bottom -->
+      <img class="illustration" src="assets/images/leave.gif" alt="" />
+    </div>
+  </div>
+
   <main class="page">
-
-    <!-- Bio -->
-    <section class="section">
-      <p>
-        Hello, I describe myself as a <span class="accent">product builder</span>, with expertise in
-        design and research.
-      </p>
-      <p>
-        In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
-      </p>
-    </section>
-
-    <!-- Illustration -->
-    <img class="illustration" src="assets/images/leave.gif" alt="" />
 
     <!-- AI + analog -->
     <section class="section">
@@ -192,7 +197,7 @@
 
     function setSwooshVolume(vol) {
       if (!swooshGain) return;
-      swooshGain.gain.setTargetAtTime(vol * 0.12, audioCtx.currentTime, 0.05);
+      swooshGain.gain.setTargetAtTime(vol * 0.025, audioCtx.currentTime, 0.08);
     }
 
     function stopSwoosh() {
