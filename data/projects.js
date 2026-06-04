@@ -2,7 +2,7 @@ const projects = [
   {
     id: "offline-to-online",
     title: "Shaping Product Vision",
-    subtitle: "Offline to Online Design Strategy",
+    subtitle: "with Offline to Online Design Strategy",
     company: "eFishery",
     year: "2023",
     role: "Design Manager",
@@ -41,7 +41,7 @@ const projects = [
   {
     id: "reorder-lifecycle",
     title: "Accelerating the Re-Order Lifecycle",
-    subtitle: "Funnel Analysis",
+    subtitle: "using Funnel Analysis",
     company: "",
     year: "",
     role: "",
@@ -56,7 +56,7 @@ const projects = [
   {
     id: "price-perception",
     title: "Price Perception in Hotel Booking",
-    subtitle: "Gestalt Principles × Discovery",
+    subtitle: "with Gestalt Principles",
     company: "",
     year: "",
     role: "",
@@ -71,7 +71,7 @@ const projects = [
   {
     id: "service-prototyping",
     title: "Service Prototyping",
-    subtitle: "Warehouse Logistics, Ops Efficiency",
+    subtitle: "in Warehouse Logistics for Ops Efficiency",
     company: "",
     year: "",
     role: "",
