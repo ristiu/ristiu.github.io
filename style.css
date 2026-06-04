@@ -7,17 +7,17 @@
   --ink-muted: #666;
   --accent: #FF5E32;
   --mono: 'JetBrains Mono', 'Courier New', monospace;
-  --serif: 'Newsreader', Georgia, serif;
+  --serif: 'JetBrains Mono', 'Courier New', monospace;
   --page-max: 375px;
   --gap: 1.5rem;
 }
 
-html { font-size: 16px; scroll-behavior: smooth; }
+html { font-size: 14px; scroll-behavior: smooth; }
 
 body {
   background: var(--cream);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--mono);
   font-size: 1rem;
   line-height: 1.65;
   padding: 2.5rem 1.25rem 4rem;
@@ -34,24 +34,18 @@ body {
 }
 
 /* ─── Typography ─────────────────────────────────────────── */
-h1 {
-  font-family: var(--serif);
-  font-weight: 400;
-}
-
-h2, .mono {
+h1, h2, .mono {
   font-family: var(--mono);
   font-weight: 400;
+  font-size: 1rem;
 }
 
 h1 {
-  font-size: 1.15rem;
   line-height: 1.4;
   margin-bottom: 2rem;
 }
 
 h2 {
-  font-size: 1rem;
   margin-bottom: 1.25rem;
 }
 
@@ -74,7 +68,7 @@ a:hover { color: var(--accent); }
 .tree {
   list-style: none;
   font-family: var(--mono);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.8;
 }
 
