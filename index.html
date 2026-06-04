@@ -10,12 +10,13 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
   <main class="page">
 
     <!-- Bio -->
     <section class="section">
       <p>
-        I describe myself as a <span class="accent">product builder</span>, with expertise in
+        Hello, I describe myself as a <span class="accent">product builder</span>, with expertise in
         design and research.
       </p>
       <p>
@@ -23,42 +24,43 @@
       </p>
     </section>
 
-    <!-- AI + analog -->
-    <section class="section">
-      <p>
-        Lately I'm having fun building with AI <span class="accent">◁°_°▷</span> to explore
-        what it means when design renders intent through technology.
-      </p>
-
-      <ul class="tree" style="margin-top: 1rem; margin-bottom: 1rem;">
-        <li><span class="branch">├──</span> <a href="#" title="coming soon">Feedback Loop</a></li>
-        <li><span class="branch">├──</span> <a href="#" title="coming soon">/skills that matters</a></li>
-        <li><span class="branch">├──</span> <a href="#" title="coming soon">Content Bookmark</a></li>
-        <li><span class="branch">├──</span> <a href="#" title="coming soon">Fortune Cookie Cracker</a></li>
-      </ul>
-
-      <p>Outside the screen, I practice <strong>analog craft.</strong></p>
-
-      <ul class="tree" style="margin-top: 1rem;">
-        <li><span class="branch">└──</span> <a href="#" title="coming soon">Contour Gestalt Coloring Book</a></li>
-      </ul>
-    </section>
-
     <!-- Illustration -->
     <div class="illustration-placeholder" aria-hidden="true"></div>
 
+    <!-- AI + analog -->
+    <section class="section">
+      <div class="tree-node-wrapper js-tree-root">
+        <div class="tree-node-header">
+          <button class="tree-toggle-btn js-tree-toggle" aria-expanded="false">
+            <span class="toggle-bar toggle-h"></span>
+            <span class="toggle-bar toggle-v"></span>
+          </button>
+          <p class="tree-node-text">Lately I'm having fun building with AI <span class="accent">◁°_°▷</span> — exploring what it means when design renders intent through technology.</p>
+        </div>
+        <div class="tree-leaves-container">
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Feedback Loop</a></div>
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">/skills that matters</a></div>
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Content Bookmark</a></div>
+          <div class="tree-leaf-row tree-leaf-last"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Fortune Cookie Cracker</a></div>
+        </div>
+      </div>
+      <p class="tree-analog">Outside the screen, I practice <a href="#" title="coming soon"><strong>analog craft.</strong></a></p>
+    </section>
+
     <!-- Portfolio -->
     <section class="section">
-      <p>
-        I've been shaped by experiences in diverse industries
-        focus, stages of company maturity, from Individual
-        contributor to leadership position, here some snippet of
-        my portfolio
-      </p>
-
-      <ul class="tree" id="portfolio-list" style="margin-top: 1.25rem;">
-        <!-- rendered by JS -->
-      </ul>
+      <div class="tree-node-wrapper js-tree-root">
+        <div class="tree-node-header">
+          <button class="tree-toggle-btn js-tree-toggle" aria-expanded="false">
+            <span class="toggle-bar toggle-h"></span>
+            <span class="toggle-bar toggle-v"></span>
+          </button>
+          <p class="tree-node-text">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position, here some snippet of my portfolio</p>
+        </div>
+        <div class="tree-leaves-container">
+          <div id="portfolio-list"></div>
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
@@ -69,17 +71,31 @@
 
   </main>
 
+  <script src="cursor.js"></script>
   <script src="data/projects.js"></script>
   <script>
+    // Accordion toggle
+    document.querySelectorAll('.js-tree-root').forEach(root => {
+      const btn = root.querySelector('.js-tree-toggle');
+      btn.addEventListener('click', () => {
+        const expanded = root.classList.toggle('is-expanded');
+        btn.setAttribute('aria-expanded', expanded);
+      });
+    });
+
+    // Portfolio list
     const list = document.getElementById('portfolio-list');
     const items = projects.map((p, i) => {
       const isLast = i === projects.length - 1;
-      const prefix = isLast ? '└──' : '├──';
-      const label  = p.subtitle ? `${p.title} ${p.subtitle}` : p.title;
-      return `<li>
-        <span class="branch">${prefix}</span>
-        <a href="project.html#${p.id}">${label}</a>
-      </li>`;
+      const subtitleLine = p.subtitle
+        ? `<span class="tree-subtitle">${p.subtitle}</span>`
+        : '';
+      return `<div class="tree-leaf-row${isLast ? ' tree-leaf-last' : ''}">
+        <span class="leaf-vector-arm"></span>
+        <div class="portfolio-entry">
+          <a href="project.html#${p.id}">${p.title}</a>${subtitleLine}
+        </div>
+      </div>`;
     });
     list.innerHTML = items.join('');
   </script>

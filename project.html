@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Riso grain SVG filter -->
   <svg style="position:absolute;width:0;height:0;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -28,6 +29,7 @@
     </div>
   </main>
 
+  <script src="cursor.js"></script>
   <script src="data/projects.js"></script>
   <script>
     const id = window.location.hash.replace('#', '');
@@ -135,5 +137,6 @@
       });
     }
   </script>
+  <script src="cursor.js"></script>
 </body>
 </html>

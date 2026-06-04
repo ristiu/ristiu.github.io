@@ -21,6 +21,7 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   padding: 2.5rem 1.25rem 4rem;
+  text-align: left;
 }
 
 /* ─── Layout ─────────────────────────────────────────────── */
@@ -30,7 +31,7 @@ body {
 }
 
 .section {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 }
 
 /* ─── Typography ─────────────────────────────────────────── */
@@ -67,6 +68,7 @@ a:hover { color: var(--accent); }
 /* ─── Tree List ──────────────────────────────────────────── */
 .tree {
   list-style: none;
+  padding-left: 0;
   font-family: var(--mono);
   font-size: 1rem;
   line-height: 1.8;
@@ -89,6 +91,152 @@ a:hover { color: var(--accent); }
 
 .tree a:hover { color: var(--accent); }
 
+/* ─── Accordion tree node ────────────────────────────────── */
+.tree-node-wrapper {
+  position: relative;
+}
+
+/* Static spine — faint when collapsed, solid black when expanded */
+.tree-node-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 34px;
+  left: 10px;
+  width: 1px;
+  bottom: 0;
+  background: var(--ink);
+  opacity: 0.15;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.is-expanded.tree-node-wrapper::before {
+  opacity: 1;
+}
+
+/* Remove the accent overlay — no longer needed */
+.tree-node-wrapper::after { content: none; }
+
+/* Header row: toggle button + text side by side */
+.tree-node-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* The orange square toggle — larger with glow */
+.tree-toggle-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 0.1em;
+  background: #fff;
+  border: 1.5px solid var(--accent);
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  box-shadow: 0 0 10px 2px rgba(255, 94, 50, 0.25);
+}
+
+/* Crossbar vectors drawn with CSS */
+.toggle-bar {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toggle-h { width: 6px; height: 1.5px; }
+.toggle-v { width: 1.5px; height: 6px; }
+
+.is-expanded .toggle-v {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Collapsible body */
+.tree-leaves-container {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-left: 10px;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              margin-top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-expanded .tree-leaves-container {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: 0.5rem;
+}
+
+/* Leaf rows — horizontal arm as a real CSS line */
+.tree-leaf-row {
+  display: flex;
+  align-items: flex-start;
+  min-height: 34px;
+  padding: 4px 0;
+  font-family: var(--mono);
+  font-size: 1rem;
+}
+
+.leaf-vector-arm {
+  width: 22px;
+  height: 1px;
+  background: var(--ink);
+  opacity: 1;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-right: 10px;
+  margin-top: 0.6em;
+}
+
+.tree-leaf-row a {
+  text-decoration: none;
+  color: var(--ink);
+}
+.tree-leaf-row a:hover { color: var(--accent); }
+
+.tree-analog {
+  margin-top: 1.25rem;
+}
+
+.tree-node-text {
+  margin: 0;
+  flex: 1;
+}
+
+/* Portfolio two-line tree */
+.portfolio-tree .portfolio-item {
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.portfolio-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-entry a {
+  text-decoration: none;
+}
+
+.portfolio-entry a:hover { color: var(--accent); }
+
+.tree-subtitle {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  margin-top: 0.1rem;
+}
+
 /* ─── Divider ────────────────────────────────────────────── */
 .divider {
   border: none;
@@ -107,9 +255,9 @@ a:hover { color: var(--accent); }
 }
 
 .illustration-placeholder {
-  width: 180px;
-  height: 160px;
-  margin: 2rem auto;
+  width: 220px;
+  height: 260px;
+  margin: 0 0 5rem 0;
   display: block;
   background: #e8e3dc;
   border-radius: 4px;
@@ -258,6 +406,37 @@ ol li, ul li {
 
 .timeline-content p { margin-bottom: 0.4rem; }
 
+/* ─── Accordion ─────────────────────────────────────────── */
+.accordion-trigger {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--ink);
+  text-align: left;
+  line-height: 1.65;
+  width: 100%;
+}
+
+.accordion-toggle {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--accent);
+  display: inline-block;
+  margin-top: 0.3rem;
+}
+
+.accordion-body {
+  margin-top: 1rem;
+}
+
+.accordion-body[hidden] { display: none; }
+
 /* Project image wrapper */
 .riso-image-wrapper {
   width: 100%;
@@ -273,6 +452,7 @@ ol li, ul li {
   object-fit: cover;
   display: block;
 }
+
 
 /* ─── Responsive tweaks ──────────────────────────────────── */
 @media (min-width: 700px) {
