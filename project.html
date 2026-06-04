@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Risti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+    <a class="back" href="index.html">← back</a>
+    <div id="project-content">
+      <!-- rendered by JS -->
+    </div>
+  </main>
+
+  <script src="data/projects.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const project = projects.find(p => p.id === id);
+    const el = document.getElementById('project-content');
+
+    if (!project) {
+      el.innerHTML = '<p class="stub-notice">Project not found.</p>';
+    } else {
+      document.title = `${project.title} — Risti`;
+
+      if (project.stub) {
+        el.innerHTML = `
+          <h1 class="project-title">${project.title}${project.subtitle ? '\n' + project.subtitle : ''}</h1>
+          <p class="stub-notice">This case study is coming soon.</p>
+        `;
+      } else {
+        el.innerHTML = renderProject(project);
+      }
+    }
+
+    function renderProject(p) {
+      const titleHtml = p.subtitle
+        ? `${p.title}<br>${p.subtitle}`
+        : p.title;
+
+      const impactHtml = p.impact.length ? `
+        <div class="content-section">
+          <p class="section-heading">Impact to business?</p>
+          <ol>${p.impact.map(i => `<li>${i}</li>`).join('')}</ol>
+        </div>` : '';
+
+      const situationHtml = p.situation ? `
+        <div class="content-section">
+          <p class="section-heading">Situation</p>
+          <p>${p.situation}</p>
+        </div>` : '';
+
+      const solutionHtml = p.solutionSpace.length ? `
+        <div class="content-section">
+          <p class="section-heading">Solution Space</p>
+          <ol>${p.solutionSpace.map(s => `<li>${s}</li>`).join('')}</ol>
+        </div>` : '';
+
+      const contributionHtml = p.contribution ? `
+        <div class="content-section">
+          <p class="section-heading">Contribution</p>
+          <p>${p.contribution}</p>
+        </div>` : '';
+
+      const planningHtml = p.projectPlanning.length ? `
+        <div class="content-section">
+          <p class="section-heading" style="font-family:var(--mono);font-weight:400;font-size:1rem;margin-bottom:0.75rem;">Project Planing</p>
+          <ul class="planning-list">
+            ${p.projectPlanning.map(item => {
+              const label = item.bold
+                ? `<strong>${item.label}</strong>${item.description ? `, ${item.description}` : ''}`
+                : item.label;
+              const imageBlock = item.hasImage
+                ? `<div class="image-placeholder">[ image / gif — upload to assets/images/ ]</div>`
+                : '';
+              return `<li>
+                <span class="bullet">•</span>
+                <span>${label}${imageBlock}</span>
+              </li>`;
+            }).join('')}
+          </ul>
+        </div>` : '';
+
+      const imagesHtml = p.images.length
+        ? p.images.map(src => `<img class="project-image" src="${src}" alt="" />`).join('')
+        : '';
+
+      return `
+        <h1 class="project-title">${titleHtml}</h1>
+        ${impactHtml}
+        ${situationHtml}
+        ${solutionHtml}
+        ${contributionHtml}
+        ${planningHtml}
+        ${imagesHtml}
+      `;
+    }
+  </script>
+</body>
+</html>

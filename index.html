@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risti — Product Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+
+    <!-- Bio -->
+    <section class="section">
+      <p>
+        I describe myself as a <span class="accent">product builder</span>, with expertise in
+        design and research.
+      </p>
+      <p>
+        In 10+ years, I've contributed to multinational companies
+        across APAC, UK, and Japan — reaching 45M monthly
+        active users — and to early-stage startups finding their
+        product market fitness.
+      </p>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- AI + analog -->
+    <section class="section">
+      <p>
+        Lately I'm having fun building with <span class="accent">AI &lt;|°_°|&gt;</span> to explore
+        what it means when design renders intent through technology.
+      </p>
+      <p>
+        Outside the screen, I practice <span class="accent">analog craft.</span>
+      </p>
+
+      <!-- Side projects tree -->
+      <ul class="tree" style="margin-top: 1.25rem;">
+        <li><span class="branch">├──</span> <a href="#" title="coming soon">Feedback Loop</a></li>
+        <li><span class="branch">├──</span> <a href="#" title="coming soon">/skills that matters</a></li>
+        <li><span class="branch">├──</span> <a href="#" title="coming soon">Content Bookmark</a></li>
+        <li><span class="branch">├──</span> <a href="#" title="coming soon">Fortune Cookie Cracker</a></li>
+        <li><span class="branch">└──</span> <a href="#" title="coming soon">Contour Gestalt Coloring Book</a></li>
+      </ul>
+    </section>
+
+    <!-- Illustration -->
+    <div class="illustration-placeholder" aria-hidden="true"></div>
+
+    <hr class="divider" />
+
+    <!-- Portfolio -->
+    <section class="section">
+      <p>
+        I've been shaped by experiences in diverse industries
+        focus, stages of company maturity, from Individual
+        contributor to leadership position, here some snippet of
+        my <strong>portfolio</strong>
+      </p>
+
+      <ul class="tree" id="portfolio-list" style="margin-top: 1.25rem;">
+        <!-- rendered by JS -->
+      </ul>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Footer -->
+    <section class="section footer-links">
+      <p>You can download my <strong><a href="#" title="coming soon">resume</a></strong></p>
+      <p>You can also <strong><a href="#" title="coming soon">read my thinking</a></strong> and leadership principle</p>
+    </section>
+
+  </main>
+
+  <script src="data/projects.js"></script>
+  <script>
+    const list = document.getElementById('portfolio-list');
+    const branches = projects.map((p, i) => {
+      const isLast = i === projects.length - 1;
+      const prefix = isLast ? '└──' : '├──';
+      const label = p.subtitle ? `${p.title}\n${p.subtitle}` : p.title;
+      const lines = label.split('\n');
+      const linkLines = lines.map((line, li) => {
+        return li === 0
+          ? `<a href="project.html?id=${p.id}">${line}</a>`
+          : `<span style="padding-left:2.1rem;display:block;">${line}</span>`;
+      }).join('');
+
+      return `<li>
+        <span class="branch">${prefix}</span>
+        <span>${linkLines}</span>
+      </li>`;
+    });
+    list.innerHTML = branches.join('');
+  </script>
+</body>
+</html>
