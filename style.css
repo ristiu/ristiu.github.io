@@ -2,13 +2,13 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cream: #f5f2ed;
+  --cream: #ffffff;
   --ink: #1a1a1a;
   --ink-muted: #666;
-  --accent: #c4501a;
-  --mono: 'Courier Prime', 'Courier New', monospace;
-  --serif: 'EB Garamond', Georgia, serif;
-  --page-max: 640px;
+  --accent: #FF5E32;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --serif: 'Newsreader', Georgia, serif;
+  --page-max: 375px;
   --gap: 1.5rem;
 }
 

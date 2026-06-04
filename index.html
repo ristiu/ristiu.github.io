@@ -6,7 +6,7 @@
   <title>Risti — Product Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -34,16 +34,17 @@
         Lately I'm having fun building with <span class="accent">AI &lt;|°_°|&gt;</span> to explore
         what it means when design renders intent through technology.
       </p>
-      <p>
-        Outside the screen, I practice <span class="accent">analog craft.</span>
-      </p>
 
-      <!-- Side projects tree -->
-      <ul class="tree" style="margin-top: 1.25rem;">
+      <ul class="tree" style="margin-top: 1rem; margin-bottom: 1rem;">
         <li><span class="branch">├──</span> <a href="#" title="coming soon">Feedback Loop</a></li>
         <li><span class="branch">├──</span> <a href="#" title="coming soon">/skills that matters</a></li>
         <li><span class="branch">├──</span> <a href="#" title="coming soon">Content Bookmark</a></li>
         <li><span class="branch">├──</span> <a href="#" title="coming soon">Fortune Cookie Cracker</a></li>
+      </ul>
+
+      <p>Outside the screen, I practice <span class="accent">analog craft.</span></p>
+
+      <ul class="tree" style="margin-top: 1rem;">
         <li><span class="branch">└──</span> <a href="#" title="coming soon">Contour Gestalt Coloring Book</a></li>
       </ul>
     </section>
@@ -80,23 +81,38 @@
   <script src="data/projects.js"></script>
   <script>
     const list = document.getElementById('portfolio-list');
-    const branches = projects.map((p, i) => {
-      const isLast = i === projects.length - 1;
-      const prefix = isLast ? '└──' : '├──';
-      const label = p.subtitle ? `${p.title}\n${p.subtitle}` : p.title;
-      const lines = label.split('\n');
-      const linkLines = lines.map((line, li) => {
-        return li === 0
-          ? `<a href="project.html?id=${p.id}">${line}</a>`
-          : `<span style="padding-left:2.1rem;display:block;">${line}</span>`;
-      }).join('');
+    const items = [];
 
-      return `<li>
-        <span class="branch">${prefix}</span>
-        <span>${linkLines}</span>
-      </li>`;
+    // First project is top-level; the rest are nested under it
+    projects.forEach((p, i) => {
+      const isFirst = i === 0;
+      const isLast  = i === projects.length - 1;
+
+      if (isFirst) {
+        items.push(`<li>
+          <span class="branch">├──</span>
+          <a href="project.html?id=${p.id}">${p.title}</a>
+        </li>`);
+        if (p.subtitle) items.push(`<li>
+          <span class="branch" style="opacity:.35;">│</span>
+          <span class="tree-sub">&nbsp;&nbsp;${p.subtitle}</span>
+        </li>`);
+      } else {
+        const childPrefix = isLast ? '└──' : '├──';
+        const childPipe   = isLast ? '&nbsp;&nbsp;&nbsp;' : '│';
+        items.push(`<li>
+          <span class="branch" style="opacity:.35;">│</span>
+          <span class="branch">&nbsp;&nbsp;${childPrefix}</span>
+          <a href="project.html?id=${p.id}">${p.title}</a>
+        </li>`);
+        if (p.subtitle) items.push(`<li>
+          <span class="branch" style="opacity:.35;">│&nbsp;&nbsp;${childPipe}</span>
+          <span class="tree-sub">&nbsp;&nbsp;${p.subtitle}</span>
+        </li>`);
+      }
     });
-    list.innerHTML = branches.join('');
+
+    list.innerHTML = items.join('');
   </script>
 </body>
 </html>
