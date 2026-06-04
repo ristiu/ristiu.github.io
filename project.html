@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- Riso grain SVG filter -->
+  <svg style="position:absolute;width:0;height:0;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <filter id="riso-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.45 0" result="hard-grain"/>
+      <feComposite operator="in" in2="SourceGraphic" result="grained-photo"/>
+      <feBlend mode="multiply" in="grained-photo" in2="SourceGraphic"/>
+    </filter>
+  </svg>
+
   <main class="page">
     <a class="back" href="index.html">← back</a>
     <div id="project-content">
@@ -19,8 +30,7 @@
 
   <script src="data/projects.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const id = window.location.hash.replace('#', '');
     const project = projects.find(p => p.id === id);
     const el = document.getElementById('project-content');
 
@@ -28,21 +38,18 @@
       el.innerHTML = '<p class="stub-notice">Project not found.</p>';
     } else {
       document.title = `${project.title} — Risti`;
-
-      if (project.stub) {
-        el.innerHTML = `
-          <h1 class="project-title">${project.title}${project.subtitle ? '\n' + project.subtitle : ''}</h1>
-          <p class="stub-notice">This case study is coming soon.</p>
-        `;
-      } else {
-        el.innerHTML = renderProject(project);
-      }
+      el.innerHTML = renderProject(project);
+      initTimeline();
+      initRisoImages();
     }
 
     function renderProject(p) {
-      const titleHtml = p.subtitle
-        ? `${p.title}<br>${p.subtitle}`
-        : p.title;
+      const titleHtml = p.subtitle ? `${p.title}<br>${p.subtitle}` : p.title;
+
+      const industryHtml = (p.industry || p.company) ? `
+        <p style="color:var(--ink-muted);margin-bottom:2rem;font-size:0.875rem;">
+          ${[p.company, p.industry].filter(Boolean).join(' — ')}
+        </p>` : '';
 
       const impactHtml = p.impact.length ? `
         <div class="content-section">
@@ -68,38 +75,64 @@
           <p>${p.contribution}</p>
         </div>` : '';
 
-      const planningHtml = p.projectPlanning.length ? `
+      const approachHtml = p.projectPlanning.length ? `
         <div class="content-section">
-          <p class="section-heading" style="font-family:var(--mono);font-weight:400;font-size:1rem;margin-bottom:0.75rem;">Project Planing</p>
-          <ul class="planning-list">
+          <p class="section-heading">Project Approach</p>
+          <div class="timeline-container">
             ${p.projectPlanning.map(item => {
               const label = item.bold
-                ? `<strong>${item.label}</strong>${item.description ? `, ${item.description}` : ''}`
+                ? `<strong>${item.label}</strong>${item.description ? ` — ${item.description}` : ''}`
                 : item.label;
-              const imageBlock = item.hasImage
-                ? `<div class="image-placeholder">[ image / gif — upload to assets/images/ ]</div>`
-                : '';
-              return `<li>
-                <span class="bullet">•</span>
-                <span>${label}${imageBlock}</span>
-              </li>`;
+              const imgHtml = item.image
+                ? `<div class="riso-image-wrapper js-riso-container">
+                    <img src="${item.image}" class="js-riso-img" alt="${item.label}" loading="lazy" />
+                  </div>`
+                : `<div class="riso-image-wrapper js-riso-container" style="opacity:0.4;"></div>`;
+              return `<div class="timeline-item js-timeline-item">
+                <div class="timeline-content">
+                  <p>${label}</p>
+                  ${imgHtml}
+                </div>
+              </div>`;
             }).join('')}
-          </ul>
+          </div>
         </div>` : '';
-
-      const imagesHtml = p.images.length
-        ? p.images.map(src => `<img class="project-image" src="${src}" alt="" />`).join('')
-        : '';
 
       return `
         <h1 class="project-title">${titleHtml}</h1>
+        ${industryHtml}
         ${impactHtml}
         ${situationHtml}
         ${solutionHtml}
         ${contributionHtml}
-        ${planningHtml}
-        ${imagesHtml}
+        ${approachHtml}
       `;
+    }
+
+    function initTimeline() {
+      const items = document.querySelectorAll('.js-timeline-item');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      items.forEach(item => observer.observe(item));
+    }
+
+    function initRisoImages() {
+      document.querySelectorAll('.js-riso-container').forEach(wrapper => {
+        const img = wrapper.querySelector('.js-riso-img');
+        if (!img) return;
+        const onLoad = () => wrapper.classList.add('loaded');
+        if (img.complete && img.naturalWidth > 0) {
+          onLoad();
+        } else {
+          img.addEventListener('load', onLoad);
+        }
+      });
     }
   </script>
 </body>

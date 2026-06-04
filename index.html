@@ -63,7 +63,7 @@
 
     <!-- Footer -->
     <section class="section footer-links">
-      <p>You can download my <strong><a href="#" title="coming soon">resume</a></strong></p>
+      <p>You can download my <strong><a href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">resume</a></strong></p>
       <p>You can also <strong><a href="#" title="coming soon">read my thinking</a></strong> and leadership principle</p>
     </section>
 
@@ -78,7 +78,7 @@
       const label  = p.subtitle ? `${p.title} ${p.subtitle}` : p.title;
       return `<li>
         <span class="branch">${prefix}</span>
-        <a href="project.html?id=${p.id}">${label}</a>
+        <a href="project.html#${p.id}">${label}</a>
       </li>`;
     });
     list.innerHTML = items.join('');

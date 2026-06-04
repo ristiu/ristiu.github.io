@@ -23,18 +23,20 @@ const projects = [
       {
         label: "Kick off project",
         description: "output and outcome alignment, design and research process, roles involved, timeline estimation",
-        bold: true
+        bold: true,
+        image: "assets/images/offline-to-online-2.jpeg"
       },
       {
-        label: "Hypothesis Dumping",
+        label: "Field Visit & Hypothesis Dumping",
         description: "",
         bold: false,
-        hasImage: true
+        image: "assets/images/offline-to-online-1.jpeg"
       },
       {
         label: "Prioritisation",
         description: "",
-        bold: false
+        bold: false,
+        image: ""
       }
     ],
     images: []
@@ -56,7 +58,20 @@ const projects = [
       "Implemented a Reorder Feature that leverages historical transaction data. By showing personalized recommendations based on previous purchases, we shortcut the discovery phase — so farmers can bypass the catalog and move directly to checkout."
     ],
     contribution: "",
-    projectPlanning: [],
+    projectPlanning: [
+      {
+        label: "Funnel Analysis",
+        description: "Identifying drop-off points across Cash and Paylater segments",
+        bold: true,
+        image: "assets/images/reorder-lifecycle-1.jpeg"
+      },
+      {
+        label: "Solution Design & Testing",
+        description: "Reorder feature with personalised recommendations",
+        bold: false,
+        image: ""
+      }
+    ],
     images: []
   },
   {
@@ -77,7 +92,20 @@ const projects = [
       "Consumer Facing Solution — Applied Gestalt principles (Similarity & Proximity) to simplify information by grouping hotel-related details separately from pricing info. Designed bite-sized info chunks and color associations to improve UI comprehension. Photos were identified as a critical deciding factor and given prominent treatment."
     ],
     contribution: "",
-    projectPlanning: [],
+    projectPlanning: [
+      {
+        label: "Before vs After",
+        description: "Old and new hotel card design comparison",
+        bold: true,
+        image: "assets/images/price-perception-1.jpeg"
+      },
+      {
+        label: "Pricing Label Hierarchy",
+        description: "Framework for label rules implemented in pricing engine",
+        bold: false,
+        image: "assets/images/price-perception-2.jpeg"
+      }
+    ],
     images: []
   },
   {
@@ -97,7 +125,20 @@ const projects = [
       "Moved from discrete picking to cluster/batch picking and zone picking through service prototyping. All stakeholders — including data scientists, engineers, and business leads — participated to experience the new workflow firsthand, de-risking the cost of investing in untested solutions."
     ],
     contribution: "",
-    projectPlanning: [],
+    projectPlanning: [
+      {
+        label: "Service Prototyping in Warehouse",
+        description: "All stakeholders experienced the new picking workflow firsthand",
+        bold: true,
+        image: "assets/images/service-prototyping-1.jpeg"
+      },
+      {
+        label: "Zone Picking Simulation",
+        description: "Physical mapping of cluster and batch picking routes",
+        bold: false,
+        image: "assets/images/service-prototyping-2.jpeg"
+      }
+    ],
     images: []
   },
   {
@@ -118,7 +159,20 @@ const projects = [
       "Industrial Manufacturing Feasibility — Observed potential design production opportunities as smartphones became the primary camera device, with CASIO as manufacturer and cloud storage innovations as context."
     ],
     contribution: "",
-    projectPlanning: [],
+    projectPlanning: [
+      {
+        label: "Trend Research & Pattern Identification",
+        description: "Survey of 150 participants across Japan and Indonesia",
+        bold: true,
+        image: "assets/images/visual-trends-1.jpeg"
+      },
+      {
+        label: "Concept Framework",
+        description: "Eliminating the boundary between analogue and digital photos",
+        bold: false,
+        image: "assets/images/visual-trends-2.jpeg"
+      }
+    ],
     images: []
   }
 ];
