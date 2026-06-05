@@ -32,8 +32,6 @@
       </div>
       <div class="illustration-group">
         <img class="illustration" src="assets/images/leave.gif" alt="" />
-        <span class="leaf-spin-wrap"><img class="illustration illustration--sm" src="assets/images/leave.gif" alt="" /></span>
-        <span class="leaf-spin-wrap leaf-spin-wrap--xs"><img class="illustration illustration--xs" src="assets/images/leave.gif" alt="" /></span>
       </div>
       <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
     </div>
@@ -241,12 +239,8 @@
       });
     }
 
-    const leafBig = document.querySelector('.illustration:not(.illustration--sm):not(.illustration--xs)');
-    const leafSm  = document.querySelector('.illustration--sm');
-    const leafXs  = document.querySelector('.illustration--xs');
-    if (leafBig) initLeafAvoidance(leafBig, 160, 40, 1.0);   // full volume
-    if (leafSm)  initLeafAvoidance(leafSm,  100, 24, 0.3);   // 30% volume
-    if (leafXs)  initLeafAvoidance(leafXs,   70, 16, 0.12);  // 12% volume, tiny radius
+    const leafBig = document.querySelector('.illustration');
+    if (leafBig) initLeafAvoidance(leafBig, 160, 40, 1.0);
 
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
