@@ -12,22 +12,25 @@
 <body>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
-  <!-- Hero: full-viewport centred wrapper -->
+  <!-- Hover thumbnail preview -->
+  <div id="hover-preview" class="hover-preview" aria-hidden="true">
+    <img id="hover-preview-img" src="" alt="" />
+  </div>
+
+  <!-- Hero -->
   <div class="hero-wrapper">
     <div class="hero-card">
-      <!-- Bio at top -->
       <div class="hero-text">
         <p>
-          Hello, I describe myself as a <span class="accent">product builder</span>, with expertise in
-          design and research.
+          <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I describe myself as a
+          <span class="accent preview-trigger" data-img="assets/images/resume-thumb.jpg">product builder</span>,
+          with expertise in design and research.
         </p>
         <p>
           In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
         </p>
       </div>
-      <!-- Illustration at bottom -->
       <img class="illustration" src="assets/images/leave.gif" alt="" />
-      <!-- Scroll hint inside card, bottom-right -->
       <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
     </div>
   </div>
@@ -42,16 +45,18 @@
             <span class="toggle-bar toggle-h"></span>
             <span class="toggle-bar toggle-v"></span>
           </button>
-          <p class="tree-node-text">Lately I'm having fun building with AI <span class="accent">◁°_°▷</span> — exploring what it means when design renders intent through technology.</p>
+          <p class="tree-node-text">Lately I'm having fun building with
+            <span class="accent preview-trigger" data-img="assets/images/offline-to-online-2.jpeg">AI ◁°_°▷</span>
+            — exploring what it means when design renders intent through technology.</p>
         </div>
         <div class="tree-leaves-container">
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Feedback Loop</a></div>
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">/skills that matters</a></div>
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Content Bookmark</a></div>
-          <div class="tree-leaf-row tree-leaf-last"><span class="leaf-vector-arm"></span><a href="#" title="coming soon">Fortune Cookie Cracker</a></div>
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/offline-to-online-2.jpeg">Feedback Loop</a></div>
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/reorder-lifecycle-1.jpeg">/skills that matters</a></div>
+          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/visual-trends-1.jpeg">Content Bookmark</a></div>
+          <div class="tree-leaf-row tree-leaf-last"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/service-prototyping-2.jpeg">Fortune Cookie Cracker</a></div>
         </div>
       </div>
-      <p class="tree-analog">Outside the screen, I practice <a href="#" title="coming soon"><strong>analog craft.</strong></a></p>
+      <p class="tree-analog">Outside the screen, I practice <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/leave.gif"><strong>analog craft.</strong></a></p>
     </section>
 
     <!-- Portfolio -->
@@ -72,8 +77,19 @@
 
     <!-- Footer -->
     <section class="section footer-links">
-      <p>You can download my <strong><a href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">resume</a></strong></p>
-      <p>You can also <strong><a href="#" title="coming soon">read my thinking</a></strong> and leadership principle</p>
+      <a class="footer-action preview-trigger" data-img="assets/images/resume-thumb.jpg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
+        Download Resume
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a class="footer-action preview-trigger" data-img="assets/images/resume-thumb.jpg" href="https://www.linkedin.com/in/ristiu/" target="_blank" rel="noopener">
+        Connect via LinkedIn
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M4 6v4M4 4.5v.01M6.5 10V7.5C6.5 6.7 7 6 8 6s1.5.7 1.5 1.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </a>
     </section>
 
   </main>
@@ -90,23 +106,82 @@
       });
     });
 
-    // Portfolio list
+    // Portfolio list — Leadership inserted at index 2 (3rd position)
+    const leadershipItem = `<div class="tree-leaf-row">
+      <span class="leaf-vector-arm"></span>
+      <div class="portfolio-entry">
+        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Leadership and Team Management Principle</a>
+        <span class="tree-subtitle">Build High Performing Team</span>
+      </div>
+    </div>`;
+
     const list = document.getElementById('portfolio-list');
-    const items = projects.map((p, i) => {
-      const isLast = i === projects.length - 1;
+    const rows = projects.map((p, i) => {
       const subtitleLine = p.subtitle
         ? `<span class="tree-subtitle">${p.subtitle}</span>`
         : '';
-      return `<div class="tree-leaf-row${isLast ? ' tree-leaf-last' : ''}">
+      const thumb = (p.projectPlanning || []).find(s => s.image)?.image || '';
+      return `<div class="tree-leaf-row">
         <span class="leaf-vector-arm"></span>
         <div class="portfolio-entry">
-          <a href="project.html#${p.id}">${p.title}</a>${subtitleLine}
+          <a href="project.html#${p.id}" class="preview-trigger" data-img="${thumb}">${p.title}</a>${subtitleLine}
         </div>
       </div>`;
     });
-    list.innerHTML = items.join('');
 
-    // Leaf cursor avoidance
+    // Insert leadership at position 2 (after index 1)
+    rows.splice(2, 0, leadershipItem);
+    list.innerHTML = rows.join('');
+
+    // ── Hello letter colour wave ────────────────────────────
+    const helloWord = document.querySelector('.hello-word');
+    const helloLetters = document.querySelectorAll('.hello-letter');
+    const colors = ['#FF5E32','#f7c59f','#e8a87c','#FF5E32','#ff8c5e'];
+
+    helloWord.addEventListener('mouseenter', () => {
+      helloLetters.forEach((el, i) => {
+        el.style.transition = `color 0.3s ease ${i * 0.06}s`;
+        el.style.color = colors[i % colors.length];
+      });
+    });
+    helloWord.addEventListener('mouseleave', () => {
+      helloLetters.forEach((el, i) => {
+        el.style.transition = `color 0.4s ease ${i * 0.04}s`;
+        el.style.color = '';
+      });
+    });
+
+    // ── Hover thumbnail preview (event delegation) ──────────
+    const preview = document.getElementById('hover-preview');
+    const previewImg = document.getElementById('hover-preview-img');
+
+    function movePreview(e) {
+      preview.style.left = (e.clientX + 20) + 'px';
+      preview.style.top  = (e.clientY - 70) + 'px';
+    }
+
+    document.addEventListener('mouseover', (e) => {
+      const trigger = e.target.closest('.preview-trigger');
+      if (trigger && trigger.dataset.img) {
+        previewImg.src = trigger.dataset.img;
+        preview.classList.add('visible');
+        movePreview(e);
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (preview.classList.contains('visible')) movePreview(e);
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const trigger = e.target.closest('.preview-trigger');
+      if (trigger) {
+        preview.classList.remove('visible');
+        previewImg.src = '';
+      }
+    });
+
+    // ── Leaf cursor avoidance ────────────────────────────────
     const leaf = document.querySelector('.illustration');
     if (leaf) {
       let tx = 0, ty = 0;
@@ -143,10 +218,8 @@
           tx = -(dx / dist) * strength;
           ty = -(dy / dist) * strength;
         } else {
-          tx = 0;
-          ty = 0;
+          tx = 0; ty = 0;
         }
-
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(animate);
       });
@@ -160,37 +233,29 @@
 
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
-
     function getAudioCtx() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
 
-    // Swoosh: filtered noise burst, volume scales with proximity
-    let swooshNode = null;
-    let swooshGain = null;
+    let swooshNode = null, swooshGain = null;
 
     function startSwoosh() {
       const ctx = getAudioCtx();
       if (swooshNode) return;
-
       const bufferSize = ctx.sampleRate * 0.5;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
       swooshNode = ctx.createBufferSource();
       swooshNode.buffer = buffer;
       swooshNode.loop = true;
-
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
       filter.frequency.value = 300;
       filter.Q.value = 0.4;
-
       swooshGain = ctx.createGain();
       swooshGain.gain.value = 0;
-
       swooshNode.connect(filter);
       filter.connect(swooshGain);
       swooshGain.connect(ctx.destination);
@@ -210,71 +275,47 @@
       }, 400);
     }
 
-    // Wire swoosh to leaf proximity
     if (leaf) {
       document.addEventListener('mousemove', (e) => {
         const rect = leaf.getBoundingClientRect();
         const lx = rect.left + rect.width / 2;
         const ly = rect.top + rect.height / 2;
-        const dx = e.clientX - lx;
-        const dy = e.clientY - ly;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const radius = 160;
-
-        if (dist < radius) {
-          startSwoosh();
-          setSwooshVolume(1 - dist / radius);
-        } else {
-          stopSwoosh();
-        }
+        const dx = e.clientX - lx, dy = e.clientY - ly;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 160) { startSwoosh(); setSwooshVolume(1 - dist/160); }
+        else stopSwoosh();
       });
     }
 
-    // UI tick: short sine blip on hover of links/buttons
-    let lastTickTarget = null;
-
     function playTick() {
       const ctx = getAudioCtx();
-
-      // Short noise burst — mechanical tick feel
       const len = Math.floor(ctx.sampleRate * 0.012);
       const buf = ctx.createBuffer(1, len, ctx.sampleRate);
       const data = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 8);
-      }
-
+      for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/len, 8);
       const src = ctx.createBufferSource();
       src.buffer = buf;
-
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
       filter.frequency.value = 2400;
       filter.Q.value = 1.5;
-
       const gain = ctx.createGain();
       gain.gain.setValueAtTime(0.18, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.012);
-
-      src.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
+      src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
       src.start();
     }
 
+    let lastTickTarget = null;
     document.addEventListener('mouseover', (e) => {
       const target = e.target.closest('a, button');
-      if (target && target !== lastTickTarget) {
-        lastTickTarget = target;
-        playTick();
-      }
+      if (target && target !== lastTickTarget) { lastTickTarget = target; playTick(); }
     });
-
     document.addEventListener('mouseout', (e) => {
       if (e.target.closest('a, button')) lastTickTarget = null;
     });
 
-    // Scroll hint: hide when near bottom, show when more to scroll
+    // Scroll hint hide at bottom
     const scrollHint = document.querySelector('.scroll-hint');
     function updateScrollHint() {
       const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;

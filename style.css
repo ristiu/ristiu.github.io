@@ -182,7 +182,17 @@ a:hover { color: var(--accent); }
   cursor: pointer;
   padding: 0;
   outline: none;
-  box-shadow: 0 0 10px 2px rgba(255, 94, 50, 0.25);
+  box-shadow: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.tree-toggle-btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.tree-toggle-btn:hover .toggle-bar {
+  background: #fff;
 }
 
 /* Crossbar vectors drawn with CSS */
@@ -305,12 +315,57 @@ a:hover { color: var(--accent); }
   border-radius: 4px;
 }
 
-/* ─── Footer links ───────────────────────────────────────── */
+/* ─── Footer actions ─────────────────────────────────────── */
 .footer-links {
-  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.footer-links p + p { margin-top: 0.4rem; }
+.footer-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-action:hover { color: var(--accent); }
+.footer-action svg { flex-shrink: 0; }
+
+/* ─── Hello letter animation ─────────────────────────────── */
+.hello-word { cursor: default; }
+.hello-letter { display: inline-block; transition: color 0.3s ease; }
+
+/* ─── Hover thumbnail preview ────────────────────────────── */
+.hover-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 70px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.hover-preview.visible { opacity: 1; }
+
+.hover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
 /* ─── Back link ──────────────────────────────────────────── */
 .back {

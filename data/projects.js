@@ -76,7 +76,7 @@ const projects = [
   },
   {
     id: "price-perception",
-    title: "Price Perception in Hotel Booking",
+    title: "Improving Price Perception in Hotel Booking Discovery",
     subtitle: "with Gestalt Principles",
     company: "Traveloka",
     industry: "Pricing, Travel, Ecommerce",
@@ -110,8 +110,8 @@ const projects = [
   },
   {
     id: "service-prototyping",
-    title: "Service Prototyping",
-    subtitle: "in Warehouse Logistics for Ops Efficiency",
+    title: "Improving Warehouse Logistics Efficiency",
+    subtitle: "Service Prototyping",
     company: "Warung Pintar",
     industry: "Supply Chain, Retail, Warehousing",
     year: "",
@@ -144,7 +144,7 @@ const projects = [
   {
     id: "visual-trends",
     title: "Forecasting Visual Product Trends",
-    subtitle: "",
+    subtitle: "Japan & Indonesia Youth Segment",
     company: "Casio",
     industry: "Electronics Manufacturing",
     year: "2014",
