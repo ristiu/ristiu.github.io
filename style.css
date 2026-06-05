@@ -470,11 +470,128 @@ a:hover { color: var(--accent); }
 }
 
 /* ─── Project detail ─────────────────────────────────────── */
+/* ─── Project hero ───────────────────────────────────────── */
+.project-hero {
+  position: relative;
+  width: 100%;
+  min-height: 52vw;
+  max-height: 320px;
+  background-color: #1a1a1a;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.project-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+}
+
+.project-hero-back {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  z-index: 2;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+.project-hero-back:hover { color: var(--accent); opacity: 1; }
+
+.project-hero-text {
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem;
+  padding-top: 3rem;
+}
+
+.project-hero-title {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.project-hero-meta {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ─── Project body ───────────────────────────────────────── */
+.project-body {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+}
+
+/* ─── Hook blockquote ────────────────────────────────────── */
+.hook-text {
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--ink);
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  margin: 0;
+}
+
+/* ─── Strategy card ──────────────────────────────────────── */
+.strategy-card {
+  background: #f0ede8;
+  border-radius: 4px;
+  padding: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.strategy-card-label {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.strategy-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.strategy-card-img {
+  width: 100%;
+  border-radius: 2px;
+  display: block;
+}
+
+/* ─── Bottom screenshots ─────────────────────────────────── */
+.project-screenshots {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-screenshot {
+  width: 100%;
+  border-radius: 4px;
+  display: block;
+}
+
+/* legacy — keep for fallback */
 .project-title {
   font-family: var(--mono);
   font-size: 1.1rem;
   line-height: 1.45;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 400;
 }
 
