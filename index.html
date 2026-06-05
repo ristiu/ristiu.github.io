@@ -50,10 +50,10 @@
             — exploring what it means when design renders intent through technology.</p>
         </div>
         <div class="tree-leaves-container">
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/offline-to-online-2.jpeg">Feedback Loop</a></div>
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/reorder-lifecycle-1.jpeg">/skills that matters</a></div>
-          <div class="tree-leaf-row"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/visual-trends-1.jpeg">Content Bookmark</a></div>
-          <div class="tree-leaf-row tree-leaf-last"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/service-prototyping-2.jpeg">Fortune Cookie Cracker</a></div>
+          <div class="tree-leaf-row" style="--index:1;--total:4"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/offline-to-online-2.jpeg">Feedback Loop</a></div>
+          <div class="tree-leaf-row" style="--index:2;--total:4"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/reorder-lifecycle-1.jpeg">/skills that matters</a></div>
+          <div class="tree-leaf-row" style="--index:3;--total:4"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/visual-trends-1.jpeg">Content Bookmark</a></div>
+          <div class="tree-leaf-row tree-leaf-last" style="--index:4;--total:4"><span class="leaf-vector-arm"></span><a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/service-prototyping-2.jpeg">Fortune Cookie Cracker</a></div>
         </div>
       </div>
       <p class="tree-analog">Outside the screen, I practice <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/leave.gif"><strong>analog craft.</strong></a></p>
@@ -103,35 +103,47 @@
       btn.addEventListener('click', () => {
         const expanded = root.classList.toggle('is-expanded');
         btn.setAttribute('aria-expanded', expanded);
+
+        if (expanded) {
+          // Fire a tick for each leaf matching the CSS stagger delay
+          const leaves = root.querySelectorAll('.tree-leaf-row');
+          const staggerMs = 70; // matches --stagger-delay: 0.07s
+          leaves.forEach((leaf, i) => {
+            const idx = parseInt(leaf.style.getPropertyValue('--index') || (i + 1));
+            setTimeout(() => playTick(), idx * staggerMs);
+          });
+        }
       });
     });
 
     // Portfolio list — Leadership inserted at index 2 (3rd position)
-    const leadershipItem = `<div class="tree-leaf-row">
-      <span class="leaf-vector-arm"></span>
-      <div class="portfolio-entry">
-        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Leadership and Team Management Principle</a>
-        <span class="tree-subtitle">Build High Performing Team</span>
-      </div>
-    </div>`;
-
     const list = document.getElementById('portfolio-list');
     const rows = projects.map((p, i) => {
       const subtitleLine = p.subtitle
         ? `<span class="tree-subtitle">${p.subtitle}</span>`
         : '';
       const thumb = (p.projectPlanning || []).find(s => s.image)?.image || '';
-      return `<div class="tree-leaf-row">
+      return { html: `<div class="tree-leaf-row" style="--index:INDEX;--total:TOTAL">
         <span class="leaf-vector-arm"></span>
         <div class="portfolio-entry">
           <a href="project.html#${p.id}" class="preview-trigger" data-img="${thumb}">${p.title}</a>${subtitleLine}
         </div>
-      </div>`;
+      </div>` };
     });
 
-    // Insert leadership at position 2 (after index 1)
+    const leadershipItem = { html: `<div class="tree-leaf-row" style="--index:INDEX;--total:TOTAL">
+      <span class="leaf-vector-arm"></span>
+      <div class="portfolio-entry">
+        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Leadership and Team Management Principle</a>
+        <span class="tree-subtitle">Build High Performing Team</span>
+      </div>
+    </div>` };
+
     rows.splice(2, 0, leadershipItem);
-    list.innerHTML = rows.join('');
+    const total = rows.length;
+    list.innerHTML = rows.map((r, i) =>
+      r.html.replace(/INDEX/g, i + 1).replace(/TOTAL/g, total)
+    ).join('');
 
     // ── Hello letter colour wave ────────────────────────────
     const helloWord = document.querySelector('.hello-word');

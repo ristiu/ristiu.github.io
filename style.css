@@ -10,6 +10,7 @@
   --serif: 'JetBrains Mono', 'Courier New', monospace;
   --page-max: 375px;
   --gap: 1.5rem;
+  --stagger-delay: 0.07s;
 }
 
 html { font-size: 14px; scroll-behavior: smooth; }
@@ -231,7 +232,7 @@ a:hover { color: var(--accent); }
   margin-top: 0.5rem;
 }
 
-/* Leaf rows — horizontal arm as a real CSS line */
+/* Leaf rows — staggered entrance */
 .tree-leaf-row {
   display: flex;
   align-items: flex-start;
@@ -239,6 +240,17 @@ a:hover { color: var(--accent); }
   padding: 4px 0;
   font-family: var(--mono);
   font-size: 1rem;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* Reverse stagger on close */
+  transition-delay: calc((var(--total, 6) - var(--index, 0)) * 0.03s);
+}
+
+.is-expanded .tree-leaf-row {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--index, 0) * var(--stagger-delay));
 }
 
 .leaf-vector-arm {
