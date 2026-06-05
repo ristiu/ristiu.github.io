@@ -310,12 +310,60 @@ a:hover { color: var(--accent); }
 }
 
 /* ─── Illustration placeholder ───────────────────────────── */
+.illustration-group {
+  position: relative;
+  width: 280px;
+  margin-left: -60px;
+}
+
 .illustration {
   width: 280px;
   height: auto;
   display: block;
   object-fit: contain;
-  margin-left: -60px;
+}
+
+.leaf-spin-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 84px;
+  height: auto;
+  display: block;
+  animation: leaf-spin 12s linear infinite;
+  transform-origin: center center;
+}
+
+.illustration--sm {
+  width: 84px;
+  height: auto;
+  display: block;
+  opacity: 0.6;
+}
+
+.leaf-spin-wrap--xs {
+  top: 80px;   /* below the small leaf */
+  right: -10px;
+  width: 42px;
+  animation-name: leaf-spin-ccw;
+  animation-duration: 8s; /* slightly faster for variety */
+}
+
+.illustration--xs {
+  width: 42px;
+  height: auto;
+  display: block;
+  opacity: 0.45;
+}
+
+@keyframes leaf-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes leaf-spin-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
 }
 
 .illustration-placeholder {

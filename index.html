@@ -30,7 +30,11 @@
           In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
         </p>
       </div>
-      <img class="illustration" src="assets/images/leave.gif" alt="" />
+      <div class="illustration-group">
+        <img class="illustration" src="assets/images/leave.gif" alt="" />
+        <span class="leaf-spin-wrap"><img class="illustration illustration--sm" src="assets/images/leave.gif" alt="" /></span>
+        <span class="leaf-spin-wrap leaf-spin-wrap--xs"><img class="illustration illustration--xs" src="assets/images/leave.gif" alt="" /></span>
+      </div>
       <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
     </div>
   </div>
@@ -193,42 +197,36 @@
       }
     });
 
-    // ── Leaf cursor avoidance ────────────────────────────────
-    const leaf = document.querySelector('.illustration');
-    if (leaf) {
-      let tx = 0, ty = 0;
-      let cx = 0, cy = 0;
-      let rafId;
+    // ── Per-leaf cursor avoidance + swoosh ───────────────────
+    function lerp(a, b, t) { return a + (b - a) * t; }
 
-      leaf.style.transition = 'none';
-      leaf.style.willChange = 'transform';
-
-      function lerp(a, b, t) { return a + (b - a) * t; }
+    function initLeafAvoidance(el, radius, strength, swooshScale) {
+      let tx = 0, ty = 0, cx = 0, cy = 0, rafId;
+      el.style.willChange = 'transform';
 
       function animate() {
         cx = lerp(cx, tx, 0.08);
         cy = lerp(cy, ty, 0.08);
-        leaf.style.transform = `translate(${cx}px, ${cy}px)`;
-        if (Math.abs(cx - tx) > 0.1 || Math.abs(cy - ty) > 0.1) {
+        el.style.transform = `translate(${cx}px, ${cy}px)`;
+        if (Math.abs(cx - tx) > 0.1 || Math.abs(cy - ty) > 0.1)
           rafId = requestAnimationFrame(animate);
-        } else {
-          leaf.style.transform = `translate(${tx}px, ${ty}px)`;
-        }
+        else
+          el.style.transform = `translate(${tx}px, ${ty}px)`;
       }
 
       document.addEventListener('mousemove', (e) => {
-        const rect = leaf.getBoundingClientRect();
-        const lx = rect.left + rect.width / 2;
-        const ly = rect.top + rect.height / 2;
-        const dx = e.clientX - lx;
-        const dy = e.clientY - ly;
+        const r = el.getBoundingClientRect();
+        const lx = r.left + r.width / 2;
+        const ly = r.top + r.height / 2;
+        const dx = e.clientX - lx, dy = e.clientY - ly;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const radius = 160;
 
         if (dist < radius) {
-          const strength = (1 - dist / radius) * 40;
-          tx = -(dx / dist) * strength;
-          ty = -(dy / dist) * strength;
+          const s = (1 - dist / radius) * strength;
+          tx = -(dx / dist) * s;
+          ty = -(dy / dist) * s;
+          startSwoosh();
+          setSwooshVolume((1 - dist / radius) * swooshScale);
         } else {
           tx = 0; ty = 0;
         }
@@ -242,6 +240,13 @@
         rafId = requestAnimationFrame(animate);
       });
     }
+
+    const leafBig = document.querySelector('.illustration:not(.illustration--sm):not(.illustration--xs)');
+    const leafSm  = document.querySelector('.illustration--sm');
+    const leafXs  = document.querySelector('.illustration--xs');
+    if (leafBig) initLeafAvoidance(leafBig, 160, 40, 1.0);   // full volume
+    if (leafSm)  initLeafAvoidance(leafSm,  100, 24, 0.3);   // 30% volume
+    if (leafXs)  initLeafAvoidance(leafXs,   70, 16, 0.12);  // 12% volume, tiny radius
 
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
@@ -287,17 +292,7 @@
       }, 400);
     }
 
-    if (leaf) {
-      document.addEventListener('mousemove', (e) => {
-        const rect = leaf.getBoundingClientRect();
-        const lx = rect.left + rect.width / 2;
-        const ly = rect.top + rect.height / 2;
-        const dx = e.clientX - lx, dy = e.clientY - ly;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 160) { startSwoosh(); setSwooshVolume(1 - dist/160); }
-        else stopSwoosh();
-      });
-    }
+    // swoosh is now handled inside initLeafAvoidance per leaf
 
     function playTick() {
       const ctx = getAudioCtx();
