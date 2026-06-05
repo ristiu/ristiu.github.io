@@ -227,6 +227,7 @@
           setSwooshVolume((1 - dist / radius) * swooshScale);
         } else {
           tx = 0; ty = 0;
+          stopSwoosh(); // stop sound when cursor leaves radius
         }
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(animate);
@@ -234,13 +235,14 @@
 
       document.addEventListener('mouseleave', () => {
         tx = 0; ty = 0;
+        stopSwoosh();
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(animate);
       });
     }
 
     const leafBig = document.querySelector('.illustration');
-    if (leafBig) initLeafAvoidance(leafBig, 160, 40, 1.0);
+    if (leafBig) initLeafAvoidance(leafBig, 200, 100, 1.0); // larger radius + more movement
 
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
