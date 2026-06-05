@@ -187,13 +187,14 @@ a:hover { color: var(--accent); }
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.tree-toggle-btn:hover {
-  background: var(--ink);
-  border-color: var(--ink);
-}
-
-.tree-toggle-btn:hover .toggle-bar {
-  background: #fff;
+@media (hover: hover) {
+  .tree-toggle-btn:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .tree-toggle-btn:hover .toggle-bar {
+    background: #fff;
+  }
 }
 
 /* Crossbar vectors drawn with CSS */

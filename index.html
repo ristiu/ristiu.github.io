@@ -136,8 +136,8 @@
     const leadershipItem = { html: `<div class="tree-leaf-row" style="--index:INDEX;--total:TOTAL">
       <span class="leaf-vector-arm"></span>
       <div class="portfolio-entry">
-        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Leadership and Team Management Principle</a>
-        <span class="tree-subtitle">Build High Performing Team</span>
+        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Build High Performing Team</a>
+        <span class="tree-subtitle">Leadership and Team Management Principle</span>
       </div>
     </div>` };
 
@@ -165,35 +165,38 @@
       });
     });
 
-    // ── Hover thumbnail preview (event delegation) ──────────
+    // ── Hover thumbnail — desktop only ───────────────────────
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
     const preview = document.getElementById('hover-preview');
     const previewImg = document.getElementById('hover-preview-img');
 
-    function movePreview(e) {
-      preview.style.left = (e.clientX + 20) + 'px';
-      preview.style.top  = (e.clientY - 70) + 'px';
+    if (!isTouchDevice) {
+      function movePreview(e) {
+        preview.style.left = (e.clientX + 20) + 'px';
+        preview.style.top  = (e.clientY - 70) + 'px';
+      }
+
+      document.addEventListener('mouseover', (e) => {
+        const trigger = e.target.closest('.preview-trigger');
+        if (trigger && trigger.dataset.img) {
+          previewImg.src = trigger.dataset.img;
+          preview.classList.add('visible');
+          movePreview(e);
+        }
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (preview.classList.contains('visible')) movePreview(e);
+      });
+
+      document.addEventListener('mouseout', (e) => {
+        const trigger = e.target.closest('.preview-trigger');
+        if (trigger) {
+          preview.classList.remove('visible');
+          previewImg.src = '';
+        }
+      });
     }
-
-    document.addEventListener('mouseover', (e) => {
-      const trigger = e.target.closest('.preview-trigger');
-      if (trigger && trigger.dataset.img) {
-        previewImg.src = trigger.dataset.img;
-        preview.classList.add('visible');
-        movePreview(e);
-      }
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (preview.classList.contains('visible')) movePreview(e);
-    });
-
-    document.addEventListener('mouseout', (e) => {
-      const trigger = e.target.closest('.preview-trigger');
-      if (trigger) {
-        preview.classList.remove('visible');
-        previewImg.src = '';
-      }
-    });
 
     // ── Per-leaf cursor avoidance + swoosh ───────────────────
     function lerp(a, b, t) { return a + (b - a) * t; }
@@ -247,9 +250,22 @@
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
     function getAudioCtx() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      // Resume if suspended (required after first user gesture on some browsers)
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
+
+    // Unlock audio on first interaction
+    const unlockAudio = () => {
+      getAudioCtx();
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    };
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
 
     let swooshNode = null, swooshGain = null;
 

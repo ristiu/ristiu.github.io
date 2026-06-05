@@ -111,7 +111,7 @@ const projects = [
   {
     id: "service-prototyping",
     title: "Improving Warehouse Logistics Efficiency",
-    subtitle: "Service Prototyping",
+    subtitle: "with Service Prototyping",
     company: "Warung Pintar",
     industry: "Supply Chain, Retail, Warehousing",
     year: "",
