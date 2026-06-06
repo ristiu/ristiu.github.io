@@ -326,6 +326,10 @@
         sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
         sessionStorage.setItem('scrollY', window.scrollY);
 
+        // Lift card above all dither overlays, hide shadows
+        card.style.zIndex = '500';
+        document.querySelectorAll('.card-dither-overlay').forEach(c => c.style.opacity = '0');
+
         // Float card up further from hover position
         card.style.transition = 'transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)';
         card.style.transform = 'translateX(-50%) translateY(-28px) rotateX(0deg)';
