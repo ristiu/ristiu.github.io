@@ -56,7 +56,7 @@ const projects = [
     strategyVol: 1,
     strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
     strategyCardImage: "assets/images/o2o-strategy-card.png",
-    heroImage: "assets/images/o2o-hero.jpg",
+    heroImage: "assets/images/o2o-hero.png",
     screenshots: ["assets/images/o2o-whatsapp.png"],
     images: []
   },

@@ -250,22 +250,31 @@
     drawAllDither();
     window.addEventListener('resize', drawAllDither);
 
-    // ── Card reset + jump to stack on back navigation ────────
+    // ── Scroll position: save on leave, restore on back ──────
     history.scrollRestoration = 'manual';
 
-    window.addEventListener('pageshow', () => {
+    // Save scroll position before navigating away
+    window.addEventListener('pagehide', () => {
+      sessionStorage.setItem('scrollY', window.scrollY);
+    });
+
+    window.addEventListener('pageshow', (e) => {
       // Reset card hover/focus states
       document.querySelectorAll('.stack-card').forEach(card => card.blur());
-      // Restore all dither canvas opacities
       document.querySelectorAll('.card-dither-overlay').forEach(c => {
         c.style.transition = 'none';
         c.style.opacity = '1';
         c.style.clipPath = '';
       });
       drawAllDither();
-      // Jump straight to the portfolio stack
-      const stack = document.getElementById('portfolio-list');
-      if (stack) stack.scrollIntoView({ behavior: 'instant' });
+
+      if (e.persisted || sessionStorage.getItem('scrollY') !== null) {
+        // Back navigation — restore exact position
+        const savedY = parseInt(sessionStorage.getItem('scrollY') || '0', 10);
+        sessionStorage.removeItem('scrollY');
+        window.scrollTo({ top: savedY, behavior: 'instant' });
+      }
+      // Fresh load — do nothing, browser starts at top
     });
 
     // ── Hello letter colour wave ────────────────────────────
