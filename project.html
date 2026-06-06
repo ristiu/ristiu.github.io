@@ -205,6 +205,10 @@
         'z-index:9999','pointer-events:none',
         'image-rendering:pixelated','image-rendering:crisp-edges',
       ].join(';');
+      // Pre-fill before appending so there's no blank frame on first paint
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
       document.body.appendChild(cvs);
       return cvs;
     }
@@ -212,8 +216,6 @@
     function dtDissolve(cvs) {
       const ctx = cvs.getContext('2d');
       const { width: cw, height: ch } = cvs;
-      ctx.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
-      ctx.fillRect(0, 0, cw, ch);
       const img = ctx.getImageData(0, 0, cw, ch);
       const d = img.data;
       let level = 0;
@@ -227,13 +229,14 @@
       })();
     }
 
-    // ── Entry: dither dissolve away ────────────────────────────
-    requestAnimationFrame(() => { dtDissolve(makeCvs()); });
+    // ── Entry: dither dissolve away (canvas pre-filled, no blank frame) ──
+    dtDissolve(makeCvs());
 
     // ── Back button: dither fill → navigate ───────────────────
     document.querySelector('.project-hero-back').addEventListener('click', (e) => {
       e.preventDefault();
       const href = e.currentTarget.getAttribute('href');
+      sessionStorage.setItem('ditherBack', '1');
       const cvs = makeCvs();
       const ctx = cvs.getContext('2d');
       const { width: cw, height: ch } = cvs;

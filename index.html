@@ -372,12 +372,15 @@
         sessionStorage.removeItem('scrollY');
         window.scrollTo({ top: savedY, behavior: 'instant' });
 
-        // Dither dissolve reveal on back
-        const cvs = makeDitherCvs();
-        const ctx0 = cvs.getContext('2d');
-        ctx0.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
-        ctx0.fillRect(0, 0, cvs.width, cvs.height);
-        requestAnimationFrame(() => ditherDissolve(cvs));
+        // Dither dissolve only when our back button was clicked (not native swipe-back)
+        if (sessionStorage.getItem('ditherBack')) {
+          sessionStorage.removeItem('ditherBack');
+          const cvs = makeDitherCvs();
+          const ctx0 = cvs.getContext('2d');
+          ctx0.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
+          ctx0.fillRect(0, 0, cvs.width, cvs.height);
+          requestAnimationFrame(() => ditherDissolve(cvs));
+        }
 
         // Pop the card that was previously clicked
         const returnI = sessionStorage.getItem('returnCardI');
