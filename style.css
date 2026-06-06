@@ -168,16 +168,11 @@ a:hover { color: var(--accent); }
   position: absolute;
   top: 34px;
   left: 10px;
-  width: 1px;
+  width: 2px;
   bottom: 0;
   background: var(--ink);
-  opacity: 0.15;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.is-expanded.tree-node-wrapper::before {
   opacity: 1;
+  pointer-events: none;
 }
 
 /* Remove the accent overlay — no longer needed */
@@ -278,7 +273,7 @@ a:hover { color: var(--accent); }
 
 .leaf-vector-arm {
   width: 22px;
-  height: 1px;
+  height: 2px;
   background: var(--ink);
   opacity: 1;
   display: inline-block;
@@ -650,7 +645,6 @@ a:hover { color: var(--accent); }
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  background: #fff;
   display: flex;
   flex-direction: column;
 }
