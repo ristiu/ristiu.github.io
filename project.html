@@ -188,20 +188,69 @@
       });
     }
   </script>
-  <script src="cursor.js"></script>
   <script>
-    // ── Back button shrink transition ──────────────────────────
+    // ── Dither engine (shared) ─────────────────────────────────
+    const DT_BAYER = [[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+    const DT_BEIGE = [245, 240, 232];
+    const DT_BLOCK = 3;
+
+    function makeCvs() {
+      const W = window.innerWidth, H = window.innerHeight;
+      const cvs = document.createElement('canvas');
+      cvs.width = Math.ceil(W / DT_BLOCK);
+      cvs.height = Math.ceil(H / DT_BLOCK);
+      cvs.style.cssText = [
+        'position:fixed','top:0','left:0',
+        `width:${W}px`,`height:${H}px`,
+        'z-index:9999','pointer-events:none',
+        'image-rendering:pixelated','image-rendering:crisp-edges',
+      ].join(';');
+      document.body.appendChild(cvs);
+      return cvs;
+    }
+
+    function dtDissolve(cvs) {
+      const ctx = cvs.getContext('2d');
+      const { width: cw, height: ch } = cvs;
+      ctx.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
+      ctx.fillRect(0, 0, cw, ch);
+      const img = ctx.getImageData(0, 0, cw, ch);
+      const d = img.data;
+      let level = 0;
+      (function frame() {
+        for (let y = 0; y < ch; y++)
+          for (let x = 0; x < cw; x++)
+            if (DT_BAYER[y % 4][x % 4] === level) d[(y * cw + x) * 4 + 3] = 0;
+        ctx.putImageData(img, 0, 0);
+        if (level < 15) { level++; requestAnimationFrame(frame); }
+        else cvs.remove();
+      })();
+    }
+
+    // ── Entry: dither dissolve away ────────────────────────────
+    requestAnimationFrame(() => { dtDissolve(makeCvs()); });
+
+    // ── Back button: dither fill → navigate ───────────────────
     document.querySelector('.project-hero-back').addEventListener('click', (e) => {
       e.preventDefault();
       const href = e.currentTarget.getAttribute('href');
-
-      const content = document.getElementById('project-content');
-      content.style.transition = 'transform 0.28s cubic-bezier(0.4, 0, 1, 1), opacity 0.22s ease';
-      content.style.transformOrigin = 'center top';
-      content.style.transform = 'scale(0.94) translateY(16px)';
-      content.style.opacity = '0';
-
-      setTimeout(() => { window.location.href = href; }, 250);
+      const cvs = makeCvs();
+      const ctx = cvs.getContext('2d');
+      const { width: cw, height: ch } = cvs;
+      const img = ctx.createImageData(cw, ch);
+      const d = img.data;
+      let level = 0;
+      (function frame() {
+        for (let y = 0; y < ch; y++)
+          for (let x = 0; x < cw; x++)
+            if (DT_BAYER[y % 4][x % 4] === level) {
+              const i = (y * cw + x) * 4;
+              d[i] = DT_BEIGE[0]; d[i+1] = DT_BEIGE[1]; d[i+2] = DT_BEIGE[2]; d[i+3] = 255;
+            }
+        ctx.putImageData(img, 0, 0);
+        if (level < 15) { level++; requestAnimationFrame(frame); }
+        else window.location.href = href;
+      })();
     });
   </script>
 </body>
