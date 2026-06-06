@@ -260,11 +260,14 @@
 
         const rect = card.getBoundingClientRect();
 
-        // Float card up
-        card.style.transition = 'transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        card.style.transform = 'translateX(-50%) translateY(-28px) rotateX(0deg)';
+        // Store card index for back-transition pop
+        sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
 
-        // Overlay starts at card's exact position
+        // Float card up briefly
+        card.style.transition = 'transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        card.style.transform = 'translateX(-50%) translateY(-24px) rotateX(0deg)';
+
+        // Overlay starts at card's exact position, expands to fullscreen
         const overlay = document.createElement('div');
         overlay.className = 'card-expand-overlay';
         overlay.style.top    = rect.top + 'px';
@@ -283,9 +286,9 @@
         overlay.style.height       = '100vh';
         overlay.style.borderRadius = '0';
 
-        // Save scroll position and navigate after animation
+        // Navigate right as overlay finishes filling — project page fades in to mask the cut
         sessionStorage.setItem('scrollY', window.scrollY);
-        setTimeout(() => { window.location.href = href; }, 500);
+        setTimeout(() => { window.location.href = href; }, 280);
       });
     });
 
@@ -298,8 +301,15 @@
     });
 
     window.addEventListener('pageshow', (e) => {
+      // Remove any expand overlay left from bfcache
+      document.querySelectorAll('.card-expand-overlay').forEach(el => el.remove());
+
       // Reset card hover/focus states
-      document.querySelectorAll('.stack-card').forEach(card => card.blur());
+      document.querySelectorAll('.stack-card').forEach(card => {
+        card.blur();
+        card.style.transform = '';
+        card.style.transition = '';
+      });
       document.querySelectorAll('.card-dither-overlay').forEach(c => {
         c.style.transition = 'none';
         c.style.opacity = '1';
@@ -312,6 +322,21 @@
         const savedY = parseInt(sessionStorage.getItem('scrollY') || '0', 10);
         sessionStorage.removeItem('scrollY');
         window.scrollTo({ top: savedY, behavior: 'instant' });
+
+        // Pop the card that was previously clicked
+        const returnI = sessionStorage.getItem('returnCardI');
+        sessionStorage.removeItem('returnCardI');
+        if (returnI) {
+          const returnCard = list.querySelector(`.stack-card[style*="--stack-i:${returnI}"]`);
+          if (returnCard) {
+            returnCard.style.transition = 'none';
+            returnCard.style.transform = 'translateX(-50%) translateY(-20px) scale(1.03)';
+            requestAnimationFrame(() => {
+              returnCard.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+              returnCard.style.transform = '';
+            });
+          }
+        }
       }
       // Fresh load — do nothing, browser starts at top
     });

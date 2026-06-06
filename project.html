@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="page-enter">
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Riso grain SVG filter -->
@@ -22,8 +22,16 @@
     </filter>
   </svg>
 
+  <!-- Fixed back nav — lives outside animated content -->
+  <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
+
   <div id="project-content">
-    <!-- rendered by JS -->
+    <!-- skeleton shown instantly while JS renders -->
+    <div class="project-skeleton">
+      <div class="project-skeleton__bar project-skeleton__bar--title"></div>
+      <div class="project-skeleton__bar project-skeleton__bar--sub"></div>
+      <div class="project-skeleton__hero"></div>
+    </div>
   </div>
 
   <script src="cursor.js"></script>
@@ -37,7 +45,15 @@
       el.innerHTML = '<p class="stub-notice">Project not found.</p>';
     } else {
       document.title = `${project.title} — Risti`;
-      el.innerHTML = renderProject(project);
+      // Swap skeleton → real content
+      const skeleton = el.querySelector('.project-skeleton');
+      if (skeleton) skeleton.classList.add('is-hidden');
+      const content = document.createElement('div');
+      content.innerHTML = renderProject(project);
+      content.style.opacity = '0';
+      content.style.transition = 'opacity 0.25s ease';
+      el.appendChild(content);
+      requestAnimationFrame(() => { content.style.opacity = '1'; });
       initTimeline();
       initRisoImages();
     }
@@ -51,7 +67,6 @@
       const heroColor = placeholderColors[Math.abs(p.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % placeholderColors.length];
       const heroHtml = `
         <div class="project-hero">
-          <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
           <div class="project-hero-text">
             <h1 class="project-hero-title">${p.title}</h1>
             ${(p.company || p.tags?.length) ? `<div class="project-hero-keywords"><span>${[p.company, p.industry].filter(Boolean).join(' · ')}</span>${p.tags?.length ? `<span>${p.tags.join(', ')}</span>` : ''}</div>` : ''}
@@ -174,5 +189,20 @@
     }
   </script>
   <script src="cursor.js"></script>
+  <script>
+    // ── Back button shrink transition ──────────────────────────
+    document.querySelector('.project-hero-back').addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = e.currentTarget.getAttribute('href');
+
+      const content = document.getElementById('project-content');
+      content.style.transition = 'transform 0.28s cubic-bezier(0.4, 0, 1, 1), opacity 0.22s ease';
+      content.style.transformOrigin = 'center top';
+      content.style.transform = 'scale(0.94) translateY(16px)';
+      content.style.opacity = '0';
+
+      setTimeout(() => { window.location.href = href; }, 250);
+    });
+  </script>
 </body>
 </html>
