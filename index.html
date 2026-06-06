@@ -192,7 +192,7 @@
     list.querySelectorAll('.stack-card').forEach(card => {
       const isTop    = card.classList.contains('stack-card--top');
       const stackI   = parseInt(card.style.getPropertyValue('--stack-i'));
-      const cardTop  = 160 + (stackI - 1) * gap;
+      const cardTop  = 220 + (stackI - 1) * gap;
       const exposedH = isTop ? 155 : gap;
 
       // More white space at top: push shadow start further down
