@@ -62,19 +62,8 @@
     </section>
 
     <!-- Portfolio -->
-    <section class="section">
-      <div class="tree-node-wrapper js-tree-root">
-        <div class="tree-node-header">
-          <button class="tree-toggle-btn js-tree-toggle" aria-expanded="false">
-            <span class="toggle-bar toggle-h"></span>
-            <span class="toggle-bar toggle-v"></span>
-          </button>
-          <p class="tree-node-text">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
-        </div>
-        <div class="tree-leaves-container">
-          <div id="portfolio-list"></div>
-        </div>
-      </div>
+    <section class="section section--stack">
+      <div class="stack-container" id="portfolio-list"></div>
     </section>
 
     <!-- Footer -->
@@ -118,34 +107,28 @@
       });
     });
 
-    // Portfolio list — Leadership inserted at index 2 (3rd position)
+    // Portfolio stack cards
     const list = document.getElementById('portfolio-list');
-    const rows = projects.map((p, i) => {
-      const subtitleLine = p.subtitle
-        ? `<span class="tree-subtitle">${p.subtitle}</span>`
-        : '';
-      const thumb = (p.projectPlanning || []).find(s => s.image)?.image || '';
-      return { html: `<div class="tree-leaf-row" style="--index:INDEX;--total:TOTAL">
-        <span class="leaf-vector-arm"></span>
-        <div class="portfolio-entry">
-          <a href="project.html#${p.id}" class="preview-trigger" data-img="${thumb}">${p.title}</a>${subtitleLine}
-        </div>
-      </div>` };
-    });
 
-    const leadershipItem = { html: `<div class="tree-leaf-row" style="--index:INDEX;--total:TOTAL">
-      <span class="leaf-vector-arm"></span>
-      <div class="portfolio-entry">
-        <a href="#" title="coming soon" class="preview-trigger" data-img="assets/images/resume-thumb.jpg">Build High Performing Team</a>
-        <span class="tree-subtitle">Leadership and Team Management Principle</span>
-      </div>
-    </div>` };
+    const allCards = [
+      { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#visual-trends',       img: 'assets/images/visual-trends-1.jpeg' },
+      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#service-prototyping', img: 'assets/images/service-prototyping-1.jpeg' },
+      { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/images/price-perception-1.jpeg' },
+      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: '#',                                img: 'assets/images/resume-thumb.jpg' },
+      { title: 'Accelerating the Re-Order Lifecycle', subtitle: 'using Funnel Analysis',                                href: 'project.html#reorder-lifecycle',   img: 'assets/images/reorder-lifecycle-1.jpeg' },
+      { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/images/offline-to-online-2.jpeg' },
+    ];
 
-    rows.splice(2, 0, leadershipItem);
-    const total = rows.length;
-    list.innerHTML = rows.map((r, i) =>
-      r.html.replace(/INDEX/g, i + 1).replace(/TOTAL/g, total)
-    ).join('');
+    list.innerHTML = `
+      <p class="stack-description">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
+      ${allCards.map((c, i) => `
+        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}" href="${c.href}" style="--stack-i:${i + 1}">
+          <span class="stack-card-title">${c.title}</span>
+          <span class="stack-card-sub">${c.subtitle}</span>
+        </a>
+      `).join('')}
+    `;
+
 
     // ── Hello letter colour wave ────────────────────────────
     const helloWord = document.querySelector('.hello-word');
