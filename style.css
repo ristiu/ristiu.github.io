@@ -420,18 +420,22 @@ a:hover { color: var(--accent); }
 }
 
 
-.stack-container .stack-card:hover {
-  transform: translateX(-50%) translateY(-12px) rotateX(4deg);
-  border-top: 3px solid #000;
-  background: #fff;
+@media (hover: hover) {
+  .stack-container .stack-card:hover {
+    transform: translateX(-50%) translateY(-12px) rotateX(4deg);
+    border-top: 3px solid #000;
+    background: #fff;
+  }
 }
 
-.stack-card:hover .stack-card-title {
-  color: var(--accent);
-}
+@media (hover: hover) {
+  .stack-card:hover .stack-card-title {
+    color: var(--accent);
+  }
 
-.stack-card:hover .stack-card-sub {
-  color: var(--ink);
+  .stack-card:hover .stack-card-sub {
+    color: var(--ink);
+  }
 }
 
 

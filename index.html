@@ -225,32 +225,48 @@
       canvasMap.set(stackI, cvs);
     });
 
-    // Attach hover after all canvases are built so canvasMap is complete
-    list.querySelectorAll('.stack-card').forEach(card => {
-      const isTop  = card.classList.contains('stack-card--top');
-      const stackI = parseInt(card.style.getPropertyValue('--stack-i'));
-      const cvs    = canvasMap.get(stackI);
-      // The card visually above (lower stackI) has a shadow that bleeds into
-      // the top of this card when it lifts — hide it on hover
-      const cvsAbove = canvasMap.get(stackI - 1);
+    // Attach hover interactions — desktop (pointer) only
+    if (window.matchMedia('(hover: hover)').matches) {
+      list.querySelectorAll('.stack-card').forEach(card => {
+        const isTop  = card.classList.contains('stack-card--top');
+        const stackI = parseInt(card.style.getPropertyValue('--stack-i'));
+        const cvs    = canvasMap.get(stackI);
+        const cvsAbove = canvasMap.get(stackI - 1);
 
-      const hide = (c) => { if (c) { c.style.transition = 'none'; c.style.opacity = '0'; } };
-      const show = (c) => { if (c) { c.style.transition = 'opacity 0.4s ease'; c.style.opacity = '1'; } };
+        const hide = (c) => { if (c) { c.style.transition = 'none'; c.style.opacity = '0'; } };
+        const show = (c) => { if (c) { c.style.transition = 'opacity 0.4s ease'; c.style.opacity = '1'; } };
 
-      card.addEventListener('mouseenter', () => {
-        if (!isTop) hide(cvs);
-        // Clip 12px from the bottom of the card-above's shadow (matches the lift amount)
-        // so it doesn't bleed onto the hovered card face — but stays visible on its own card
-        if (cvsAbove) { cvsAbove.style.transition = 'none'; cvsAbove.style.clipPath = 'inset(0 0 12px 0)'; }
+        card.addEventListener('mouseenter', () => {
+          if (!isTop) hide(cvs);
+          if (cvsAbove) { cvsAbove.style.transition = 'none'; cvsAbove.style.clipPath = 'inset(0 0 12px 0)'; }
+        });
+        card.addEventListener('mouseleave', () => {
+          if (!isTop) show(cvs);
+          if (cvsAbove) { cvsAbove.style.transition = 'clip-path 0.4s ease'; cvsAbove.style.clipPath = ''; }
+        });
       });
-      card.addEventListener('mouseleave', () => {
-        if (!isTop) show(cvs);
-        if (cvsAbove) { cvsAbove.style.transition = 'clip-path 0.4s ease'; cvsAbove.style.clipPath = ''; }
-      });
-    });
+    }
 
     drawAllDither();
     window.addEventListener('resize', drawAllDither);
+
+    // ── Card reset + jump to stack on back navigation ────────
+    history.scrollRestoration = 'manual';
+
+    window.addEventListener('pageshow', () => {
+      // Reset card hover/focus states
+      document.querySelectorAll('.stack-card').forEach(card => card.blur());
+      // Restore all dither canvas opacities
+      document.querySelectorAll('.card-dither-overlay').forEach(c => {
+        c.style.transition = 'none';
+        c.style.opacity = '1';
+        c.style.clipPath = '';
+      });
+      drawAllDither();
+      // Jump straight to the portfolio stack
+      const stack = document.getElementById('portfolio-list');
+      if (stack) stack.scrollIntoView({ behavior: 'instant' });
+    });
 
     // ── Hello letter colour wave ────────────────────────────
     const helloWord = document.querySelector('.hello-word');
