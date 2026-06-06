@@ -380,7 +380,7 @@ a:hover { color: var(--accent); }
 
 /* [2] non-top cards — white base, shadow strip extended to fill visible area */
 .stack-card:not(.stack-card--top) {
-  background-color: #fff;
+  background-color: #E8E8E8;
 }
 
 /* per-card Bayer dither canvas — sits outside clip-path as container child */
@@ -507,6 +507,7 @@ a:hover { color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: flex-start;
 }
 
 .footer-action {

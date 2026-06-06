@@ -23,7 +23,7 @@
       <div class="hero-text">
         <p>
           <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I describe myself as a
-          <span class="accent preview-trigger" data-img="assets/images/resume-thumb.jpg">product builder</span>,
+          <span class="accent preview-trigger" data-img="assets/images/offline-to-online-1.jpeg">product builder</span>,
           with expertise in design and research.
         </p>
         <p>
@@ -68,13 +68,13 @@
 
     <!-- Footer -->
     <section class="section footer-links">
-      <a class="footer-action preview-trigger" data-img="assets/images/resume-thumb.jpg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
+      <a class="footer-action preview-trigger" data-img="assets/images/offline-to-online-1.jpeg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
         Download Resume
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-      <a class="footer-action preview-trigger" data-img="assets/images/resume-thumb.jpg" href="https://www.linkedin.com/in/ristiu/" target="_blank" rel="noopener">
+      <a class="footer-action preview-trigger" data-img="assets/images/offline-to-online-1.jpeg" href="https://www.linkedin.com/in/ristiu/" target="_blank" rel="noopener">
         Connect via LinkedIn
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -269,15 +269,16 @@
     const previewImg = document.getElementById('hover-preview-img');
 
     if (!isTouchDevice) {
-      function movePreview(e) {
-        const pw = preview.offsetWidth  || 140;
-        const ph = preview.offsetHeight || 100;
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const gap = 16;
-        let x = e.clientX + gap;
-        let y = e.clientY - ph / 2;
-        if (x + pw > vw - gap) x = e.clientX - pw - gap;
+      function anchorPreview(trigger) {
+        const pw  = preview.offsetWidth  || 70;
+        const ph  = preview.offsetHeight || 70;
+        const vw  = window.innerWidth;
+        const vh  = window.innerHeight;
+        const gap = 12;
+        const r   = trigger.getBoundingClientRect();
+        let x = r.right + gap;
+        let y = r.top + r.height / 2 - ph / 2;
+        if (x + pw > vw - gap) x = r.left - pw - gap;
         if (y < gap) y = gap;
         if (y + ph > vh - gap) y = vh - ph - gap;
         preview.style.left = x + 'px';
@@ -289,12 +290,8 @@
         if (trigger && trigger.dataset.img) {
           previewImg.src = trigger.dataset.img;
           preview.classList.add('visible');
-          movePreview(e);
+          anchorPreview(trigger);
         }
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (preview.classList.contains('visible')) movePreview(e);
       });
 
       document.addEventListener('mouseout', (e) => {
