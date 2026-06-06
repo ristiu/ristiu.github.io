@@ -47,18 +47,22 @@
       const heroBg = p.heroImage || (p.projectPlanning && p.projectPlanning.find(s => s.image)?.image) || '';
       const metaTags = [p.company, p.industry, ...(p.tags || [])].filter(Boolean);
 
+      const placeholderColors = ['#C8B89A','#A8B8A0','#B0B8C8','#C8A8A0','#B8C0A0','#A8C0C0'];
+      const heroColor = placeholderColors[Math.abs(p.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % placeholderColors.length];
       const heroHtml = `
-        <div class="project-hero" style="${heroBg ? `background-image:url(${heroBg})` : ''}">
-          <div class="project-hero-overlay"></div>
-          <a class="back project-hero-back" href="index.html" aria-label="Back">←</a>
+        <div class="project-hero">
+          <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
           <div class="project-hero-text">
             <h1 class="project-hero-title">${p.title}</h1>
-            ${metaTags.length ? `<p class="project-hero-meta">${metaTags.join(' · ')}</p>` : ''}
+            ${(p.company || p.tags?.length) ? `<div class="project-hero-keywords"><span>${[p.company, p.industry].filter(Boolean).join(' · ')}</span>${p.tags?.length ? `<span>${p.tags.join(', ')}</span>` : ''}</div>` : ''}
+          </div>
+          <div class="project-hero-image" style="${heroBg ? '' : `background:${heroColor};`}">
+            ${heroBg ? `<img src="${heroBg}" alt="${p.title}" />` : ''}
           </div>
         </div>`;
 
       // ── Body ──────────────────────────────────────────────────
-      const body = `<div class="page project-body">`;
+      const body = `<div class="project-body">`;
       const bodyClose = `</div>`;
 
       const hookHtml = p.hook ? `
@@ -84,21 +88,30 @@
           <p>${p.insight}</p>
         </div>` : '';
 
-      const directionHtml = p.direction ? `
+      // Direction + strategy card side by side
+      const directionParas = p.direction ? p.direction.split('\n\n') : [];
+      const directionFirstPara = directionParas[0] || '';
+      const directionRestParas = directionParas.slice(1).join('\n\n');
+
+      const cardHtml = (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
         <div class="content-section">
           <p class="section-heading">Direction</p>
-          ${p.direction.split('\n\n').map(para => `<p>${para}</p>`).join('')}
-        </div>` : '';
-
-      // Design Strategy card (projectPlanning → card)
-      const cardHtml = p.projectPlanning && p.projectPlanning.length ? `
-        <div class="content-section">
-          <div class="strategy-card">
-            <p class="strategy-card-label">Design Strategy Vol.${p.strategyVol || 1}</p>
-            <p class="strategy-card-title">${p.strategyTitle || p.projectPlanning[0].label}</p>
-            ${p.projectPlanning[0].image ? `<img src="${p.projectPlanning[0].image}" alt="" class="strategy-card-img" loading="lazy" />` : ''}
+          ${directionFirstPara ? `<p>${directionFirstPara}</p>` : ''}
+          <div class="direction-cols">
+            <div class="strategy-card">
+              <p class="strategy-card-label">Design Strategy Vol.${p.strategyVol || 1}</p>
+              <p class="strategy-card-title">${p.strategyTitle || (p.projectPlanning && p.projectPlanning[0].label) || ''}</p>
+              ${p.strategyCardImage ? `<img src="${p.strategyCardImage}" alt="" class="strategy-card-img" loading="lazy" />` : ''}
+            </div>
+            <div class="direction-text">${directionRestParas.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
           </div>
-        </div>` : '';
+        </div>` : (p.direction ? `
+        <div class="content-section">
+          <p class="section-heading">Direction</p>
+          ${directionParas.map(para => `<p>${para}</p>`).join('')}
+        </div>` : '');
+
+      const directionHtml = '';
 
       const contributionHtml = p.contribution ? `
         <div class="content-section">
@@ -106,17 +119,18 @@
           <p>${p.contribution}</p>
         </div>` : '';
 
+      // What shifted + screenshot side by side
       const whatShiftedHtml = p.whatShifted ? `
         <div class="content-section">
           <p class="section-heading">What shifted</p>
-          ${p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}
+          ${p.screenshots && p.screenshots.length ? `
+          <div class="shifted-cols">
+            <div class="shifted-text">${p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
+            <div class="shifted-img"><img src="${p.screenshots[0]}" alt="" loading="lazy" /></div>
+          </div>` : p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}
         </div>` : '';
 
-      // Bottom screenshots
-      const screenshotsHtml = p.screenshots && p.screenshots.length ? `
-        <div class="content-section project-screenshots">
-          ${p.screenshots.map(src => `<img src="${src}" alt="" class="project-screenshot" loading="lazy" />`).join('')}
-        </div>` : '';
+      const screenshotsHtml = '';
 
       return `
         ${heroHtml}

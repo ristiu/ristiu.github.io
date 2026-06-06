@@ -4,10 +4,10 @@ const projects = [
     title: "Shaping Product Vision Through Omnichannel O2O Design Strategy",
     subtitle: "with Offline to Online Design Strategy",
     company: "eFishery",
-    industry: "Agriculture · Ecommerce",
+    industry: "Agriculture",
     year: "2023",
     role: "Design Manager with a team of 4",
-    tags: ["Strategy", "Field Research", "Leadership", "Omnichannel"],
+    tags: ["Ecommerce", "Strategy", "Omnichannel"],
 
     hook: "How do you reduce the cost of field officers when maintaining human services for every farmer is unsustainable?",
 
@@ -55,8 +55,9 @@ const projects = [
     ],
     strategyVol: 1,
     strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
-    heroImage: "assets/images/offline-to-online-2.jpeg",
-    screenshots: ["assets/images/offline-to-online-1.jpeg"],
+    strategyCardImage: "assets/images/o2o-strategy-card.png",
+    heroImage: "assets/images/o2o-hero.jpg",
+    screenshots: ["assets/images/o2o-whatsapp.png"],
     images: []
   },
   {

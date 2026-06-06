@@ -625,105 +625,177 @@ a:hover { color: var(--accent); }
 /* ─── Project detail ─────────────────────────────────────── */
 /* ─── Project hero ───────────────────────────────────────── */
 .project-hero {
-  position: relative;
   width: 100%;
-  min-height: 52vw;
-  max-height: 320px;
-  background-color: #1a1a1a;
-  background-size: cover;
-  background-position: center;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  overflow: hidden;
-}
-
-.project-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
 }
 
 .project-hero-back {
-  position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  color: #fff;
-  font-size: 2rem;
-  font-weight: 700;
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--ink);
   text-decoration: none;
-  z-index: 2;
-  opacity: 0.9;
-  margin-bottom: 0;
+  padding: 20px 20px 8px;
+  opacity: 0.6;
 }
 
-.project-hero-back:hover { color: var(--accent); opacity: 1; }
+.project-hero-back:hover { opacity: 1; color: var(--accent); }
 
 .project-hero-text {
-  position: relative;
-  z-index: 2;
-  padding: 1.25rem;
-  padding-top: 3rem;
+  padding: 8px 20px 20px;
 }
 
 .project-hero-title {
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.35;
-  margin-bottom: 0.4rem;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  color: var(--ink);
+  margin-bottom: 12px;
 }
 
-.project-hero-meta {
-  color: rgba(255,255,255,0.7);
-  font-size: 0.75rem;
-  line-height: 1.5;
+.project-hero-keywords {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 14px;
+  color: #545454;
+}
+
+.project-hero-image {
+  width: calc(100% - 40px);
+  margin: 0 20px;
+  height: 292px;
+  overflow: hidden;
+}
+
+.project-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(71%) contrast(102%) saturate(0%);
 }
 
 /* ─── Project body ───────────────────────────────────────── */
 .project-body {
-  padding-top: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 28px;
   padding-bottom: 5rem;
+  padding-left: 32px;
+  padding-right: 33px;
 }
 
 /* ─── Hook blockquote ────────────────────────────────────── */
 .hook-text {
-  font-size: 1rem;
-  font-style: italic;
-  line-height: 1.65;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-style: normal;
+  line-height: 14px;
   color: var(--ink);
   border-left: 2px solid var(--accent);
-  padding-left: 1rem;
+  padding-left: 14px;
   margin: 0;
+}
+
+/* ─── Section headings ───────────────────────────────────── */
+.section-heading {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 14px;
+  margin-bottom: 14px;
+}
+
+/* ─── Body paragraphs ────────────────────────────────────── */
+.content-section p,
+.content-section ol,
+.content-section ul {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--ink);
+}
+
+.content-section {
+  margin-bottom: 28px;
+}
+
+/* ─── Direction two-column ───────────────────────────────── */
+.direction-cols {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.direction-cols .strategy-card {
+  flex: 0 0 57%;
+}
+
+.direction-cols .direction-text {
+  flex: 1;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+/* ─── What shifted two-column ────────────────────────────── */
+.shifted-cols {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.shifted-cols .shifted-text {
+  flex: 1;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.shifted-cols .shifted-img {
+  flex: 0 0 47%;
+}
+
+.shifted-cols .shifted-img img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
 }
 
 /* ─── Strategy card ──────────────────────────────────────── */
 .strategy-card {
   background: #f0ede8;
   border-radius: 4px;
-  padding: 1.25rem;
-  margin-top: 0.5rem;
+  padding: 12px;
 }
 
 .strategy-card-label {
-  font-size: 0.7rem;
+  font-family: var(--mono);
+  font-size: 10px;
   color: var(--ink-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 6px;
 }
 
 .strategy-card-title {
-  font-size: 1rem;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 12px;
   font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 1rem;
+  line-height: 14px;
+  margin-bottom: 10px;
 }
 
 .strategy-card-img {
   width: 100%;
-  border-radius: 2px;
   display: block;
+  border-radius: 2px;
 }
 
 /* ─── Bottom screenshots ─────────────────────────────────── */
@@ -737,26 +809,6 @@ a:hover { color: var(--accent); }
   width: 100%;
   border-radius: 4px;
   display: block;
-}
-
-/* legacy — keep for fallback */
-.project-title {
-  font-family: var(--mono);
-  font-size: 1.1rem;
-  line-height: 1.45;
-  margin-bottom: 0.75rem;
-  font-weight: 400;
-}
-
-.section-heading {
-  font-family: var(--serif);
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.content-section {
-  margin-bottom: 2rem;
 }
 
 ol, ul {
