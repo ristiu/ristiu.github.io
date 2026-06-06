@@ -25,6 +25,9 @@
   <!-- Fixed back nav — lives outside animated content -->
   <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
 
+  <!-- Scroll hint — same as homepage -->
+  <a class="scroll-hint js-proj-scroll-hint" href="#" aria-label="Scroll down" onclick="window.scrollBy({top: window.innerHeight * 0.8, behavior:'smooth'}); return false;">↓</a>
+
   <div id="project-content">
     <!-- skeleton shown instantly while JS renders -->
     <div class="project-skeleton">
@@ -231,6 +234,15 @@
 
     // ── Entry: dither dissolve away (canvas pre-filled, no blank frame) ──
     dtDissolve(makeCvs());
+
+    // ── Scroll hint hide/show ─────────────────────────────────
+    const projScrollHint = document.querySelector('.js-proj-scroll-hint');
+    function updateProjScrollHint() {
+      const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
+      projScrollHint.classList.toggle('hidden', nearBottom);
+    }
+    window.addEventListener('scroll', updateProjScrollHint, { passive: true });
+    updateProjScrollHint();
 
     // ── Back button: dither fill → navigate ───────────────────
     document.querySelector('.project-hero-back').addEventListener('click', (e) => {

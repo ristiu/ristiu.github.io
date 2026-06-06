@@ -75,7 +75,7 @@
 
     <!-- Footer -->
     <section class="section footer-links">
-      <a class="footer-action preview-trigger" data-img="assets/images/offline-to-online-1.jpeg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
+      <a class="footer-action preview-trigger" data-img="assets/images/reorder-lifecycle-2.jpeg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
         Download Resume
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -192,7 +192,7 @@
     list.querySelectorAll('.stack-card').forEach(card => {
       const isTop    = card.classList.contains('stack-card--top');
       const stackI   = parseInt(card.style.getPropertyValue('--stack-i'));
-      const cardTop  = 220 + (stackI - 1) * gap;
+      const cardTop  = (window.innerWidth < 600 ? 275 : 220) + (stackI - 1) * gap;
       const exposedH = isTop ? 155 : gap;
 
       // More white space at top: push shadow start further down
