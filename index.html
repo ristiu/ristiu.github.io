@@ -127,8 +127,123 @@
           <span class="stack-card-sub">${c.subtitle}</span>
         </a>
       `).join('')}
+      <canvas class="stack-dither-canvas" aria-hidden="true"></canvas>
     `;
 
+    // ── Bayer ordered dither ─────────────────────────────────
+    const BAYER4 = [
+      [ 0,  8,  2, 10],
+      [12,  4, 14,  6],
+      [ 3, 11,  1,  9],
+      [15,  7, 13,  5]
+    ];
+
+    function bayerDither(canvas, W, H, topGrey, bottomGrey) {
+      canvas.width  = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(W, H);
+      const d   = img.data;
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const t = H > 1 ? y / (H - 1) : 0;
+          const grey = Math.round(topGrey + (bottomGrey - topGrey) * t);
+          const threshold = (BAYER4[y % 4][x % 4] / 16) * 255;
+          const val = grey > threshold ? 255 : 0;
+          const idx = (y * W + x) * 4;
+          d[idx] = d[idx+1] = d[idx+2] = val;
+          d[idx+3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    function drawAllDither() {
+      const W = list.offsetWidth;
+      const cardW = Math.round(W * 0.94);
+
+      // Ground overlay: white → black
+      const ground = list.querySelector('.stack-dither-canvas');
+      if (ground) bayerDither(ground, W, 100, 255, 0);
+
+      // Full-face card overlays
+      list.querySelectorAll('.card-dither-overlay').forEach(c => {
+        const h  = parseInt(c.dataset.h);
+        const tg = parseInt(c.dataset.greyTop);
+        const bg = parseInt(c.dataset.greyBottom);
+        bayerDither(c, cardW, h, tg, bg);
+      });
+    }
+
+    // Shadow strip: covers the LOWER portion of each card's visible area.
+    // Upper area stays pure white → text fully readable.
+    // Lower area fades white → dark grey → depth/shadow effect.
+    const totalCards = allCards.length;
+    const gap        = 50; // px each non-top card exposes
+    const canvasMap  = new Map(); // stackI → canvas
+
+    list.querySelectorAll('.stack-card').forEach(card => {
+      const isTop    = card.classList.contains('stack-card--top');
+      const stackI   = parseInt(card.style.getPropertyValue('--stack-i'));
+      const cardTop  = 160 + (stackI - 1) * gap;
+      const exposedH = isTop ? 155 : gap;
+
+      // More white space at top: push shadow start further down
+      // Stronger gradient: near-white top → dark bottom
+      const shadowStart = isTop ? 95  : 22;
+      const stripH      = exposedH - shadowStart;
+
+      const t = (stackI - 1) / (totalCards - 1);
+      const greyTop    = 252;                       // near-white at strip top (very sparse dots)
+      const greyBottom = Math.round(60 + t * 70);  // 60 (back, dark) → 130 (front card)
+
+      const cvs = document.createElement('canvas');
+      cvs.className = 'card-dither-overlay';
+      cvs.setAttribute('aria-hidden', 'true');
+      cvs.dataset.h          = stripH;
+      cvs.dataset.greyTop    = greyTop;
+      cvs.dataset.greyBottom = greyBottom;
+      const stripTop = cardTop + shadowStart;
+      cvs.style.cssText = [
+        'position:absolute',
+        'left:3%',
+        'width:94%',
+        `height:${stripH}px`,
+        `top:${stripTop}px`,
+        'pointer-events:none',
+        `z-index:${stackI + 1}`,
+        'transition:opacity 0.4s ease',
+        'mix-blend-mode:multiply',
+      ].join(';');
+      list.appendChild(cvs);
+      canvasMap.set(stackI, cvs);
+    });
+
+    // Attach hover after all canvases are built so canvasMap is complete
+    list.querySelectorAll('.stack-card').forEach(card => {
+      const isTop  = card.classList.contains('stack-card--top');
+      const stackI = parseInt(card.style.getPropertyValue('--stack-i'));
+      const cvs    = canvasMap.get(stackI);
+      // The card visually above (lower stackI) has a shadow that bleeds into
+      // the top of this card when it lifts — hide it on hover
+      const cvsAbove = canvasMap.get(stackI - 1);
+
+      const hide = (c) => { if (c) { c.style.transition = 'none'; c.style.opacity = '0'; } };
+      const show = (c) => { if (c) { c.style.transition = 'opacity 0.4s ease'; c.style.opacity = '1'; } };
+
+      card.addEventListener('mouseenter', () => {
+        // Top card: keep its own bottom shadow (it's below the text area, adds depth)
+        if (!isTop) hide(cvs);
+        hide(cvsAbove);
+      });
+      card.addEventListener('mouseleave', () => {
+        if (!isTop) show(cvs);
+        show(cvsAbove);
+      });
+    });
+
+    drawAllDither();
+    window.addEventListener('resize', drawAllDither);
 
     // ── Hello letter colour wave ────────────────────────────
     const helloWord = document.querySelector('.hello-word');
