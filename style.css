@@ -660,7 +660,7 @@ a:hover { color: var(--accent); }
 .scroll-hint:hover { opacity: 1; }
 
 @media (min-width: 600px) {
-  .scroll-hint { left: calc(50% + 190px); }
+  .scroll-hint { left: calc(50% + 270px); }
 }
 
 @keyframes nudge {

@@ -326,8 +326,7 @@
         sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
         sessionStorage.setItem('scrollY', window.scrollY);
 
-        // Lift card above all dither overlays, hide shadows
-        card.style.zIndex = '500';
+        // Hide dither shadows so they don't overlap the floating card
         document.querySelectorAll('.card-dither-overlay').forEach(c => c.style.opacity = '0');
 
         // Float card up further from hover position
