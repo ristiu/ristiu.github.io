@@ -250,6 +250,45 @@
     drawAllDither();
     window.addEventListener('resize', drawAllDither);
 
+    // ── Card expand-to-page transition ───────────────────────
+    list.querySelectorAll('.stack-card').forEach(card => {
+      const href = card.getAttribute('href');
+      if (!href || href === '#') return;
+
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const rect = card.getBoundingClientRect();
+
+        // Float card up
+        card.style.transition = 'transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        card.style.transform = 'translateX(-50%) translateY(-28px) rotateX(0deg)';
+
+        // Overlay starts at card's exact position
+        const overlay = document.createElement('div');
+        overlay.className = 'card-expand-overlay';
+        overlay.style.top    = rect.top + 'px';
+        overlay.style.left   = rect.left + 'px';
+        overlay.style.width  = rect.width + 'px';
+        overlay.style.height = rect.height + 'px';
+        document.body.appendChild(overlay);
+
+        // Force reflow before animating
+        overlay.getBoundingClientRect();
+
+        // Expand to fill viewport
+        overlay.style.top          = '0';
+        overlay.style.left         = '0';
+        overlay.style.width        = '100vw';
+        overlay.style.height       = '100vh';
+        overlay.style.borderRadius = '0';
+
+        // Save scroll position and navigate after animation
+        sessionStorage.setItem('scrollY', window.scrollY);
+        setTimeout(() => { window.location.href = href; }, 500);
+      });
+    });
+
     // ── Scroll position: save on leave, restore on back ──────
     history.scrollRestoration = 'manual';
 
