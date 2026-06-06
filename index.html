@@ -149,10 +149,10 @@
           const t = H > 1 ? y / (H - 1) : 0;
           const grey = Math.round(topGrey + (bottomGrey - topGrey) * t);
           const threshold = (BAYER4[y % 4][x % 4] / 16) * 255;
-          const val = grey > threshold ? 255 : 0;
+          const isDark = grey <= threshold;
           const idx = (y * W + x) * 4;
-          d[idx] = d[idx+1] = d[idx+2] = val;
-          d[idx+3] = 255;
+          d[idx] = d[idx+1] = d[idx+2] = 0;        // always black dots
+          d[idx+3] = isDark ? 255 : 0;              // opaque where dark, transparent where light
         }
       }
       ctx.putImageData(img, 0, 0);
@@ -213,7 +213,6 @@
         'pointer-events:none',
         `z-index:${stackI + 1}`,
         'transition:opacity 0.4s ease',
-        'mix-blend-mode:multiply',
       ].join(';');
       list.appendChild(cvs);
       canvasMap.set(stackI, cvs);
@@ -232,13 +231,14 @@
       const show = (c) => { if (c) { c.style.transition = 'opacity 0.4s ease'; c.style.opacity = '1'; } };
 
       card.addEventListener('mouseenter', () => {
-        // Top card: keep its own bottom shadow (it's below the text area, adds depth)
         if (!isTop) hide(cvs);
-        hide(cvsAbove);
+        // Clip 12px from the bottom of the card-above's shadow (matches the lift amount)
+        // so it doesn't bleed onto the hovered card face — but stays visible on its own card
+        if (cvsAbove) { cvsAbove.style.transition = 'none'; cvsAbove.style.clipPath = 'inset(0 0 12px 0)'; }
       });
       card.addEventListener('mouseleave', () => {
         if (!isTop) show(cvs);
-        show(cvsAbove);
+        if (cvsAbove) { cvsAbove.style.transition = 'clip-path 0.4s ease'; cvsAbove.style.clipPath = ''; }
       });
     });
 
@@ -270,8 +270,18 @@
 
     if (!isTouchDevice) {
       function movePreview(e) {
-        preview.style.left = (e.clientX + 20) + 'px';
-        preview.style.top  = (e.clientY - 70) + 'px';
+        const pw = preview.offsetWidth  || 140;
+        const ph = preview.offsetHeight || 100;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const gap = 16;
+        let x = e.clientX + gap;
+        let y = e.clientY - ph / 2;
+        if (x + pw > vw - gap) x = e.clientX - pw - gap;
+        if (y < gap) y = gap;
+        if (y + ph > vh - gap) y = vh - ph - gap;
+        preview.style.left = x + 'px';
+        preview.style.top  = y + 'px';
       }
 
       document.addEventListener('mouseover', (e) => {
