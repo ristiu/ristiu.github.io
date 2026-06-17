@@ -361,57 +361,106 @@ a:hover { color: var(--accent); }
 .stack-container {
   position: relative;
   width: 100%;
-  height: 615px;
-  background: #000;
-  overflow: hidden;
-  isolation: isolate;
+  background: transparent;
 }
 
 .stack-description {
-  position: absolute;
-  top: 32px;
-  left: 28px;
-  right: 28px;
-  color: #fff;
+  padding: 0 0 1.5rem;
+  color: var(--ink);
   font-family: var(--mono);
   font-size: 14px;
   line-height: 1.65;
-  z-index: 10;
 }
 
 .stack-card {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 94%;
-  height: 155px;
-  background: #E8E8E8;
-  border: 1px solid #000;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 10px 24px 24px;
+  width: var(--card-w, 88%);
+  margin: 0 auto;
+  margin-top: -168px;
+  height: 235px;
+  background: var(--folder-color, #E4C0A0);
+  border-radius: 10px;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.04), inset 0 2px 6px rgba(255,255,255,0.25);
+  padding: 18px 22px 24px;
   text-decoration: none;
   color: var(--ink);
   font-family: var(--mono);
   font-size: 12px;
   cursor: pointer;
-  clip-path: polygon(0% 0%, 100% 0%, 96% 100%, 4% 100%);
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.09)) drop-shadow(0 4px 14px rgba(0,0,0,0.09));
   transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
-  top: calc(220px + (var(--stack-i) - 1) * 50px);
   z-index: var(--stack-i);
+}
+
+/* Rounded folder tab above the card body */
+.stack-card::before {
+  content: '';
+  position: absolute;
+  top: -26px;
+  left: var(--tab-l, 8%);
+  width: 34%;
+  max-width: calc(100% - var(--tab-l, 8%));
+  height: 40px;
+  background: var(--folder-color, #E4C0A0);
+  border-radius: 8px 8px 0 0;
+}
+
+/* Paper grain texture */
+.stack-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.38 0.62' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23g)' opacity='0.32'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.stack-card:first-of-type {
+  margin-top: 34px;
 }
 
 .stack-card--top {
   font-weight: 400;
 }
 
+.stack-card-tab-label {
+  position: absolute;
+  top: -24px;
+  left: calc(var(--tab-l, 8%) + 2%);
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.stack-card-tab-logo {
+  display: block;
+  height: auto;
+  max-height: 18px;
+  width: auto;
+  max-width: 84px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+}
+
 .stack-card-title {
   display: block;
+  font-size: 13px;
   font-weight: inherit;
   line-height: 1.4;
   margin-bottom: 6px;
+  position: relative;
+  z-index: 3;
 }
 
 .stack-card-sub {
@@ -419,44 +468,26 @@ a:hover { color: var(--accent); }
   font-weight: 400;
   color: var(--ink-muted);
   font-size: 10px;
+  position: relative;
+  z-index: 3;
 }
 
 .stack-card:hover .stack-card-sub {
   color: var(--ink);
 }
 
-/* [2] non-top cards — white base, shadow strip extended to fill visible area */
-.stack-card:not(.stack-card--top) {
-  background-color: #E8E8E8;
-}
-
-/* per-card Bayer dither canvas — sits outside clip-path as container child */
-.card-dither-overlay {
-  display: block;
-}
-
-/* ground dither canvas (Bayer) */
-.stack-dither-canvas {
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 90px;
-  display: block;
-  pointer-events: none;
-  z-index: 100;
-}
-
-
 @media (hover: hover) {
   .stack-container .stack-card:hover {
-    transform: translateX(-50%) translateY(-12px) rotateX(4deg);
-    border-top: 3px solid #000;
-    background: #fff;
+    transform: translateY(-32px);
+    border-top: 3px solid rgba(0,0,0,0.4);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.10)) brightness(1.03);
   }
 }
 
 @media (hover: hover) {
   .stack-card:hover .stack-card-title {
-    color: var(--accent);
+    font-weight: 700;
+    color: #000;
   }
 
   .stack-card:hover .stack-card-sub {
@@ -494,13 +525,11 @@ a:hover { color: var(--accent); }
 
 
 @media (max-width: 599px) {
-  .stack-container { height: 700px; }
-  .stack-card { top: calc(275px + (var(--stack-i) - 1) * 50px); }
+  .stack-card { width: var(--card-w, 92%); }
 }
 
 @media (min-width: 600px) {
-  .stack-container { height: 615px; }
-  .stack-card { width: 88%; font-size: 12px; }
+  .stack-card { width: var(--card-w, 86%); font-size: 12px; }
   .stack-description { font-size: 14px; }
 }
 
