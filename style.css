@@ -379,7 +379,7 @@ a:hover { color: var(--accent); }
   align-items: flex-start;
   justify-content: flex-start;
   width: var(--card-w, 88%);
-  margin: 0 auto;
+  margin: 0;
   margin-top: -168px;
   height: 235px;
   background: var(--folder-color, #E4C0A0);
@@ -391,8 +391,9 @@ a:hover { color: var(--accent); }
   font-family: var(--mono);
   font-size: 12px;
   cursor: pointer;
+  rotate: var(--card-r, 0deg);
   filter: drop-shadow(0 1px 3px rgba(0,0,0,0.09)) drop-shadow(0 4px 14px rgba(0,0,0,0.09));
-  transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
+  transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), rotate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
   z-index: var(--stack-i);
 }
 
@@ -479,6 +480,7 @@ a:hover { color: var(--accent); }
 @media (hover: hover) {
   .stack-container .stack-card:hover {
     transform: translateY(-32px);
+    rotate: 0deg;
     border-top: 3px solid rgba(0,0,0,0.4);
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.10)) brightness(1.03);
   }
@@ -525,11 +527,11 @@ a:hover { color: var(--accent); }
 
 
 @media (max-width: 599px) {
-  .stack-card { width: var(--card-w, 92%); }
+  .stack-card { width: var(--card-w, 100%); }
 }
 
 @media (min-width: 600px) {
-  .stack-card { width: var(--card-w, 86%); font-size: 12px; }
+  .stack-card { width: var(--card-w, 100%); font-size: 12px; }
   .stack-description { font-size: 14px; }
 }
 

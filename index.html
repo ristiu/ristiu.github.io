@@ -129,18 +129,18 @@
     ];
 
     const allCards = [
-      { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#visual-trends',       img: 'assets/images/visual-trends-1.jpeg',    tabLabel: 'Casio',        tabLogo: 'assets/images/logo-casio.png',         tabL: '8%',  cardW: '88%' },
-      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#service-prototyping', img: 'assets/images/service-prototyping-1.jpeg', tabLabel: 'Warung Pintar', tabLogo: 'assets/images/logo-warung-pintar.png', tabL: '62%', cardW: '90%' },
-      { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/images/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/images/logo-traveloka.png',     tabL: '20%', cardW: '87%' },
-      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: '#',                                img: 'assets/images/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '89%' },
-      { title: 'Accelerating the Re-Order Lifecycle', subtitle: 'using Funnel Analysis',                                href: 'project.html#reorder-lifecycle',   img: 'assets/images/reorder-lifecycle-1.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '68%', cardW: '90%' },
-      { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/images/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '30%', cardW: '88%' },
+      { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#visual-trends',       img: 'assets/images/visual-trends-1.jpeg',    tabLabel: 'Casio',        tabLogo: 'assets/images/logo-casio.png',         tabL: '8%',  cardW: '100%', cardR: '-1.2deg' },
+      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#service-prototyping', img: 'assets/images/service-prototyping-1.jpeg', tabLabel: 'Warung Pintar', tabLogo: 'assets/images/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
+      { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/images/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/images/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
+      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: '#',                                img: 'assets/images/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
+      { title: 'Accelerating the Re-Order Lifecycle', subtitle: 'using Funnel Analysis',                                href: 'project.html#reorder-lifecycle',   img: 'assets/images/reorder-lifecycle-1.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '68%', cardW: '100%' },
+      { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/images/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '30%', cardW: '100%' },
     ];
 
     list.innerHTML = `
       <p class="stack-description">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
       ${allCards.map((c, i) => `
-        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}">
+        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}">
           ${c.tabLogo ? `<span class="stack-card-tab-label"><img class="stack-card-tab-logo" src="${c.tabLogo}" alt="${c.tabLabel}" /></span>` : ''}
           <span class="stack-card-title">${c.title}</span>
           <span class="stack-card-sub">${c.subtitle}</span>
