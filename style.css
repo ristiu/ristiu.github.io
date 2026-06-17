@@ -446,12 +446,22 @@ a:hover { color: var(--accent); }
 .stack-card-tab-logo {
   display: block;
   height: auto;
-  max-height: 18px;
+  max-height: 14px;
   width: auto;
-  max-width: 84px;
+  max-width: 72px;
   object-fit: contain;
   mix-blend-mode: multiply;
   opacity: 0.72;
+}
+
+.stack-card-tab-logo[alt="Traveloka"] {
+  max-height: 20px;
+  max-width: 88px;
+}
+
+.stack-card-tab-logo[alt="eFishery"] {
+  max-height: 10px;
+  max-width: 56px;
 }
 
 .stack-card-title {
