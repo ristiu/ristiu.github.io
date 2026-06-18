@@ -62,35 +62,17 @@ const projects = [
   },
   {
     id: "reorder-lifecycle",
-    title: "Accelerating the Re-Order Lifecycle",
-    subtitle: "using Funnel Analysis",
-    company: "eFishery",
-    industry: "Ecommerce, Agriculture",
+    title: "",
+    subtitle: "",
+    company: "",
+    industry: "",
     year: "",
     role: "",
-    impact: [
-      "New flow produced higher conversion rate of confirmed orders compared to the regular flow (+16.5%, p-value 0.0026)",
-      "Generated GMV IDR 9.77 billion within the first month of release"
-    ],
-    situation: "We observed a declining conversion rate from catalog to purchase across two primary segments — Cash (3.92%) and Paylater (4.77%). Agricultural cycles are predictable; farmers typically purchase the same supplies throughout a specific cultivation phase. The current search-from-scratch flow creates unnecessary friction. High intent was also lost when users searched for specific products only to find them out of stock, leading to purchase abandonment.",
-    solutionSpace: [
-      "Implemented a Reorder Feature that leverages historical transaction data. By showing personalized recommendations based on previous purchases, we shortcut the discovery phase — so farmers can bypass the catalog and move directly to checkout."
-    ],
+    impact: [],
+    situation: "",
+    solutionSpace: [],
     contribution: "",
-    projectPlanning: [
-      {
-        label: "Funnel Analysis",
-        description: "Identifying drop-off points across Cash and Paylater segments",
-        bold: true,
-        image: "assets/images/reorder-lifecycle-1.jpeg"
-      },
-      {
-        label: "Solution Design & Testing",
-        description: "Reorder feature with personalised recommendations",
-        bold: false,
-        image: ""
-      }
-    ],
+    projectPlanning: [],
     images: []
   },
   {
