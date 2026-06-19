@@ -254,7 +254,7 @@
     });
 
 
-    // Restore scroll before the View Transition new-root fade finishes — jump is invisible
+    // Restore scroll — runs on full page load (View Transition fade covers the jump)
     const savedY = sessionStorage.getItem('scrollY');
     if (savedY !== null) {
       sessionStorage.removeItem('scrollY');
@@ -268,6 +268,15 @@
         card.style.transform = '';
         card.style.transition = '';
       });
+
+      // bfcache restore (back swipe on mobile) — re-apply saved scroll
+      if (e.persisted) {
+        const y = sessionStorage.getItem('scrollY');
+        if (y !== null) {
+          sessionStorage.removeItem('scrollY');
+          window.scrollTo({ top: parseInt(y, 10), behavior: 'instant' });
+        }
+      }
 
       // Pop the card that was previously clicked (on any back navigation)
       const returnI = sessionStorage.getItem('returnCardI');
