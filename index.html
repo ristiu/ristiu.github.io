@@ -169,6 +169,7 @@
     function burstAndNavigate(card, href, peekImgs) {
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
+      sessionStorage.setItem('folderColor', card.style.getPropertyValue('--folder-color'));
 
       if (!peekImgs.length) {
         card.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';

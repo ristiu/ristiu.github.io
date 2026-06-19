@@ -257,19 +257,24 @@
     }
   </script>
   <script>
-    // Hero scatter fires after page paints
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const container = document.querySelector('.js-hero-scatter');
-        if (container) container.classList.remove('is-stacked');
-      });
-    });
+    // Hero scatter fires after page settles — delay lets title read before images fly
+    setTimeout(() => {
+      const container = document.querySelector('.js-hero-scatter');
+      if (container) container.classList.remove('is-stacked');
+    }, 600);
 
-    // ── Scroll hint hide/show ─────────────────────────────────
+    const folderColor = sessionStorage.getItem('folderColor');
+    if (folderColor) {
+      sessionStorage.removeItem('folderColor');
+      const hero = document.querySelector('.project-hero');
+      if (hero) hero.style.setProperty('--folder-accent', folderColor);
+    }
+
+    // ── Scroll hint: visible near top, hides once reading, reappears on scroll back
     const projScrollHint = document.querySelector('.js-proj-scroll-hint');
     function updateProjScrollHint() {
-      const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
-      projScrollHint.classList.toggle('hidden', nearBottom);
+      const inHero = window.scrollY < window.innerHeight * 0.6;
+      projScrollHint.classList.toggle('hidden', !inHero);
     }
     window.addEventListener('scroll', updateProjScrollHint, { passive: true });
     updateProjScrollHint();
