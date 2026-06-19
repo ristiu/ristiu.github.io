@@ -158,6 +158,50 @@ const projects = [
     ]
   },
   {
+    id: "product-trends",
+    title: "Forecasting Visual Product Trends",
+    subtitle: "Japan & Indonesia Youth Segment",
+    company: "Joint venture: Casio Design Japan, Chiba University, Institut Teknologi Bandung",
+    industry: "Design Research, Consumer Electronics",
+    year: "2014",
+    role: "Design Researcher",
+    tags: ["Trend Forecasting", "Ethnography", "Design Speculation"],
+
+    hook: "What happens when you ask 150 people across two countries the same question: what will you do with your photos two years from now?",
+
+    impact: [
+      "Forecast validated within a year. Instagram's Boomerang launched, echoing the same morphing-photo instinct",
+      "Analog camera resurgence confirmed the predicted retro nuance trend",
+      "150 participants studied across Indonesia and Japan. Full ethnographic ownership",
+      "Concept never commercialized, but the trend signal it was built on proved accurate"
+    ],
+
+    situation: "Casio Design Japan, Chiba University, and Institut Teknologi Bandung partnered to ask a forward looking question. What if the boundary between physical and digital photos disappeared. Smartphone cameras were getting good and cheap. Storage was filling up fast. Instagram had just shown up. Nobody yet knew what came next.",
+
+    insight: "People weren't just taking more photos. They were quietly mourning the ones they lost. 6 out of 10 participants admitted their digital photos from 10 years ago were gone. The printed ones from the same decade were still sitting safely in a wardrobe. Digital was convenient. Physical was permanent. People wanted both, and nothing was giving them both at once.",
+
+    direction: "I ran the full ethnographic study myself, across 150 participants in Indonesia and Japan. We built a simple framework: look at the recent past, look at the present, project forward. Three repeating signals stood out: a pull toward retro nuance, a growing storage problem, and a quiet preference for physical permanence.\n\nFrom there we explored a concept: lenticular photos, the kind that shift and move depending on the angle you view them. Physical, but alive. We tested reactions with three sample cards: a flat photo, a morphing lenticular photo, and a 3D lenticular photo. People were genuinely intrigued by the morphing one. It felt like the photo had a secret.\n\nWe explored building it end to end. NFC chip embedded in the printed photo, tap it with your phone, and it pulls the full photo series from the cloud. We even designed a 360 degree adjustable camera rig to capture the right angles for the lenticular effect.\n\nWhat we killed: mass production. Industrial lenticular printers needed heat processes and large material sizes, viable for ad campaigns, not for someone's family photo from a weekend trip. We never followed up on solving that cost problem, and the concept stayed at the prototype stage.",
+
+    contribution: "Design Researcher. I owned the ethnographic research end to end across all 150 participants in both countries, synthesized the trend signals, and led the design concept from lenticular photo prototyping through to the NFC interaction model.",
+
+    whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended wasn't the lenticular photo itself. It was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
+
+    solutionSpace: [],
+    projectPlanning: [],
+    images: [],
+
+    sectionImages: [
+      { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },
+      { url: "https://static.wixstatic.com/media/242cb7_89aa46a90c4f40b3a5dfcd081ad2559b~mv2_d_4032_3024_s_4_2.png", caption: "Participants reproduced several takes per moment, then kept only the best one",                                 section: "insight" },
+      { url: "https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif",                   caption: "The lenticular concept: a photo that shifts and moves depending on viewing angle",                            section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png",                   caption: "Tap to connect: NFC chip links the printed photo to its full series in the cloud",                            section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg",                   caption: "Exploring the end to end experience, from capture to print to interaction",                                    section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_95020ef2345141d08d8e739ab6fb7650~mv2.png",                   caption: "Industrial lenticular printers required heat processing and large material, too costly for personal use",         section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_6b429834df9a432aab775ef77defbfde~mv2.png",                   caption: "A modular camera rig designed to capture the angles needed for the lenticular effect",                          section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_1a274806132d42d1ad30a1d48ef42cd9~mv2.png",                   caption: "Connected experience concept: tap, choose an action, link to cloud gallery",                                   section: "contribution" }
+    ]
+  },
+  {
     id: "service-prototyping",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "with Service Prototyping",

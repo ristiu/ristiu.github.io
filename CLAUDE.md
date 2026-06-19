@@ -112,7 +112,7 @@ Inject these naturally into copy. Never literally quote them.
 | leadership | Leadership and Team Management Principle | 🔲 To do |
 | hotel-booking | Improving Price Perception in Hotel Booking | 🔲 To do |
 | warehouse-logistics | Improving Warehouse Logistics Efficiency | ✅ Content written |
-| product-trends | Forecasting Visual Product Trends | 🔲 To do |
+| product-trends | Forecasting Visual Product Trends | ✅ Content written |
 
 ---
 
