@@ -8,9 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Inline critical: prevent bare-white flash in browsers without View Transitions -->
+  <style>html, body { background: #F8F4EC; margin: 0; }</style>
 </head>
 <body>
-  <div class="page-veil is-in js-page-veil" aria-hidden="true"></div>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Riso grain SVG filter -->
@@ -56,10 +57,12 @@
       if (skeleton) skeleton.classList.add('is-hidden');
       const content = document.createElement('div');
       content.innerHTML = renderProject(project);
-      content.style.opacity = '0';
-      content.style.transition = 'opacity 0.25s ease';
+      content.style.cssText = 'opacity:0;transform:translateY(-12px);transition:opacity 0.45s ease,transform 0.5s cubic-bezier(0.25,1,0.5,1);';
       el.appendChild(content);
-      requestAnimationFrame(() => { content.style.opacity = '1'; });
+      requestAnimationFrame(() => {
+        content.style.opacity = '1';
+        content.style.transform = 'translateY(0)';
+      });
       initTimeline();
       initRisoImages();
       initSectionPhotos();
@@ -254,21 +257,13 @@
     }
   </script>
   <script>
-    // ── Smooth fade entrance ──────────────────────────────────
-    (function fadeIn() {
-      const veil = document.querySelector('.js-page-veil');
-      if (!veil) return;
+    // Hero scatter fires after page paints
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        veil.classList.remove('is-in');
-        setTimeout(() => veil.remove(), 420);
+        const container = document.querySelector('.js-hero-scatter');
+        if (container) container.classList.remove('is-stacked');
       });
-    })();
-
-    // Hero scatter fires after fade-in settles
-    setTimeout(() => {
-      const container = document.querySelector('.js-hero-scatter');
-      if (container) container.classList.remove('is-stacked');
-    }, 420);
+    });
 
     // ── Scroll hint hide/show ─────────────────────────────────
     const projScrollHint = document.querySelector('.js-proj-scroll-hint');
@@ -279,18 +274,8 @@
     window.addEventListener('scroll', updateProjScrollHint, { passive: true });
     updateProjScrollHint();
 
-    // ── Back button: fade → navigate ──────────────────────────
-    document.querySelector('.project-hero-back').addEventListener('click', (e) => {
-      e.preventDefault();
-      const href = e.currentTarget.getAttribute('href');
-      const veil = document.createElement('div');
-      veil.className = 'page-veil';
-      document.body.appendChild(veil);
-      requestAnimationFrame(() => {
-        veil.classList.add('is-in');
-        setTimeout(() => { window.location.href = href; }, 370);
-      });
-    });
+    // Back button — View Transitions handles the fade automatically
+    // (no manual veil needed)
   </script>
 </body>
 </html>

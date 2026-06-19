@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script>history.scrollRestoration = 'manual';</script>
 </head>
 <body>
-  <div class="page-veil is-in js-page-veil" aria-hidden="true"></div>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Hover thumbnail preview -->
@@ -165,18 +165,7 @@
       }).join('')}
     `;
 
-    // ── Smooth fade transition ────────────────────────────────
-    function fadeOut(onDone) {
-      const veil = document.createElement('div');
-      veil.className = 'page-veil';
-      document.body.appendChild(veil);
-      requestAnimationFrame(() => {
-        veil.classList.add('is-in');
-        setTimeout(onDone, 360);
-      });
-    }
-
-    // Burst images from card, then dither fill → navigate
+    // Burst images from card → navigate (View Transitions handles the cross-page fade)
     function burstAndNavigate(card, href, peekImgs) {
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
@@ -184,7 +173,7 @@
       if (!peekImgs.length) {
         card.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';
         card.style.transform = 'translateY(-28px)';
-        setTimeout(() => fadeOut(() => { window.location.href = href; }), 160);
+        setTimeout(() => { window.location.href = href; }, 200);
         return;
       }
 
@@ -197,21 +186,21 @@
       overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
       document.body.appendChild(overlay);
 
-      // Fan spread positions: upward and outward
+      // Burst near the folder — images fan just above the tab
       const spreads = [
-        { dx: -160, dy: -220, rot: -14 },
-        { dx:  20,  dy: -270, rot:   4 },
-        { dx:  180, dy: -200, rot:  16 },
+        { dx: -70, dy: -110, rot: -12 },
+        { dx:  10, dy: -140, rot:   3 },
+        { dx:  80, dy: -100, rot:  14 },
       ];
 
       const els = peekImgs.map((img, i) => {
         const el = document.createElement('img');
         el.src = img.url;
         el.style.cssText = `
-          position:fixed;width:160px;height:auto;border-radius:6px;
-          box-shadow:0 6px 20px rgba(0,0,0,0.22),0 12px 36px rgba(0,0,0,0.14);
+          position:fixed;width:120px;height:auto;border-radius:5px;
+          box-shadow:0 4px 14px rgba(0,0,0,0.22),0 8px 24px rgba(0,0,0,0.14);
           left:${cx}px;top:${cy}px;
-          transform:translate(-50%,-50%) rotate(${(i-1)*7}deg) scale(0.5);
+          transform:translate(-50%,-50%) rotate(${(i-1)*6}deg) scale(0.4);
           opacity:0;will-change:transform,opacity;transition:none;`;
         overlay.appendChild(el);
         return { el, ...spreads[i] };
@@ -230,7 +219,7 @@
           el.style.opacity = '1';
         });
 
-        // Fade images out, then dither fill
+        // Fade images out, then navigate
         setTimeout(() => {
           els.forEach(({ el }, i) => {
             el.style.transition = `opacity 0.2s ease ${i * 20}ms`;
@@ -238,8 +227,8 @@
           });
           setTimeout(() => {
             overlay.remove();
-            fadeOut(() => { window.location.href = href; });
-          }, 250);
+            window.location.href = href;
+          }, 220);
         }, 480);
       });
     }
@@ -264,21 +253,15 @@
       sessionStorage.setItem('scrollY', window.scrollY);
     });
 
-    // Fade in on load — dissolve the entry veil
-    function fadeIn() {
-      const veil = document.querySelector('.js-page-veil');
-      if (!veil) return;
-      requestAnimationFrame(() => {
-        veil.classList.remove('is-in');
-        setTimeout(() => veil.remove(), 420);
-      });
+
+    // Restore scroll before the View Transition new-root fade finishes — jump is invisible
+    const savedY = sessionStorage.getItem('scrollY');
+    if (savedY !== null) {
+      sessionStorage.removeItem('scrollY');
+      window.scrollTo({ top: parseInt(savedY, 10), behavior: 'instant' });
     }
-    fadeIn();
 
     window.addEventListener('pageshow', (e) => {
-      // Remove any leftover veils (bfcache restore)
-      document.querySelectorAll('.page-veil').forEach(el => el.remove());
-
       // Reset card hover/focus states
       document.querySelectorAll('.stack-card').forEach(card => {
         card.blur();
@@ -286,32 +269,22 @@
         card.style.transition = '';
       });
 
-      if (e.persisted || sessionStorage.getItem('scrollY') !== null) {
-        const savedY = parseInt(sessionStorage.getItem('scrollY') || '0', 10);
-        sessionStorage.removeItem('scrollY');
-        window.scrollTo({ top: savedY, behavior: 'instant' });
-        if (sessionStorage.getItem('ditherBack')) {
-          sessionStorage.removeItem('ditherBack');
-        }
-
-        // Pop the card that was previously clicked
-        const returnI = sessionStorage.getItem('returnCardI');
+      // Pop the card that was previously clicked (on any back navigation)
+      const returnI = sessionStorage.getItem('returnCardI');
+      if (returnI) {
         sessionStorage.removeItem('returnCardI');
-        if (returnI) {
-          const returnCard = list.querySelector(`.stack-card[style*="--stack-i:${returnI}"]`);
-          if (returnCard) {
-            setTimeout(() => {
-              returnCard.style.transition = 'none';
-              returnCard.style.transform = 'translateY(-20px) scale(1.03)';
-              requestAnimationFrame(() => {
-                returnCard.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                returnCard.style.transform = '';
-              });
-            }, 120);
-          }
+        const returnCard = list.querySelector(`.stack-card[style*="--stack-i:${returnI}"]`);
+        if (returnCard) {
+          setTimeout(() => {
+            returnCard.style.transition = 'none';
+            returnCard.style.transform = 'translateY(-20px) scale(1.03)';
+            requestAnimationFrame(() => {
+              returnCard.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
+              returnCard.style.transform = '';
+            });
+          }, 120);
         }
       }
-      // Fresh load — do nothing
     });
 
     // ── Hello letter colour wave ────────────────────────────

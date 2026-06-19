@@ -1147,7 +1147,28 @@ ol li, ul li {
   box-shadow: 0 2px 6px rgba(0,0,0,0.13), 0 5px 16px rgba(0,0,0,0.09);
 }
 
-/* ─── Page fade transition ───────────────────────────────── */
+/* ─── Native page transitions (Chrome 126+) ─────────────── */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.28s ease forwards;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.38s ease forwards;
+}
+
+@keyframes vt-out {
+  to { opacity: 0; }
+}
+
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+/* Fallback veil for non-supporting browsers */
 .page-veil {
   position: fixed;
   inset: 0;
@@ -1155,10 +1176,9 @@ ol li, ul li {
   z-index: 9999;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.32s ease;
 }
-.page-veil.is-in  { opacity: 1; }
-.page-veil.is-out { opacity: 0; transition: opacity 0.4s ease; }
+.page-veil.is-in { opacity: 1; }
 
 
 /* ─── Responsive tweaks ──────────────────────────────────── */
