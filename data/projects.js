@@ -110,6 +110,54 @@ const projects = [
     images: []
   },
   {
+    id: "warehouse-logistics",
+    title: "Improving Warehouse Logistics Efficiency",
+    subtitle: "Service Prototyping",
+    company: "Warung Pintar · Supply Chain",
+    industry: "Supply Chain, Retail",
+    year: "",
+    role: "UX Researcher",
+    tags: ["Service Design", "Field Research", "Data Analysis", "UX Research"],
+
+    hook: "How do you speed up warehouse picking when the bottleneck isn't the people — it's the system they're trapped in?",
+
+    impact: [
+      "6.7x faster picking time — zone & cluster picking vs discrete singular picking",
+      "Cluster picking adopted permanently in high-volume warehouses post-rollout",
+      "Simpler method retained for new warehouses — right-sized by context, not forced to fit",
+      "Picker app designed to work without relying on language fluency"
+    ],
+
+    situation: "Warung Pintar built its own distribution center to serve micro retail warungs — shops that order 4x more SKU lines than typical e-commerce. The original picking method had one picker handling one order at a time. As order volume grew, pickers were overwhelmed while checkers sat idle waiting. The system wasn't broken — it was just designed for a scale that no longer existed.",
+
+    insight: "Traveling between warehouse locations — not searching, not picking — took the longest time. Data confirmed it: picking duration correlated with SKU line variety, not quantity. A picker walking to collect 3 different items took longer than one collecting 100 units of the same item. The problem wasn't speed. It was distance.",
+
+    direction: "We started with zero context on warehouse operations. Desktop research surfaced several picking methods — but none were obviously right for Warung Pintar's unique order profile. We mapped them on two axes: order volume and territory. That gave us the direction: from discrete singular picking to zone and cluster/batch picking.\n\nBefore touching the real warehouse, we ran a service prototype — VP, data scientists, PMs, and engineers all became pickers and checkers for a day. Everyone felt the experience firsthand. That session surfaced things no diagram would have caught.\n\nWhat we killed: the assumption that one picking method could work across all warehouse types. High-volume warehouses got cluster picking. New warehouses kept the simpler flow.",
+
+    contribution: "UX Researcher. I ran field observation using timed tracking, identified the traveling bottleneck from data, designed the service prototyping session, accompanied the live rollout, and designed the picker app interface. Pickers came from diverse local backgrounds — some not fully fluent in Bahasa Indonesia. I designed the UI to be understood without depending on language, using visual cues that worked across literacy levels.",
+
+    whatShifted: "Before: checkers played Mobile Legend waiting for pickers who were exhausted walking the full warehouse alone. After: the workload balanced because the system matched how the warehouse actually operated.\n\n\"But if you never try, you'll never know.\" I came into this with zero warehouse context. What I learned: too many variables in one experiment makes it hard to isolate what actually worked. That honesty shaped how I design experiments now.",
+
+    solutionSpace: [],
+    projectPlanning: [],
+    images: [],
+
+    sectionImages: [
+      { url: "https://static.wixstatic.com/media/242cb7_68b9577e5e5b43f2ba8c550838a39d3a~mv2.jpg",  caption: "Warung — the micro retail stores Warung Pintar serves",                        section: "situation" },
+      { url: "https://static.wixstatic.com/media/242cb7_f69062528b57422ba517613f41f46bed~mv2.png", caption: "Picking duration correlates with SKU line variety — not quantity",             section: "insight" },
+      { url: "https://static.wixstatic.com/media/242cb7_716a0c48ae634ab2990d3eb6d563f4f7~mv2.png", caption: "No pattern between quantity and duration. Variety is the real driver.",        section: "insight" },
+      { url: "https://static.wixstatic.com/media/242cb7_47ac1be737bd42f69daeb83fd79b0edf~mv2.png", caption: "Mapping picking methods: order volume vs territory",                           section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_916a8b112d83419da4deeb1ca8a36501~mv2.png", caption: "Service prototyping strategy — each scale of test had its own objective",      section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_091fea75ec054b76ad38bb38b6eaee63~mv2.png", caption: "Planning before the warehouse simulation",                                      section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_7bf9baabc9b543fcbbb271cdcf0ddcd9~mv2.png", caption: "Cross-functional team acting as pickers and checkers",                         section: "direction" },
+      { url: "https://static.wixstatic.com/media/242cb7_148734a84e524d9e93c52d6b2760e0b2~mv2.png", caption: "Field observation during production rollout",                                   section: "contribution" },
+      { url: "https://static.wixstatic.com/media/242cb7_f68d87b518304760908d0f446d7f5589~mv2.png", caption: "Timed activity tracking using Google Sheets script",                           section: "contribution" },
+      { url: "https://static.wixstatic.com/media/242cb7_4d3f607b4ea7412a932be163a273bf5c~mv2.png", caption: "Sorting to rack: a redundant step consuming 30–50% of picker time",            section: "contribution" },
+      { url: "https://static.wixstatic.com/media/242cb7_9a3b2fbd544341d68cac703d7188177b~mv2.png", caption: "Picker app — designed for visual clarity across literacy levels",              section: "contribution" },
+      { url: "https://static.wixstatic.com/media/242cb7_bfff809fd4ea400dab78049817081f12~mv2.png", caption: "V2 zone & cluster picking: 6.7x faster than V1 discrete singular picking",    section: "whatShifted" }
+    ]
+  },
+  {
     id: "service-prototyping",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "with Service Prototyping",

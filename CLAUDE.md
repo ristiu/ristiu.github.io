@@ -111,7 +111,7 @@ Inject these naturally into copy. Never literally quote them.
 | reorder-lifecycle | Accelerating the Re-Order Lifecycle | ✅ Content written |
 | leadership | Leadership and Team Management Principle | 🔲 To do |
 | hotel-booking | Improving Price Perception in Hotel Booking | 🔲 To do |
-| warehouse-logistics | Improving Warehouse Logistics Efficiency | 🔲 To do |
+| warehouse-logistics | Improving Warehouse Logistics Efficiency | ✅ Content written |
 | product-trends | Forecasting Visual Product Trends | 🔲 To do |
 
 ---

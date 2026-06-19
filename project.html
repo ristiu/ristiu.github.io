@@ -9,7 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="page-enter">
+<body>
+  <div class="page-veil is-in js-page-veil" aria-hidden="true"></div>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Riso grain SVG filter -->
@@ -61,6 +62,7 @@
       requestAnimationFrame(() => { content.style.opacity = '1'; });
       initTimeline();
       initRisoImages();
+      initSectionPhotos();
     }
 
     function renderProject(p) {
@@ -70,15 +72,31 @@
 
       const placeholderColors = ['#C8B89A','#A8B8A0','#B0B8C8','#C8A8A0','#B8C0A0','#A8C0C0'];
       const heroColor = placeholderColors[Math.abs(p.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % placeholderColors.length];
+
+      // 4 hardcoded scatter slots — positions work at any width ≤ 560px
+      // --fx/fy/fr = final scattered; --sx/sy/sr = stacked (center pile)
+      const SCATTER_SLOTS = [
+        { hw:'210px', fx:'2%',   fy:'20px',  fr:'-9deg',  fz:1,  sx:'30%', sy:'55px', sr:'-5deg',  fd:'0ms'   },
+        { hw:'190px', fx:'22%',  fy:'-10px', fr:'5deg',   fz:3,  sx:'30%', sy:'55px', sr:'3deg',   fd:'40ms'  },
+        { hw:'220px', fx:'44%',  fy:'30px',  fr:'-6deg',  fz:2,  sx:'30%', sy:'55px', sr:'-2deg',  fd:'20ms'  },
+        { hw:'180px', fx:'68%',  fy:'-5px',  fr:'11deg',  fz:4,  sx:'30%', sy:'55px', sr:'8deg',   fd:'60ms'  },
+      ];
+      const heroImgs = (p.sectionImages || []).slice(0, 4);
+      const heroScatterHtml = heroImgs.length ? `
+        <div class="hero-scatter js-hero-scatter is-stacked">
+          ${heroImgs.map((img, i) => {
+            const s = SCATTER_SLOTS[i];
+            return `<img class="hero-img" src="${img.url}" alt="" loading="lazy" style="--hw:${s.hw};--fx:${s.fx};--fy:${s.fy};--fr:${s.fr};--fz:${s.fz};--sx:${s.sx};--sy:${s.sy};--sr:${s.sr};--fd:${s.fd}" />`;
+          }).join('')}
+        </div>` : '';
+
       const heroHtml = `
-        <div class="project-hero">
+        <div class="project-hero${p.sectionImages && p.sectionImages.length ? ' project-hero--scatter' : ''}">
           <div class="project-hero-text">
             <h1 class="project-hero-title">${p.title}</h1>
             ${(p.company || p.tags?.length) ? `<div class="project-hero-keywords"><span>${[p.company, p.industry].filter(Boolean).join(' · ')}</span>${p.tags?.length ? `<span>${p.tags.join(', ')}</span>` : ''}</div>` : ''}
           </div>
-          <div class="project-hero-image" style="${heroBg ? '' : `background:${heroColor};`}">
-            ${heroBg ? `<img src="${heroBg}" alt="${p.title}" />` : ''}
-          </div>
+          ${heroScatterHtml || `<div class="project-hero-image" style="${heroBg ? '' : `background:${heroColor};`}">${heroBg ? `<img src="${heroBg}" alt="${p.title}" />` : ''}</div>`}
         </div>`;
 
       // ── Body ──────────────────────────────────────────────────
@@ -96,16 +114,31 @@
           <ol>${p.impact.map(i => `<li>${i}</li>`).join('')}</ol>
         </div>` : '';
 
+      // Helper: render inline photos for a given section
+      function sectionPhotos(section) {
+        if (!p.sectionImages || !p.sectionImages.length) return '';
+        const imgs = p.sectionImages.filter(img => img.section === section);
+        if (!imgs.length) return '';
+        return `<div class="section-photos js-section-photos" data-section="${section}">
+          ${imgs.map((img, i) => `
+            <figure class="section-photo">
+              <img src="${img.url}" alt="" loading="lazy" />
+            </figure>`).join('')}
+        </div>`;
+      }
+
       const situationHtml = p.situation ? `
         <div class="content-section">
           <p class="section-heading">Situation</p>
           <p>${p.situation}</p>
+          ${sectionPhotos('situation')}
         </div>` : '';
 
       const insightHtml = p.insight ? `
         <div class="content-section">
           <p class="section-heading">Insight</p>
           <p>${p.insight}</p>
+          ${sectionPhotos('insight')}
         </div>` : '';
 
       // Direction + strategy card side by side
@@ -124,10 +157,12 @@
             </div>
             <div class="direction-text">${directionRestParas.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
           </div>
+          ${sectionPhotos('direction')}
         </div>` : (p.direction ? `
         <div class="content-section">
           <p class="section-heading">Direction</p>
           ${directionParas.map(para => `<p>${para}</p>`).join('')}
+          ${sectionPhotos('direction')}
         </div>` : '');
 
       const directionHtml = '';
@@ -136,6 +171,7 @@
         <div class="content-section">
           <p class="section-heading">My Contribution</p>
           <p>${p.contribution}</p>
+          ${sectionPhotos('contribution')}
         </div>` : '';
 
       // What shifted + screenshot side by side
@@ -147,6 +183,7 @@
             <div class="shifted-text">${p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
             <div class="shifted-img"><img src="${p.screenshots[0]}" alt="" loading="lazy" /></div>
           </div>` : p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}
+          ${sectionPhotos('whatShifted')}
         </div>` : '';
 
       const screenshotsHtml = '';
@@ -180,6 +217,29 @@
       items.forEach(item => observer.observe(item));
     }
 
+    function initHeroScatter() {
+      const container = document.querySelector('.js-hero-scatter');
+      if (!container) return;
+      // Remove stacked class after dither dissolve to trigger fly-out
+      setTimeout(() => container.classList.remove('is-stacked'), 340);
+    }
+
+    function initSectionPhotos() {
+      const photos = document.querySelectorAll('.section-photo');
+      if (!photos.length) return;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const siblings = [...entry.target.closest('.section-photos').querySelectorAll('.section-photo')];
+            const idx = siblings.indexOf(entry.target);
+            setTimeout(() => entry.target.classList.add('is-visible'), idx * 60);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      photos.forEach(p => observer.observe(p));
+    }
+
     function initRisoImages() {
       document.querySelectorAll('.js-riso-container').forEach(wrapper => {
         const img = wrapper.querySelector('.js-riso-img');
@@ -194,48 +254,21 @@
     }
   </script>
   <script>
-    // ── Dither engine (shared) ─────────────────────────────────
-    const DT_BAYER = [[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
-    const DT_BEIGE = [245, 240, 232];
-    const DT_BLOCK = 3;
+    // ── Smooth fade entrance ──────────────────────────────────
+    (function fadeIn() {
+      const veil = document.querySelector('.js-page-veil');
+      if (!veil) return;
+      requestAnimationFrame(() => {
+        veil.classList.remove('is-in');
+        setTimeout(() => veil.remove(), 420);
+      });
+    })();
 
-    function makeCvs() {
-      const W = window.innerWidth, H = window.innerHeight;
-      const cvs = document.createElement('canvas');
-      cvs.width = Math.ceil(W / DT_BLOCK);
-      cvs.height = Math.ceil(H / DT_BLOCK);
-      cvs.style.cssText = [
-        'position:fixed','top:0','left:0',
-        `width:${W}px`,`height:${H}px`,
-        'z-index:9999','pointer-events:none',
-        'image-rendering:pixelated','image-rendering:crisp-edges',
-      ].join(';');
-      // Pre-fill before appending so there's no blank frame on first paint
-      const ctx = cvs.getContext('2d');
-      ctx.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
-      ctx.fillRect(0, 0, cvs.width, cvs.height);
-      document.body.appendChild(cvs);
-      return cvs;
-    }
-
-    function dtDissolve(cvs) {
-      const ctx = cvs.getContext('2d');
-      const { width: cw, height: ch } = cvs;
-      const img = ctx.getImageData(0, 0, cw, ch);
-      const d = img.data;
-      let level = 0;
-      (function frame() {
-        for (let y = 0; y < ch; y++)
-          for (let x = 0; x < cw; x++)
-            if (DT_BAYER[y % 4][x % 4] === level) d[(y * cw + x) * 4 + 3] = 0;
-        ctx.putImageData(img, 0, 0);
-        if (level < 15) { level++; requestAnimationFrame(frame); }
-        else cvs.remove();
-      })();
-    }
-
-    // ── Entry: dither dissolve away (canvas pre-filled, no blank frame) ──
-    dtDissolve(makeCvs());
+    // Hero scatter fires after fade-in settles
+    setTimeout(() => {
+      const container = document.querySelector('.js-hero-scatter');
+      if (container) container.classList.remove('is-stacked');
+    }, 420);
 
     // ── Scroll hint hide/show ─────────────────────────────────
     const projScrollHint = document.querySelector('.js-proj-scroll-hint');
@@ -246,28 +279,17 @@
     window.addEventListener('scroll', updateProjScrollHint, { passive: true });
     updateProjScrollHint();
 
-    // ── Back button: dither fill → navigate ───────────────────
+    // ── Back button: fade → navigate ──────────────────────────
     document.querySelector('.project-hero-back').addEventListener('click', (e) => {
       e.preventDefault();
       const href = e.currentTarget.getAttribute('href');
-      sessionStorage.setItem('ditherBack', '1');
-      const cvs = makeCvs();
-      const ctx = cvs.getContext('2d');
-      const { width: cw, height: ch } = cvs;
-      const img = ctx.createImageData(cw, ch);
-      const d = img.data;
-      let level = 0;
-      (function frame() {
-        for (let y = 0; y < ch; y++)
-          for (let x = 0; x < cw; x++)
-            if (DT_BAYER[y % 4][x % 4] === level) {
-              const i = (y * cw + x) * 4;
-              d[i] = DT_BEIGE[0]; d[i+1] = DT_BEIGE[1]; d[i+2] = DT_BEIGE[2]; d[i+3] = 255;
-            }
-        ctx.putImageData(img, 0, 0);
-        if (level < 15) { level++; requestAnimationFrame(frame); }
-        else window.location.href = href;
-      })();
+      const veil = document.createElement('div');
+      veil.className = 'page-veil';
+      document.body.appendChild(veil);
+      requestAnimationFrame(() => {
+        veil.classList.add('is-in');
+        setTimeout(() => { window.location.href = href; }, 370);
+      });
     });
   </script>
 </body>

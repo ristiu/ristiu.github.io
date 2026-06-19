@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="page-veil is-in js-page-veil" aria-hidden="true"></div>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
 
   <!-- Hover thumbnail preview -->
@@ -94,6 +95,7 @@
   </main>
 </div><!-- /.paper -->
 
+  <script src="data/projects.js"></script>
   <script src="cursor.js"></script>
   <script src="data/projects.js"></script>
   <script>
@@ -130,109 +132,127 @@
 
     const allCards = [
       { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#visual-trends',       img: 'assets/images/visual-trends-1.jpeg',    tabLabel: 'Casio',        tabLogo: 'assets/images/logo-casio.png',         tabL: '8%',  cardW: '100%', cardR: '-1.2deg' },
-      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#service-prototyping', img: 'assets/images/service-prototyping-1.jpeg', tabLabel: 'Warung Pintar', tabLogo: 'assets/images/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
+      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#warehouse-logistics',  img: '',                                       tabLabel: 'Warung Pintar', tabLogo: 'assets/images/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
       { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/images/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/images/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
       { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: '#',                                img: 'assets/images/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
       { title: 'Untitled',                             subtitle: '',                                                      href: 'project.html#reorder-lifecycle',   img: '',                                       tabLabel: '',             tabLogo: '',                                     tabL: '68%', cardW: '100%' },
       { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/images/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '30%', cardW: '100%' },
     ];
 
+    // Build a lookup: project id → first 3 sectionImages
+    const projectImageMap = {};
+    (typeof projects !== 'undefined' ? projects : []).forEach(p => {
+      if (p.sectionImages && p.sectionImages.length) {
+        projectImageMap[p.id] = p.sectionImages.slice(0, 3);
+      }
+    });
+
+    function getPeekImages(href) {
+      const id = (href || '').split('#')[1];
+      return projectImageMap[id] || [];
+    }
+
     list.innerHTML = `
       <p class="stack-description">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
-      ${allCards.map((c, i) => `
+      ${allCards.map((c, i) => {
+        const peekImgs = getPeekImages(c.href);
+        return `
         <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}">
           ${c.tabLogo ? `<span class="stack-card-tab-label"><img class="stack-card-tab-logo" src="${c.tabLogo}" alt="${c.tabLabel}" /></span>` : ''}
           <span class="stack-card-title">${c.title}</span>
           <span class="stack-card-sub">${c.subtitle}</span>
-        </a>
-      `).join('')}
+        </a>`;
+      }).join('')}
     `;
 
-    // ── Dither transition engine ──────────────────────────────
-    const DT_BAYER = [[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
-    const DT_BEIGE = [245, 240, 232];
-    const DT_BLOCK = 3; // 3px blocks — matches card dither density
-
-    function makeDitherCvs() {
-      const W = window.innerWidth, H = window.innerHeight;
-      const cw = Math.ceil(W / DT_BLOCK), ch = Math.ceil(H / DT_BLOCK);
-      const cvs = document.createElement('canvas');
-      cvs.width = cw; cvs.height = ch;
-      cvs.className = 'js-dither-cvs';
-      cvs.style.cssText = [
-        'position:fixed','top:0','left:0',
-        `width:${W}px`,`height:${H}px`,
-        'z-index:9999','pointer-events:none',
-        'image-rendering:pixelated','image-rendering:crisp-edges',
-      ].join(';');
-      document.body.appendChild(cvs);
-      return cvs;
+    // ── Smooth fade transition ────────────────────────────────
+    function fadeOut(onDone) {
+      const veil = document.createElement('div');
+      veil.className = 'page-veil';
+      document.body.appendChild(veil);
+      requestAnimationFrame(() => {
+        veil.classList.add('is-in');
+        setTimeout(onDone, 360);
+      });
     }
 
-    // Fill screen with beige dither (level 0→15), call onDone when full
-    function ditherFill(cvs, onDone) {
-      const ctx = cvs.getContext('2d');
-      const { width: cw, height: ch } = cvs;
-      const img = ctx.createImageData(cw, ch);
-      const d = img.data;
-      let level = 0;
-      (function frame() {
-        for (let y = 0; y < ch; y++) {
-          for (let x = 0; x < cw; x++) {
-            if (DT_BAYER[y % 4][x % 4] === level) {
-              const i = (y * cw + x) * 4;
-              d[i] = DT_BEIGE[0]; d[i+1] = DT_BEIGE[1]; d[i+2] = DT_BEIGE[2]; d[i+3] = 255;
-            }
-          }
-        }
-        ctx.putImageData(img, 0, 0);
-        if (level < 15) { level++; requestAnimationFrame(frame); }
-        else onDone();
-      })();
+    // Burst images from card, then dither fill → navigate
+    function burstAndNavigate(card, href, peekImgs) {
+      sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
+      sessionStorage.setItem('scrollY', window.scrollY);
+
+      if (!peekImgs.length) {
+        card.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';
+        card.style.transform = 'translateY(-28px)';
+        setTimeout(() => fadeOut(() => { window.location.href = href; }), 160);
+        return;
+      }
+
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width * 0.5;
+      const cy = rect.top + 20; // near the folder tab top
+
+      // Overlay container
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
+      document.body.appendChild(overlay);
+
+      // Fan spread positions: upward and outward
+      const spreads = [
+        { dx: -160, dy: -220, rot: -14 },
+        { dx:  20,  dy: -270, rot:   4 },
+        { dx:  180, dy: -200, rot:  16 },
+      ];
+
+      const els = peekImgs.map((img, i) => {
+        const el = document.createElement('img');
+        el.src = img.url;
+        el.style.cssText = `
+          position:fixed;width:160px;height:auto;border-radius:6px;
+          box-shadow:0 6px 20px rgba(0,0,0,0.22),0 12px 36px rgba(0,0,0,0.14);
+          left:${cx}px;top:${cy}px;
+          transform:translate(-50%,-50%) rotate(${(i-1)*7}deg) scale(0.5);
+          opacity:0;will-change:transform,opacity;transition:none;`;
+        overlay.appendChild(el);
+        return { el, ...spreads[i] };
+      });
+
+      overlay.offsetWidth; // reflow
+
+      // Card floats up slightly
+      card.style.transition = 'transform 0.2s ease';
+      card.style.transform = 'translateY(-18px)';
+
+      requestAnimationFrame(() => {
+        els.forEach(({ el, dx, dy, rot }, i) => {
+          el.style.transition = `transform 0.6s cubic-bezier(0.2,0.85,0.25,1) ${i * 35}ms, opacity 0.2s ease ${i * 35}ms`;
+          el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg) scale(1)`;
+          el.style.opacity = '1';
+        });
+
+        // Fade images out, then dither fill
+        setTimeout(() => {
+          els.forEach(({ el }, i) => {
+            el.style.transition = `opacity 0.2s ease ${i * 20}ms`;
+            el.style.opacity = '0';
+          });
+          setTimeout(() => {
+            overlay.remove();
+            fadeOut(() => { window.location.href = href; });
+          }, 250);
+        }, 480);
+      });
     }
 
-    // Dissolve beige screen away (level 0→15), remove canvas when done
-    function ditherDissolve(cvs) {
-      const ctx = cvs.getContext('2d');
-      const { width: cw, height: ch } = cvs;
-      ctx.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
-      ctx.fillRect(0, 0, cw, ch);
-      const img = ctx.getImageData(0, 0, cw, ch);
-      const d = img.data;
-      let level = 0;
-      (function frame() {
-        for (let y = 0; y < ch; y++) {
-          for (let x = 0; x < cw; x++) {
-            if (DT_BAYER[y % 4][x % 4] === level) {
-              d[(y * cw + x) * 4 + 3] = 0;
-            }
-          }
-        }
-        ctx.putImageData(img, 0, 0);
-        if (level < 15) { level++; requestAnimationFrame(frame); }
-        else cvs.remove();
-      })();
-    }
-
-    // Card click: float up → dither fill → navigate
+    // Card click handler
     list.querySelectorAll('.stack-card').forEach(card => {
       const href = card.getAttribute('href');
       if (!href || href === '#') return;
+      const peekImgs = getPeekImages(href);
 
       card.addEventListener('click', (e) => {
         e.preventDefault();
-        sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
-        sessionStorage.setItem('scrollY', window.scrollY);
-
-        // Float card up further from hover position
-        card.style.transition = 'transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        card.style.transform = 'translateY(-28px)';
-
-        // After float: dither fill → navigate
-        setTimeout(() => {
-          const cvs = makeDitherCvs();
-          ditherFill(cvs, () => { window.location.href = href; });
-        }, 160);
+        burstAndNavigate(card, href, peekImgs);
       });
     });
 
@@ -244,9 +264,20 @@
       sessionStorage.setItem('scrollY', window.scrollY);
     });
 
+    // Fade in on load — dissolve the entry veil
+    function fadeIn() {
+      const veil = document.querySelector('.js-page-veil');
+      if (!veil) return;
+      requestAnimationFrame(() => {
+        veil.classList.remove('is-in');
+        setTimeout(() => veil.remove(), 420);
+      });
+    }
+    fadeIn();
+
     window.addEventListener('pageshow', (e) => {
-      // Remove any leftover dither canvas (bfcache restore)
-      document.querySelectorAll('.js-dither-cvs').forEach(el => el.remove());
+      // Remove any leftover veils (bfcache restore)
+      document.querySelectorAll('.page-veil').forEach(el => el.remove());
 
       // Reset card hover/focus states
       document.querySelectorAll('.stack-card').forEach(card => {
@@ -256,19 +287,11 @@
       });
 
       if (e.persisted || sessionStorage.getItem('scrollY') !== null) {
-        // Back navigation — restore exact position
         const savedY = parseInt(sessionStorage.getItem('scrollY') || '0', 10);
         sessionStorage.removeItem('scrollY');
         window.scrollTo({ top: savedY, behavior: 'instant' });
-
-        // Dither dissolve only when our back button was clicked (not native swipe-back)
         if (sessionStorage.getItem('ditherBack')) {
           sessionStorage.removeItem('ditherBack');
-          const cvs = makeDitherCvs();
-          const ctx0 = cvs.getContext('2d');
-          ctx0.fillStyle = `rgb(${DT_BEIGE.join(',')})`;
-          ctx0.fillRect(0, 0, cvs.width, cvs.height);
-          requestAnimationFrame(() => ditherDissolve(cvs));
         }
 
         // Pop the card that was previously clicked
