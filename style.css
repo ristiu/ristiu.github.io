@@ -1027,21 +1027,22 @@ a:hover { color: var(--accent); }
   border-radius: 4px;
   position: relative;
   z-index: 1;
-  mask-image: linear-gradient(to bottom, black 50%, transparent 92%);
-  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 92%);
+  mix-blend-mode: multiply;
+  filter: brightness(1.6) contrast(1.1);
 }
 
-
-/* Cover watermark bottom-right */
+/* Fade bottom of hero image — overlay instead of mask-image to avoid
+   stacked compositor layers that cause grey on iOS Safari */
 .project-hero-imgwrap::after {
   content: '';
   position: absolute;
   bottom: 0;
+  left: 0;
   right: 0;
-  width: 120px;
-  height: 36px;
-  background: #fff;
-  z-index: 3;
+  height: 55%;
+  background: linear-gradient(to bottom, transparent 0%, #ffffff 75%);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .hero-tags {
