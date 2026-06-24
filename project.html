@@ -66,21 +66,31 @@
       el.innerHTML = '<p class="stub-notice">Project not found.</p>';
     } else {
       document.title = `${project.title} — Risti`;
-      // Swap skeleton → real content
+
       const skeleton = el.querySelector('.project-skeleton');
-      if (skeleton) skeleton.classList.add('is-hidden');
       const content = document.createElement('div');
       content.innerHTML = renderProject(project);
-      content.style.cssText = 'opacity:0;transform:translateY(-12px);transition:opacity 0.45s ease,transform 0.5s cubic-bezier(0.25,1,0.5,1);';
+      content.style.cssText = 'opacity:0;transition:opacity 0.4s ease;';
       el.appendChild(content);
-      requestAnimationFrame(() => {
-        content.style.opacity = '1';
-        content.style.transform = 'translateY(0)';
-      });
-      initTimeline();
-      initRisoImages();
-      initSectionPhotos();
-      initSidenav(project);
+
+      function revealContent() {
+        if (skeleton) skeleton.classList.add('is-hidden');
+        requestAnimationFrame(() => { content.style.opacity = '1'; });
+        initTimeline();
+        initRisoImages();
+        initSectionPhotos();
+        initSidenav(project);
+      }
+
+      const heroImg = content.querySelector('.project-hero-mainimg');
+      if (heroImg) {
+        // Wait for hero image — 5s fallback so it never stays hidden
+        const fallback = setTimeout(revealContent, 5000);
+        heroImg.addEventListener('load', () => { clearTimeout(fallback); revealContent(); }, { once: true });
+        heroImg.addEventListener('error', () => { clearTimeout(fallback); revealContent(); }, { once: true });
+      } else {
+        revealContent();
+      }
     }
 
     function renderProject(p) {
