@@ -16,12 +16,12 @@
 html {
   font-size: 14px;
   scroll-behavior: smooth;
-  background-color: #F8F4EC;
+  background-color: #ffffff;
 }
 
 /* ─── Paper container ────────────────────────────────────── */
 .paper {
-  background: #F8F4EC;
+  background: #ffffff;
   max-width: 600px;
   margin: 0 auto;
   min-height: 100vh;
@@ -1292,7 +1292,7 @@ ol li, ul li {
 .page-veil {
   position: fixed;
   inset: 0;
-  background: #F8F4EC;
+  background: #ffffff;
   z-index: 9999;
   pointer-events: none;
   opacity: 0;
