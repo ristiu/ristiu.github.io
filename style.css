@@ -733,6 +733,7 @@ a:hover { color: var(--accent); }
 .project-layout {
   display: flex;
   min-height: 100vh;
+  padding-top: 60px;
 }
 
 .project-sidenav {
@@ -744,7 +745,7 @@ a:hover { color: var(--accent); }
   min-width: 0;
 }
 
-/* Mobile back link visible by default */
+/* Mobile back link */
 .project-hero-back {
   display: block;
   max-width: 600px;
@@ -753,7 +754,7 @@ a:hover { color: var(--accent); }
   font-size: 2.5rem;
   color: var(--ink);
   text-decoration: none;
-  padding: 20px 20px 8px;
+  padding: 0 20px 8px;
   opacity: 0.6;
 }
 .project-hero-back:hover { opacity: 1; color: var(--accent); }
@@ -761,30 +762,40 @@ a:hover { color: var(--accent); }
 @media (min-width: 900px) {
   .project-layout {
     flex-direction: row;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 72px;
+    gap: 0;
   }
 
-  /* Sidebar visible on desktop */
+  /* Sidebar — sticky, travels with content */
   .project-sidenav {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100vh;
-    padding: 32px 24px 40px;
+    width: 180px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 40px;
+    align-self: flex-start;
+    height: auto;
+    padding: 0 28px 40px 0;
     box-sizing: border-box;
-    gap: 0;
-    z-index: 100;
   }
 
   .project-main {
-    margin-left: 200px;
+    flex: 1;
+    min-width: 0;
   }
 
   /* Hide mobile back link on desktop */
   .project-main .project-hero-back {
     display: none;
+  }
+
+  /* Uncap paper width inside the layout */
+  .project-main .paper {
+    max-width: none;
+    box-shadow: none;
   }
 }
 
@@ -795,9 +806,10 @@ a:hover { color: var(--accent); }
   color: var(--ink);
   text-decoration: none;
   opacity: 0.5;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   display: block;
   transition: opacity 0.2s ease;
+  line-height: 1;
 }
 .project-sidenav-back:hover { opacity: 1; color: var(--accent); }
 
@@ -909,6 +921,99 @@ a:hover { color: var(--accent); }
   object-fit: cover;
   display: block;
   filter: brightness(71%) contrast(102%) saturate(0%);
+}
+
+/* ─── Tagged hero (heroImage + tags) ────────────────────── */
+.project-hero--tagged {
+  overflow: visible;
+}
+
+.project-hero--tagged .project-hero-text {
+  padding: 0 20px 20px;
+}
+
+.project-hero-company {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #999;
+  margin-top: 6px;
+}
+
+.project-hero-imgwrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.project-hero-mainimg {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+/* Radial vignette — fades image edges into white page */
+.project-hero-imgwrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 55% 50% at 50% 50%,
+    transparent 30%,
+    rgba(255,255,255,0.55) 60%,
+    rgba(255,255,255,0.92) 80%,
+    #fff 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+/* Cover watermark bottom-right */
+.project-hero-imgwrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 36px;
+  background: #fff;
+  z-index: 3;
+}
+
+.hero-tags {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-tag {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(0,0,0,0.72);
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: tagAppear 0.25s ease forwards;
+  animation-delay: calc(0.55s + var(--ti) * 0.1s);
+}
+
+@keyframes tagAppear {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Hero scatter (projects with sectionImages) ─────────── */
@@ -1264,7 +1369,7 @@ ol li, ul li {
   height: auto;
   display: block;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.13), 0 5px 16px rgba(0,0,0,0.09);
+  box-shadow: none;
 }
 
 /* ─── Native page transitions (Chrome 126+) ─────────────── */
