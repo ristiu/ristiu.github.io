@@ -24,22 +24,36 @@
     </filter>
   </svg>
 
-  <!-- Fixed back nav — lives outside animated content -->
-  <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
-
   <!-- Scroll hint — same as homepage -->
   <a class="scroll-hint js-proj-scroll-hint" href="#" aria-label="Scroll down" onclick="window.scrollBy({top: window.innerHeight * 0.8, behavior:'smooth'}); return false;">↓</a>
 
-<div class="paper">
-  <div id="project-content">
-    <!-- skeleton shown instantly while JS renders -->
-    <div class="project-skeleton">
-      <div class="project-skeleton__bar project-skeleton__bar--title"></div>
-      <div class="project-skeleton__bar project-skeleton__bar--sub"></div>
-      <div class="project-skeleton__hero"></div>
+<div class="project-layout">
+
+  <!-- Left sidebar — desktop only -->
+  <aside class="project-sidenav js-sidenav" aria-label="Project navigation">
+    <a class="project-sidenav-back" href="index.html" aria-label="Back to homepage">←</a>
+    <div class="project-sidenav-meta js-sidenav-meta"></div>
+    <nav class="project-sidenav-links js-sidenav-links"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="project-main">
+    <div class="paper">
+      <!-- Mobile-only back link -->
+      <a class="project-hero-back" href="index.html" aria-label="Back to homepage">←</a>
+
+      <div id="project-content">
+        <!-- skeleton shown instantly while JS renders -->
+        <div class="project-skeleton">
+          <div class="project-skeleton__bar project-skeleton__bar--title"></div>
+          <div class="project-skeleton__bar project-skeleton__bar--sub"></div>
+          <div class="project-skeleton__hero"></div>
+        </div>
+      </div>
     </div>
   </div>
-</div><!-- /.paper -->
+
+</div><!-- /.project-layout -->
 
   <script src="cursor.js"></script>
   <script src="data/projects.js"></script>
@@ -66,6 +80,7 @@
       initTimeline();
       initRisoImages();
       initSectionPhotos();
+      initSidenav(project);
     }
 
     function renderProject(p) {
@@ -107,12 +122,12 @@
       const bodyClose = `</div>`;
 
       const hookHtml = p.hook ? `
-        <div class="content-section">
+        <div class="content-section" id="section-hook">
           <blockquote class="hook-text">${p.hook}</blockquote>
         </div>` : '';
 
       const impactHtml = p.impact && p.impact.length ? `
-        <div class="content-section">
+        <div class="content-section" id="section-outcome">
           <p class="section-heading">Outcome</p>
           <ol>${p.impact.map(i => `<li>${i}</li>`).join('')}</ol>
         </div>` : '';
@@ -131,14 +146,14 @@
       }
 
       const situationHtml = p.situation ? `
-        <div class="content-section">
+        <div class="content-section" id="section-situation">
           <p class="section-heading">Situation</p>
           <p>${p.situation}</p>
           ${sectionPhotos('situation')}
         </div>` : '';
 
       const insightHtml = p.insight ? `
-        <div class="content-section">
+        <div class="content-section" id="section-insight">
           <p class="section-heading">Insight</p>
           <p>${p.insight}</p>
           ${sectionPhotos('insight')}
@@ -150,7 +165,7 @@
       const directionRestParas = directionParas.slice(1).join('\n\n');
 
       const cardHtml = (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
-        <div class="content-section">
+        <div class="content-section" id="section-direction">
           <p class="section-heading">Direction</p>
           ${directionFirstPara ? `<p>${directionFirstPara}</p>` : ''}
           <div class="direction-cols">
@@ -162,7 +177,7 @@
           </div>
           ${sectionPhotos('direction')}
         </div>` : (p.direction ? `
-        <div class="content-section">
+        <div class="content-section" id="section-direction">
           <p class="section-heading">Direction</p>
           ${directionParas.map(para => `<p>${para}</p>`).join('')}
           ${sectionPhotos('direction')}
@@ -171,7 +186,7 @@
       const directionHtml = '';
 
       const contributionHtml = p.contribution ? `
-        <div class="content-section">
+        <div class="content-section" id="section-contribution">
           <p class="section-heading">My Contribution</p>
           <p>${p.contribution}</p>
           ${sectionPhotos('contribution')}
@@ -179,7 +194,7 @@
 
       // What shifted + screenshot side by side
       const whatShiftedHtml = p.whatShifted ? `
-        <div class="content-section">
+        <div class="content-section" id="section-shifted">
           <p class="section-heading">What shifted</p>
           ${p.screenshots && p.screenshots.length ? `
           <div class="shifted-cols">
@@ -241,6 +256,55 @@
         });
       }, { threshold: 0.1 });
       photos.forEach(p => observer.observe(p));
+    }
+
+    function initSidenav(p) {
+      const meta = document.querySelector('.js-sidenav-meta');
+      const links = document.querySelector('.js-sidenav-links');
+      if (!meta || !links) return;
+
+      // Meta: company + title
+      meta.innerHTML = `
+        <span class="sidenav-company">${p.company || ''}</span>
+        <span class="sidenav-title">${p.title}</span>`;
+
+      // Build section list from what's actually in the DOM
+      const sections = [
+        { id: 'section-hook',         label: 'Overview' },
+        { id: 'section-outcome',      label: 'Outcome' },
+        { id: 'section-situation',    label: 'Situation' },
+        { id: 'section-insight',      label: 'Insight' },
+        { id: 'section-direction',    label: 'Direction' },
+        { id: 'section-contribution', label: 'Contribution' },
+        { id: 'section-shifted',      label: 'What shifted' },
+      ].filter(s => document.getElementById(s.id));
+
+      links.innerHTML = sections.map(s =>
+        `<a class="sidenav-link" href="#${s.id}" data-section="${s.id}">${s.label}</a>`
+      ).join('');
+
+      // Scrollspy
+      const anchors = sections.map(s => document.getElementById(s.id)).filter(Boolean);
+      const navLinks = links.querySelectorAll('.sidenav-link');
+
+      function updateActive() {
+        let current = anchors[0];
+        for (const el of anchors) {
+          if (el.getBoundingClientRect().top <= window.innerHeight * 0.35) current = el;
+        }
+        navLinks.forEach(a => a.classList.toggle('is-active', a.dataset.section === current.id));
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+
+      // Smooth scroll on click
+      links.addEventListener('click', e => {
+        const a = e.target.closest('.sidenav-link');
+        if (!a) return;
+        e.preventDefault();
+        document.getElementById(a.dataset.section)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
 
     function initRisoImages() {
