@@ -43,6 +43,11 @@
 
   <main class="page" id="main-content">
 
+    <!-- Portfolio -->
+    <section class="section section--stack" style="padding-top: 3rem; margin-bottom: 5rem;">
+      <div class="stack-container" id="portfolio-list"></div>
+    </section>
+
     <!-- AI + analog -->
     <section class="section">
       <div class="tree-node-wrapper js-tree-root">
@@ -70,11 +75,6 @@
           <div class="analog-panel"></div>
         </div>
       </div>
-    </section>
-
-    <!-- Portfolio -->
-    <section class="section section--stack">
-      <div class="stack-container" id="portfolio-list"></div>
     </section>
 
     <!-- Footer -->
@@ -111,6 +111,10 @@
 
       setTimeout(() => {
         heroWrapper.style.overflow = '';
+        // Lock the final rotation as an inline style, then remove the animation
+        // so hover transform isn't overridden by fill-mode: both
+        wrap.style.animation = 'none';
+        wrap.style.transform = '';
         wrap.classList.add('hero-note-wrap--settled');
       }, 1400); // slightly after animation duration (1.3s)
     })();
