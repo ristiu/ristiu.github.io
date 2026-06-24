@@ -20,8 +20,9 @@
 
 <div class="paper">
   <!-- Hero -->
-  <div class="hero-wrapper">
-    <div class="hero-card">
+  <div class="hero-wrapper hero-wrapper--yellow">
+    <div class="hero-note-wrap">
+    <div class="hero-card hero-card--note">
       <div class="hero-text">
         <p>
           <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I describe myself as a
@@ -32,11 +33,12 @@
           In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
         </p>
       </div>
-      <div class="illustration-group">
-        <img class="illustration" src="assets/images/leaf.gif" alt="" />
-      </div>
-      <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
     </div>
+    </div>
+    <div class="illustration-group">
+      <img class="illustration" src="assets/images/leaf.gif" alt="" />
+    </div>
+    <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
   </div>
 
   <main class="page" id="main-content">
@@ -98,6 +100,21 @@
   <script src="data/projects.js"></script>
   <script src="cursor.js"></script>
   <script src="data/projects.js"></script>
+  <script>
+    // Sticker drop → hover wobble
+    (function() {
+      const wrap = document.querySelector('.hero-note-wrap');
+      const heroWrapper = document.querySelector('.hero-wrapper--yellow');
+      if (!wrap || !heroWrapper) return;
+
+      heroWrapper.style.overflow = 'hidden';
+
+      setTimeout(() => {
+        heroWrapper.style.overflow = '';
+        wrap.classList.add('hero-note-wrap--settled');
+      }, 1400); // slightly after animation duration (1.3s)
+    })();
+  </script>
   <script>
     // Accordion toggle
     document.querySelectorAll('.js-tree-root').forEach(root => {
@@ -415,14 +432,17 @@
       return audioCtx;
     }
 
-    // Unlock audio on first interaction
+    // Unlock audio on first interaction (pointerdown fires before click, so sounds work on first hover)
     const unlockAudio = () => {
-      getAudioCtx();
-      document.removeEventListener('click', unlockAudio);
+      const ctx = getAudioCtx();
+      if (ctx.state === 'suspended') ctx.resume();
+      document.removeEventListener('pointerdown', unlockAudio);
       document.removeEventListener('touchstart', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
     };
-    document.addEventListener('click', unlockAudio);
+    document.addEventListener('pointerdown', unlockAudio);
     document.addEventListener('touchstart', unlockAudio);
+    document.addEventListener('keydown', unlockAudio);
 
     let swooshNode = null, swooshGain = null;
 
@@ -450,7 +470,7 @@
 
     function setSwooshVolume(vol) {
       if (!swooshGain) return;
-      swooshGain.gain.setTargetAtTime(vol * 0.025, audioCtx.currentTime, 0.08);
+      swooshGain.gain.setTargetAtTime(vol * 0.09, audioCtx.currentTime, 0.08);
     }
 
     function stopSwoosh() {
@@ -476,8 +496,8 @@
       filter.frequency.value = 2400;
       filter.Q.value = 1.5;
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.012);
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.018);
       src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
       src.start();
     }
