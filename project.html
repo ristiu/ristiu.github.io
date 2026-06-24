@@ -108,7 +108,35 @@
           }).join('')}
         </div>` : '';
 
-      const heroHtml = `
+      // Tagged hero — full image with floating tag chips
+      const TAG_POSITIONS = [
+        { top:    '10%', left:  '8%'  },
+        { top:    '8%',  right: '10%' },
+        { top:    '42%', left:  '6%'  },
+        { bottom: '12%', right: '8%'  },
+        { bottom: '10%', left:  '12%' },
+        { top:    '24%', right: '6%'  },
+        { bottom: '32%', left:  '10%' },
+      ];
+      const taggedHeroHtml = (p.heroImage && p.tags && p.tags.length) ? `
+        <div class="project-hero project-hero--tagged">
+          <div class="project-hero-text">
+            <h1 class="project-hero-title">${p.title}</h1>
+            ${p.company ? `<p class="project-hero-company">${p.company}</p>` : ''}
+          </div>
+          <div class="project-hero-imgwrap">
+            <img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" />
+            <div class="hero-tags js-hero-tags">
+              ${p.tags.map((t, i) => {
+                const pos = TAG_POSITIONS[i % TAG_POSITIONS.length];
+                const style = Object.entries(pos).map(([k,v]) => `${k}:${v}`).join(';');
+                return `<span class="hero-tag" style="${style};--ti:${i}">${t}</span>`;
+              }).join('')}
+            </div>
+          </div>
+        </div>` : '';
+
+      const heroHtml = taggedHeroHtml || `
         <div class="project-hero${p.sectionImages && p.sectionImages.length ? ' project-hero--scatter' : ''}">
           <div class="project-hero-text">
             <h1 class="project-hero-title">${p.title}</h1>
@@ -263,10 +291,7 @@
       const links = document.querySelector('.js-sidenav-links');
       if (!meta || !links) return;
 
-      // Meta: company + title
-      meta.innerHTML = `
-        <span class="sidenav-company">${p.company || ''}</span>
-        <span class="sidenav-title">${p.title}</span>`;
+      meta.innerHTML = '';
 
       // Build section list from what's actually in the DOM
       const sections = [
@@ -331,7 +356,9 @@
     if (folderColor) {
       sessionStorage.removeItem('folderColor');
       const hero = document.querySelector('.project-hero');
-      if (hero) hero.style.setProperty('--folder-accent', folderColor);
+      if (hero && !hero.classList.contains('project-hero--tagged')) {
+        hero.style.setProperty('--folder-accent', folderColor);
+      }
     }
 
     // ── Scroll hint: visible near top, hides once reading, reappears on scroll back

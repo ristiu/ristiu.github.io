@@ -117,7 +117,8 @@ const projects = [
     industry: "Supply Chain, Retail",
     year: "",
     role: "UX Researcher",
-    tags: ["Service Design", "Field Research", "Data Analysis", "UX Research"],
+    tags: ["Service Design", "Field Research", "Data Analysis", "UX Research", "Supply Chain", "Warehouse Operations"],
+    heroImage: "assets/images/warehouse-hero.gif",
 
     hook: "How do you speed up warehouse picking when the bottleneck isn't the people — it's the system they're trapped in?",
 
@@ -165,7 +166,7 @@ const projects = [
     industry: "Design Research, Consumer Electronics",
     year: "2014",
     role: "Design Researcher",
-    tags: ["Trend Forecasting", "Ethnography", "Design Speculation"],
+    tags: ["Trend Forecasting", "Ethnography", "Design Speculation", "Design Research", "Consumer Electronics"],
 
     hook: "What happens when you ask 150 people across two countries the same question: what will you do with your photos two years from now?",
 
@@ -186,6 +187,7 @@ const projects = [
 
     whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended wasn't the lenticular photo itself. It was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
+    heroImage: "assets/images/casio-hero.gif",
     solutionSpace: [],
     projectPlanning: [],
     images: [],
