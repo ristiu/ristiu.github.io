@@ -125,7 +125,7 @@
             ${p.company ? `<p class="project-hero-company">${p.company}</p>` : ''}
           </div>
           <div class="project-hero-imgwrap">
-            <img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" />
+            <img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" onload="this.classList.add('is-loaded')" />
             <div class="hero-tags js-hero-tags">
               ${p.tags.map((t, i) => {
                 const pos = TAG_POSITIONS[i % TAG_POSITIONS.length];
