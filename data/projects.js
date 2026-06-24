@@ -7,7 +7,7 @@ const projects = [
     industry: "Agriculture",
     year: "2023",
     role: "Design Manager with a team of 4",
-    tags: ["Ecommerce", "Strategy", "Omnichannel"],
+    tags: ["Ecommerce", "Strategy", "Omnichannel", "Field Research", "Agriculture", "UX Research"],
 
     hook: "How do you reduce the cost of field officers when maintaining human services for every farmer is unsustainable?",
 
@@ -56,7 +56,7 @@ const projects = [
     strategyVol: 1,
     strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
     strategyCardImage: "assets/images/o2o-strategy-card-opt.jpg",
-    heroImage: "assets/images/o2o-hero-opt.jpg",
+    heroImage: "assets/images/efishery-hero.gif",
     screenshots: ["assets/images/o2o-whatsapp-opt.jpg"],
     images: []
   },
@@ -83,6 +83,8 @@ const projects = [
     industry: "Pricing, Travel, Ecommerce",
     year: "",
     role: "",
+    tags: ["Gestalt Principles", "Price Perception", "Hotel Booking", "Design Systems", "Travel", "Ecommerce"],
+    heroImage: "assets/images/traveloka-hero.gif",
     impact: [
       "The pricing label hierarchy now streamlines all strategic partnerships and campaigns, integrating directly into the Traveloka pricing engine",
       "The design underwent escalation up to VP and CEO level, ensuring alignment with strategic goals and mitigating potential risk"

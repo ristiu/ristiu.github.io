@@ -979,7 +979,9 @@ a:hover { color: var(--accent); }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 2;
+  z-index: 10;
+  isolation: isolate;
+  mix-blend-mode: normal;
 }
 
 .hero-tag {
