@@ -1015,6 +1015,7 @@ a:hover { color: var(--accent); }
   margin: 0 auto;
   max-width: 100%;
   background: #ffffff;
+  isolation: isolate;
 }
 
 .project-hero-mainimg {
