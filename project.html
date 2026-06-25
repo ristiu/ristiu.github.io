@@ -76,12 +76,16 @@
         const layout = document.querySelector('.project-layout');
         if (layout) layout.style.setProperty('--folder-accent', accentColor);
         document.documentElement.style.setProperty('--folder-accent', accentColor);
-        // Desktop only: color the page background to match the project folder color
         if (window.innerWidth >= 900) {
+          // Desktop: color page background to match project folder color
           document.body.style.background = accentColor;
           document.documentElement.style.background = accentColor;
           const imgwrap = document.querySelector('.project-hero-imgwrap');
           if (imgwrap) imgwrap.style.backgroundColor = accentColor;
+        } else {
+          // Mobile: always pure white
+          document.body.style.background = '#ffffff';
+          document.documentElement.style.background = '#ffffff';
         }
         const themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) themeMeta.content = accentColor;
