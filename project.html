@@ -75,7 +75,14 @@
 
       function revealContent() {
         if (skeleton) skeleton.classList.add('is-hidden');
-        requestAnimationFrame(() => { content.style.opacity = '1'; });
+        requestAnimationFrame(() => {
+          content.style.opacity = '1';
+          // Trigger tag animation after content is visible
+          setTimeout(() => {
+            const tags = content.querySelector('.js-hero-tags');
+            if (tags) tags.classList.add('is-ready');
+          }, 100);
+        });
         initTimeline();
         initRisoImages();
         initSectionPhotos();
@@ -178,7 +185,7 @@
         return `<div class="section-photos js-section-photos" data-section="${section}">
           ${imgs.map((img, i) => `
             <figure class="section-photo">
-              <img src="${img.url}" alt="" loading="lazy" />
+              <img src="${img.url}" alt="" loading="lazy" referrerpolicy="no-referrer" />
             </figure>`).join('')}
         </div>`;
       }

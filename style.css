@@ -1081,8 +1081,12 @@ a:hover { color: var(--accent); }
   white-space: nowrap;
   opacity: 0;
   transform: translateY(10px) scale(0.88);
+}
+
+/* Animation only starts once .is-ready is added after content reveal */
+.hero-tags.is-ready .hero-tag {
   animation: tagAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: calc(0.5s + var(--ti) * 0.12s);
+  animation-delay: calc(var(--ti) * 0.12s);
 }
 
 @keyframes tagAppear {
