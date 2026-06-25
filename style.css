@@ -1180,8 +1180,18 @@ a:hover { color: var(--accent); }
   padding: 6px 12px;
   white-space: nowrap;
   opacity: 0;
-  transform: translateY(10px) scale(0.88);
+  --tag-r: 0deg;
+  transform: translateY(10px) scale(0.88) rotate(var(--tag-r));
 }
+
+/* Per-tag tilt — slightly messy but organized */
+.hero-tag:nth-child(1) { --tag-r: -2deg; }
+.hero-tag:nth-child(2) { --tag-r:  1.5deg; }
+.hero-tag:nth-child(3) { --tag-r: -1deg; }
+.hero-tag:nth-child(4) { --tag-r:  2.5deg; }
+.hero-tag:nth-child(5) { --tag-r: -1.5deg; }
+.hero-tag:nth-child(6) { --tag-r:  1deg; }
+.hero-tag:nth-child(7) { --tag-r: -2.5deg; }
 
 /* Animation only starts once .is-ready is added after content reveal */
 .hero-tags.is-ready .hero-tag {
@@ -1190,7 +1200,7 @@ a:hover { color: var(--accent); }
 }
 
 @keyframes tagAppear {
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tag-r)); }
 }
 
 /* ─── Hero scatter (projects with sectionImages) ─────────── */
