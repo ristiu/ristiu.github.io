@@ -836,11 +836,6 @@ a:hover { color: var(--accent); }
     background: transparent;
   }
 
-  /* On mobile: project-body starts colored so there's no white box in the colored zone.
-     It transitions to white together with everything else via --folder-accent. */
-  .project-main .project-body {
-    background: var(--folder-accent);
-  }
 }
 
 /* Mobile back link */
@@ -1053,7 +1048,6 @@ a:hover { color: var(--accent); }
   }
 
   #section-hook {
-    background: var(--folder-accent);
     padding: 0 20px 12vh;
   }
 }

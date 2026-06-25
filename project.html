@@ -76,10 +76,10 @@
         const layout = document.querySelector('.project-layout');
         if (layout) layout.style.setProperty('--folder-accent', accentColor);
         document.documentElement.style.setProperty('--folder-accent', accentColor);
-        document.body.style.background = accentColor;
-        document.documentElement.style.background = accentColor;
-        // Set imgwrap directly on desktop only — mobile uses transparent bg + mask
+        // Desktop only: color the page background to match the project folder color
         if (window.innerWidth >= 900) {
+          document.body.style.background = accentColor;
+          document.documentElement.style.background = accentColor;
           const imgwrap = document.querySelector('.project-hero-imgwrap');
           if (imgwrap) imgwrap.style.backgroundColor = accentColor;
         }
@@ -403,6 +403,7 @@
     }
 
     function initColorTransition(project) {
+      if (window.innerWidth < 900) return; // mobile stays white throughout
       const projectBodyEl = document.querySelector('.project-body');
       if (!projectBodyEl || !project.folderColor) return;
 
