@@ -628,14 +628,6 @@ a:hover { color: var(--accent); }
   .stack-description { font-size: 14px; }
 }
 
-/* keep a stub so old .pf-card-visual img rule doesn't error */
-.pf-card-visual img {
-  width: 100%;
-  max-height: 140px;
-  object-fit: cover;
-  display: block;
-  border-radius: 1px;
-}
 
 /* ─── Divider ────────────────────────────────────────────── */
 .divider {

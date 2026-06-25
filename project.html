@@ -69,8 +69,6 @@
     } else {
       document.title = `${project.title} — Risti`;
 
-      // Always use the project's own folderColor — ignore any stale sessionStorage
-      sessionStorage.removeItem('folderColor');
       const accentColor = project.folderColor;
       if (accentColor) {
         const layout = document.querySelector('.project-layout');
@@ -153,7 +151,6 @@
     function renderProject(p) {
       // ── Hero block ────────────────────────────────────────────
       const heroBg = p.heroImage || (p.projectPlanning && p.projectPlanning.find(s => s.image)?.image) || '';
-      const metaTags = [p.company, p.industry, ...(p.tags || [])].filter(Boolean);
 
       const placeholderColors = ['#C8B89A','#A8B8A0','#B0B8C8','#C8A8A0','#B8C0A0','#A8C0C0'];
       const heroColor = placeholderColors[Math.abs(p.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % placeholderColors.length];
@@ -278,8 +275,6 @@
           ${sectionPhotos('direction')}
         </div>` : '');
 
-      const directionHtml = '';
-
       const contributionHtml = p.contribution ? `
         <div class="content-section" id="section-contribution">
           <p class="section-heading">My Contribution</p>
@@ -299,8 +294,6 @@
           ${sectionPhotos('whatShifted')}
         </div>` : '';
 
-      const screenshotsHtml = '';
-
       return `
         ${heroHtml}
         ${hookHtml}
@@ -308,11 +301,9 @@
           ${impactHtml}
           ${situationHtml}
           ${insightHtml}
-          ${directionHtml}
           ${cardHtml}
           ${contributionHtml}
           ${whatShiftedHtml}
-          ${screenshotsHtml}
         ${bodyClose}
       `;
     }
@@ -328,13 +319,6 @@
         });
       }, { threshold: 0.15 });
       items.forEach(item => observer.observe(item));
-    }
-
-    function initHeroScatter() {
-      const container = document.querySelector('.js-hero-scatter');
-      if (!container) return;
-      // Remove stacked class after dither dissolve to trigger fly-out
-      setTimeout(() => container.classList.remove('is-stacked'), 340);
     }
 
     function initSectionPhotos() {
