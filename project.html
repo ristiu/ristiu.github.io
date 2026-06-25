@@ -72,20 +72,19 @@
       // Always use the project's own folderColor — ignore any stale sessionStorage
       sessionStorage.removeItem('folderColor');
       const accentColor = project.folderColor;
+      // Default everything to white — desktop overrides below
+      document.body.style.background = '#ffffff';
+      document.documentElement.style.background = '#ffffff';
       if (accentColor) {
         const layout = document.querySelector('.project-layout');
         if (layout) layout.style.setProperty('--folder-accent', accentColor);
         document.documentElement.style.setProperty('--folder-accent', accentColor);
-        if (window.innerWidth >= 900) {
-          // Desktop: color page background to match project folder color
+        if (window.matchMedia('(min-width: 900px)').matches) {
+          // Desktop only: color page background to match project folder color
           document.body.style.background = accentColor;
           document.documentElement.style.background = accentColor;
           const imgwrap = document.querySelector('.project-hero-imgwrap');
           if (imgwrap) imgwrap.style.backgroundColor = accentColor;
-        } else {
-          // Mobile: always pure white
-          document.body.style.background = '#ffffff';
-          document.documentElement.style.background = '#ffffff';
         }
         const themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) themeMeta.content = accentColor;
