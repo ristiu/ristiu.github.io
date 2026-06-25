@@ -78,9 +78,11 @@
         document.documentElement.style.setProperty('--folder-accent', accentColor);
         document.body.style.background = accentColor;
         document.documentElement.style.background = accentColor;
-        // Set imgwrap directly — CSS var inheritance is unreliable on mobile Safari
-        const imgwrap = document.querySelector('.project-hero-imgwrap');
-        if (imgwrap) imgwrap.style.backgroundColor = accentColor;
+        // Set imgwrap directly on desktop only — mobile uses transparent bg + mask
+        if (window.innerWidth >= 900) {
+          const imgwrap = document.querySelector('.project-hero-imgwrap');
+          if (imgwrap) imgwrap.style.backgroundColor = accentColor;
+        }
         const themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) themeMeta.content = accentColor;
       }
@@ -425,9 +427,11 @@
         document.body.style.background = target;
         document.documentElement.style.background = target;
         if (layout) layout.style.setProperty('--folder-accent', target);
-        // Set imgwrap directly — CSS var inheritance is unreliable on mobile Safari
-        const imgwrapEl = document.querySelector('.project-hero-imgwrap');
-        if (imgwrapEl) imgwrapEl.style.backgroundColor = target;
+        // Set imgwrap directly on desktop only — mobile uses transparent bg + mask
+        if (window.innerWidth >= 900) {
+          const imgwrapEl = document.querySelector('.project-hero-imgwrap');
+          if (imgwrapEl) imgwrapEl.style.backgroundColor = target;
+        }
       }
 
       window.addEventListener('scroll', updateColor, { passive: true });
