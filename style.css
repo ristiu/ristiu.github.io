@@ -14,7 +14,7 @@
 }
 
 html {
-  font-size: 14px;
+  font-size: 15.4px;
   scroll-behavior: smooth;
   background-color: #ffffff;
 }
@@ -69,7 +69,7 @@ body {
 
 .hero-note-wrap {
   position: relative;
-  max-width: 340px;
+  max-width: 270px;
   width: 100%;
   animation: sticker-drop 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -138,7 +138,7 @@ body {
 
 @media (min-width: 600px) {
   .hero-note-wrap {
-    max-width: 440px;
+    max-width: 360px;
   }
 }
 
@@ -806,11 +806,20 @@ a:hover { color: var(--accent); }
   50%       { transform: translateY(5px); }
 }
 
+/* Register --folder-accent as a typed color so it can be transitioned */
+@property --folder-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f0ebe4;
+}
+
 /* ─── Project two-column layout ─────────────────────────── */
 .project-layout {
+  transition: --folder-accent 0.4s ease;
   display: flex;
   min-height: 100vh;
-  padding-top: 20px;
+  padding-top: 0;
+  --folder-accent: #f0ebe4;
 }
 
 .project-sidenav {
@@ -820,6 +829,18 @@ a:hover { color: var(--accent); }
 .project-main {
   flex: 1;
   min-width: 0;
+}
+
+@media (max-width: 599px) {
+  .project-main .paper {
+    background: transparent;
+  }
+
+  /* On mobile: project-body starts colored so there's no white box in the colored zone.
+     It transitions to white together with everything else via --folder-accent. */
+  .project-main .project-body {
+    background: var(--folder-accent);
+  }
 }
 
 /* Mobile back link */
@@ -843,36 +864,97 @@ a:hover { color: var(--accent); }
     margin: 0 auto;
     padding-top: 72px;
     gap: 0;
+    position: relative;
   }
 
-  /* Sidebar — sticky, travels with content */
+  /* White masks: left gutter + sidebar column, and right gutter */
+  .project-layout::before,
+  .project-layout::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background: #ffffff;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Left: from viewport edge to where project-main begins */
+  .project-layout::before {
+    left: 0;
+    right: calc(50vw + 342px);
+  }
+
+  /* Right: from project-main right edge to viewport edge */
+  .project-layout::after {
+    left: calc(50vw + 450px);
+    right: 0;
+  }
+
   .project-sidenav {
     display: flex;
     flex-direction: column;
-    width: 180px;
+    width: 108px;
     flex-shrink: 0;
     position: sticky;
     top: 40px;
     align-self: flex-start;
     height: auto;
-    padding: 0 28px 40px 0;
+    padding: 0 17px 24px 0;
     box-sizing: border-box;
+    background: #ffffff;
+    z-index: 1;
   }
 
   .project-main {
     flex: 1;
     min-width: 0;
+    background: transparent; /* body folderColor shows through hero area */
   }
 
-  /* Hide mobile back link on desktop */
   .project-main .project-hero-back {
     display: none;
   }
 
-  /* Uncap paper width inside the layout */
   .project-main .paper {
     max-width: none;
     box-shadow: none;
+    background: transparent;
+  }
+
+  /* Hero stays transparent — inherits folderColor from body */
+  .project-main .project-hero {
+    background: transparent;
+  }
+
+  /* Body content starts colored and transitions to white via --folder-accent on scroll */
+  .project-main .project-body {
+    background: var(--folder-accent);
+    position: relative;
+  }
+
+  /* Larger title wraps to 2 lines — needs 2-class specificity to beat base rule */
+  .project-main .project-hero-title {
+    font-size: 42px;
+    line-height: 52px;
+    max-width: 520px;
+  }
+
+  /* More breathing room around hero image so viewport fits title+image+hook */
+  /* min-height ensures short images (forklift etc.) still fill enough vertical space */
+  .project-main .project-hero-imgwrap {
+    padding: 100px 0 52px;
+    min-height: 380px;
+  }
+
+  /* Push Outcome below the fold — hook aligns with hero (same max-width + centering) */
+  .project-main #section-hook {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px 12vh;
+    box-sizing: border-box;
+    /* Explicit color so hook stays colored when body background transitions to white */
+    background: var(--folder-accent);
   }
 }
 
@@ -896,7 +978,6 @@ a:hover { color: var(--accent); }
   gap: 4px;
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
 .sidenav-company {
@@ -943,9 +1024,27 @@ a:hover { color: var(--accent); }
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  --folder-accent: transparent;
-  background: #ffffff;
+  background: var(--folder-accent);
   transition: background 0.6s ease;
+}
+
+/* Tagged hero on mobile: compact so hook is also visible on first viewport */
+@media (max-width: 599px) {
+  .project-hero--tagged {
+    max-width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 0;
+  }
+
+  .project-hero-imgwrap {
+    padding: 60px 0 32px;
+    min-height: 260px;
+  }
+
+  #section-hook {
+    background: var(--folder-accent);
+    padding: 0 20px 12vh;
+  }
 }
 
 @media (min-width: 600px) {
@@ -1029,7 +1128,7 @@ a:hover { color: var(--accent); }
   align-items: center;
   margin: 0 auto;
   max-width: 100%;
-  background: #ffffff;
+  background: var(--folder-accent, #f0ebe4);
   isolation: isolate;
 }
 
@@ -1055,7 +1154,7 @@ a:hover { color: var(--accent); }
   left: 0;
   right: 0;
   height: 55%;
-  background: linear-gradient(to bottom, transparent 0%, #ffffff 75%);
+  background: linear-gradient(to bottom, transparent 0%, var(--folder-accent, #f0ebe4) 75%);
   z-index: 2;
   pointer-events: none;
 }
@@ -1146,6 +1245,12 @@ a:hover { color: var(--accent); }
   padding-bottom: 5rem;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+@media (max-width: 599px) {
+  .project-body {
+    background: linear-gradient(to bottom, var(--folder-accent, #f0ebe4) 0%, #ffffff 140px);
+  }
 }
 
 /* ─── Hook blockquote ────────────────────────────────────── */

@@ -1,6 +1,7 @@
 const projects = [
   {
     id: "offline-to-online",
+    folderColor: "#C2CCBE",
     title: "Shaping Product Vision Through Omnichannel O2O Design Strategy",
     subtitle: "with Offline to Online Design Strategy",
     company: "eFishery",
@@ -62,6 +63,7 @@ const projects = [
   },
   {
     id: "reorder-lifecycle",
+    folderColor: "#B8CED8",
     title: "",
     subtitle: "",
     company: "",
@@ -77,6 +79,7 @@ const projects = [
   },
   {
     id: "price-perception",
+    folderColor: "#E4C4A4",
     title: "Improving Price Perception in Hotel Booking Discovery",
     subtitle: "with Gestalt Principles",
     company: "Traveloka",
@@ -113,6 +116,7 @@ const projects = [
   },
   {
     id: "warehouse-logistics",
+    folderColor: "#EDE4A0",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "Service Prototyping",
     company: "Warung Pintar · Supply Chain",
@@ -162,6 +166,7 @@ const projects = [
   },
   {
     id: "product-trends",
+    folderColor: "#C8C0B8",
     title: "Forecasting Visual Product Trends",
     subtitle: "Japan & Indonesia Youth Segment",
     company: "Joint venture: Casio Design Japan, Chiba University, Institut Teknologi Bandung",
@@ -207,6 +212,7 @@ const projects = [
   },
   {
     id: "service-prototyping",
+    folderColor: "#EDE4A0",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "with Service Prototyping",
     company: "Warung Pintar",
@@ -240,6 +246,7 @@ const projects = [
   },
   {
     id: "visual-trends",
+    folderColor: "#C8C0B8",
     title: "Forecasting Visual Product Trends",
     subtitle: "Japan & Indonesia Youth Segment",
     company: "Casio",

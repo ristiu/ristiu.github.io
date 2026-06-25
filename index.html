@@ -35,7 +35,7 @@
       </div>
     </div>
     </div>
-    <div class="illustration-group">
+    <div class="illustration-group" style="opacity:0;transition:opacity 0.8s ease;">
       <img class="illustration" src="assets/images/leaf.gif" alt="" />
     </div>
     <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
@@ -116,6 +116,10 @@
         wrap.style.animation = 'none';
         wrap.style.transform = '';
         wrap.classList.add('hero-note-wrap--settled');
+
+        // Leaf fades in after the paper has landed
+        const ilGroup = document.querySelector('.illustration-group');
+        if (ilGroup) ilGroup.style.opacity = '1';
       }, 1400); // slightly after animation duration (1.3s)
     })();
   </script>

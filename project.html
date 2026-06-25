@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Inline critical: prevent bare-white flash in browsers without View Transitions -->
-  <style>html, body { background: #ffffff; margin: 0; }</style>
+  <!-- Theme color for browser chrome — updated by JS when folder color is known -->
+  <meta name="theme-color" content="#f0ebe4" />
+  <!-- Inline critical: start with default folder accent to avoid white flash -->
+  <style>html, body { background: #f0ebe4; margin: 0; }</style>
 </head>
 <body>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
@@ -67,6 +69,18 @@
     } else {
       document.title = `${project.title} — Risti`;
 
+      // Always use the project's own folderColor — ignore any stale sessionStorage
+      sessionStorage.removeItem('folderColor');
+      const accentColor = project.folderColor;
+      if (accentColor) {
+        const layout = document.querySelector('.project-layout');
+        if (layout) layout.style.setProperty('--folder-accent', accentColor);
+        document.body.style.background = accentColor;
+        document.documentElement.style.background = accentColor;
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) themeMeta.content = accentColor;
+      }
+
       const skeleton = el.querySelector('.project-skeleton');
       const content = document.createElement('div');
       content.innerHTML = renderProject(project);
@@ -77,16 +91,49 @@
         if (skeleton) skeleton.classList.add('is-hidden');
         requestAnimationFrame(() => {
           content.style.opacity = '1';
-          // Trigger tag animation after content is visible
+          // Trigger tag animation after content fully fades in
           setTimeout(() => {
             const tags = content.querySelector('.js-hero-tags');
             if (tags) tags.classList.add('is-ready');
-          }, 100);
+          }, 450);
+          // Set --color-end: at least full viewport, extends if hook goes below fold
+          setTimeout(() => {
+            const layout = document.querySelector('.project-layout');
+            const main = document.querySelector('.project-main');
+            const hookEl = content.querySelector('#section-hook');
+            if (layout && main) {
+              const mainTop = main.getBoundingClientRect().top + window.scrollY;
+              const hookBottom = hookEl
+                ? hookEl.getBoundingClientRect().bottom + window.scrollY
+                : mainTop + 500;
+              const viewportEnd = window.innerHeight - mainTop;
+              const colorEnd = Math.max(hookBottom - mainTop + 20, viewportEnd);
+              layout.style.setProperty('--color-end', colorEnd + 'px');
+              // Position sidenav links so their BOTTOM aligns with the BOTTOM of the hook
+              if (window.innerWidth >= 900) {
+                const sidenavLinks = document.querySelector('.project-sidenav-links');
+                const sidenavMeta = document.querySelector('.project-sidenav-meta');
+                if (sidenavLinks) {
+                  const sidenavTop = main.getBoundingClientRect().top + window.scrollY;
+                  const hookBottom = hookEl
+                    ? hookEl.getBoundingClientRect().bottom + window.scrollY
+                    : sidenavTop + 700;
+                  const linksHeight = sidenavLinks.offsetHeight;
+                  const metaHeight = sidenavMeta ? sidenavMeta.offsetHeight + 28 : 0;
+                  // back arrow: ~1.4rem height + 40px margin-bottom ≈ 62px
+                  const backArrowArea = 62;
+                  const offset = (hookBottom - sidenavTop) - backArrowArea - metaHeight - linksHeight - 80;
+                  sidenavLinks.style.marginTop = Math.max(offset, 10) + 'px';
+                }
+              }
+            }
+          }, 80);
         });
         initTimeline();
         initRisoImages();
         initSectionPhotos();
         initSidenav(project);
+        initColorTransition(project);
       }
 
       const heroImg = content.querySelector('.project-hero-mainimg');
@@ -253,8 +300,8 @@
 
       return `
         ${heroHtml}
+        ${hookHtml}
         ${body}
-          ${hookHtml}
           ${impactHtml}
           ${situationHtml}
           ${insightHtml}
@@ -349,6 +396,37 @@
       });
     }
 
+    function initColorTransition(project) {
+      const projectBodyEl = document.querySelector('.project-body');
+      if (!projectBodyEl || !project.folderColor) return;
+
+      const layout = document.querySelector('.project-layout');
+
+      document.body.style.transition = 'background-color 0.4s ease';
+      document.documentElement.style.transition = 'background-color 0.4s ease';
+
+      function updateColor() {
+        let reached;
+        if (window.innerWidth < 900) {
+          // Mobile: use imgwrap position — fire when imgwrap has nearly scrolled off the top
+          const imgwrap = document.querySelector('.project-hero-imgwrap');
+          const ir = imgwrap ? imgwrap.getBoundingClientRect() : null;
+          reached = ir ? ir.bottom < window.innerHeight * 0.15 : window.scrollY > window.innerHeight * 0.6;
+        } else {
+          // Desktop: fire when project-body enters from viewport bottom
+          const rect = projectBodyEl.getBoundingClientRect();
+          reached = rect.top <= window.innerHeight;
+        }
+        const target = reached ? '#ffffff' : project.folderColor;
+        document.body.style.background = target;
+        document.documentElement.style.background = target;
+        // Also update --folder-accent so imgwrap bg + gradient both transition to white
+        if (layout) layout.style.setProperty('--folder-accent', target);
+      }
+
+      window.addEventListener('scroll', updateColor, { passive: true });
+    }
+
     function initRisoImages() {
       document.querySelectorAll('.js-riso-container').forEach(wrapper => {
         const img = wrapper.querySelector('.js-riso-img');
@@ -369,14 +447,6 @@
       if (container) container.classList.remove('is-stacked');
     }, 600);
 
-    const folderColor = sessionStorage.getItem('folderColor');
-    if (folderColor) {
-      sessionStorage.removeItem('folderColor');
-      const hero = document.querySelector('.project-hero');
-      if (hero && !hero.classList.contains('project-hero--tagged')) {
-        hero.style.setProperty('--folder-accent', folderColor);
-      }
-    }
 
     // ── Scroll hint: visible near top, hides once reading, reappears on scroll back
     const projScrollHint = document.querySelector('.js-proj-scroll-hint');
