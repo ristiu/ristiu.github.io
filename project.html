@@ -75,6 +75,8 @@
       if (accentColor) {
         const layout = document.querySelector('.project-layout');
         if (layout) layout.style.setProperty('--folder-accent', accentColor);
+        // Also set on root so mobile Safari @property inheritance works reliably
+        document.documentElement.style.setProperty('--folder-accent', accentColor);
         document.body.style.background = accentColor;
         document.documentElement.style.background = accentColor;
         const themeMeta = document.querySelector('meta[name="theme-color"]');
