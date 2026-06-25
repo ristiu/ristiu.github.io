@@ -72,20 +72,14 @@
       // Always use the project's own folderColor — ignore any stale sessionStorage
       sessionStorage.removeItem('folderColor');
       const accentColor = project.folderColor;
-      // Default everything to white — desktop overrides below
-      document.body.style.background = '#ffffff';
-      document.documentElement.style.background = '#ffffff';
       if (accentColor) {
         const layout = document.querySelector('.project-layout');
         if (layout) layout.style.setProperty('--folder-accent', accentColor);
         document.documentElement.style.setProperty('--folder-accent', accentColor);
-        if (window.matchMedia('(min-width: 900px)').matches) {
-          // Desktop only: color page background to match project folder color
-          document.body.style.background = accentColor;
-          document.documentElement.style.background = accentColor;
-          const imgwrap = document.querySelector('.project-hero-imgwrap');
-          if (imgwrap) imgwrap.style.backgroundColor = accentColor;
-        }
+        document.body.style.background = accentColor;
+        document.documentElement.style.background = accentColor;
+        const imgwrap = document.querySelector('.project-hero-imgwrap');
+        if (imgwrap) imgwrap.style.backgroundColor = accentColor;
         const themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) themeMeta.content = accentColor;
       }
@@ -406,7 +400,6 @@
     }
 
     function initColorTransition(project) {
-      if (window.innerWidth < 900) return; // mobile stays white throughout
       const projectBodyEl = document.querySelector('.project-body');
       if (!projectBodyEl || !project.folderColor) return;
 
@@ -418,7 +411,7 @@
       function updateColor() {
         let reached;
         if (window.innerWidth < 900) {
-          // Mobile: use imgwrap position — fire when imgwrap has nearly scrolled off the top
+          // Mobile: fire when imgwrap has scrolled nearly off screen
           const imgwrap = document.querySelector('.project-hero-imgwrap');
           const ir = imgwrap ? imgwrap.getBoundingClientRect() : null;
           reached = ir ? ir.bottom < window.innerHeight * 0.15 : window.scrollY > window.innerHeight * 0.6;
@@ -431,11 +424,8 @@
         document.body.style.background = target;
         document.documentElement.style.background = target;
         if (layout) layout.style.setProperty('--folder-accent', target);
-        // Set imgwrap directly on desktop only — mobile uses transparent bg + mask
-        if (window.innerWidth >= 900) {
-          const imgwrapEl = document.querySelector('.project-hero-imgwrap');
-          if (imgwrapEl) imgwrapEl.style.backgroundColor = target;
-        }
+        const imgwrapEl = document.querySelector('.project-hero-imgwrap');
+        if (imgwrapEl) imgwrapEl.style.backgroundColor = target;
       }
 
       window.addEventListener('scroll', updateColor, { passive: true });

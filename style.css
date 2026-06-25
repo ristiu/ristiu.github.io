@@ -1034,17 +1034,12 @@ a:hover { color: var(--accent); }
   .project-hero-imgwrap {
     padding: 60px 0 32px;
     min-height: 260px;
-    background: transparent !important; /* no colored rectangle — image blends directly into page bg */
-  }
-
-  /* Replace ::after gradient with a mask on the image itself */
-  .project-hero-imgwrap::after {
-    display: none;
+    background: var(--folder-accent);
   }
 
   .project-hero-mainimg {
-    -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
-    mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   #section-hook {
