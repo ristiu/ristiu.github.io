@@ -810,7 +810,7 @@ a:hover { color: var(--accent); }
 .project-layout {
   display: flex;
   min-height: 100vh;
-  padding-top: 60px;
+  padding-top: 20px;
 }
 
 .project-sidenav {
@@ -962,7 +962,7 @@ a:hover { color: var(--accent); }
   font-size: 2.5rem;
   color: var(--ink);
   text-decoration: none;
-  padding: 20px 20px 8px;
+  padding: 4px 20px 8px;
   opacity: 0.6;
 }
 
@@ -1043,7 +1043,7 @@ a:hover { color: var(--accent); }
   position: relative;
   z-index: 1;
   mix-blend-mode: multiply;
-  filter: brightness(1.6) contrast(1.1);
+  filter: brightness(1.5) contrast(1.05);
 }
 
 /* Fade bottom of hero image — overlay instead of mask-image to avoid
@@ -1075,18 +1075,18 @@ a:hover { color: var(--accent); }
   font-size: 10px;
   line-height: 1;
   color: #fff;
-  background: rgba(0,0,0,0.72);
+  background: rgba(0,0,0,0.76);
   border-radius: 999px;
-  padding: 5px 10px;
+  padding: 6px 12px;
   white-space: nowrap;
   opacity: 0;
-  transform: translateY(6px);
-  animation: tagAppear 0.25s ease forwards;
-  animation-delay: calc(0.55s + var(--ti) * 0.1s);
+  transform: translateY(10px) scale(0.88);
+  animation: tagAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.5s + var(--ti) * 0.12s);
 }
 
 @keyframes tagAppear {
-  to { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ─── Hero scatter (projects with sectionImages) ─────────── */
