@@ -977,7 +977,7 @@ a:hover { color: var(--accent); }
 
 .sidenav-title {
   font-family: 'Newsreader', Georgia, serif;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
   color: var(--ink);
   opacity: 0.7;
@@ -991,7 +991,7 @@ a:hover { color: var(--accent); }
 
 .sidenav-link {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--ink);
   text-decoration: none;
   opacity: 0.35;
@@ -1108,7 +1108,7 @@ a:hover { color: var(--accent); }
 
 .project-hero-company {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10px;
   color: #999;
   margin-top: 6px;
 }
