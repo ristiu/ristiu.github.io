@@ -25,17 +25,13 @@
     ::view-transition-old(root) {
       animation: pg-exit 0.5s cubic-bezier(0.4, 0, 0.8, 1) forwards;
     }
-    /* Entrance of next page: fade in normally */
+    /* Entering playground: instant — canvas zoom-in is the entrance effect */
     ::view-transition-new(root) {
-      animation: pg-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: none;
     }
 
     @keyframes pg-exit {
       to { opacity: 0; transform: scale(0.18); }
-    }
-    @keyframes pg-enter {
-      from { opacity: 0; transform: scale(1.03); }
-      to   { opacity: 1; transform: scale(1); }
     }
 
     html, body {
@@ -117,6 +113,15 @@
       width: 100%;
       display: block;
       object-fit: cover;
+    }
+
+    /* Media starts invisible, fades in once loaded */
+    .card [data-src] {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .card [data-src].is-loaded {
+      opacity: 1;
     }
 
     .card-caption {
@@ -437,7 +442,12 @@
         card.querySelectorAll('[data-src]').forEach(el => {
           if (el.src) return; // already loaded
           el.src = el.dataset.src;
-          if (el.tagName === 'VIDEO') el.play().catch(() => {});
+          if (el.tagName === 'VIDEO') {
+            el.addEventListener('canplay', () => el.classList.add('is-loaded'), { once: true });
+            el.play().catch(() => {});
+          } else {
+            el.addEventListener('load', () => el.classList.add('is-loaded'), { once: true });
+          }
         });
       });
     }
