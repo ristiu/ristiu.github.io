@@ -237,18 +237,12 @@
         </div>`;
       }
 
-      const situationHtml = p.situation ? `
+      const situationHtml = (p.situation || p.insight) ? `
         <div class="content-section" id="section-situation">
           <p class="section-heading">Situation</p>
-          <p>${p.situation}</p>
+          ${p.situation ? `<p>${p.situation}</p>` : ''}
+          ${p.insight ? `<p>${p.insight}</p>` : ''}
           ${sectionPhotos('situation')}
-        </div>` : '';
-
-      const insightHtml = p.insight ? `
-        <div class="content-section" id="section-insight">
-          <p class="section-heading">Insight</p>
-          <p>${p.insight}</p>
-          ${sectionPhotos('insight')}
         </div>` : '';
 
       // Direction + strategy card side by side
@@ -258,7 +252,7 @@
 
       const cardHtml = (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
         <div class="content-section" id="section-direction">
-          <p class="section-heading">Direction</p>
+          <p class="section-heading">Approach & Contribution</p>
           ${directionFirstPara ? `<p>${directionFirstPara}</p>` : ''}
           <div class="direction-cols">
             <div class="strategy-card">
@@ -267,25 +261,20 @@
             </div>
             <div class="direction-text">${directionRestParas.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
           </div>
+          ${p.contribution ? `<p>${p.contribution}</p>` : ''}
           ${sectionPhotos('direction')}
         </div>` : (p.direction ? `
         <div class="content-section" id="section-direction">
-          <p class="section-heading">Direction</p>
+          <p class="section-heading">Approach & Contribution</p>
           ${directionParas.map(para => `<p>${para}</p>`).join('')}
+          ${p.contribution ? `<p>${p.contribution}</p>` : ''}
           ${sectionPhotos('direction')}
         </div>` : '');
-
-      const contributionHtml = p.contribution ? `
-        <div class="content-section" id="section-contribution">
-          <p class="section-heading">My Contribution</p>
-          <p>${p.contribution}</p>
-          ${sectionPhotos('contribution')}
-        </div>` : '';
 
       // What shifted + screenshot side by side
       const whatShiftedHtml = p.whatShifted ? `
         <div class="content-section" id="section-shifted">
-          <p class="section-heading">What shifted</p>
+          <p class="section-heading">My Reflection</p>
           ${p.screenshots && p.screenshots.length ? `
           <div class="shifted-cols">
             <div class="shifted-text">${p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
@@ -300,9 +289,7 @@
         ${body}
           ${impactHtml}
           ${situationHtml}
-          ${insightHtml}
           ${cardHtml}
-          ${contributionHtml}
           ${whatShiftedHtml}
         ${bodyClose}
       `;
@@ -346,13 +333,10 @@
 
       // Build section list from what's actually in the DOM
       const sections = [
-        { id: 'section-hook',         label: 'Overview' },
-        { id: 'section-outcome',      label: 'Outcome' },
-        { id: 'section-situation',    label: 'Situation' },
-        { id: 'section-insight',      label: 'Insight' },
-        { id: 'section-direction',    label: 'Direction' },
-        { id: 'section-contribution', label: 'Contribution' },
-        { id: 'section-shifted',      label: 'What shifted' },
+        { id: 'section-outcome',   label: 'Outcome' },
+        { id: 'section-situation', label: 'Situation' },
+        { id: 'section-direction', label: 'Approach & Contribution' },
+        { id: 'section-shifted',   label: 'My Reflection' },
       ].filter(s => document.getElementById(s.id));
 
       links.innerHTML = sections.map(s =>

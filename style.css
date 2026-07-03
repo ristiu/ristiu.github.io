@@ -869,7 +869,7 @@ a:hover { color: var(--accent); }
   /* Left: from viewport edge to where project-main begins */
   .project-layout::before {
     left: 0;
-    right: calc(50vw + 342px);
+    right: calc(50vw + 250px);
   }
 
   /* Right: from project-main right edge to viewport edge */
@@ -881,13 +881,13 @@ a:hover { color: var(--accent); }
   .project-sidenav {
     display: flex;
     flex-direction: column;
-    width: 108px;
+    width: 200px;
     flex-shrink: 0;
     position: sticky;
     top: 40px;
     align-self: flex-start;
     height: auto;
-    padding: 0 17px 24px 0;
+    padding: 0 24px 24px 0;
     box-sizing: border-box;
     background: #ffffff;
     z-index: 1;
