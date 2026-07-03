@@ -42,6 +42,7 @@
       background: var(--bg);
       cursor: grab;
       user-select: none;
+      touch-action: none;
     }
 
     body.grabbing { cursor: grabbing; }
@@ -227,21 +228,24 @@
     const isMobile = window.innerWidth < 700;
 
     if (isMobile) {
-      // Stack cards vertically on mobile with fixed positions (offsetHeight unreliable before media loads)
+      // Horizontal row on mobile — swipe left/right to explore
       const cards = root.querySelectorAll('.card');
-      const margin = 48;
-      const cardW = 280;
-      const tops = [60, 460, 960]; // army bookmark ~360h gap, exhibition ~460h gap
+      const cardW = 270;
+      const gap = 28;
+      const topBase = 100;
+      const topOffsets = [0, -20, 10];
       const tilts = [-2, 1.5, -1];
       cards.forEach((card, i) => {
-        card.style.left = margin + 'px';
-        card.style.top  = (tops[i] || 60 + i * 440) + 'px';
+        card.style.left  = (gap + i * (cardW + gap)) + 'px';
+        card.style.top   = (topBase + (topOffsets[i] || 0)) + 'px';
         card.style.width = cardW + 'px';
         card.style.transform = `rotate(${tilts[i] || 0}deg)`;
       });
       scale = 1;
-      tx = window.innerWidth / 2 - (cardW / 2 + margin);
-      ty = 80;
+      // Start centered on first card
+      const firstCardCx = gap + cardW / 2;
+      tx = window.innerWidth / 2 - firstCardCx;
+      ty = 60;
     } else {
       scale = 1;
       const canvasCenterX = 600;
@@ -274,13 +278,13 @@
     }
 
     document.addEventListener('pointerdown', e => {
-      if (e.target.closest('a, button, video')) return;
+      if (e.target.closest('a, button')) return;
       stopMomentum();
       dragging = true;
       lastX = e.clientX; lastY = e.clientY; lastT = Date.now();
       vx = 0; vy = 0;
       document.body.classList.add('grabbing');
-      document.setPointerCapture?.(e.pointerId);
+      e.target.setPointerCapture?.(e.pointerId);
     });
 
     document.addEventListener('pointermove', e => {
