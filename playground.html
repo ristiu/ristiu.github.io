@@ -15,7 +15,25 @@
       --accent: #c0392b;
       --mono: 'JetBrains Mono', monospace;
       --serif: 'Newsreader', serif;
-      --bg: #f0ebe4;
+      --bg: #ffffff;
+    }
+
+    /* Cross-document view transition */
+    @view-transition { navigation: auto; }
+
+    ::view-transition-old(root) {
+      animation: fade-out 0.35s ease forwards;
+    }
+    ::view-transition-new(root) {
+      animation: fade-in-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes fade-out {
+      to { opacity: 0; transform: scale(0.97); }
+    }
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: scale(1.03); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     html, body {
@@ -28,6 +46,20 @@
 
     body.grabbing { cursor: grabbing; }
 
+    /* Canvas entrance */
+    #canvas-root {
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+      animation: canvas-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes canvas-enter {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
     /* Back link */
     .back {
       position: fixed;
@@ -36,65 +68,50 @@
       font-size: 1.4rem;
       color: var(--ink);
       text-decoration: none;
-      opacity: 0.5;
+      opacity: 0.4;
       z-index: 100;
       transition: opacity 0.15s;
+      /* larger tap target on mobile */
+      padding: 8px;
+      margin: -8px;
     }
     .back:hover { opacity: 1; color: var(--accent); }
 
     /* Zoom controls */
     .zoom-controls {
       position: fixed;
-      bottom: 28px; right: 28px;
+      bottom: 28px; right: 20px;
       display: flex;
       flex-direction: column;
       gap: 4px;
       z-index: 100;
     }
     .zoom-btn {
-      width: 32px; height: 32px;
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 4px;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
       font-family: var(--mono);
-      font-size: 16px;
+      font-size: 18px;
       color: var(--ink);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       opacity: 0.7;
       transition: opacity 0.15s;
+      touch-action: manipulation;
     }
-    .zoom-btn:hover { opacity: 1; }
-
-    /* Hint */
-    .hint {
-      position: fixed;
-      bottom: 28px; left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--ink);
-      opacity: 0.3;
-      z-index: 100;
-      pointer-events: none;
-    }
-
-    /* Canvas */
-    #canvas-root {
-      position: absolute;
-      top: 0; left: 0;
-      transform-origin: 0 0;
-      will-change: transform;
-    }
+    .zoom-btn:hover, .zoom-btn:active { opacity: 1; }
 
     /* Cards */
     .card {
       position: absolute;
-      width: 260px;
+      width: 300px;
       background: #fff;
-      border-radius: 4px;
+      border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
       cursor: default;
     }
 
@@ -105,25 +122,25 @@
     }
 
     .card-caption {
-      padding: 12px 14px;
+      padding: 14px 16px;
       font-family: var(--mono);
-      font-size: 10px;
-      line-height: 1.6;
+      font-size: 13px;
+      line-height: 1.7;
       color: var(--ink);
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     /* Note cards (text only) */
     .card.card--note {
-      width: 220px;
+      width: 260px;
       background: #fdfaf5;
-      padding: 18px 20px;
+      padding: 20px 22px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     .card.card--note .card-caption {
       padding: 0;
-      font-size: 11px;
+      font-size: 13px;
       opacity: 0.85;
     }
 
@@ -149,7 +166,6 @@
     <button class="zoom-btn" id="zoom-out">−</button>
   </div>
 
-  <p class="hint">drag to explore · scroll to zoom</p>
 
   <div id="canvas-root">
 
@@ -170,94 +186,204 @@
     -->
 
     <!-- Army Bookmark -->
-    <div class="card" style="left: 200px; top: 160px; width: 300px;">
+    <div class="card" style="left: 160px; top: 200px; width: 300px; transform: rotate(-2.5deg);">
       <video src="assets/playground-army-bookmark.mov" autoplay muted loop playsinline style="width:100%;display:block;"></video>
       <p class="card-caption"><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
     </div>
 
-    <!-- Placeholder -->
-    <div class="card card--note" style="left: 560px; top: 220px;">
-      <p class="card-caption">← drop images & notes here.<br><br>I'll add things as I build them.</p>
+    <!-- Coloring Book -->
+    <div class="card" style="left: 900px; top: 260px; transform: rotate(-1.2deg);">
+      <video src="assets/playground-coloring-book.mp4" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+      <p class="card-caption"><strong>Freestyle Coloring Book</strong><br><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
     </div>
+
+    <!-- Exhibition -->
+    <div class="card" style="left: 540px; top: 100px; transform: rotate(1.8deg);">
+      <img src="assets/playground-exhibition.png" alt="Exhibition" />
+      <p class="card-caption" style="opacity:1;"><strong>Exhibition</strong><br><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
+    </div>
+
 
   </div>
 
   <script src="cursor.js"></script>
   <script>
     const root = document.getElementById('canvas-root');
+
+    // State
     let scale = 1;
     let tx = 0, ty = 0;
+
+    // Momentum
+    let vx = 0, vy = 0;
+    let lastX, lastY, lastT;
     let dragging = false;
-    let startX, startY, startTx, startTy;
+    let rafId;
 
     function applyTransform() {
       root.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
     }
 
-    // Center canvas on load
-    tx = window.innerWidth / 2 - 450;
-    ty = window.innerHeight / 2 - 300;
+    const isMobile = window.innerWidth < 700;
+
+    if (isMobile) {
+      // Stack cards vertically on mobile with fixed positions (offsetHeight unreliable before media loads)
+      const cards = root.querySelectorAll('.card');
+      const margin = 48;
+      const cardW = 280;
+      const tops = [60, 460, 960]; // army bookmark ~360h gap, exhibition ~460h gap
+      const tilts = [-2, 1.5, -1];
+      cards.forEach((card, i) => {
+        card.style.left = margin + 'px';
+        card.style.top  = (tops[i] || 60 + i * 440) + 'px';
+        card.style.width = cardW + 'px';
+        card.style.transform = `rotate(${tilts[i] || 0}deg)`;
+      });
+      scale = 1;
+      tx = window.innerWidth / 2 - (cardW / 2 + margin);
+      ty = 80;
+    } else {
+      scale = 1;
+      const canvasCenterX = 600;
+      const canvasCenterY = 320;
+      tx = window.innerWidth  / 2 - canvasCenterX * scale;
+      ty = window.innerHeight / 2 - canvasCenterY * scale;
+    }
+
     applyTransform();
 
-    // Pan
-    document.addEventListener('mousedown', e => {
-      if (e.target.closest('a, button')) return;
+    // ── Pan with momentum ────────────────────────────────────────
+    function stopMomentum() {
+      cancelAnimationFrame(rafId);
+      vx = 0; vy = 0;
+    }
+
+    function startMomentum() {
+      cancelAnimationFrame(rafId);
+      const FRICTION = 0.88;
+      function step() {
+        if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) return;
+        vx *= FRICTION;
+        vy *= FRICTION;
+        tx += vx;
+        ty += vy;
+        applyTransform();
+        rafId = requestAnimationFrame(step);
+      }
+      rafId = requestAnimationFrame(step);
+    }
+
+    document.addEventListener('pointerdown', e => {
+      if (e.target.closest('a, button, video')) return;
+      stopMomentum();
       dragging = true;
-      startX = e.clientX; startY = e.clientY;
-      startTx = tx; startTy = ty;
+      lastX = e.clientX; lastY = e.clientY; lastT = Date.now();
+      vx = 0; vy = 0;
       document.body.classList.add('grabbing');
+      document.setPointerCapture?.(e.pointerId);
     });
 
-    document.addEventListener('mousemove', e => {
+    document.addEventListener('pointermove', e => {
       if (!dragging) return;
-      tx = startTx + (e.clientX - startX);
-      ty = startTy + (e.clientY - startY);
+      const now = Date.now();
+      const dt = Math.max(now - lastT, 1);
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      // Rolling velocity sample
+      vx = dx / dt * 16;
+      vy = dy / dt * 16;
+      tx += dx; ty += dy;
+      lastX = e.clientX; lastY = e.clientY; lastT = now;
       applyTransform();
     });
 
-    document.addEventListener('mouseup', () => {
+    document.addEventListener('pointerup', () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.classList.remove('grabbing');
+      startMomentum();
+    });
+
+    document.addEventListener('pointercancel', () => {
       dragging = false;
       document.body.classList.remove('grabbing');
     });
 
-    // Touch pan
-    let touch0;
+    // ── Zoom (wheel scroll = pan, ctrl+wheel / pinch = zoom) ────
+    document.addEventListener('wheel', e => {
+      e.preventDefault();
+      stopMomentum();
+
+      if (e.ctrlKey || e.metaKey) {
+        // Pinch-to-zoom or ctrl+scroll
+        const zoomFactor = e.deltaY < 0 ? 1.06 : 0.94;
+        const newScale = Math.min(Math.max(scale * zoomFactor, 0.15), 5);
+        const mx = e.clientX, my = e.clientY;
+        tx = mx - (mx - tx) * (newScale / scale);
+        ty = my - (my - ty) * (newScale / scale);
+        scale = newScale;
+      } else {
+        // Trackpad two-finger pan
+        tx -= e.deltaX;
+        ty -= e.deltaY;
+      }
+      applyTransform();
+    }, { passive: false });
+
+    // ── Touch (mobile pinch + pan) ───────────────────────────────
+    let touches = {};
+    let pinchDist0, pinchScale0, pinchTx0, pinchTy0, pinchMx, pinchMy;
+
     document.addEventListener('touchstart', e => {
-      if (e.touches.length === 1) {
-        touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx, ty };
+      stopMomentum();
+      [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
+      if (Object.keys(touches).length === 2) {
+        const [a, b] = Object.values(touches);
+        pinchDist0 = Math.hypot(b.x - a.x, b.y - a.y);
+        pinchScale0 = scale;
+        pinchTx0 = tx; pinchTy0 = ty;
+        pinchMx = (a.x + b.x) / 2; pinchMy = (a.y + b.y) / 2;
       }
     }, { passive: true });
 
     document.addEventListener('touchmove', e => {
-      if (e.touches.length === 1 && touch0) {
-        tx = touch0.tx + (e.touches[0].clientX - touch0.x);
-        ty = touch0.ty + (e.touches[0].clientY - touch0.y);
+      e.preventDefault();
+      [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
+      const ids = Object.keys(touches);
+      if (ids.length === 1) {
+        const t = touches[ids[0]];
+        tx += t.x - lastX; ty += t.y - lastY;
+        lastX = t.x; lastY = t.y;
+        applyTransform();
+      } else if (ids.length === 2) {
+        const [a, b] = Object.values(touches);
+        const dist = Math.hypot(b.x - a.x, b.y - a.y);
+        const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), 5);
+        tx = pinchMx - (pinchMx - pinchTx0) * (newScale / pinchScale0);
+        ty = pinchMy - (pinchMy - pinchTy0) * (newScale / pinchScale0);
+        scale = newScale;
         applyTransform();
       }
-    }, { passive: true });
-
-    // Scroll to zoom
-    document.addEventListener('wheel', e => {
-      e.preventDefault();
-      const delta = e.deltaY > 0 ? 0.92 : 1.08;
-      const newScale = Math.min(Math.max(scale * delta, 0.2), 4);
-      // Zoom toward cursor
-      const mx = e.clientX, my = e.clientY;
-      tx = mx - (mx - tx) * (newScale / scale);
-      ty = my - (my - ty) * (newScale / scale);
-      scale = newScale;
-      applyTransform();
     }, { passive: false });
 
-    // Zoom buttons
-    document.getElementById('zoom-in').addEventListener('click', () => {
-      scale = Math.min(scale * 1.2, 4);
+    document.addEventListener('touchend', e => {
+      [...e.changedTouches].forEach(t => { delete touches[t.identifier]; });
+      if (Object.keys(touches).length === 0) startMomentum();
+    }, { passive: true });
+
+    // ── Zoom buttons ─────────────────────────────────────────────
+    function zoomTo(factor) {
+      stopMomentum();
+      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      const newScale = Math.min(Math.max(scale * factor, 0.15), 5);
+      tx = cx - (cx - tx) * (newScale / scale);
+      ty = cy - (cy - ty) * (newScale / scale);
+      scale = newScale;
       applyTransform();
-    });
-    document.getElementById('zoom-out').addEventListener('click', () => {
-      scale = Math.max(scale * 0.8, 0.2);
-      applyTransform();
-    });
+    }
+
+    document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));
+    document.getElementById('zoom-out').addEventListener('click', () => zoomTo(0.8));
   </script>
 </body>
 </html>
