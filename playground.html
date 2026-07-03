@@ -25,9 +25,13 @@
     ::view-transition-old(root) {
       animation: pg-exit 0.5s cubic-bezier(0.4, 0, 0.8, 1) forwards;
     }
-    /* Entering playground: instant — canvas zoom-in is the entrance effect */
+    /* Entering playground: short fade-in so canvas zoom plays underneath smoothly */
     ::view-transition-new(root) {
-      animation: none;
+      animation: pg-fade-in 0.35s ease forwards;
+    }
+    @keyframes pg-fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     @keyframes pg-exit {
@@ -115,13 +119,10 @@
       object-fit: cover;
     }
 
-    /* Media starts invisible, fades in once loaded */
-    .card [data-src] {
+    /* Cards start hidden, JS reveals them once media is ready */
+    .card {
       opacity: 0;
       transition: opacity 0.5s ease;
-    }
-    .card [data-src].is-loaded {
-      opacity: 1;
     }
 
     .card-caption {
@@ -269,18 +270,20 @@
     applyTransform();
 
     // Fade in immediately, then spring to final scale after browser commits initial paint
-    root.style.opacity = '1';
+    // Keep canvas hidden until page fade-in has started (~100ms delay)
+    root.style.opacity = '0';
     root.style.transition = 'none';
     applyTransform();
 
     setTimeout(() => {
-      root.style.transition = 'transform 0.9s cubic-bezier(0.22, 1, 0.36, 1)';
+      root.style.opacity = '1';
+      root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
       scale = finalScale; tx = finalTx; ty = finalTy;
       applyTransform();
       root.addEventListener('transitionend', () => {
         root.style.transition = '';
       }, { once: true });
-    }, 20);
+    }, 100);
 
     // ── Pan with momentum ────────────────────────────────────────
     function stopMomentum() {
@@ -443,10 +446,14 @@
           if (el.src) return; // already loaded
           el.src = el.dataset.src;
           if (el.tagName === 'VIDEO') {
-            el.addEventListener('canplay', () => el.classList.add('is-loaded'), { once: true });
+            el.addEventListener('canplay', () => { card.style.opacity = '1'; }, { once: true });
             el.play().catch(() => {});
           } else {
-            el.addEventListener('load', () => el.classList.add('is-loaded'), { once: true });
+            if (el.complete) {
+              card.style.opacity = '1';
+            } else {
+              el.addEventListener('load', () => { card.style.opacity = '1'; }, { once: true });
+            }
           }
         });
       });
