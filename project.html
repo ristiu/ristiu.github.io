@@ -135,6 +135,7 @@
         initSectionPhotos();
         initSidenav(project);
         initColorTransition(project);
+        initReadGate();
       }
 
       const heroImg = content.querySelector('.project-hero-mainimg');
@@ -286,12 +287,17 @@
       return `
         ${heroHtml}
         ${hookHtml}
-        ${body}
-          ${impactHtml}
-          ${situationHtml}
-          ${cardHtml}
-          ${whatShiftedHtml}
-        ${bodyClose}
+        <div class="read-gate is-closed" id="read-gate">
+          ${body}
+            ${impactHtml}
+            ${situationHtml}
+            ${cardHtml}
+            ${whatShiftedHtml}
+          ${bodyClose}
+        </div>
+        <div class="project-body" style="padding-top:0;padding-bottom:2rem;">
+          <button class="read-more-btn" id="read-more-btn">Read case study ↓</button>
+        </div>
       `;
     }
 
@@ -397,6 +403,19 @@
       }
 
       window.addEventListener('scroll', updateColor, { passive: true });
+    }
+
+    function initReadGate() {
+      const gate = document.getElementById('read-gate');
+      const btn  = document.getElementById('read-more-btn');
+      if (!gate || !btn) return;
+
+      btn.addEventListener('click', () => {
+        gate.classList.remove('is-closed');
+        btn.classList.add('is-hidden');
+        // Smooth scroll just past the fold so first section comes into view
+        gate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
 
     function initRisoImages() {
