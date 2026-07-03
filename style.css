@@ -527,6 +527,11 @@ a:hover { color: var(--accent); }
   max-width: 68px;
 }
 
+.stack-card-tab-logo[alt="Context Labs"] {
+  max-height: 20px;
+  max-width: 100px;
+}
+
 .stack-card-title {
   display: block;
   font-size: 13px;
