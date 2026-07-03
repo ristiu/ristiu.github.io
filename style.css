@@ -230,21 +230,9 @@ a:hover { color: var(--accent); }
 /* ─── Accordion tree node ────────────────────────────────── */
 .tree-node-wrapper {
   position: relative;
-  margin-left: -1.25rem;
 }
 
-/* Static spine — faint when collapsed, solid black when expanded */
-.tree-node-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 34px;
-  left: 10px;
-  width: 2px;
-  bottom: 0;
-  background: var(--ink);
-  opacity: 1;
-  pointer-events: none;
-}
+.tree-node-wrapper::before { content: none; }
 
 /* Remove the accent overlay — no longer needed */
 .tree-node-wrapper::after { content: none; }
