@@ -188,19 +188,19 @@
 
     <!-- Army Bookmark -->
     <div class="card" style="left: 160px; top: 200px; width: 300px; transform: rotate(-2.5deg);">
-      <video src="assets/playground-army-bookmark.mp4" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+      <video data-src="assets/playground-army-bookmark.mp4" muted loop playsinline style="width:100%;display:block;" preload="none"></video>
       <p class="card-caption"><strong>Concert Info for BTS</strong><br><br>A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
     </div>
 
     <!-- Coloring Book -->
     <div class="card" style="left: 900px; top: 260px; transform: rotate(-1.2deg);">
-      <video src="assets/playground-coloring-book.mp4" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+      <video data-src="assets/playground-coloring-book.mp4" muted loop playsinline style="width:100%;display:block;" preload="none"></video>
       <p class="card-caption"><strong>Freestyle Coloring Book</strong><br><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
     </div>
 
     <!-- Exhibition -->
     <div class="card" style="left: 540px; top: 100px; transform: rotate(1.8deg);">
-      <img src="assets/playground-exhibition.png" alt="Exhibition" style="width:100%;display:block;" />
+      <img data-src="assets/playground-exhibition.png" alt="Exhibition" style="width:100%;display:block;" />
       <p class="card-caption" style="opacity:1;"><strong>Exhibition</strong><br><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
     </div>
 
@@ -389,6 +389,55 @@
     document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));
     document.getElementById('zoom-out').addEventListener('click', () => zoomTo(0.8));
 
+    // ── Canvas-aware lazy loader ──────────────────────────────────
+    // IntersectionObserver doesn't work with CSS transforms, so we
+    // check card positions manually using the live tx/ty/scale values.
+    function loadVisibleMedia() {
+      const MARGIN = 200; // px buffer beyond viewport edge
+      const vw = window.innerWidth, vh = window.innerHeight;
+
+      root.querySelectorAll('.card').forEach(card => {
+        const cl = parseInt(card.style.left) || 0;
+        const ct = parseInt(card.style.top)  || 0;
+        const cw = card.offsetWidth  || 300;
+        const ch = card.offsetHeight || 400;
+
+        // Map canvas rect to screen rect
+        const sx = cl * scale + tx;
+        const sy = ct * scale + ty;
+        const sw = cw * scale;
+        const sh = ch * scale;
+
+        const inView = sx + sw > -MARGIN && sx < vw + MARGIN &&
+                       sy + sh > -MARGIN && sy < vh + MARGIN;
+
+        if (!inView) return;
+
+        card.querySelectorAll('[data-src]').forEach(el => {
+          if (el.src) return; // already loaded
+          el.src = el.dataset.src;
+          if (el.tagName === 'VIDEO') el.play().catch(() => {});
+        });
+      });
+    }
+
+    // Run after pan/zoom settles
+    let loadTimer;
+    function scheduleLoad() {
+      clearTimeout(loadTimer);
+      loadTimer = setTimeout(loadVisibleMedia, 120);
+    }
+
+    // Hook into existing pan/zoom events
+    document.addEventListener('pointerup',    scheduleLoad, { passive: true });
+    document.addEventListener('pointercancel',scheduleLoad, { passive: true });
+    document.addEventListener('touchend',     scheduleLoad, { passive: true });
+    document.addEventListener('wheel',        scheduleLoad, { passive: true });
+    document.getElementById('zoom-in') .addEventListener('click', scheduleLoad);
+    document.getElementById('zoom-out').addEventListener('click', scheduleLoad);
+
+    // Initial check after layout settles
+    setTimeout(loadVisibleMedia, 150);
   </script>
 </body>
 </html>
