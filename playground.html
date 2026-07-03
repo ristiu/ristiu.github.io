@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground — Risti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a1a;
+      --accent: #c0392b;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Newsreader', serif;
+      --bg: #f0ebe4;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      cursor: grab;
+      user-select: none;
+    }
+
+    body.grabbing { cursor: grabbing; }
+
+    /* Back link */
+    .back {
+      position: fixed;
+      top: 24px; left: 28px;
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0.5;
+      z-index: 100;
+      transition: opacity 0.15s;
+    }
+    .back:hover { opacity: 1; color: var(--accent); }
+
+    /* Zoom controls */
+    .zoom-controls {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 100;
+    }
+    .zoom-btn {
+      width: 32px; height: 32px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 16px;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .zoom-btn:hover { opacity: 1; }
+
+    /* Hint */
+    .hint {
+      position: fixed;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink);
+      opacity: 0.3;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    /* Canvas */
+    #canvas-root {
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    /* Cards */
+    .card {
+      position: absolute;
+      width: 260px;
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      cursor: default;
+    }
+
+    .card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .card-caption {
+      padding: 12px 14px;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.7;
+    }
+
+    /* Note cards (text only) */
+    .card.card--note {
+      width: 220px;
+      background: #fdfaf5;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .card.card--note .card-caption {
+      padding: 0;
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    /* Section label */
+    .canvas-label {
+      position: absolute;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink);
+      opacity: 0.25;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back" href="index.html" aria-label="Back">←</a>
+
+  <div class="zoom-controls">
+    <button class="zoom-btn" id="zoom-in">+</button>
+    <button class="zoom-btn" id="zoom-out">−</button>
+  </div>
+
+  <p class="hint">drag to explore · scroll to zoom</p>
+
+  <div id="canvas-root">
+
+    <!-- Add your cards here. Use left/top to position them on the infinite canvas. -->
+    <!-- Image card example: -->
+    <!--
+    <div class="card" style="left: 200px; top: 160px;">
+      <img src="your-image.jpg" alt="" />
+      <p class="card-caption">Your caption here</p>
+    </div>
+    -->
+
+    <!-- Note card example: -->
+    <!--
+    <div class="card card--note" style="left: 500px; top: 200px;">
+      <p class="card-caption">A short thought or link note here.</p>
+    </div>
+    -->
+
+    <!-- Army Bookmark -->
+    <div class="card" style="left: 200px; top: 160px; width: 300px;">
+      <video src="assets/playground-army-bookmark.mov" autoplay muted loop playsinline style="width:100%;display:block;"></video>
+      <p class="card-caption"><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
+    </div>
+
+    <!-- Placeholder -->
+    <div class="card card--note" style="left: 560px; top: 220px;">
+      <p class="card-caption">← drop images & notes here.<br><br>I'll add things as I build them.</p>
+    </div>
+
+  </div>
+
+  <script src="cursor.js"></script>
+  <script>
+    const root = document.getElementById('canvas-root');
+    let scale = 1;
+    let tx = 0, ty = 0;
+    let dragging = false;
+    let startX, startY, startTx, startTy;
+
+    function applyTransform() {
+      root.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+
+    // Center canvas on load
+    tx = window.innerWidth / 2 - 450;
+    ty = window.innerHeight / 2 - 300;
+    applyTransform();
+
+    // Pan
+    document.addEventListener('mousedown', e => {
+      if (e.target.closest('a, button')) return;
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      startTx = tx; startTy = ty;
+      document.body.classList.add('grabbing');
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      tx = startTx + (e.clientX - startX);
+      ty = startTy + (e.clientY - startY);
+      applyTransform();
+    });
+
+    document.addEventListener('mouseup', () => {
+      dragging = false;
+      document.body.classList.remove('grabbing');
+    });
+
+    // Touch pan
+    let touch0;
+    document.addEventListener('touchstart', e => {
+      if (e.touches.length === 1) {
+        touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx, ty };
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      if (e.touches.length === 1 && touch0) {
+        tx = touch0.tx + (e.touches[0].clientX - touch0.x);
+        ty = touch0.ty + (e.touches[0].clientY - touch0.y);
+        applyTransform();
+      }
+    }, { passive: true });
+
+    // Scroll to zoom
+    document.addEventListener('wheel', e => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.92 : 1.08;
+      const newScale = Math.min(Math.max(scale * delta, 0.2), 4);
+      // Zoom toward cursor
+      const mx = e.clientX, my = e.clientY;
+      tx = mx - (mx - tx) * (newScale / scale);
+      ty = my - (my - ty) * (newScale / scale);
+      scale = newScale;
+      applyTransform();
+    }, { passive: false });
+
+    // Zoom buttons
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      scale = Math.min(scale * 1.2, 4);
+      applyTransform();
+    });
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      scale = Math.max(scale * 0.8, 0.2);
+      applyTransform();
+    });
+  </script>
+</body>
+</html>
