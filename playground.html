@@ -21,17 +21,19 @@
     /* Cross-document view transition */
     @view-transition { navigation: auto; }
 
+    /* Exit: zoom out like pulling back from the canvas */
     ::view-transition-old(root) {
-      animation: fade-out 0.35s ease forwards;
+      animation: pg-exit 0.5s cubic-bezier(0.4, 0, 0.8, 1) forwards;
     }
+    /* Entrance of next page: fade in normally */
     ::view-transition-new(root) {
-      animation: fade-in-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: pg-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    @keyframes fade-out {
-      to { opacity: 0; transform: scale(0.97); }
+    @keyframes pg-exit {
+      to { opacity: 0; transform: scale(0.18); }
     }
-    @keyframes fade-in-up {
+    @keyframes pg-enter {
       from { opacity: 0; transform: scale(1.03); }
       to   { opacity: 1; transform: scale(1); }
     }
@@ -47,18 +49,13 @@
 
     body.grabbing { cursor: grabbing; }
 
-    /* Canvas entrance */
+    /* Canvas entrance — driven by JS zoom-from-far */
     #canvas-root {
       position: absolute;
       top: 0; left: 0;
       transform-origin: 0 0;
       will-change: transform;
-      animation: canvas-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    @keyframes canvas-enter {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      opacity: 0;
     }
 
     /* Back link */
@@ -254,7 +251,31 @@
       ty = window.innerHeight / 2 - canvasCenterY * scale;
     }
 
+    // ── Zoom-from-far entrance ────────────────────────────────────
+    // Save the final resting state
+    const finalScale = scale, finalTx = tx, finalTy = ty;
+
+    // Start zoomed way out, centered on the same point
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    const startScale = finalScale * 0.22;
+    tx = cx - (cx - finalTx) * (startScale / finalScale);
+    ty = cy - (cy - finalTy) * (startScale / finalScale);
+    scale = startScale;
     applyTransform();
+
+    // Fade in immediately, then spring to final scale after browser commits initial paint
+    root.style.opacity = '1';
+    root.style.transition = 'none';
+    applyTransform();
+
+    setTimeout(() => {
+      root.style.transition = 'transform 0.9s cubic-bezier(0.22, 1, 0.36, 1)';
+      scale = finalScale; tx = finalTx; ty = finalTy;
+      applyTransform();
+      root.addEventListener('transitionend', () => {
+        root.style.transition = '';
+      }, { once: true });
+    }, 20);
 
     // ── Pan with momentum ────────────────────────────────────────
     function stopMomentum() {
