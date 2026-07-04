@@ -29,11 +29,12 @@ const projects = [
 
     whatShifted: "Before: a field officer spent most of their day taking orders. After: farmers could order at 2am when they realised they needed fish food.\n\nField officers stopped doing operational tasks and started doing relationship work — the kind that actually needs a person. The goal was never to make farmers use the product more. It was to make them need us less, for the things that didn't need us.",
 
-    // kept for project approach section
-    solutionSpace: [
-      "WhatsApp Chatbot for Low Tech-Savvy Segment — designed for areas with poor signal, it prioritizes only the essential features, reducing dependency on field teams while still impressing farmers.",
-      "eFisheryKu App for High Tech-Savvy Segment — offering extensive features similar to e-commerce platforms style."
-    ],
+    strategyVol: 1,
+    strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
+    strategyCardImage: "assets/images/o2o-strategy-card-opt.jpg",
+    heroImage: "assets/images/efishery-hero.gif",
+    screenshots: ["assets/images/o2o-whatsapp-opt.jpg"],
+
     projectPlanning: [
       {
         label: "Kick off project",
@@ -53,13 +54,7 @@ const projects = [
         bold: false,
         image: ""
       }
-    ],
-    strategyVol: 1,
-    strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
-    strategyCardImage: "assets/images/o2o-strategy-card-opt.jpg",
-    heroImage: "assets/images/efishery-hero.gif",
-    screenshots: ["assets/images/o2o-whatsapp-opt.jpg"],
-    images: []
+    ]
   },
   {
     id: "reorder-lifecycle",
@@ -72,10 +67,7 @@ const projects = [
     role: "",
     impact: [],
     situation: "",
-    solutionSpace: [],
-    contribution: "",
-    projectPlanning: [],
-    images: []
+    contribution: ""
   },
   {
     id: "price-perception",
@@ -103,15 +95,13 @@ const projects = [
 
     whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. 50% of company revenue going through one product category makes every label choice feel less like a UI decision and more like a business policy.\n\nWhat I learned: a good pricing system is invisible to the user and irreplaceable to the business. The goal was never to make pricing more prominent. It was to make the right price feel obvious at the right moment, without the user noticing the system behind it.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision. The escalation to VP and CEO wasn't bureaucracy. It was the system working as it should when the risk is real.",
 
+    heroImage: "assets/images/traveloka-hero.gif",
+
     sectionImages: [
       { url: "assets/hotel-booking/gestalt-before-after-wireframe.png", caption: "Before: similar colors representing unrelated information, no clear grouping. After: Gestalt principles applied, grouped by type.", section: "situation" },
       { url: "assets/hotel-booking/gestalt-principles.png",             caption: "Gestalt law of Similarity and Proximity: the theoretical foundation for the redesign",                                              section: "direction" },
       { url: "assets/hotel-booking/hotel-card-old-vs-new.png",          caption: "Old hotel card design vs new. Pricing, credibility, and hotel info now in distinct visual clusters.",                               section: "direction" }
-    ],
-
-    heroImage: "assets/images/traveloka-hero.gif",
-    projectPlanning: [],
-    images: []
+    ]
   },
   {
     id: "warehouse-logistics",
@@ -143,10 +133,6 @@ const projects = [
     contribution: "UX Researcher. I ran field observation using timed tracking, identified the traveling bottleneck from data, designed the service prototyping session, accompanied the live rollout, and designed the picker app interface. Pickers came from diverse local backgrounds — some not fully fluent in Bahasa Indonesia. I designed the UI to be understood without depending on language, using visual cues that worked across literacy levels.",
 
     whatShifted: "Before: checkers played Mobile Legend waiting for pickers who were exhausted walking the full warehouse alone. After: the workload balanced because the system matched how the warehouse actually operated.\n\n\"But if you never try, you'll never know.\" I came into this with zero warehouse context. What I learned: too many variables in one experiment makes it hard to isolate what actually worked. That honesty shaped how I design experiments now.",
-
-    solutionSpace: [],
-    projectPlanning: [],
-    images: [],
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_68b9577e5e5b43f2ba8c550838a39d3a~mv2.jpg",  caption: "Warung — the micro retail stores Warung Pintar serves",                        section: "situation" },
@@ -194,9 +180,6 @@ const projects = [
     whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended wasn't the lenticular photo itself. It was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
     heroImage: "assets/images/casio-hero.gif",
-    solutionSpace: [],
-    projectPlanning: [],
-    images: [],
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },
@@ -208,75 +191,6 @@ const projects = [
       { url: "https://static.wixstatic.com/media/242cb7_6b429834df9a432aab775ef77defbfde~mv2.png",                   caption: "A modular camera rig designed to capture the angles needed for the lenticular effect",                          section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_1a274806132d42d1ad30a1d48ef42cd9~mv2.png",                   caption: "Connected experience concept: tap, choose an action, link to cloud gallery",                                   section: "contribution" }
     ]
-  },
-  {
-    id: "service-prototyping",
-    folderColor: "#ffffff",
-    title: "Improving Warehouse Logistics Efficiency",
-    subtitle: "with Service Prototyping",
-    company: "Warung Pintar",
-    industry: "Supply Chain, Retail, Warehousing",
-    year: "",
-    role: "",
-    impact: [
-      "Increased probable picking order efficiency by 1.3x when serving +40k MAU for Mom & Pop Business Owners",
-      "During simulation, picker traveling time was significantly reduced"
-    ],
-    situation: "How can we reduce the traveling time during the warehouse picking process to improve order processing efficiency? Warung Pintar, a micro-retail technology company, enables digitalization for grassroots segments through digitized warungs (mom-and-pop shops). Traveling time was the longest part of the picking process, hindering timely delivery of orders. We found SKU lines (number of different items per order) correlated with longer picking times, while SKU quantity did not.",
-    solutionSpace: [
-      "Moved from discrete picking to cluster/batch picking and zone picking through service prototyping. All stakeholders — including data scientists, engineers, and business leads — participated to experience the new workflow firsthand, de-risking the cost of investing in untested solutions."
-    ],
-    contribution: "",
-    projectPlanning: [
-      {
-        label: "Service Prototyping in Warehouse",
-        description: "All stakeholders experienced the new picking workflow firsthand",
-        bold: true,
-        image: "assets/images/service-prototyping-1.jpeg"
-      },
-      {
-        label: "Zone Picking Simulation",
-        description: "Physical mapping of cluster and batch picking routes",
-        bold: false,
-        image: "assets/images/service-prototyping-2.jpeg"
-      }
-    ],
-    images: []
-  },
-  {
-    id: "visual-trends",
-    folderColor: "#ffffff",
-    title: "Forecasting Visual Product Trends",
-    subtitle: "Japan & Indonesia Youth Segment",
-    company: "Casio",
-    industry: "Electronics Manufacturing",
-    year: "2014",
-    role: "",
-    impact: [
-      "In 2016, the trend forecast was successfully validated — marked by the emergence of similar product concepts and the resurgence of analogue cameras"
-    ],
-    situation: "Initiated in 2014, this project aimed to predict visual imagery product trends for the next 3 years. The Casio design and research team collaborated with members from Japan and Indonesia, conducting surveys with 150 participants across both countries.",
-    solutionSpace: [
-      "Pattern Identification — Retro trends in fashion, music, and digital aesthetics (e.g. photo filters) show cyclical patterns where older aesthetics appeal to newer generations. Smartphone cameras and social media (Instagram) have accelerated and globalized retro trends.",
-      "Causal Factors — Smartphones transformed photography into an instant yet ubiquitous activity, leading to exponential data storage explosion.",
-      "Industrial Manufacturing Feasibility — Observed potential design production opportunities as smartphones became the primary camera device, with CASIO as manufacturer and cloud storage innovations as context."
-    ],
-    contribution: "",
-    projectPlanning: [
-      {
-        label: "Trend Research & Pattern Identification",
-        description: "Survey of 150 participants across Japan and Indonesia",
-        bold: true,
-        image: "assets/images/visual-trends-1.jpeg"
-      },
-      {
-        label: "Concept Framework",
-        description: "Eliminating the boundary between analogue and digital photos",
-        bold: false,
-        image: "assets/images/visual-trends-2.jpeg"
-      }
-    ],
-    images: []
   },
   {
     id: "context-labs",
