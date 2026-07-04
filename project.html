@@ -232,6 +232,7 @@
                data-spread-rot="${SPREAD_ROTS[i % SPREAD_ROTS.length]}"
                data-stack-rot="${rot}"
                data-stack-tx="${tx}"
+               data-orig-z="${zIndex}"
                style="--card-bg:${color};--card-ink:${ink};--card-divider:${divider};z-index:${zIndex};opacity:0;">
             <p class="article-card-number">0${i + 1}</p>
             <h2 class="article-card-title">${a.title}</h2>
@@ -246,11 +247,11 @@
 
       return `
         <div class="article-page">
-          <div class="article-header">
+          <div class="article-header" style="view-transition-name:leadership-hero;">
             <h1 class="article-title">${p.title}</h1>
             <p class="article-company">${p.company}</p>
           </div>
-          <div class="article-stack" style="view-transition-name:leadership-hero;">
+          <div class="article-stack">
             ${cardsHtml}
           </div>
         </div>
@@ -311,17 +312,32 @@
     }
 
     function initArticleExpand() {
+      // Overlay lives on body — outside all stacking contexts
+      const overlay = document.createElement('div');
+      overlay.id = 'article-dim-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.78);opacity:0;pointer-events:none;transition:opacity 0.45s ease;z-index:200;';
+      document.body.appendChild(overlay);
+
+      function showOverlay() { overlay.style.opacity = '1'; overlay.style.pointerEvents = 'auto'; }
+      function hideOverlay() { overlay.style.opacity = '0'; overlay.style.pointerEvents = 'none'; }
+
       document.querySelectorAll('.article-read-more').forEach(btn => {
         btn.addEventListener('click', () => {
           const body = document.getElementById(btn.dataset.target);
           const card = body.closest('.article-card');
           const expanded = body.classList.contains('is-open');
           body.classList.toggle('is-open', !expanded);
+
           if (!expanded) {
             card.dataset.savedTransform = card.style.transform;
             card.style.transform = 'rotate(0deg)';
+            card.style.position = 'relative';
+            card.style.zIndex = '300';
+            showOverlay();
           } else {
             card.style.transform = card.dataset.savedTransform || '';
+            card.style.zIndex = card.dataset.origZ || '';
+            hideOverlay();
           }
           btn.textContent = expanded ? 'Read more' : 'Read less';
 
@@ -338,6 +354,13 @@
             card.style.setProperty('--card-divider', card.dataset.savedDivider || '');
           }
         });
+      });
+
+      // Click the dark overlay to dismiss
+      overlay.addEventListener('click', () => {
+        const openBody = document.querySelector('.article-card-body.is-open');
+        if (!openBody) return;
+        openBody.closest('.article-card').querySelector('.article-read-more').click();
       });
     }
 
