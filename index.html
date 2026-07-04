@@ -258,6 +258,120 @@
       });
     }
 
+    // ── Leadership: blank post-it burst ─────────────────────────
+    function postItBurst(card, href) {
+      sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
+      sessionStorage.setItem('scrollY', window.scrollY);
+      card.classList.add('is-tapped');
+      card.style.viewTransitionName = 'leadership-hero';
+      card.style.transform = 'translateY(-20px) scale(1.02)';
+
+      const rect = card.getBoundingClientRect();
+      const tabL = parseFloat(card.style.getPropertyValue('--tab-l') || '44');
+      const cx = rect.left + rect.width * (tabL / 100) + 40;
+      const cy = rect.top + 4;
+
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
+      document.body.appendChild(overlay);
+
+      const STICKY_COLORS = ['#FFE566', '#FF9ED2', '#80D4FF'];
+      const spreads = [
+        { dx: -28, dy: -58, rot: -9  },
+        { dx:  58, dy: -76, rot:  4  },
+        { dx: 138, dy: -52, rot: 11  },
+      ];
+
+      const els = STICKY_COLORS.map((color, i) => {
+        const el = document.createElement('span');
+        el.style.cssText = `
+          position:fixed;display:block;width:36px;height:36px;
+          background:${color};
+          box-shadow:1px 2px 8px rgba(0,0,0,0.18);
+          left:${cx}px;top:${cy}px;
+          transform:translate(-50%,-50%) scale(0.3) rotate(${(i - 1) * 6}deg);
+          opacity:0;will-change:transform,opacity;transition:none;`;
+        overlay.appendChild(el);
+        return { el, ...spreads[i] };
+      });
+
+      overlay.offsetWidth;
+      requestAnimationFrame(() => {
+        els.forEach(({ el, dx, dy, rot }, i) => {
+          el.style.transition = `transform 0.5s cubic-bezier(0.2,0.85,0.25,1) ${i * 45}ms, opacity 0.18s ease ${i * 45}ms`;
+          el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
+          el.style.opacity = '1';
+        });
+        setTimeout(() => {
+          els.forEach(({ el }, i) => {
+            el.style.transition = `opacity 0.15s ease ${i * 15}ms`;
+            el.style.opacity = '0';
+          });
+          setTimeout(() => { overlay.remove(); window.location.href = href; }, 200);
+        }, 420);
+      });
+    }
+
+    // ── Context Labs: letter burst ────────────────────────────────
+    function letterBurst(card, href) {
+      sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
+      sessionStorage.setItem('scrollY', window.scrollY);
+      sessionStorage.setItem('folderColor', card.style.getPropertyValue('--folder-color'));
+      card.classList.add('is-tapped');
+      card.style.transform = 'translateY(-20px)';
+
+      const rect = card.getBoundingClientRect();
+      const tabL = parseFloat(card.style.getPropertyValue('--tab-l') || '55');
+      const cx = rect.left + rect.width * (tabL / 100) + 40;
+      const cy = rect.top + 4;
+
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
+      document.body.appendChild(overlay);
+
+      const LETTERS = ['C', 'N', 'T', 'X', 'T', 'L', 'B', 'S'];
+      const spreads = [
+        { dx: -110, dy: -42, rot: -12 },
+        { dx:  -68, dy: -74, rot:  -6 },
+        { dx:  -22, dy: -86, rot:  -2 },
+        { dx:   22, dy: -80, rot:   3 },
+        { dx:   64, dy: -68, rot:   7 },
+        { dx: 104,  dy: -48, rot:  11 },
+        { dx: 138,  dy: -24, rot:  15 },
+        { dx: 160,  dy:   4, rot:  18 },
+      ];
+
+      const els = LETTERS.map((letter, i) => {
+        const el = document.createElement('span');
+        el.textContent = letter;
+        el.style.cssText = `
+          position:fixed;
+          font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;line-height:1;
+          color:#1a1a1a;
+          left:${cx}px;top:${cy}px;
+          transform:translate(-50%,-50%) scale(0.2) rotate(${(i - 3.5) * 5}deg);
+          opacity:0;will-change:transform,opacity;transition:none;`;
+        overlay.appendChild(el);
+        return { el, ...spreads[i] };
+      });
+
+      overlay.offsetWidth;
+      requestAnimationFrame(() => {
+        els.forEach(({ el, dx, dy, rot }, i) => {
+          el.style.transition = `transform 0.48s cubic-bezier(0.2,0.85,0.25,1) ${i * 30}ms, opacity 0.16s ease ${i * 30}ms`;
+          el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
+          el.style.opacity = '1';
+        });
+        setTimeout(() => {
+          els.forEach(({ el }, i) => {
+            el.style.transition = `opacity 0.13s ease ${i * 10}ms`;
+            el.style.opacity = '0';
+          });
+          setTimeout(() => { overlay.remove(); window.location.href = href; }, 180);
+        }, 400);
+      });
+    }
+
     // Card click handler
     list.querySelectorAll('.stack-card').forEach(card => {
       const href = card.getAttribute('href');
@@ -267,16 +381,8 @@
       card.addEventListener('click', (e) => {
         e.preventDefault();
 
-        // Leadership: shared-element VT for seamless folder-open feel
-        if (href.includes('#leadership')) {
-          sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
-          sessionStorage.setItem('scrollY', window.scrollY);
-          card.classList.add('is-tapped');
-          card.style.viewTransitionName = 'leadership-hero';
-          card.style.transform = 'translateY(-20px) scale(1.02)';
-          setTimeout(() => { window.location.href = href; }, 220);
-          return;
-        }
+        if (href.includes('#leadership')) { postItBurst(card, href); return; }
+        if (href.includes('#context-labs')) { letterBurst(card, href); return; }
 
         burstAndNavigate(card, href, tags);
       });
