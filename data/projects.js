@@ -84,34 +84,33 @@ const projects = [
     subtitle: "with Gestalt Principles",
     company: "Traveloka",
     industry: "Pricing, Travel, Ecommerce",
-    year: "",
-    role: "",
-    tags: ["Gestalt Principles", "Price Perception", "Hotel Booking", "Design Systems", "Travel", "Ecommerce"],
-    heroImage: "assets/images/traveloka-hero.gif",
+    tags: ["Interaction Design", "Gestalt Principles", "Pricing System", "Ecommerce"],
+
+    hook: "How do you fix pricing perception for 35 million users when the team behind it is still managing labels manually?",
+
     impact: [
-      "The pricing label hierarchy now streamlines all strategic partnerships and campaigns, integrating directly into the Traveloka pricing engine",
-      "The design underwent escalation up to VP and CEO level, ensuring alignment with strategic goals and mitigating potential risk"
+      "Pricing label hierarchy integrated directly into Traveloka's pricing engine — no more manual work per campaign",
+      "Design escalated to VP of Product, Head of Pricing, and CEO — hotel contributed 50%+ of company revenue",
+      "System now serves hotel-facing, internal, affiliate, and marketing campaigns in one unified framework",
+      "Gestalt-based redesign grouped scattered information into clear clusters: hotel info, pricing info, credibility info"
     ],
-    situation: "Pricing is critical to driving transactions. Traveloka aimed to avoid making users promo-dependent, but acknowledged that best price is the deciding factor for +35M MAU. Without a proper system to display pricing labels based on prioritized rules, manual processes became a blocker for the company roadmap.",
-    solutionSpace: [
-      "Back-Office Solution — Defined a pricing label hierarchy framework based on pricing rules, with visual prominence for the best price vs. normal price, setting promo ranking later implemented in the pricing engine.",
-      "Consumer Facing Solution — Applied Gestalt principles (Similarity & Proximity) to simplify information by grouping hotel-related details separately from pricing info. Designed bite-sized info chunks and color associations to improve UI comprehension. Photos were identified as a critical deciding factor and given prominent treatment."
+
+    situation: "Pricing is the deciding factor for Traveloka's 35 million MAU when choosing a hotel. But there was no system behind it. Every campaign, partnership, and special event required manual label management across four different audiences: hotel-facing, internal, affiliate, and marketing. The hotel listing had the same problem. Information was scattered with no clear grouping, similar colors representing unrelated things, and pricing buried in visual noise. Research confirmed what the team suspected: photos and price are the first things users look at, and neither was getting the hierarchy it deserved.",
+
+    direction: "We worked on two solutions in parallel. For the back-office, I designed a pricing label hierarchy framework — a ranking system that defined which label type wins when multiple rules apply, and how visual prominence should reflect that. This got integrated directly into the pricing engine so campaigns could launch without manual intervention.\n\nFor the consumer-facing side, I applied Gestalt principles of similarity and proximity to reorganize the hotel listing. Similar information was grouped together with consistent visual treatment: hotel details in one cluster, pricing in another, credibility signals in a third. Color associations were tightened so similar colors only appeared on related information. The result was bite-sized, scannable chunks instead of a wall of competing elements.",
+
+    contribution: "Interaction Designer. I owned both the back-office framework and the consumer-facing redesign. The solution went through escalation to VP of Product, Head of Pricing, and CEO before launch. Hotel bookings represented more than 50% of Traveloka's revenue at the time, so even small changes required sign-off at the top.",
+
+    whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. 50% of company revenue going through one product category makes every label choice feel less like a UI decision and more like a business policy.\n\nWhat I learned: a good pricing system is invisible to the user and irreplaceable to the business. The goal was never to make pricing more prominent. It was to make the right price feel obvious at the right moment, without the user noticing the system behind it.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision. The escalation to VP and CEO wasn't bureaucracy. It was the system working as it should when the risk is real.",
+
+    sectionImages: [
+      { url: "assets/hotel-booking/gestalt-before-after-wireframe.png", caption: "Before: similar colors representing unrelated information, no clear grouping. After: Gestalt principles applied, grouped by type.", section: "situation" },
+      { url: "assets/hotel-booking/gestalt-principles.png",             caption: "Gestalt law of Similarity and Proximity: the theoretical foundation for the redesign",                                              section: "direction" },
+      { url: "assets/hotel-booking/hotel-card-old-vs-new.png",          caption: "Old hotel card design vs new. Pricing, credibility, and hotel info now in distinct visual clusters.",                               section: "direction" }
     ],
-    contribution: "",
-    projectPlanning: [
-      {
-        label: "Before vs After",
-        description: "Old and new hotel card design comparison",
-        bold: true,
-        image: "assets/images/price-perception-1.jpeg"
-      },
-      {
-        label: "Pricing Label Hierarchy",
-        description: "Framework for label rules implemented in pricing engine",
-        bold: false,
-        image: "assets/images/price-perception-2.jpeg"
-      }
-    ],
+
+    heroImage: "assets/images/traveloka-hero.gif",
+    projectPlanning: [],
     images: []
   },
   {
@@ -278,5 +277,41 @@ const projects = [
       }
     ],
     images: []
+  },
+  {
+    id: "context-labs",
+    type: "list",
+    folderColor: "#D4C8B8",
+    title: "Collective Case Study as Fractional UX Lead",
+    company: "Context Labs · Design Consultancy",
+    heroImage: "assets/images/logo-context-labs.png",
+    description: "As Fractional Design Lead, embedded AI design workflows while helping establish design expectations and the hiring roadmap for the first design team. Acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
+    clients: [
+      {
+        client: "HAND's by Japan Foundation",
+        industry: "Institution",
+        description: "Facilitated online Design Thinking workshop for 80+ participants during the pandemic, focused on plastic research and sustainable design methods."
+      },
+      {
+        client: "Epsylon",
+        industry: "Ads Management & SysAd",
+        description: "Led end-to-end UX redesign for a 30-year-old enterprise advertising platform. Conducted UX audit, established a Design System, and validated changes through usability testing on highest-risk operational flows."
+      },
+      {
+        client: "Pintaria",
+        industry: "Edutech",
+        description: "Design research to improve conversion rate. Product iteration to capture revenue from Kartu Prakerja participants."
+      },
+      {
+        client: "Wisataone",
+        industry: "Travel",
+        description: "UI design for Europe trip planning. Shipped."
+      },
+      {
+        client: "Vaya Constellar",
+        industry: "Company Branding",
+        description: "Brand identity and logo for a sales strategy and distribution partner. Deliverables: brand system aligned to their positioning as a trusted end-to-end commercial partner."
+      }
+    ]
   }
 ];

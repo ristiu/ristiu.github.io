@@ -110,9 +110,10 @@ Inject these naturally into copy. Never literally quote them.
 | offline-to-online | Shaping Product Vision — O2O Strategy | ✅ Content written |
 | reorder-lifecycle | Accelerating the Re-Order Lifecycle | ✅ Content written |
 | leadership | Leadership and Team Management Principle | 🔲 To do |
-| hotel-booking | Improving Price Perception in Hotel Booking | 🔲 To do |
+| price-perception | Improving Price Perception in Hotel Booking | ✅ Content written |
 | warehouse-logistics | Improving Warehouse Logistics Efficiency | ✅ Content written |
 | product-trends | Forecasting Visual Product Trends | ✅ Content written |
+| context-labs | Collective Case Study — Context Labs | ✅ Content written |
 
 ---
 

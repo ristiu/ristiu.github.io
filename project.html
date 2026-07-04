@@ -149,7 +149,42 @@
       }
     }
 
+    function renderListProject(p) {
+      const heroColor = '#D4C8B8';
+      return `
+        <div class="project-hero">
+          <div class="project-hero-text">
+            <h1 class="project-hero-title">${p.title}</h1>
+            <div class="project-hero-keywords"><span>${p.company}</span></div>
+          </div>
+          <div class="project-hero-image" style="background:${heroColor};">
+            <img src="${p.heroImage}" alt="${p.title}" style="object-fit:contain;padding:2rem;" />
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="content-section">
+            <p>${p.description}</p>
+          </div>
+          <div class="content-section">
+            <p class="section-heading">Clients</p>
+            <div class="client-list">
+              ${p.clients.map(c => `
+                <div class="client-item">
+                  <div class="client-header">
+                    <span class="client-name">${c.client}</span>
+                    <span class="client-industry">${c.industry}</span>
+                  </div>
+                  <p class="client-description">${c.description}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderProject(p) {
+      if (p.type === 'list') return renderListProject(p);
       // ── Hero block ────────────────────────────────────────────
       const heroBg = p.heroImage || (p.projectPlanning && p.projectPlanning.find(s => s.image)?.image) || '';
 

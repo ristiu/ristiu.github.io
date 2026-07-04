@@ -1626,5 +1626,45 @@ ol li, ul li {
 .page-veil.is-in { opacity: 1; }
 
 
+/* ─── Client list (Context Labs) ────────────────────────── */
+.client-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.client-item {
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.client-item:last-child {
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.client-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+.client-name {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.client-industry {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.05);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.client-description {
+  font-size: 0.9rem;
+  color: rgba(0,0,0,0.65);
+  margin: 0;
+  line-height: 1.6;
+}
+
 /* ─── Responsive tweaks ──────────────────────────────────── */
 /* font size stays consistent across all viewports */
