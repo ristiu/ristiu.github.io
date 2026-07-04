@@ -315,7 +315,7 @@
       // Overlay lives on body — outside all stacking contexts
       const overlay = document.createElement('div');
       overlay.id = 'article-dim-overlay';
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.78);opacity:0;pointer-events:none;transition:opacity 0.45s ease;z-index:200;';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);opacity:0;pointer-events:none;transition:opacity 0.45s ease;z-index:200;';
       document.body.appendChild(overlay);
 
       function showOverlay() { overlay.style.opacity = '1'; overlay.style.pointerEvents = 'auto'; }
@@ -363,45 +363,6 @@
         openBody.closest('.article-card').querySelector('.article-read-more').click();
       });
 
-      // Candlelight spotlight — warm radial gradient follows cursor inside active card
-      let activeCard = null;
-
-      function applyCandle(card, x, y) {
-        const rect = card.getBoundingClientRect();
-        const cx = x - rect.left;
-        const cy = y - rect.top;
-        card.style.setProperty('--candle-x', cx + 'px');
-        card.style.setProperty('--candle-y', cy + 'px');
-      }
-
-      function enableCandle(card) {
-        activeCard = card;
-        card.classList.add('candle-active');
-        card.style.setProperty('--candle-x', '50%');
-        card.style.setProperty('--candle-y', '40%');
-      }
-
-      function disableCandle(card) {
-        card.classList.remove('candle-active');
-        activeCard = null;
-      }
-
-      document.addEventListener('mousemove', e => {
-        if (!activeCard) return;
-        applyCandle(activeCard, e.clientX, e.clientY);
-      });
-
-      // Hook into expand/collapse
-      const origBtns = document.querySelectorAll('.article-read-more');
-      origBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const body = document.getElementById(btn.dataset.target);
-          const card = body.closest('.article-card');
-          const nowOpen = body.classList.contains('is-open');
-          if (nowOpen) enableCandle(card);
-          else disableCandle(card);
-        });
-      });
     }
 
     function renderListProject(p) {
@@ -412,9 +373,6 @@
             <h1 class="project-hero-title">${p.title}</h1>
             <div class="project-hero-keywords"><span>${p.company}</span></div>
           </div>
-          <div class="project-hero-image" style="background:#ffffff;">
-            <img src="${p.heroImage}" alt="${p.title}" style="object-fit:contain;padding:2rem;" />
-          </div>
         </div>
         <div class="project-body">
           <div class="content-section">
@@ -423,8 +381,8 @@
           <div class="content-section">
             <p class="section-heading">Clients</p>
             <div class="client-list">
-              ${p.clients.map(c => `
-                <div class="client-item">
+              ${p.clients.map((c, i) => `
+                <div class="client-item" id="client-${i}">
                   <div class="client-header">
                     <span class="client-name">${c.client}</span>
                     <span class="client-industry">${c.industry}</span>
@@ -627,16 +585,30 @@
 
       meta.innerHTML = '';
 
-      // Build section list from what's actually in the DOM
-      const sections = [
-        { id: 'section-outcome',   label: 'Outcome' },
-        { id: 'section-situation', label: 'Situation' },
-        { id: 'section-direction', label: 'Approach & Contribution' },
-        { id: 'section-shifted',   label: 'My Reflection' },
-      ].filter(s => document.getElementById(s.id));
+      let sections = [];
+
+      if (p.type === 'article' && p.articles) {
+        // Leadership-style: one nav entry per card, using card id and title
+        sections = p.articles.map(a => ({ id: `article-card-${p.articles.indexOf(a)}`, label: a.title }));
+      } else if (p.type === 'list' && p.clients) {
+        // Context Labs-style: show industry focus label, no nav links
+        const industries = p.clients.map(c => c.industry).join(', ');
+        links.innerHTML = `<span class="sidenav-industry-label"><strong>Client industry focus</strong><br>${industries}</span>`;
+        return;
+      } else {
+        // Default case study sections
+        sections = [
+          { id: 'section-outcome',   label: 'Outcome' },
+          { id: 'section-situation', label: 'Situation' },
+          { id: 'section-direction', label: 'Approach & Contribution' },
+          { id: 'section-shifted',   label: 'My Reflection' },
+        ].filter(s => document.getElementById(s.id));
+      }
 
       links.innerHTML = sections.map(s =>
-        `<a class="sidenav-link" href="#${s.id}" data-section="${s.id}">${s.label}</a>`
+        `<a class="sidenav-link" href="#${s.id}" data-section="${s.id}">
+          ${s.label}${s.sublabel ? `<span class="sidenav-link-sub">${s.sublabel}</span>` : ''}
+        </a>`
       ).join('');
 
       // Scrollspy
@@ -646,9 +618,9 @@
       function updateActive() {
         let current = anchors[0];
         for (const el of anchors) {
-          if (el.getBoundingClientRect().top <= window.innerHeight * 0.35) current = el;
+          if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.35) current = el;
         }
-        navLinks.forEach(a => a.classList.toggle('is-active', a.dataset.section === current.id));
+        if (current) navLinks.forEach(a => a.classList.toggle('is-active', a.dataset.section === current.id));
       }
 
       window.addEventListener('scroll', updateActive, { passive: true });

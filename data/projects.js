@@ -203,12 +203,12 @@ const projects = [
     clients: [
       {
         client: "HAND's by Japan Foundation",
-        industry: "Institution",
+        industry: "Public Institution",
         description: "Facilitated online Design Thinking workshop for 80+ participants during the pandemic, focused on plastic research and sustainable design methods."
       },
       {
         client: "Epsylon",
-        industry: "Ads Management & SysAd",
+        industry: "Ads Management",
         description: "Led end-to-end UX redesign for a 30-year-old enterprise advertising platform. Conducted UX audit, established a Design System, and validated changes through usability testing on highest-risk operational flows."
       },
       {
@@ -223,7 +223,7 @@ const projects = [
       },
       {
         client: "Vaya Constellar",
-        industry: "Company Branding",
+        industry: "Sales Distribution",
         description: "Brand identity and logo for a sales strategy and distribution partner. Deliverables: brand system aligned to their positioning as a trusted end-to-end commercial partner."
       }
     ]
@@ -305,7 +305,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/leadership/design-workshop.png",
+            url: "assets/playground/design-workshop.png",
             caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {

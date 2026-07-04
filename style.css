@@ -104,6 +104,21 @@ body {
   border-radius: 4px 4px 0 4px;
   padding: 1.5rem 1.5rem 2rem;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 48px), calc(100% - 48px) 100%, 0 100%);
+  filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.18));
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card--note::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.38 0.62' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23g)' opacity='0.58'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  mix-blend-mode: overlay;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* white text overrides inside red sticker */
@@ -1013,6 +1028,8 @@ a:hover { color: var(--accent); }
 
 .sidenav-link:hover { opacity: 0.7; }
 .sidenav-link.is-active { opacity: 1; color: var(--accent); }
+.sidenav-link-sub { display: block; font-size: 0.7rem; opacity: 0.5; margin-top: 1px; }
+.sidenav-industry-label { display: block; font-size: 0.7rem; color: var(--ink); opacity: 0.45; line-height: 1.6; font-family: var(--mono); }
 
 /* ─── Project detail ─────────────────────────────────────── */
 /* ─── Project hero ───────────────────────────────────────── */
@@ -1686,20 +1703,7 @@ ol li, ul li {
   flex-direction: column;
 }
 
-/* Candlelight spotlight on active card */
-@media (hover: hover) {
-  .article-card.candle-active {
-    background: radial-gradient(
-      ellipse 600px 480px at var(--candle-x, 50%) var(--candle-y, 40%),
-      #ffffff 0%,
-      #f0f0f0 28%,
-      #d4d4d4 54%,
-      #a8a8a8 76%,
-      #6e6e6e 100%
-    ) !important;
-    cursor: none;
-  }
-}
+
 
 .article-card {
   background: var(--card-bg, #ffffff);
@@ -1712,11 +1716,25 @@ ol li, ul li {
   flex-direction: column;
   gap: 0.75rem;
   transform-origin: center top;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.13), 0 1px 4px rgba(0,0,0,0.07);
+  filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.18));
   position: relative;
+  overflow: hidden;
   transition:
     transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
     margin-top 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.article-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.38 0.62' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23g)' opacity='0.58'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* Margins controlled by JS (initArticleStack) so it can measure card heights first */
