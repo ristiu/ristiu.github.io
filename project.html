@@ -230,7 +230,9 @@
         return `
           <div class="article-card" id="article-card-${i}"
                data-spread-rot="${SPREAD_ROTS[i % SPREAD_ROTS.length]}"
-               style="--card-bg:${color};--card-ink:${ink};--card-divider:${divider};z-index:${zIndex};transform:rotate(${rot}deg) translateX(${tx}px);">
+               data-stack-rot="${rot}"
+               data-stack-tx="${tx}"
+               style="--card-bg:${color};--card-ink:${ink};--card-divider:${divider};z-index:${zIndex};opacity:0;">
             <p class="article-card-number">0${i + 1}</p>
             <h2 class="article-card-title">${a.title}</h2>
             ${intro ? `<p class="article-intro">${intro.text}</p>` : ''}
@@ -261,26 +263,51 @@
       const cards = [...stack.querySelectorAll('.article-card')];
       if (!cards.length) return;
 
-      // Measure real card height so the pile overlap is accurate
-      const cardHeight = cards[0].offsetHeight;
-      const PEEK = 68; // px of each card that peeks out behind the pile
+      const PEEK = 68;
+      const FALL_DURATION = 600; // ms per card
+      const FALL_STAGGER  = 130; // ms between cards
+      const LAND_PAUSE    = 320; // ms after last card lands before spread
 
-      // Set pile: pull each subsequent card up so only PEEK px shows
+      // Measure card height for pile overlap
+      const cardHeight = cards[0].offsetHeight;
+
+      // Set pile margins (collapsed)
       cards.forEach((card, i) => {
         if (i === 0) return;
         card.style.marginTop = `-${cardHeight - PEEK}px`;
       });
 
-      // Wait for view transition to settle, then spread
-      const spreadDelay = document.startViewTransition ? 620 : 400;
-      setTimeout(() => {
+      // Position each card off-screen above, with its stack rotation
+      cards.forEach((card) => {
+        const rot = parseFloat(card.dataset.stackRot || 0);
+        const tx  = parseFloat(card.dataset.stackTx  || 0);
+        card.style.transition = 'none';
+        card.style.transform  = `rotate(${rot}deg) translateX(${tx}px) translateY(-110vh)`;
+        card.style.opacity    = '1';
+      });
+
+      // Staggered fall: each card drops into its pile position
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         cards.forEach((card, i) => {
-          const spreadRot = parseFloat(card.dataset.spreadRot || 0);
-          card.style.transitionDelay = `${i * 0.08}s`;
-          card.style.transform = `rotate(${spreadRot}deg)`;
-          if (i > 0) card.style.marginTop = '2.5rem';
+          const rot = parseFloat(card.dataset.stackRot || 0);
+          const tx  = parseFloat(card.dataset.stackTx  || 0);
+          setTimeout(() => {
+            card.style.transition = `transform ${FALL_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+            card.style.transform  = `rotate(${rot}deg) translateX(${tx}px)`;
+          }, i * FALL_STAGGER);
         });
-      }, spreadDelay);
+
+        // After all cards have landed, spread into readable list
+        const allLanded = (cards.length - 1) * FALL_STAGGER + FALL_DURATION + LAND_PAUSE;
+        setTimeout(() => {
+          cards.forEach((card, i) => {
+            const spreadRot = parseFloat(card.dataset.spreadRot || 0);
+            card.style.transition = `transform 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.08}s, margin-top 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.08}s`;
+            card.style.transform  = `rotate(${spreadRot}deg)`;
+            if (i > 0) card.style.marginTop = '2.5rem';
+          });
+        }, allLanded);
+      }));
     }
 
     function initArticleExpand() {
@@ -297,14 +324,14 @@
     }
 
     function renderListProject(p) {
-      const heroColor = '#D4C8B8';
+      
       return `
         <div class="project-hero">
           <div class="project-hero-text">
             <h1 class="project-hero-title">${p.title}</h1>
             <div class="project-hero-keywords"><span>${p.company}</span></div>
           </div>
-          <div class="project-hero-image" style="background:${heroColor};">
+          <div class="project-hero-image" style="background:#ffffff;">
             <img src="${p.heroImage}" alt="${p.title}" style="object-fit:contain;padding:2rem;" />
           </div>
         </div>
@@ -336,8 +363,7 @@
       // ── Hero block ────────────────────────────────────────────
       const heroBg = p.heroImage || (p.projectPlanning && p.projectPlanning.find(s => s.image)?.image) || '';
 
-      const placeholderColors = ['#C8B89A','#A8B8A0','#B0B8C8','#C8A8A0','#B8C0A0','#A8C0C0'];
-      const heroColor = placeholderColors[Math.abs(p.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % placeholderColors.length];
+      const heroColor = '#ffffff';
 
       // 4 hardcoded scatter slots — positions work at any width ≤ 560px
       // --fx/fy/fr = final scattered; --sx/sy/sr = stacked (center pile)

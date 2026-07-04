@@ -818,19 +818,11 @@ a:hover { color: var(--accent); }
   50%       { transform: translateY(5px); }
 }
 
-/* Register --folder-accent as a typed color so it can be transitioned */
-@property --folder-accent {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #ffffff;
-}
-
 /* ─── Project two-column layout ─────────────────────────── */
 .project-layout {
   display: flex;
   min-height: 100vh;
   padding-top: 0;
-  --folder-accent: #ffffff;
 }
 
 .project-sidenav {
@@ -928,14 +920,12 @@ a:hover { color: var(--accent); }
     background: transparent;
   }
 
-  /* Hero stays transparent — inherits folderColor from body */
   .project-main .project-hero {
     background: transparent;
   }
 
-  /* Body content starts colored and transitions to white via --folder-accent on scroll */
   .project-main .project-body {
-    background: var(--folder-accent);
+    background: #ffffff;
     position: relative;
   }
 
@@ -960,7 +950,7 @@ a:hover { color: var(--accent); }
     padding: 0 20px 12vh;
     box-sizing: border-box;
     /* Explicit color so hook stays colored when body background transitions to white */
-    background: var(--folder-accent);
+    background: #ffffff;
   }
 }
 
@@ -1030,8 +1020,7 @@ a:hover { color: var(--accent); }
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: var(--folder-accent);
-  transition: background 0.6s ease;
+  background: #ffffff;
 }
 
 /* Tagged hero on mobile: compact so hook is also visible on first viewport */
@@ -1045,7 +1034,7 @@ a:hover { color: var(--accent); }
   .project-hero-imgwrap {
     padding: 60px 0 32px;
     min-height: 260px;
-    background: var(--folder-accent);
+    background: #ffffff;
   }
 
   .project-hero-mainimg {
@@ -1058,11 +1047,6 @@ a:hover { color: var(--accent); }
   }
 }
 
-@media (min-width: 600px) {
-  .project-hero {
-    background: radial-gradient(ellipse at 60% 0%, color-mix(in srgb, var(--folder-accent) 18%, transparent) 0%, transparent 70%);
-  }
-}
 
 .project-hero-back {
   display: block;
@@ -1139,8 +1123,7 @@ a:hover { color: var(--accent); }
   align-items: center;
   margin: 0 auto;
   max-width: 100%;
-  background: var(--folder-accent, #ffffff);
-  transition: background-color 0.4s ease;
+  background: #ffffff;
 }
 
 .project-hero-mainimg {
@@ -1644,7 +1627,7 @@ ol li, ul li {
   animation: leadership-out 0.32s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 ::view-transition-new(leadership-hero) {
-  animation: leadership-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: leadership-in 0.15s ease forwards;
 }
 @keyframes leadership-out {
   to { opacity: 0; transform: scale(1.06) translateY(-12px); }
