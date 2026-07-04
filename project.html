@@ -9,9 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <!-- Theme color for browser chrome — updated by JS when folder color is known -->
-  <meta name="theme-color" content="#f0ebe4" />
-  <!-- Inline critical: start with default folder accent to avoid white flash -->
-  <style>html, body { background: #f0ebe4; margin: 0; }</style>
+  <meta name="theme-color" content="#ffffff" />
+  <style>html, body { background: #ffffff; margin: 0; }</style>
 </head>
 <body>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
@@ -69,17 +68,11 @@
     } else {
       document.title = `${project.title} — Risti`;
 
-      const accentColor = project.folderColor;
-      if (accentColor) {
-        const layout = document.querySelector('.project-layout');
-        if (layout) layout.style.setProperty('--folder-accent', accentColor);
-        document.documentElement.style.setProperty('--folder-accent', accentColor);
-        document.body.style.background = accentColor;
-        document.documentElement.style.background = accentColor;
-        const imgwrap = document.querySelector('.project-hero-imgwrap');
-        if (imgwrap) imgwrap.style.backgroundColor = accentColor;
-        const themeMeta = document.querySelector('meta[name="theme-color"]');
-        if (themeMeta) themeMeta.content = accentColor;
+      if (project.type === 'article') {
+        const paper = document.querySelector('.paper');
+        if (paper) paper.classList.add('paper--article');
+        document.body.style.background = '#ffffff';
+        document.documentElement.style.background = '#ffffff';
       }
 
       const skeleton = el.querySelector('.project-skeleton');
@@ -136,6 +129,8 @@
         initSidenav(project);
         initColorTransition(project);
         initReadGate();
+        initArticleExpand();
+        initArticleStack();
       }
 
       const heroImg = content.querySelector('.project-hero-mainimg');
@@ -147,6 +142,158 @@
       } else {
         revealContent();
       }
+    }
+
+    function renderArticleSections(sections) {
+      return (sections || []).map(s => {
+        if (s.type === 'intro') {
+          return `<p class="article-intro">${s.text}</p>`;
+        } else if (s.type === 'pull-quote') {
+          return `<blockquote class="article-pull-quote">
+            <p>${s.text}</p>
+            <cite>${s.author}</cite>
+          </blockquote>`;
+        } else if (s.type === 'image') {
+          return `<figure class="article-figure">
+            <img src="${s.url}" alt="" loading="lazy" />
+            ${s.caption ? `<figcaption>${s.caption}</figcaption>` : ''}
+          </figure>`;
+        } else if (s.type === 'section') {
+          const quotes = (s.quotes || []).map(q => `<blockquote class="article-quote">${q}</blockquote>`).join('');
+          return `<div class="article-section">
+            <p class="article-section-label"><span class="article-section-number">${s.number}</span> ${s.title}</p>
+            <p class="article-section-subtitle">${s.subtitle}</p>
+            <p>${s.body}</p>
+            ${quotes}
+          </div>`;
+        } else if (s.type === 'impact') {
+          const stats = (s.stats || []).map(st => `<li>${st}</li>`).join('');
+          const quotes = (s.quotes || []).map(q => `<blockquote class="article-quote">${q}</blockquote>`).join('');
+          return `<div class="article-section article-impact">
+            <p class="article-section-label">Impact</p>
+            <p>${s.body}</p>
+            ${stats ? `<ul class="article-stats">${stats}</ul>` : ''}
+            ${s.note ? `<p class="article-note">${s.note}</p>` : ''}
+            ${quotes}
+          </div>`;
+        } else if (s.type === 'themes') {
+          const items = (s.items || []).map(t => `
+            <div class="article-theme-item">
+              <p class="article-theme-label">${t.label}</p>
+              <p class="article-theme-desc">${t.description}</p>
+            </div>`).join('');
+          return `<div class="article-themes">${items}</div>`;
+        } else if (s.type === 'approach') {
+          const steps = (s.steps || []).map(st => `
+            <div class="article-step">
+              <span class="article-step-number">${st.number}</span>
+              <div>
+                <p class="article-step-title">${st.title}</p>
+                <p class="article-step-desc">${st.description}</p>
+              </div>
+            </div>`).join('');
+          return `<div class="article-section">
+            <p class="article-section-label">${s.label}</p>
+            <div class="article-steps">${steps}</div>
+          </div>`;
+        } else if (s.type === 'testimonial') {
+          return `<blockquote class="article-quote article-testimonial">
+            <p>${s.text}</p>
+            <cite>${s.author}</cite>
+          </blockquote>`;
+        }
+        return '';
+      }).join('');
+    }
+
+    function renderArticleProject(p) {
+      const articles = p.articles || [];
+
+      // Retro palette — warm, muted, pulled from the "scattered cards" reference
+      const CARD_COLORS   = ['#F2C0B0', '#EDD87A', '#D4895A', '#2C4A3E', '#3D2635', '#E8C4A8'];
+      const CARD_INKS     = ['#1a1a1a', '#1a1a1a', '#1a1a1a', '#f0ede8', '#f0ede8', '#1a1a1a'];
+      const CARD_DIVIDERS = ['rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(255,255,255,0.15)', 'rgba(255,255,255,0.15)', 'rgba(0,0,0,0.09)'];
+      const STACK_ROTS    = [-7, 5, -4, 8, -6, 3];
+      const STACK_TX      = [10, -14, 18, -8, 12, -6];
+      const SPREAD_ROTS   = [-1.5, 1.8, -1.2, 2, -1, 1.5];
+
+      const cardsHtml = articles.map((a, i) => {
+        const intro = (a.sections || []).find(s => s.type === 'intro');
+        const restSections = (a.sections || []).filter(s => s.type !== 'intro');
+        const cardId = `article-expand-${i}`;
+        const color   = CARD_COLORS[i % CARD_COLORS.length];
+        const ink     = CARD_INKS[i % CARD_INKS.length];
+        const divider = CARD_DIVIDERS[i % CARD_DIVIDERS.length];
+        const rot     = STACK_ROTS[i % STACK_ROTS.length];
+        const tx      = STACK_TX[i % STACK_TX.length];
+        const zIndex  = articles.length - i;
+        return `
+          <div class="article-card" id="article-card-${i}"
+               data-spread-rot="${SPREAD_ROTS[i % SPREAD_ROTS.length]}"
+               style="--card-bg:${color};--card-ink:${ink};--card-divider:${divider};z-index:${zIndex};transform:rotate(${rot}deg) translateX(${tx}px);">
+            <p class="article-card-number">0${i + 1}</p>
+            <h2 class="article-card-title">${a.title}</h2>
+            ${intro ? `<p class="article-intro">${intro.text}</p>` : ''}
+            <div class="article-card-body" id="${cardId}">
+              ${renderArticleSections(restSections)}
+            </div>
+            <button class="article-read-more" data-target="${cardId}" data-index="${i}" aria-expanded="false">read more</button>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="article-page">
+          <div class="article-header">
+            <h1 class="article-title">${p.title}</h1>
+            <p class="article-company">${p.company}</p>
+          </div>
+          <div class="article-stack" style="view-transition-name:leadership-hero;">
+            ${cardsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function initArticleStack() {
+      const stack = document.querySelector('.article-stack');
+      if (!stack) return;
+      const cards = [...stack.querySelectorAll('.article-card')];
+      if (!cards.length) return;
+
+      // Measure real card height so the pile overlap is accurate
+      const cardHeight = cards[0].offsetHeight;
+      const PEEK = 68; // px of each card that peeks out behind the pile
+
+      // Set pile: pull each subsequent card up so only PEEK px shows
+      cards.forEach((card, i) => {
+        if (i === 0) return;
+        card.style.marginTop = `-${cardHeight - PEEK}px`;
+      });
+
+      // Wait for view transition to settle, then spread
+      const spreadDelay = document.startViewTransition ? 620 : 400;
+      setTimeout(() => {
+        cards.forEach((card, i) => {
+          const spreadRot = parseFloat(card.dataset.spreadRot || 0);
+          card.style.transitionDelay = `${i * 0.08}s`;
+          card.style.transform = `rotate(${spreadRot}deg)`;
+          if (i > 0) card.style.marginTop = '2.5rem';
+        });
+      }, spreadDelay);
+    }
+
+    function initArticleExpand() {
+      document.querySelectorAll('.article-read-more').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const body = document.getElementById(btn.dataset.target);
+          const card = body.closest('.article-card');
+          const expanded = body.classList.contains('is-open');
+          body.classList.toggle('is-open', !expanded);
+          card.style.transform = expanded ? `rotate(var(--card-rot, 0deg))` : 'rotate(0deg)';
+          btn.textContent = expanded ? 'read more' : 'read less';
+        });
+      });
     }
 
     function renderListProject(p) {
@@ -185,6 +332,7 @@
 
     function renderProject(p) {
       if (p.type === 'list') return renderListProject(p);
+      if (p.type === 'article') return renderArticleProject(p);
       // ── Hero block ────────────────────────────────────────────
       const heroBg = p.heroImage || (p.projectPlanning && p.projectPlanning.find(s => s.image)?.image) || '';
 
@@ -408,36 +556,8 @@
       });
     }
 
-    function initColorTransition(project) {
-      const projectBodyEl = document.querySelector('.project-body');
-      if (!projectBodyEl || !project.folderColor) return;
-
-      const layout = document.querySelector('.project-layout');
-
-      document.body.style.transition = 'background-color 0.4s ease';
-      document.documentElement.style.transition = 'background-color 0.4s ease';
-
-      function updateColor() {
-        let reached;
-        if (window.innerWidth < 900) {
-          // Mobile: fire when imgwrap has scrolled nearly off screen
-          const imgwrap = document.querySelector('.project-hero-imgwrap');
-          const ir = imgwrap ? imgwrap.getBoundingClientRect() : null;
-          reached = ir ? ir.bottom < window.innerHeight * 0.15 : window.scrollY > window.innerHeight * 0.6;
-        } else {
-          // Desktop: fire when project-body enters from viewport bottom
-          const rect = projectBodyEl.getBoundingClientRect();
-          reached = rect.top <= window.innerHeight;
-        }
-        const target = reached ? '#ffffff' : project.folderColor;
-        document.body.style.background = target;
-        document.documentElement.style.background = target;
-        if (layout) layout.style.setProperty('--folder-accent', target);
-        const imgwrapEl = document.querySelector('.project-hero-imgwrap');
-        if (imgwrapEl) imgwrapEl.style.backgroundColor = target;
-      }
-
-      window.addEventListener('scroll', updateColor, { passive: true });
+    function initColorTransition() {
+      // Color transition removed — all pages use white background
     }
 
     function initReadGate() {

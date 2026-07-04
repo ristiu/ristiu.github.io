@@ -140,7 +140,7 @@
     const FOLDER_COLORS = [
       '#C8C0B8', // 1 back  — warm taupe   (Casio)
       '#EDE4A0', // 2       — pale yellow  (Warung Pintar)
-      '#E4C4A4', // 3       — peach        (Traveloka, was Warung Pintar)
+      '#C8C0B4', // 3       — peach        (Traveloka, was Warung Pintar)
       '#EEBCAA', // 4       — blush        (Leadership)
       '#B8CED8', // 5       — powder blue  (Reorder)
       '#C2CCBE', // 6 front — sage         (O2O)
@@ -152,7 +152,7 @@
       { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/images/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/images/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
       { title: 'Collective case study as Fractional UX lead',  subtitle: 'Client-facing design consultancy',                    href: 'project.html#context-labs',        img: '',                                       tabLabel: 'Context Labs', tabLogo: 'assets/images/logo-context-labs.png',  tabL: '55%', cardW: '100%' },
       { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/images/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/images/logo-efishery.png',      tabL: '30%', cardW: '100%' },
-      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: '#',                                img: 'assets/images/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
+      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: 'project.html#leadership',          img: 'assets/images/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
     ];
 
     // Build a lookup: project id → first 3 sectionImages
@@ -168,6 +168,16 @@
       return projectImageMap[id] || [];
     }
 
+    // Build tag map from projects data
+    const projectTagMap = {};
+    (typeof projects !== 'undefined' ? projects : []).forEach(p => {
+      if (p.tags && p.tags.length) projectTagMap[p.id] = p.tags.slice(0, 3);
+    });
+    function getProjectTags(href) {
+      const id = (href || '').split('#')[1];
+      return projectTagMap[id] || [];
+    }
+
     list.innerHTML = `
       <p class="stack-description">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
       ${allCards.map((c, i) => {
@@ -181,43 +191,46 @@
       }).join('')}
     `;
 
-    // Burst images from card → navigate (View Transitions handles the cross-page fade)
-    function burstAndNavigate(card, href, peekImgs) {
+    // Burst tags from folder tab → navigate
+    function burstAndNavigate(card, href, tags) {
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
       sessionStorage.setItem('folderColor', card.style.getPropertyValue('--folder-color'));
 
-      if (!peekImgs.length) {
-        card.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';
-        card.style.transform = 'translateY(-28px)';
-        setTimeout(() => { window.location.href = href; }, 200);
+      card.classList.add('is-tapped');
+      card.style.transform = 'translateY(-20px)';
+
+      if (!tags.length) {
+        setTimeout(() => { window.location.href = href; }, 220);
         return;
       }
 
       const rect = card.getBoundingClientRect();
-      const cx = rect.left + rect.width * 0.5;
-      const cy = rect.top + 20; // near the folder tab top
+      const tabL = parseFloat(card.style.getPropertyValue('--tab-l') || '8');
+      const cx = rect.left + rect.width * (tabL / 100) + 40; // near folder tab
+      const cy = rect.top + 4;
 
-      // Overlay container
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
       document.body.appendChild(overlay);
 
-      // Burst near the folder — images fan just above the tab
+      // Fan positions: spread above and around the tab
       const spreads = [
-        { dx: -70, dy: -110, rot: -12 },
-        { dx:  10, dy: -140, rot:   3 },
-        { dx:  80, dy: -100, rot:  14 },
+        { dx: -20, dy: -52, rot: -6  },
+        { dx:  72, dy: -72, rot:  2  },
+        { dx: 160, dy: -44, rot:  8  },
       ];
 
-      const els = peekImgs.map((img, i) => {
-        const el = document.createElement('img');
-        el.src = img.url;
+      const els = tags.map((label, i) => {
+        const el = document.createElement('span');
+        el.textContent = label;
         el.style.cssText = `
-          position:fixed;width:120px;height:auto;border-radius:5px;
-          box-shadow:0 4px 14px rgba(0,0,0,0.22),0 8px 24px rgba(0,0,0,0.14);
+          position:fixed;
+          font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1;
+          color:#fff;background:rgba(0,0,0,0.82);
+          border-radius:999px;padding:6px 12px;white-space:nowrap;
           left:${cx}px;top:${cy}px;
-          transform:translate(-50%,-50%) rotate(${(i-1)*6}deg) scale(0.4);
+          transform:translate(-50%,-50%) scale(0.5) rotate(${(i-1)*4}deg);
           opacity:0;will-change:transform,opacity;transition:none;`;
         overlay.appendChild(el);
         return { el, ...spreads[i] };
@@ -225,28 +238,23 @@
 
       overlay.offsetWidth; // reflow
 
-      // Card floats up slightly
-      card.style.transition = 'transform 0.2s ease';
-      card.style.transform = 'translateY(-18px)';
-
       requestAnimationFrame(() => {
         els.forEach(({ el, dx, dy, rot }, i) => {
-          el.style.transition = `transform 0.6s cubic-bezier(0.2,0.85,0.25,1) ${i * 35}ms, opacity 0.2s ease ${i * 35}ms`;
-          el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg) scale(1)`;
+          el.style.transition = `transform 0.5s cubic-bezier(0.2,0.85,0.25,1) ${i * 40}ms, opacity 0.18s ease ${i * 40}ms`;
+          el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
           el.style.opacity = '1';
         });
 
-        // Fade images out, then navigate
         setTimeout(() => {
           els.forEach(({ el }, i) => {
-            el.style.transition = `opacity 0.2s ease ${i * 20}ms`;
+            el.style.transition = `opacity 0.15s ease ${i * 15}ms`;
             el.style.opacity = '0';
           });
           setTimeout(() => {
             overlay.remove();
             window.location.href = href;
-          }, 220);
-        }, 480);
+          }, 200);
+        }, 420);
       });
     }
 
@@ -254,11 +262,23 @@
     list.querySelectorAll('.stack-card').forEach(card => {
       const href = card.getAttribute('href');
       if (!href || href === '#') return;
-      const peekImgs = getPeekImages(href);
+      const tags = getProjectTags(href);
 
       card.addEventListener('click', (e) => {
         e.preventDefault();
-        burstAndNavigate(card, href, peekImgs);
+
+        // Leadership: shared-element VT for seamless folder-open feel
+        if (href.includes('#leadership')) {
+          sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
+          sessionStorage.setItem('scrollY', window.scrollY);
+          card.classList.add('is-tapped');
+          card.style.viewTransitionName = 'leadership-hero';
+          card.style.transform = 'translateY(-20px) scale(1.02)';
+          setTimeout(() => { window.location.href = href; }, 220);
+          return;
+        }
+
+        burstAndNavigate(card, href, tags);
       });
     });
 

@@ -123,6 +123,26 @@
     .card {
       opacity: 0;
       transition: opacity 0.5s ease;
+      position: relative;
+    }
+
+    /* Skeleton shown while card is loading */
+    .card.is-loading::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #e8e3dc 25%, #f0ebe4 50%, #e8e3dc 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.4s ease infinite;
+      z-index: 1;
+    }
+    .card.is-loading > * {
+      opacity: 0;
+    }
+    @keyframes skeleton-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .card-caption {
@@ -444,15 +464,22 @@
 
         card.querySelectorAll('[data-src]').forEach(el => {
           if (el.src) return; // already loaded
+          card.classList.add('is-loading');
+          card.style.opacity = '1'; // show skeleton immediately
           el.src = el.dataset.src;
+
+          function reveal() {
+            card.classList.remove('is-loading');
+          }
+
           if (el.tagName === 'VIDEO') {
-            el.addEventListener('canplay', () => { card.style.opacity = '1'; }, { once: true });
+            el.addEventListener('canplay', reveal, { once: true });
             el.play().catch(() => {});
           } else {
             if (el.complete) {
-              card.style.opacity = '1';
+              reveal();
             } else {
-              el.addEventListener('load', () => { card.style.opacity = '1'; }, { once: true });
+              el.addEventListener('load', reveal, { once: true });
             }
           }
         });

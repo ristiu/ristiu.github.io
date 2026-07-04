@@ -1,7 +1,7 @@
 const projects = [
   {
     id: "offline-to-online",
-    folderColor: "#C2CCBE",
+    folderColor: "#ffffff",
     title: "Shaping Product Vision Through Omnichannel O2O Design Strategy",
     subtitle: "with Offline to Online Design Strategy",
     company: "eFishery",
@@ -63,7 +63,7 @@ const projects = [
   },
   {
     id: "reorder-lifecycle",
-    folderColor: "#B8CED8",
+    folderColor: "#ffffff",
     title: "",
     subtitle: "",
     company: "",
@@ -79,7 +79,7 @@ const projects = [
   },
   {
     id: "price-perception",
-    folderColor: "#E4C4A4",
+    folderColor: "#ffffff",
     title: "Improving Price Perception in Hotel Booking Discovery",
     subtitle: "with Gestalt Principles",
     company: "Traveloka",
@@ -115,7 +115,7 @@ const projects = [
   },
   {
     id: "warehouse-logistics",
-    folderColor: "#EDE4A0",
+    folderColor: "#ffffff",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "Service Prototyping",
     company: "Warung Pintar · Supply Chain",
@@ -165,7 +165,7 @@ const projects = [
   },
   {
     id: "product-trends",
-    folderColor: "#C8C0B8",
+    folderColor: "#ffffff",
     title: "Forecasting Visual Product Trends",
     subtitle: "Japan & Indonesia Youth Segment",
     company: "Joint venture: Casio Design Japan, Chiba University, Institut Teknologi Bandung",
@@ -211,7 +211,7 @@ const projects = [
   },
   {
     id: "service-prototyping",
-    folderColor: "#EDE4A0",
+    folderColor: "#ffffff",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "with Service Prototyping",
     company: "Warung Pintar",
@@ -245,7 +245,7 @@ const projects = [
   },
   {
     id: "visual-trends",
-    folderColor: "#C8C0B8",
+    folderColor: "#ffffff",
     title: "Forecasting Visual Product Trends",
     subtitle: "Japan & Indonesia Youth Segment",
     company: "Casio",
@@ -281,7 +281,7 @@ const projects = [
   {
     id: "context-labs",
     type: "list",
-    folderColor: "#D4C8B8",
+    folderColor: "#ffffff",
     title: "Collective Case Study as Fractional UX Lead",
     company: "Context Labs · Design Consultancy",
     heroImage: "assets/images/logo-context-labs.png",
@@ -311,6 +311,123 @@ const projects = [
         client: "Vaya Constellar",
         industry: "Company Branding",
         description: "Brand identity and logo for a sales strategy and distribution partner. Deliverables: brand system aligned to their positioning as a trusted end-to-end commercial partner."
+      }
+    ]
+  },
+  {
+    id: "leadership",
+    type: "article",
+    folderColor: "#ffffff",
+    title: "Leadership and Team Management Principle",
+    subtitle: "Build High Performing Team",
+    company: "eFishery · Design Leadership",
+    tags: ["Leadership", "Team Management", "Design Ops"],
+    heroImage: "",
+    articleBg: "#4A5AE8",
+    articles: [
+      {
+        id: "high-performing-team",
+        title: "Leadership and Team Management to Build High Performing Team",
+        sections: [
+          {
+            type: "intro",
+            text: "In leadership, I apply the same logic I use in design: focus on what actually moves people, not what looks good on a framework. For me, that comes down to three principles to sustain a high-performing team — Purpose, People, and Process."
+          },
+          {
+            type: "image",
+            url: "assets/leadership/leadership-principles.png",
+            caption: "Purpose, People, Process — the three principles I use to sustain a high-performing team"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Purpose",
+            subtitle: "Shared sense of direction",
+            body: "I align the team around a clear vision, strategy, and direction. By setting ambitious yet achievable challenges through a strength-based approach, I encourage outcomes that are both portfolio-worthy for the individual and high-impact for the collective.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "People",
+            subtitle: "Psychological safety as a foundation",
+            body: "I facilitate an environment where team members feel safe to share ideas, take risks, and stay playful. Through regular 1:1s, I aim to reduce power dynamics and build genuine openness by getting to know the person behind the role.",
+            quotes: [
+              "Risti puts in effort to get to know me as a person. My home life she knows best — she assigns me work that plays to my strength. — Sr. Interaction Designer",
+              "What I appreciate the most from Risti are the candidness, the openness, the trust. I feel those 3 things come simultaneously in building the confidence in me. — Sr. UX Writer"
+            ]
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Process",
+            subtitle: "Feedback and quality as growth levers",
+            body: "I embed reflection and retrospectives into our workflow, turning feedback into a mechanism for intentional, continuous improvement. High-quality output is our primary way to earn trust across the organization. To manage this I establish a spider web framework for the team and senior design members to manage relationships systematically. This approach ensures we are managing expectations at all levels.",
+            quotes: [
+              "Risti is a high performer, that holds to the farmer-first vision and incorporates it with company strategy. — CPO"
+            ]
+          },
+          {
+            type: "impact",
+            body: "Through transparency and supportive leadership, 85% of collaborators and team members enjoy a productive partnership that consistently drives objectives as a team.",
+            stats: [
+              "PM: 8/10 — 41 respondents from Product, Engineering, Data and Marketing",
+              "Engineering: 9/10"
+            ],
+            note: "Measured as proof of a high-performing team, not a delusional claim",
+            quotes: [
+              "Risti's team has the capacity to own the goal and the problem. They help PMs drive the business. — Sr. Product Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "facilitating-design-workshop",
+        title: "Facilitating Design Workshop for Strategic Levers and Collaborative Culture",
+        sections: [
+          {
+            type: "pull-quote",
+            text: "Great things in business are never done by one person. They're done by a team of people.",
+            author: "Steve Jobs"
+          },
+          {
+            type: "intro",
+            text: "Led and facilitated workshops with PMs and Heads to drive strategic leverage across the organization."
+          },
+          {
+            type: "image",
+            url: "assets/leadership/design-workshop.png",
+            caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
+          },
+          {
+            type: "themes",
+            items: [
+              {
+                label: "Strategic lever",
+                description: "Value creation, long-term product roadmap, hypothesis collection for experimentation."
+              },
+              {
+                label: "Collaborative culture",
+                description: "Roadmap check-in to balance top-down with bottom-up organizational culture. Retrospective with multi-department teams."
+              }
+            ]
+          },
+          {
+            type: "approach",
+            label: "My approach as a Facilitator",
+            steps: [
+              { number: "1", title: "Collective Goal Setting",        description: "Making sure the session goals are clear and co-owned from the start." },
+              { number: "2", title: "Framework Design",               description: "Curating and setting up the right frameworks — prompt questions like Value vs. Effort, Hypothesis Dumping, Ideation — to guide the team toward the goals." },
+              { number: "3", title: "Guiding Toward Outcomes",        description: "Keeping participant energy focused on the target." },
+              { number: "4", title: "Synthesizing for Actionable Items", description: "Turning workshop output into clear next steps the team can actually move on." }
+            ]
+          },
+          {
+            type: "testimonial",
+            text: "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to.",
+            author: "Head of Product"
+          }
+        ]
       }
     ]
   }
