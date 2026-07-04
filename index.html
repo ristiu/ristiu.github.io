@@ -275,22 +275,29 @@
       overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
       document.body.appendChild(overlay);
 
-      const STICKY_COLORS = ['#FFE566', '#FF9ED2', '#80D4FF'];
+      const STICKIES = [
+        { color: '#FFE566', icon: '' },           // plain post-it
+        { color: '#FF9ED2', icon: '♡' },          // with love/heart drawing
+        { color: '#80D4FF', icon: '◡‿◡' },        // with smiley
+      ];
       const spreads = [
         { dx: -28, dy: -58, rot: -9  },
         { dx:  58, dy: -76, rot:  4  },
         { dx: 138, dy: -52, rot: 11  },
       ];
 
-      const els = STICKY_COLORS.map((color, i) => {
+      const els = STICKIES.map(({ color, icon }, i) => {
         const el = document.createElement('span');
         el.style.cssText = `
-          position:fixed;display:block;width:36px;height:36px;
+          position:fixed;display:flex;align-items:center;justify-content:center;
+          width:40px;height:40px;
           background:${color};
           box-shadow:1px 2px 8px rgba(0,0,0,0.18);
+          font-size:14px;line-height:1;color:rgba(0,0,0,0.55);
           left:${cx}px;top:${cy}px;
           transform:translate(-50%,-50%) scale(0.3) rotate(${(i - 1) * 6}deg);
           opacity:0;will-change:transform,opacity;transition:none;`;
+        el.textContent = icon;
         overlay.appendChild(el);
         return { el, ...spreads[i] };
       });
@@ -331,14 +338,14 @@
 
       const LETTERS = ['C', 'N', 'T', 'X', 'T', 'L', 'B', 'S'];
       const spreads = [
-        { dx: -110, dy: -42, rot: -12 },
-        { dx:  -68, dy: -74, rot:  -6 },
-        { dx:  -22, dy: -86, rot:  -2 },
-        { dx:   22, dy: -80, rot:   3 },
-        { dx:   64, dy: -68, rot:   7 },
-        { dx: 104,  dy: -48, rot:  11 },
-        { dx: 138,  dy: -24, rot:  15 },
-        { dx: 160,  dy:   4, rot:  18 },
+        { dx: -68, dy: -32, rot: -12 },
+        { dx: -44, dy: -58, rot:  -6 },
+        { dx: -14, dy: -68, rot:  -2 },
+        { dx:  16, dy: -62, rot:   3 },
+        { dx:  44, dy: -52, rot:   7 },
+        { dx:  70, dy: -36, rot:  11 },
+        { dx:  90, dy: -16, rot:  15 },
+        { dx: 104, dy:   4, rot:  18 },
       ];
 
       const els = LETTERS.map((letter, i) => {
