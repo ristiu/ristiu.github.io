@@ -1687,16 +1687,18 @@ ol li, ul li {
 }
 
 /* Candlelight spotlight on active card */
-.article-card.candle-active {
-  background: radial-gradient(
-    ellipse 600px 480px at var(--candle-x, 50%) var(--candle-y, 40%),
-    #ffffff 0%,
-    #f0f0f0 28%,
-    #d4d4d4 54%,
-    #a8a8a8 76%,
-    #6e6e6e 100%
-  ) !important;
-  cursor: none;
+@media (hover: hover) {
+  .article-card.candle-active {
+    background: radial-gradient(
+      ellipse 600px 480px at var(--candle-x, 50%) var(--candle-y, 40%),
+      #ffffff 0%,
+      #f0f0f0 28%,
+      #d4d4d4 54%,
+      #a8a8a8 76%,
+      #6e6e6e 100%
+    ) !important;
+    cursor: none;
+  }
 }
 
 .article-card {
