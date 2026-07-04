@@ -362,6 +362,46 @@
         if (!openBody) return;
         openBody.closest('.article-card').querySelector('.article-read-more').click();
       });
+
+      // Candlelight spotlight — warm radial gradient follows cursor inside active card
+      let activeCard = null;
+
+      function applyCandle(card, x, y) {
+        const rect = card.getBoundingClientRect();
+        const cx = x - rect.left;
+        const cy = y - rect.top;
+        card.style.setProperty('--candle-x', cx + 'px');
+        card.style.setProperty('--candle-y', cy + 'px');
+      }
+
+      function enableCandle(card) {
+        activeCard = card;
+        card.classList.add('candle-active');
+        card.style.setProperty('--candle-x', '50%');
+        card.style.setProperty('--candle-y', '40%');
+      }
+
+      function disableCandle(card) {
+        card.classList.remove('candle-active');
+        activeCard = null;
+      }
+
+      document.addEventListener('mousemove', e => {
+        if (!activeCard) return;
+        applyCandle(activeCard, e.clientX, e.clientY);
+      });
+
+      // Hook into expand/collapse
+      const origBtns = document.querySelectorAll('.article-read-more');
+      origBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const body = document.getElementById(btn.dataset.target);
+          const card = body.closest('.article-card');
+          const nowOpen = body.classList.contains('is-open');
+          if (nowOpen) enableCandle(card);
+          else disableCandle(card);
+        });
+      });
     }
 
     function renderListProject(p) {
