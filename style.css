@@ -126,16 +126,16 @@ body {
     opacity: 1;
   }
   58% {
-    transform: translateY(24px) rotate(7deg) scale(1.04);
+    transform: translateY(80px) rotate(7deg) scale(1.04);
   }
   74% {
-    transform: translateY(-10px) rotate(-3.5deg) scale(0.97);
+    transform: translateY(30px) rotate(-3.5deg) scale(0.97);
   }
   88% {
-    transform: translateY(5px) rotate(-0.8deg) scale(1.01);
+    transform: translateY(52px) rotate(-0.8deg) scale(1.01);
   }
   100% {
-    transform: translateY(0) rotate(-1.5deg) scale(1);
+    transform: translateY(40px) rotate(-1.5deg) scale(1);
     opacity: 1;
   }
 }
