@@ -317,8 +317,26 @@
           const card = body.closest('.article-card');
           const expanded = body.classList.contains('is-open');
           body.classList.toggle('is-open', !expanded);
-          card.style.transform = expanded ? `rotate(var(--card-rot, 0deg))` : 'rotate(0deg)';
+          if (!expanded) {
+            card.dataset.savedTransform = card.style.transform;
+            card.style.transform = 'rotate(0deg)';
+          } else {
+            card.style.transform = card.dataset.savedTransform || '';
+          }
           btn.textContent = expanded ? 'Read more' : 'Read less';
+
+          if (!expanded) {
+            card.dataset.savedBg      = card.style.getPropertyValue('--card-bg');
+            card.dataset.savedInk     = card.style.getPropertyValue('--card-ink');
+            card.dataset.savedDivider = card.style.getPropertyValue('--card-divider');
+            card.style.setProperty('--card-bg', '#ffffff');
+            card.style.setProperty('--card-ink', '#1a1a1a');
+            card.style.setProperty('--card-divider', 'rgba(0,0,0,0.09)');
+          } else {
+            card.style.setProperty('--card-bg',      card.dataset.savedBg      || '');
+            card.style.setProperty('--card-ink',     card.dataset.savedInk     || '');
+            card.style.setProperty('--card-divider', card.dataset.savedDivider || '');
+          }
         });
       });
     }

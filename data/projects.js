@@ -300,11 +300,6 @@ const projects = [
         title: "Facilitating Design Workshop for Strategic Levers and Collaborative Culture",
         sections: [
           {
-            type: "pull-quote",
-            text: "Great things in business are never done by one person. They're done by a team of people.",
-            author: "Steve Jobs"
-          },
-          {
             type: "intro",
             text: "Led and facilitated workshops with PMs and Heads to drive strategic leverage across the organization."
           },
@@ -314,32 +309,30 @@ const projects = [
             caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {
-            type: "themes",
-            items: [
-              {
-                label: "Strategic lever",
-                description: "Value creation, long-term product roadmap, hypothesis collection for experimentation."
-              },
-              {
-                label: "Collaborative culture",
-                description: "Roadmap check-in to balance top-down with bottom-up organizational culture. Retrospective with multi-department teams."
-              }
-            ]
+            type: "section",
+            number: "1 |",
+            title: "Strategic Lever",
+            subtitle: "Value creation and long-term thinking",
+            body: "Workshops built around what actually moves the business — not just output. We mapped long-term roadmaps, surfaced hypotheses, and tied every idea back to a real lever. The goal was always a decision the team could act on.",
+            quotes: []
           },
           {
-            type: "approach",
-            label: "My approach as a Facilitator",
-            steps: [
-              { number: "1", title: "Collective Goal Setting",        description: "Making sure the session goals are clear and co-owned from the start." },
-              { number: "2", title: "Framework Design",               description: "Curating and setting up the right frameworks — prompt questions like Value vs. Effort, Hypothesis Dumping, Ideation — to guide the team toward the goals." },
-              { number: "3", title: "Guiding Toward Outcomes",        description: "Keeping participant energy focused on the target." },
-              { number: "4", title: "Synthesizing for Actionable Items", description: "Turning workshop output into clear next steps the team can actually move on." }
-            ]
+            type: "section",
+            number: "2 |",
+            title: "Collaborative Culture",
+            subtitle: "Making space between top-down and bottom-up",
+            body: "Cross-functional check-ins with product, engineering, data, marketing, and design. Retrospectives built to make it safe to say what isn't working. The format matters less than who's actually in the room.",
+            quotes: []
           },
           {
-            type: "testimonial",
-            text: "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to.",
-            author: "Head of Product"
+            type: "section",
+            number: "3 |",
+            title: "My Approach as Facilitator",
+            subtitle: "From kickoff to action in four moves",
+            body: "I open with shared goal-setting so no one's guessing what we're trying to accomplish. Then I curate the right frameworks — Value vs. Effort, Hypothesis Dumping, Ideation — to focus the room. During the session I keep energy pointed at the target, not the conversation. At the end, output becomes clear next steps, not a pile of sticky notes.",
+            quotes: [
+              "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
+            ]
           }
         ]
       }
