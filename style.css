@@ -379,6 +379,7 @@ a:hover { color: var(--accent); }
 .tree-node-text {
   margin: 0;
   flex: 1;
+  font-size: 14px;
 }
 
 /* Portfolio two-line tree */
