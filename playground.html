@@ -278,6 +278,9 @@
     root.style.transition = 'none';
     applyTransform();
 
+    // Start videos immediately — mobile browsers allow muted autoplay, no gesture needed
+    root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
+
     setTimeout(() => {
       root.style.opacity = '1';
       root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
@@ -285,9 +288,7 @@
       applyTransform();
       root.addEventListener('transitionend', () => {
         root.style.transition = '';
-        // Fade cards in once canvas has settled into position
         root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
-        root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
       }, { once: true });
     }, 100);
 
