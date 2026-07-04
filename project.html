@@ -239,7 +239,7 @@
             <div class="article-card-body" id="${cardId}">
               ${renderArticleSections(restSections)}
             </div>
-            <button class="article-read-more" data-target="${cardId}" data-index="${i}" aria-expanded="false">read more</button>
+            <button class="article-read-more" data-target="${cardId}" data-index="${i}" aria-expanded="false">Read more</button>
           </div>
         `;
       }).join('');
@@ -318,7 +318,7 @@
           const expanded = body.classList.contains('is-open');
           body.classList.toggle('is-open', !expanded);
           card.style.transform = expanded ? `rotate(var(--card-rot, 0deg))` : 'rotate(0deg)';
-          btn.textContent = expanded ? 'read more' : 'read less';
+          btn.textContent = expanded ? 'Read more' : 'Read less';
         });
       });
     }
