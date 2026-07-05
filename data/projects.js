@@ -16,7 +16,7 @@ const projects = [
 
     insight: "90% of them were already on WhatsApp every day. But the app adoption is stagnant at 19%, We assumed every farmer would learned to use the app. We designed one solution and expected it to fit everyone. But It didn't.",
 
-    direction: "Instead of forcing farmers into the app, we built a second path. WhatsApp for farmers who prefer it that build on top of exisiting habits. App for farmers who don't.\n\nI framed this with the team using BCA's model of interfacing they don't force everyone to mobile. Some customers go to the teller. Some use ATM. Some use the app. \n\nMe, my team, and head of design initiate to wrote the design strategy document to align product, marketing, data, and engineering. Since there's a tendenyc everyone was working in silos. We brought them together with framework: Value Creation vs. Value Capture or What farmers actually need versus what we want from them.\n\nIn that what we killed was the assumption that everyone can use an app. That was the real blocker. My contribution as Design Manager with a team of 4. I owned the strategy direction, did the field research, wrote the cross-functional design workshop to align the team, and made the design calls for both WhatsApp and the app.",
+    direction: "Instead of forcing farmers into the app, we built a second path. WhatsApp for farmers who prefer it that build on top of exisiting habits. App for farmers who don't.\n\nI framed this with the team using BCA's model of interfacing they don't force everyone to mobile. Some customers go to the teller. Some use ATM. Some use the app. \n\nMe, my team, and head of design initiate to wrote the design strategy document to align product, marketing, data, and engineering. Since there's a tendenyc everyone was working in silos. We brought them together with framework: Value Creation vs. Value Capture or What farmers actually need versus what we want from them.\n\nIn that what we killed was the assumption that everyone can use an app. That was the real blocker. My contribution as Design Manager with a team of 8. We owned the strategy direction, did the field research, facilitated the cross-functional design workshop to align the team, and made the design calls for both WhatsApp and the app.",
 
     impact: [
       "+35% self-transaction adoption, up from 19% baseline, rural low-tech users",
@@ -25,11 +25,8 @@ const projects = [
     ],
 
     
-    strategyVol: 1,
-    strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
     strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.png",
     heroImage: "assets/portfolio/efishery-hero.gif",
-    screenshots: ["assets/portfolio/o2o-whatsapp-opt.png"],
 
   },
   {
@@ -39,31 +36,26 @@ const projects = [
     subtitle: "with Gestalt Principles",
     company: "Traveloka",
     industry: "Pricing, Travel, Ecommerce",
-    tags: ["Interaction Design", "Gestalt Principles", "Pricing System", "Ecommerce"],
+    tags: ["Design Interaction", "Gestalt Principles", "Pricing Enginee", "Ecommerce"],
 
-    hook: "How do you fix pricing perception for 35 million users when the team behind it is still managing labels manually?",
+    hook: "How do you optimize pricing perception for 35 million users when the operation behind it is still managing labels manually?",
 
     impact: [
-      "Pricing label hierarchy integrated directly into Traveloka's pricing engine — no more manual work per campaign",
-      "Design escalated to VP of Product, Head of Pricing, and CEO — hotel contributed 50%+ of company revenue",
-      "System now serves hotel-facing, internal, affiliate, and marketing campaigns in one unified framework",
-      "Gestalt-based redesign grouped scattered information into clear clusters: hotel info, pricing info, credibility info"
+      "Pricing label hierarchy integrated directly into Traveloka's pricing engine, less manual work per campaign. The Pricing Enginee now serves hotel-facing, internal, affiliate, and marketing campaigns in one unified platform",
     ],
 
-    situation: "Pricing is the deciding factor for Traveloka's 35 million MAU when choosing a hotel. But there was no system behind it. Every campaign, partnership, and special event required manual label management across four different audiences: hotel-facing, internal, affiliate, and marketing. The hotel listing had the same problem. Information was scattered with no clear grouping, similar colors representing unrelated things, and pricing buried in visual noise. Research confirmed what the team suspected: photos and price are the first things users look at, and neither was getting the hierarchy it deserved.",
+    situation: "Pricing is the deciding factor for Traveloka's 35 million MAU when choosing a hotel. But the system is not yet optimized to scale. Every campaign, partnership, and special event required manual label management across four different audiences, hotel-facing, internal, affiliate, and marketing. The hotel listing had the same problem. Information has no clear grouping and pricing buried in visual noise. On the other hand, our research confirmed that photos and price are the first things users look at, and neither was getting the hierarchy it deserved.",
 
-    direction: "We worked on two solutions in parallel. For the back-office, I designed a pricing label hierarchy framework — a ranking system that defined which label type wins when multiple rules apply, and how visual prominence should reflect that. This got integrated directly into the pricing engine so campaigns could launch without manual intervention.\n\nFor the consumer-facing side, I applied Gestalt principles of similarity and proximity to reorganize the hotel listing. Similar information was grouped together with consistent visual treatment: hotel details in one cluster, pricing in another, credibility signals in a third. Color associations were tightened so similar colors only appeared on related information. The result was bite-sized, scannable chunks instead of a wall of competing elements.",
+    direction: "We worked on two solutions in parallel. For the back-office, I and Senior PM create a concept of ranking system that defined which label type wins when multiple rules apply, and how visual prominence should reflect that. This got integrated directly into the pricing engine so campaigns could launch without manual intervention.\n\nFor the consumer-facing side, I applied Gestalt principles of similarity and proximity to reorganize the hotel listing. Similar information was grouped together with consistent visual treatment: hotel details in one cluster, pricing in another, credibility signals in a third. Color associations were tightened so similar colors only appeared on related information. The result was bite-sized, scannable chunks instead of a wall of competing elements.",
 
-    contribution: "Interaction Designer. I owned both the back-office framework and the consumer-facing redesign. The solution went through escalation to VP of Product, Head of Pricing, and CEO before launch. Hotel bookings represented more than 50% of Traveloka's revenue at the time, so even small changes required sign-off at the top.",
+    contribution: "My role as Interaction Designer. I handled both the back-office pricing label framework and the consumer-facing redesign. The solution went through escalation to VP of Product, Head of Pricing, and CEO before launch. Since hotel bookings represented big chunck of Traveloka's revenue at the time, so even small changes is matters for the business.",
 
-    whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. 50% of company revenue going through one product category makes every label choice feel less like a UI decision and more like a business policy.\n\nWhat I learned: a good pricing system is invisible to the user and irreplaceable to the business. The goal was never to make pricing more prominent. It was to make the right price feel obvious at the right moment, without the user noticing the system behind it.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision. The escalation to VP and CEO wasn't bureaucracy. It was the system working as it should when the risk is real.",
+    whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. I exposed to pricing principle which integrity, traveloka famous for 'honest price' guarantees you pay exactly what you see. No hidden booking fees, sudden that inflate your total when checking out.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision",
 
     heroImage: "assets/portfolio/traveloka-hero.gif",
-
     sectionImages: [
-      { url: "assets/portfolio/gestalt-before-after-wireframe.png", caption: "Before: similar colors representing unrelated information, no clear grouping. After: Gestalt principles applied, grouped by type.", section: "situation" },
-      { url: "assets/portfolio/gestalt-principles.png",             caption: "Gestalt law of Similarity and Proximity: the theoretical foundation for the redesign",                                              section: "direction" },
-      { url: "assets/portfolio/hotel-card-old-vs-new.png",          caption: "Old hotel card design vs new. Pricing, credibility, and hotel info now in distinct visual clusters.",                               section: "direction" }
+      { url: "assets/portfolio/before-after-hotel.png", section: "situation" },
+
     ]
   },
   {
