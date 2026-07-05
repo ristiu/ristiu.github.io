@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZ4SXY87BP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TZ4SXY87BP');
+  </script>
   <!-- Theme color for browser chrome — updated by JS when folder color is known -->
   <meta name="theme-color" content="#ffffff" />
   <style>html, body { background: #ffffff; margin: 0; }</style>
@@ -128,6 +136,7 @@
         initReadGate();
         initArticleExpand();
         initArticleStack();
+        initSectionTracking();
       }
 
       const heroImg = content.querySelector('.project-hero-mainimg');
@@ -460,12 +469,12 @@
       const bodyClose = `</div>`;
 
       const hookHtml = p.hook ? `
-        <div class="content-section" id="section-hook">
+        <div class="content-section" id="section-hook" data-section="hook">
           <blockquote class="hook-text">${p.hook}</blockquote>
         </div>` : '';
 
       const impactHtml = p.impact && p.impact.length ? `
-        <div class="content-section" id="section-outcome">
+        <div class="content-section" id="section-outcome" data-section="outcome">
           <p class="section-heading">Outcome</p>
           <ol>${p.impact.map(i => `<li>${i}</li>`).join('')}</ol>
         </div>` : '';
@@ -484,7 +493,7 @@
       }
 
       const situationHtml = (p.situation || p.insight) ? `
-        <div class="content-section" id="section-situation">
+        <div class="content-section" id="section-situation" data-section="situation">
           <p class="section-heading">Situation</p>
           ${p.situation ? `<p>${p.situation}</p>` : ''}
           ${p.insight ? `<p>${p.insight}</p>` : ''}
@@ -497,7 +506,7 @@
       const directionRestParas = directionParas.slice(1).join('\n\n');
 
       const cardHtml = (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
-        <div class="content-section" id="section-direction">
+        <div class="content-section" id="section-direction" data-section="approach">
           <p class="section-heading">Approach & Contribution</p>
           ${directionFirstPara ? `<p>${directionFirstPara}</p>` : ''}
           <div class="direction-cols">
@@ -510,7 +519,7 @@
           ${p.contribution ? `<p>${p.contribution}</p>` : ''}
           ${sectionPhotos('direction')}
         </div>` : (p.direction ? `
-        <div class="content-section" id="section-direction">
+        <div class="content-section" id="section-direction" data-section="approach">
           <p class="section-heading">Approach & Contribution</p>
           ${directionParas.map(para => `<p>${para}</p>`).join('')}
           ${p.contribution ? `<p>${p.contribution}</p>` : ''}
@@ -519,7 +528,7 @@
 
       // What shifted + screenshot side by side
       const whatShiftedHtml = p.whatShifted ? `
-        <div class="content-section" id="section-shifted">
+        <div class="content-section" id="section-shifted" data-section="reflection">
           <p class="section-heading">My Reflection</p>
           ${p.screenshots && p.screenshots.length ? `
           <div class="shifted-cols">
@@ -644,9 +653,29 @@
       btn.addEventListener('click', () => {
         gate.classList.remove('is-closed');
         btn.classList.add('is-hidden');
-        // Smooth scroll just past the fold so first section comes into view
         gate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const projectId = window.location.hash.replace('#', '');
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'read_case_study', { project_id: projectId });
+        }
       });
+    }
+
+    function initSectionTracking() {
+      const projectId = window.location.hash.replace('#', '');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const section = e.target.dataset.section;
+          if (section && typeof gtag !== 'undefined') {
+            gtag('event', 'section_viewed', { section, project_id: projectId });
+          }
+          observer.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('[data-section]').forEach(el => observer.observe(el));
     }
 
     function initRisoImages() {

@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZ4SXY87BP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TZ4SXY87BP');
+  </script>
   <style>
     @view-transition { navigation: auto; }
     ::view-transition-old(root) {
@@ -64,12 +72,12 @@
   <main class="page" id="main-content">
 
     <!-- Portfolio -->
-    <section class="section section--stack" style="padding-top: 3rem; margin-bottom: 5rem;">
+    <section class="section section--stack" data-track="portfolio_list" style="padding-top: 3rem; margin-bottom: 5rem;">
       <div class="stack-container" id="portfolio-list"></div>
     </section>
 
     <!-- AI + analog -->
-    <section class="section" style="margin-left:-1.25rem;padding-left:0;">
+    <section class="section" data-track="playground_mention" style="margin-left:-1.25rem;padding-left:0;">
       <div class="tree-node-wrapper">
         <p class="tree-node-text">Lately I'm building with
           <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/offline-to-online-2.jpeg">AI ◁°_°▷</strong>
@@ -446,6 +454,12 @@
       card.addEventListener('click', (e) => {
         e.preventDefault();
 
+        const projectTitle = card.querySelector('.stack-card-title')?.textContent?.trim();
+        const projectId = (href || '').split('#')[1];
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'project_click', { project_title: projectTitle, project_id: projectId });
+        }
+
         if (href.includes('#leadership')) { postItBurst(card, href); return; }
         if (href.includes('#context-labs')) { letterBurst(card, href); return; }
 
@@ -709,6 +723,31 @@
     }
     window.addEventListener('scroll', updateScrollHint, { passive: true });
     updateScrollHint();
+  </script>
+
+  <script>
+    // ── Analytics: footer link clicks ────────────────────────
+    document.querySelectorAll('.footer-action').forEach(link => {
+      link.addEventListener('click', () => {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'footer_click', { label: link.textContent.trim() });
+        }
+      });
+    });
+
+    // ── Analytics: section scroll depth ──────────────────────
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const label = e.target.dataset.track;
+        if (label && typeof gtag !== 'undefined') {
+          gtag('event', 'section_viewed', { section: label, page: 'home' });
+        }
+        sectionObserver.unobserve(e.target);
+      });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll('[data-track]').forEach(el => sectionObserver.observe(el));
   </script>
 </body>
 </html>
