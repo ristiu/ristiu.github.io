@@ -25,7 +25,7 @@ const projects = [
     ],
 
     
-    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.png",
+    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.jpg",
     heroImage: "assets/portfolio/efishery-hero.gif",
 
   },
@@ -54,7 +54,7 @@ const projects = [
 
     heroImage: "assets/portfolio/traveloka-hero.gif",
     sectionImages: [
-      { url: "assets/portfolio/before-after-hotel.png", section: "situation" },
+      { url: "assets/portfolio/before-after-hotel.jpg", section: "situation" },
 
     ]
   },
@@ -90,6 +90,7 @@ const projects = [
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_68b9577e5e5b43f2ba8c550838a39d3a~mv2.jpg",  caption: "Warung — the micro retail stores Warung Pintar serves",                        section: "situation" },
+      { url: "assets/portfolio/warehouse-scatter-plot.jpg", caption: "Picking duration vs SKU quantity and SKU line count — the data that revealed the real bottleneck", section: "situation" },
       { url: "https://static.wixstatic.com/media/242cb7_f69062528b57422ba517613f41f46bed~mv2.png", caption: "Picking duration correlates with SKU line variety — not quantity",             section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_716a0c48ae634ab2990d3eb6d563f4f7~mv2.png", caption: "No pattern between quantity and duration. Variety is the real driver.",        section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_47ac1be737bd42f69daeb83fd79b0edf~mv2.png", caption: "Mapping picking methods: order volume vs territory",                           section: "direction" },
@@ -138,7 +139,7 @@ const projects = [
       { url: "https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif",                   caption: "The lenticular concept: a photo that shifts and moves depending on viewing angle",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png",                   caption: "Tap to connect: NFC chip links the printed photo to its full series in the cloud",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg",                   caption: "Exploring the end to end experience, from capture to print to interaction",                                    section: "direction" },
-      { url: "assets/portfolio/lenticular-booth.png",                                                                                 caption: "Industrial lenticular printers, A modular camera rig to capture the lenticular effect",                     section: "direction" },
+      { url: "assets/portfolio/lenticular-booth.jpg",                                                                                 caption: "Industrial lenticular printers, A modular camera rig to capture the lenticular effect",                     section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_1a274806132d42d1ad30a1d48ef42cd9~mv2.png",                   caption: "Connected experience concept: tap, choose an action, link to cloud gallery",                                   section: "contribution" }
     ]
   },
