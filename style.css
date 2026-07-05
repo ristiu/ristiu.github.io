@@ -898,9 +898,10 @@ a:hover { color: var(--accent); }
 .scroll-hint {
   position: fixed;
   bottom: 2rem;
-  left: calc(50% + 190px);
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--mono);
-  font-size: 1rem;
+  font-size: 1.43rem;
   color: var(--accent);
   text-decoration: none;
   opacity: 0.8;
@@ -911,10 +912,6 @@ a:hover { color: var(--accent); }
 
 .scroll-hint.hidden { opacity: 0; pointer-events: none; }
 .scroll-hint:hover { opacity: 1; }
-
-@media (min-width: 600px) {
-  .scroll-hint { left: calc(50% + 270px); }
-}
 
 @keyframes nudge {
   0%, 100% { transform: translateY(0); }
@@ -1050,7 +1047,7 @@ a:hover { color: var(--accent); }
   .project-main #section-hook {
     max-width: 600px;
     margin: 0 auto;
-    padding: 0 20px 12vh;
+    padding: 0 20px 50px;
     box-sizing: border-box;
     /* Explicit color so hook stays colored when body background transitions to white */
     background: #ffffff;
@@ -1148,7 +1145,7 @@ a:hover { color: var(--accent); }
   }
 
   #section-hook {
-    padding: 0 20px 12vh;
+    padding: 0 20px 50px;
   }
 }
 
@@ -1229,6 +1226,7 @@ a:hover { color: var(--accent); }
   margin: 0 auto;
   max-width: 100%;
   background: #ffffff;
+  box-shadow: inset 0 0 60px 40px #ffffff;
 }
 
 .project-hero-mainimg {
@@ -1249,11 +1247,8 @@ a:hover { color: var(--accent); }
 .project-hero-imgwrap::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 55%;
-  background: transparent;
+  inset: 0;
+  box-shadow: inset 0 0 80px 40px #ffffff, inset 0 -100px 80px 30px #ffffff;
   z-index: 2;
   pointer-events: none;
 }
@@ -1675,7 +1670,7 @@ ol li, ul li {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 0;
   margin-top: 28px;
   padding-bottom: 8px;
 }

@@ -25,9 +25,6 @@
     </filter>
   </svg>
 
-  <!-- Scroll hint — same as homepage -->
-  <a class="scroll-hint js-proj-scroll-hint" href="#" aria-label="Scroll down" onclick="window.scrollBy({top: window.innerHeight * 0.8, behavior:'smooth'}); return false;">↓</a>
-
 <div class="project-layout">
 
   <!-- Left sidebar — desktop only -->
@@ -535,16 +532,16 @@
       return `
         ${heroHtml}
         ${hookHtml}
+        <div class="project-body" style="padding-top:0;padding-bottom:0;">${impactHtml}</div>
         <div class="read-gate is-closed" id="read-gate">
           ${body}
-            ${impactHtml}
             ${situationHtml}
             ${cardHtml}
             ${whatShiftedHtml}
           ${bodyClose}
         </div>
         <div class="project-body" style="padding-top:0;padding-bottom:2rem;">
-          <button class="read-more-btn" id="read-more-btn">Read case study ↓</button>
+          <button class="read-more-btn" id="read-more-btn">Read case study</button>
         </div>
       `;
     }
@@ -673,14 +670,6 @@
     }, 600);
 
 
-    // ── Scroll hint: visible near top, hides once reading, reappears on scroll back
-    const projScrollHint = document.querySelector('.js-proj-scroll-hint');
-    function updateProjScrollHint() {
-      const inHero = window.scrollY < window.innerHeight * 0.6;
-      projScrollHint.classList.toggle('hidden', !inHero);
-    }
-    window.addEventListener('scroll', updateProjScrollHint, { passive: true });
-    updateProjScrollHint();
 
     // Back button — View Transitions handles the fade automatically
     // (no manual veil needed)
