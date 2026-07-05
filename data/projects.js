@@ -189,14 +189,14 @@ const projects = [
     folderColor: "#ffffff",
     title: "Leadership and Team Management Principle",
     subtitle: "Build High Performing Team",
-    company: "eFishery · Design Leadership",
+    company: "",
     tags: ["Leadership", "Team Management", "Design Ops"],
     heroImage: "",
     articleBg: "#4A5AE8",
     articles: [
       {
         id: "high-performing-team",
-        title: "Leadership and Team Management to Build High Performing Team",
+        title: "Building High Performing Team",
         sections: [
           {
             type: "intro",
@@ -204,7 +204,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/leadership-principles.png",
+            url: "assets/portfolio-leadership/high-performing-team.jpg",
             caption: "Purpose, People, Process, the three principles I use to sustain a high-performing team"
           },
           {
@@ -260,7 +260,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-playground/design-workshop.png",
+            url: "assets/portfolio-leadership/design-workshop.jpg",
             caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {
@@ -287,6 +287,48 @@ const projects = [
             body: "I open with shared goal-setting so no one's guessing what we're trying to accomplish. Then I curate the right frameworks — Value vs. Effort, Hypothesis Dumping, Ideation — to focus the room. During the session I keep energy pointed at the target, not the conversation. At the end, output becomes clear next steps, not a pile of sticky notes.",
             quotes: [
               "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
+            ]
+          }
+        ]
+      },
+      {
+        id: "data-design-alliance",
+        title: "Data >< Design Alliance for Greater Impact",
+        sections: [
+          {
+            type: "intro",
+            text: "What sets me apart from other design managers is how I lean into a close partnership with the Data team to drive actionable results using qualitative and quantitative data."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/design-data.jpg",
+            caption: "Data & Product Design producing actionable insight, Product Management influencing business strategy with user-focused value"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "How the alliance works",
+            subtitle: "Three roles, one feedback loop",
+            body: "Data Team quantifies qualitative hypotheses from Product Research. Product Researcher bridges storytelling and data to produce actionable insights — or finds the signal from the Data team in the field. IxD and UX Writer use funnel analysis to inform design decisions. On the other side, Product Manager gains confidence from having both qualitative and quantitative data to influence business strategy.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "What we built together",
+            subtitle: "Reports that drove real decisions",
+            body: "Sample reports from our close collaboration on strategic levers include: Identifying Loyal User Segments and Hypothesis Testing for Churn Predictors. Each report started from a design or research hypothesis and ended as an input to product and business roadmaps.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "The collaboration improved purchasing efficiency and enhanced loyal segment retention.",
+            stats: [
+              "+16.5% conversion rate uplift — statistically significant, p-value 0.0026",
+              "−30% churn in 1 business line — through loyal segment strategy"
+            ],
+            quotes: [
+              "Design team excels at strategizing team collaboration, ensuring clear actionable and effective facilitation between product, business, and data teams. — Sr. Data Manager"
             ]
           }
         ]

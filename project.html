@@ -207,8 +207,8 @@
       const articles = p.articles || [];
 
       // Retro palette — warm, muted, pulled from the "scattered cards" reference
-      const CARD_COLORS   = ['#F2C0B0', '#EDD87A', '#D4895A', '#2C4A3E', '#3D2635', '#E8C4A8'];
-      const CARD_INKS     = ['#1a1a1a', '#1a1a1a', '#1a1a1a', '#f0ede8', '#f0ede8', '#1a1a1a'];
+      const CARD_COLORS   = ['#C2CCBE', '#EDE4A0', '#EEBCAA', '#000000', '#000000', '#C2CCBE'];
+      const CARD_INKS     = ['#000000', '#000000', '#000000', '#ffffff', '#ffffff', '#000000'];
       const CARD_DIVIDERS = ['rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(255,255,255,0.15)', 'rgba(255,255,255,0.15)', 'rgba(0,0,0,0.09)'];
       const STACK_ROTS    = [-7, 5, -4, 8, -6, 3];
       const STACK_TX      = [10, -14, 18, -8, 12, -6];
@@ -343,7 +343,7 @@
             card.dataset.savedInk     = card.style.getPropertyValue('--card-ink');
             card.dataset.savedDivider = card.style.getPropertyValue('--card-divider');
             card.style.setProperty('--card-bg', '#ffffff');
-            card.style.setProperty('--card-ink', '#1a1a1a');
+            card.style.setProperty('--card-ink', '#000000');
             card.style.setProperty('--card-divider', 'rgba(0,0,0,0.09)');
           } else {
             card.style.setProperty('--card-bg',      card.dataset.savedBg      || '');

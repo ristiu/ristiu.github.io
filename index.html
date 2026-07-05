@@ -53,6 +53,7 @@
         <img class="hero-stamp-bg" src="assets/stamp.svg" alt="" aria-hidden="true" />
         <p class="hero-stamp-text">I treat portfolio as trailer, so it will be concise!</p>
       </div>
+
     </div>
     <div class="illustration-group" style="opacity:0;transition:opacity 0.8s ease;">
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
@@ -71,7 +72,7 @@
     <section class="section" style="margin-left:-1.25rem;padding-left:0;">
       <div class="tree-node-wrapper">
         <p class="tree-node-text">Lately I'm building with
-          <strong class="preview-trigger" style="color:#1a1a1a;" data-img="assets/portfolio/offline-to-online-2.jpeg">AI ◁°_°▷</strong>
+          <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/offline-to-online-2.jpeg">AI ◁°_°▷</strong>
           and getting my hands on with analog craft. It's how I keep the taste calibrated. Check my <a href="playground.html" class="accent" style="text-decoration:underline;text-underline-offset:3px;">playground</a> here</p>
       </div>
     </section>
@@ -165,12 +166,12 @@
     const list = document.getElementById('portfolio-list');
 
     const FOLDER_COLORS = [
-      '#C8C0B8', // 1 back  — warm taupe   (Casio)
-      '#EDE4A0', // 2       — pale yellow  (Warung Pintar)
-      '#C8C0B4', // 3       — peach        (Traveloka, was Warung Pintar)
-      '#EEBCAA', // 4       — blush        (Leadership)
-      '#B8CED8', // 5       — powder blue  (Reorder)
-      '#C2CCBE', // 6 front — sage         (O2O)
+      '#4A5AE8', // 1 — Casio, blue
+      '#EDE4A0', // 2 — Warung Pintar, pale yellow
+      '#EEBCAA', // 3 — Traveloka, pale orange
+      '#FF5E32', // 4 — Context Labs, orange-red
+      '#C2CCBE', // 5 — eFishery, sage
+      '#EDE4A0', // 6 — Leadership, pale yellow
     ];
 
     const allCards = [
@@ -254,7 +255,7 @@
         el.style.cssText = `
           position:fixed;
           font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1;
-          color:#fff;background:rgba(0,0,0,0.82);
+          color:#ffffff;background:rgba(0,0,0,0.82);
           border-radius:999px;padding:6px 12px;white-space:nowrap;
           left:${cx}px;top:${cy}px;
           transform:translate(-50%,-50%) scale(0.5) rotate(${(i-1)*4}deg);
@@ -303,9 +304,9 @@
       document.body.appendChild(overlay);
 
       const STICKIES = [
-        { color: '#FFE566', icon: '✿',      bold: true  },
-        { color: '#FF9ED2', icon: '♥',     bold: true  },
-        { color: '#80D4FF', icon: ':_)',    bold: true  },
+        { color: '#FF5E32', icon: '✿',      bold: true  },
+        { color: '#C2CCBE', icon: '♥',     bold: true  },
+        { color: '#4A5AE8', icon: ':_)',    bold: true  },
       ];
       const spreads = [
         { dx: -28, dy: -58, rot: -9  },
@@ -331,7 +332,7 @@
       });
 
       // Confetti particles
-      const CONFETTI_COLORS = ['#FFE566','#FF9ED2','#80D4FF','#FF5E32','#A8E6CF','#FFB347'];
+      const CONFETTI_COLORS = ['#FF5E32','#C2CCBE','#4A5AE8','#FF5E32','#C2CCBE','#FF5E32'];
       const confettiEls = Array.from({ length: 18 }, (_, i) => {
         const el = document.createElement('span');
         const size = 4 + Math.random() * 5;
@@ -411,7 +412,7 @@
         el.style.cssText = `
           position:fixed;
           font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;line-height:1;
-          color:#1a1a1a;
+          color:#000000;
           left:${cx}px;top:${cy}px;
           transform:translate(-50%,-50%) scale(0.2) rotate(${(i - 3.5) * 5}deg);
           opacity:0;will-change:transform,opacity;transition:none;`;
@@ -506,7 +507,7 @@
     // ── Hello letter colour wave ────────────────────────────
     const helloWord = document.querySelector('.hello-word');
     const helloLetters = document.querySelectorAll('.hello-letter');
-    const colors = ['#FF5E32','#f7c59f','#e8a87c','#FF5E32','#ff8c5e'];
+    const colors = ['#FF5E32','#ffffff','#FF5E32','#FF5E32','#FF5E32'];
 
     helloWord.addEventListener('mouseenter', () => {
       helloLetters.forEach((el, i) => {

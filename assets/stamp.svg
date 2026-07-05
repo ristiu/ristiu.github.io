@@ -4,8 +4,17 @@
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="988.000000pt" height="1280.000000pt" viewBox="0 0 988.000000 1280.000000"
  preserveAspectRatio="xMidYMid meet">
+<defs>
+  <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65 0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+    <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blended"/>
+    <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+  </filter>
+</defs>
 <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
-fill="#4A5AE8" stroke="none">
+fill="#4A5AE8" stroke="none" filter="url(#grain)" style="filter:url(#grain)"
+opacity="1">
 <path d="M7915 12790 c-22 -4 -203 -18 -402 -31 -200 -13 -363 -27 -363 -31 0
 -5 9 -26 20 -47 42 -83 43 -202 1 -295 -28 -64 -104 -141 -170 -173 -48 -24
 -68 -28 -146 -28 -77 0 -98 4 -147 27 -156 73 -236 242 -194 407 9 35 14 66
