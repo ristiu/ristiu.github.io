@@ -63,29 +63,28 @@ const projects = [
     folderColor: "#ffffff",
     title: "Improving Warehouse Logistics Efficiency",
     subtitle: "Service Prototyping",
-    company: "Warung Pintar · Supply Chain",
+    company: "Warung Pintar",
     industry: "Supply Chain, Retail",
     year: "",
     role: "UX Researcher",
-    tags: ["Service Design", "Field Research", "Data Analysis", "UX Research", "Supply Chain", "Warehouse Operations"],
+    tags: ["Service Design", "Data Analysis", "Service Prototyping", "Warehouse Operations"],
     heroImage: "assets/portfolio/warehouse-hero.gif",
 
-    hook: "How do you speed up warehouse picking when the bottleneck isn't the people — it's the system they're trapped in?",
+    hook: "How do you optimize up warehouse picking processes that accomodate varying order volumes and variant SKUs?",
 
     impact: [
-      "6.7x faster picking time — zone & cluster picking vs discrete singular picking",
-      "Cluster picking adopted permanently in high-volume warehouses post-rollout",
-      "Simpler method retained for new warehouses — right-sized by context, not forced to fit",
-      "Picker app designed to work without relying on language fluency"
+      "6.7x faster probable picking time from simulation zone & cluster picking vs discrete singular picking",
+      "Cluster picking adopted in high-volume warehouses post-rollout",
+      "Picker app designed heavy on simple visual cues, to accommodate diverse literacy levels",
     ],
 
-    situation: "Warung Pintar built its own distribution center to serve micro retail warungs — shops that order 4x more SKU lines than typical e-commerce. The original picking method had one picker handling one order at a time. As order volume grew, pickers were overwhelmed while checkers sat idle waiting. The system wasn't broken — it was just designed for a scale that no longer existed.",
+    situation: "Since Warung Pintar built its own distribution center to serve micro retail warungs, shops that order 4x more SKU lines than typical e-commerce. The original picking method had one picker handling one order at a time. As order volume grew, pickers were overwhelmed while checkers sat idle waiting. The picking system need to be optimized for bigger scale.",
 
-    insight: "Traveling between warehouse locations — not searching, not picking — took the longest time. Data confirmed it: picking duration correlated with SKU line variety, not quantity. A picker walking to collect 3 different items took longer than one collecting 100 units of the same item. The problem wasn't speed. It was distance.",
+    insight: "Traveling between warehouse locations from shelf to shelf took the longest time. Data confirmed, that picking duration correlated with SKU line variety, not quantity. A picker walking to collect 3 different items took longer than one collecting 100 units of the same item.",
 
-    direction: "We started with zero context on warehouse operations. Desktop research surfaced several picking methods — but none were obviously right for Warung Pintar's unique order profile. We mapped them on two axes: order volume and territory. That gave us the direction: from discrete singular picking to zone and cluster/batch picking.\n\nBefore touching the real warehouse, we ran a service prototype — VP, data scientists, PMs, and engineers all became pickers and checkers for a day. Everyone felt the experience firsthand. That session surfaced things no diagram would have caught.\n\nWhat we killed: the assumption that one picking method could work across all warehouse types. High-volume warehouses got cluster picking. New warehouses kept the simpler flow.",
+    direction: "We started with zero context on warehouse operations. Desktop research surfaced several picking methods but none were obviously right for Warung Pintar's unique order profile. We mapped them on two axes: order volume and territory. That gave us the direction, from discrete singular picking to zone and cluster/batch picking.\n\nBefore touching the real warehouse, we ran a service prototyping that included VP, data scientists, PMs, and engineers all became pickers and checkers for a day. Everyone felt the experience firsthand. That session surfaced things no diagram would have caught.\n\nWhat we killed was the assumption that one picking method could work across all warehouse types. New conclusions were drawn based on the specific context of each warehouse. High-volume warehouses got cluster picking. New warehouses kept the simpler flow.",
 
-    contribution: "UX Researcher. I ran field observation using timed tracking, identified the traveling bottleneck from data, designed the service prototyping session, accompanied the live rollout, and designed the picker app interface. Pickers came from diverse local backgrounds — some not fully fluent in Bahasa Indonesia. I designed the UI to be understood without depending on language, using visual cues that worked across literacy levels.",
+    contribution: "As UX Researcher. I ran field observation using timed tracking, identified the traveling bottleneck from data, designed the service prototyping session, accompanied the live rollout, and designed the picker app interface. Pickers came from diverse local backgrounds — some not fully fluent in Bahasa Indonesia. I designed the UI to be understood without depending on language, using visual cues that worked across literacy levels.",
 
     whatShifted: "Before: checkers played Mobile Legend waiting for pickers who were exhausted walking the full warehouse alone. After: the workload balanced because the system matched how the warehouse actually operated.\n\n\"But if you never try, you'll never know.\" I came into this with zero warehouse context. What I learned: too many variables in one experiment makes it hard to isolate what actually worked. That honesty shaped how I design experiments now.",
 
@@ -110,40 +109,36 @@ const projects = [
     title: "Forecasting Visual Product Trends",
     subtitle: "Japan & Indonesia Youth Segment",
     company: "Joint venture: Casio Design Japan, Chiba University, Institut Teknologi Bandung",
-    industry: "Design Research, Consumer Electronics",
+    industry: "Consumer Electronics",
     year: "2014",
     role: "Design Researcher",
-    tags: ["Trend Forecasting", "Ethnography", "Design Speculation", "Design Research", "Consumer Electronics"],
+    tags: ["Trend Forecasting", "Design Speculation", "Design Research", "Ethnography", "Consumer Electronics"],
 
-    hook: "What happens when you ask 150 people across two countries the same question: what will you do with your photos two years from now?",
+    hook: "On the next 4 years, what will happen to visual imagery product with the rise of digital photography?",
 
     impact: [
-      "Forecast validated within a year. Instagram's Boomerang launched, echoing the same morphing-photo instinct",
+      "Forecast validated within 3 year. Instagram's Boomerang launched, echoing the same morphing-photo instinct",
       "Analog camera resurgence confirmed the predicted retro nuance trend",
-      "150 participants studied across Indonesia and Japan. Full ethnographic ownership",
-      "Concept never commercialized, but the trend signal it was built on proved accurate"
     ],
 
-    situation: "Casio Design Japan, Chiba University, and Institut Teknologi Bandung partnered to ask a forward looking question. What if the boundary between physical and digital photos disappeared. Smartphone cameras were getting good and cheap. Storage was filling up fast. Instagram had just shown up. Nobody yet knew what came next.",
+    situation: "We came with so many proposals but the question that stick to us is, what if the boundary between physical and digital photos disappeared. Smartphone cameras were getting good and cheap. Storage was filling up fast. Instagram had just shown up. Nobody yet knew what came next.",
 
-    insight: "People weren't just taking more photos. They were quietly mourning the ones they lost. 6 out of 10 participants admitted their digital photos from 10 years ago were gone. The printed ones from the same decade were still sitting safely in a wardrobe. Digital was convenient. Physical was permanent. People wanted both, and nothing was giving them both at once.",
+    insight: "6 out of 10 targeted consumers admitted their digital photos from 10 years ago were gone. The printed ones from the same decade were still sitting safely in a wardrobe. Digital was convenient. Physical was more lasting. People wanted both, and nothing was giving them both at once.",
 
-    direction: "I ran the full ethnographic study myself, across 150 participants in Indonesia and Japan. We built a simple framework: look at the recent past, look at the present, project forward. Three repeating signals stood out: a pull toward retro nuance, a growing storage problem, and a quiet preference for physical permanence.\n\nFrom there we explored a concept: lenticular photos, the kind that shift and move depending on the angle you view them. Physical, but alive. We tested reactions with three sample cards: a flat photo, a morphing lenticular photo, and a 3D lenticular photo. People were genuinely intrigued by the morphing one. It felt like the photo had a secret.\n\nWe explored building it end to end. NFC chip embedded in the printed photo, tap it with your phone, and it pulls the full photo series from the cloud. We even designed a 360 degree adjustable camera rig to capture the right angles for the lenticular effect.\n\nWhat we killed: mass production. Industrial lenticular printers needed heat processes and large material sizes, viable for ad campaigns, not for someone's family photo from a weekend trip. We never followed up on solving that cost problem, and the concept stayed at the prototype stage.",
+    direction: "We ran the full ethnographic study, across 150 participants in Indonesia and Japan. We built a simple framework: look at the recent past trend, look at the present trend, project forward. Three repeating signals stood out which are a pull toward retro nuance, a growing storage problem, and a quiet preference for physical permanence.\n\nFrom there we explored a concept: lenticular photos, the kind that shift and move depending on the angle you view them. Physical, but alive. We tested reactions with three sample cards: a flat photo, a morphing lenticular photo, and a 3D lenticular photo. People were genuinely intrigued by the morphing one. It felt like the photo had a secret.\n\nWe explored building it end to end. NFC chip embedded in the printed photo, tap it with your phone, and it pulls the full photo series from the cloud. We even designed a 360 degree adjustable camera rig to capture the right angles for the lenticular effect.\n\nWhat we killed: mass production. Industrial lenticular printers needed heat processes and large material sizes, viable for ad campaigns, not for someone's family photo from a weekend trip. We never followed up on solving that cost problem, and the concept stayed at the prototype stage.",
 
-    contribution: "Design Researcher. I owned the ethnographic research end to end across all 150 participants in both countries, synthesized the trend signals, and led the design concept from lenticular photo prototyping through to the NFC interaction model.",
+    contribution: "As a Design Researcher. I synthesized the ethnographic research end to end across all 150 participants in both countries for the trend signals, and led the design concept from lenticular photo prototyping through to the NFC interaction model.",
 
-    whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended wasn't the lenticular photo itself. It was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
+    whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
     heroImage: "assets/portfolio/casio-hero.gif",
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },
-      { url: "https://static.wixstatic.com/media/242cb7_89aa46a90c4f40b3a5dfcd081ad2559b~mv2_d_4032_3024_s_4_2.png", caption: "Participants reproduced several takes per moment, then kept only the best one",                                 section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif",                   caption: "The lenticular concept: a photo that shifts and moves depending on viewing angle",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png",                   caption: "Tap to connect: NFC chip links the printed photo to its full series in the cloud",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg",                   caption: "Exploring the end to end experience, from capture to print to interaction",                                    section: "direction" },
-      { url: "https://static.wixstatic.com/media/242cb7_95020ef2345141d08d8e739ab6fb7650~mv2.png",                   caption: "Industrial lenticular printers required heat processing and large material, too costly for personal use",         section: "direction" },
-      { url: "https://static.wixstatic.com/media/242cb7_6b429834df9a432aab775ef77defbfde~mv2.png",                   caption: "A modular camera rig designed to capture the angles needed for the lenticular effect",                          section: "direction" },
+      { url: "lenticular-booth.png",                                                                                 caption: "Industrial lenticular printers, A modular camera rig to capture the lenticular effect",                     section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_1a274806132d42d1ad30a1d48ef42cd9~mv2.png",                   caption: "Connected experience concept: tap, choose an action, link to cloud gallery",                                   section: "contribution" }
     ]
   },
@@ -152,8 +147,7 @@ const projects = [
     type: "list",
     folderColor: "#ffffff",
     title: "Collective Case Study as Fractional UX Lead",
-    company: "Context Labs · Design Consultancy",
-    heroImage: "assets/portfolio/logo-context-labs.png",
+    company: "Context Labs",
     description: "As Fractional Design Lead, embedded AI design workflows while helping establish design expectations and the hiring roadmap for the first design team. Acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
     clients: [
       {
