@@ -33,18 +33,25 @@
   <!-- Hero -->
   <div class="hero-wrapper hero-wrapper--yellow">
     <div class="hero-note-wrap">
-    <div class="hero-card hero-card--note">
-      <div class="hero-text">
-        <p>
-          <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I describe myself as a
-          <span class="accent preview-trigger" data-img="assets/portfolio/offline-to-online-1.jpeg">product builder</span>,
-          with expertise in design and research.
-        </p>
-        <p>
-          In 10+ years, I've contributed to multinational companies across APAC, UK, and Japan that reaching 45M monthly active users and to early-stage startups finding their product market fitness.
-        </p>
+      <div class="hero-card hero-card--note">
+        <div class="hero-text">
+          <p>
+            <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I describe myself as a
+            <span class="accent preview-trigger" data-img="assets/portfolio/offline-to-online-1.jpeg">product builder</span>,
+            with expertise in design and research.
+          </p>
+          <p>&nbsp;</p>
+          <p class="hero-note-sub">In the past 10+ years,</p>
+          <ul class="hero-note-list">
+            <li>I've contributed to multinational companies across APAC, UK, and Japan reaching 45M monthly active users</li>
+            <li>and to early-stage startups finding their product market fitness.</li>
+          </ul>
+        </div>
       </div>
-    </div>
+      <div class="hero-stamp">
+        <img class="hero-stamp-bg" src="assets/stamp.svg" alt="" aria-hidden="true" />
+        <p class="hero-stamp-text">I treat portfolio as trailer, so it will be concise!</p>
+      </div>
     </div>
     <div class="illustration-group" style="opacity:0;transition:opacity 0.8s ease;">
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
@@ -104,6 +111,8 @@
         wrap.style.animation = 'none';
         wrap.style.transform = '';
         wrap.classList.add('hero-note-wrap--settled');
+        const stamp = document.querySelector('.hero-stamp');
+        if (stamp) stamp.style.animation = 'none';
         const ilGroup = document.querySelector('.illustration-group');
         if (ilGroup) ilGroup.style.opacity = '1';
         return;
@@ -113,16 +122,22 @@
 
       setTimeout(() => {
         heroWrapper.style.overflow = '';
-        // Lock the final rotation as an inline style, then remove the animation
-        // so hover transform isn't overridden by fill-mode: both
         wrap.style.animation = 'none';
         wrap.style.transform = '';
         wrap.classList.add('hero-note-wrap--settled');
 
-        // Leaf fades in after the paper has landed
         const ilGroup = document.querySelector('.illustration-group');
         if (ilGroup) ilGroup.style.opacity = '1';
-      }, 1400); // slightly after animation duration (1.3s)
+      }, 1400);
+
+      // Clear stamp animation after it ends so CSS hover transform works
+      const stamp = document.querySelector('.hero-stamp');
+      if (stamp) {
+        stamp.addEventListener('animationend', () => {
+          stamp.style.animation = 'none';
+          // no inline transform — resting tilt comes from CSS class
+        }, { once: true });
+      }
     })();
   </script>
   <script>
