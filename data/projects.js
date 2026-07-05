@@ -148,12 +148,12 @@ const projects = [
     folderColor: "#ffffff",
     title: "Collective Case Study as Fractional UX Lead",
     company: "Context Labs",
-    description: "As Fractional Design Lead, embedded AI design workflows while helping establish design expectations and the hiring roadmap for the first design team. Acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
+    description: "As Fractional Design Lead, what i do was embedded AI design workflows while helping establish design expectations and the hiring roadmap for the first design team. Acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
     clients: [
       {
-        client: "HAND's by Japan Foundation",
+        client: "Japan Foundation",
         industry: "Public Institution",
-        description: "Facilitated online Design Thinking workshop for 80+ participants during the pandemic, focused on plastic research and sustainable design methods."
+        description: "Facilitated HAND's Online Design Thinking workshop for 80+ participants during the pandemic, focused on plastic research and sustainable design methods."
       },
       {
         client: "Epsylon",
@@ -173,8 +173,13 @@ const projects = [
       {
         client: "Vaya Constellar",
         industry: "Sales Distribution",
-        description: "Brand identity and logo for a sales strategy and distribution partner. Deliverables: brand system aligned to their positioning as a trusted end-to-end commercial partner."
-      }
+        description: "Reponsible for developing company storytelling pitch narratives to communicate organizational vision alongside with managing director that serve +150 community and 15 small and medium-sized enterprises (SMEs). Directing company logos and brand identity systems and manage vendor selection for production."
+      },
+      {
+        client: "Teacup Project",
+        industry: "Community Service",
+        description: "Designed visual sticker pack design during women international days ."
+      },
     ]
   },
   {
@@ -194,12 +199,12 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "In leadership, I apply the same logic I use in design: focus on what actually moves people, not what looks good on a framework. For me, that comes down to three principles to sustain a high-performing team — Purpose, People, and Process."
+            text: "In leadership, I apply the same logic I use in design: focus on what actually moves people. For me, that comes down to three principles to sustain a high-performing team which are Purpose, People, and Process."
           },
           {
             type: "image",
             url: "assets/portfolio-leadership/leadership-principles.png",
-            caption: "Purpose, People, Process — the three principles I use to sustain a high-performing team"
+            caption: "Purpose, People, Process, the three principles I use to sustain a high-performing team"
           },
           {
             type: "section",
