@@ -255,7 +255,7 @@
 
       return `
         <div class="article-page">
-          <div class="article-header" style="view-transition-name:leadership-hero;">
+          <div class="article-header">
             <h1 class="article-title">${p.title}</h1>
             <p class="article-company">${p.company}</p>
           </div>
@@ -320,10 +320,9 @@
     }
 
     function initArticleExpand() {
-      // Overlay lives on body — outside all stacking contexts
       const overlay = document.createElement('div');
       overlay.id = 'article-dim-overlay';
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);opacity:0;pointer-events:none;transition:opacity 0.45s ease;z-index:200;';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.15);opacity:0;pointer-events:none;transition:opacity 0.45s ease;z-index:200;';
       document.body.appendChild(overlay);
 
       function showOverlay() { overlay.style.opacity = '1'; overlay.style.pointerEvents = 'auto'; }
@@ -364,13 +363,11 @@
         });
       });
 
-      // Click the dark overlay to dismiss
       overlay.addEventListener('click', () => {
         const openBody = document.querySelector('.article-card-body.is-open');
         if (!openBody) return;
         openBody.closest('.article-card').querySelector('.article-read-more').click();
       });
-
     }
 
     function renderListProject(p) {
