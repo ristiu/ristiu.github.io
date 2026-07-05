@@ -1398,9 +1398,9 @@ a:hover { color: var(--accent); }
 
 /* ─── Strategy card ──────────────────────────────────────── */
 .strategy-card {
-  background: #f0ede8;
-  border-radius: 4px;
-  padding: 12px;
+  background: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .strategy-card-label {
@@ -1412,12 +1412,7 @@ a:hover { color: var(--accent); }
 }
 
 .strategy-card-title {
-  font-family: 'Newsreader', Georgia, serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 22px;
-  color: #000;
-  margin-bottom: 10px;
+  display: none;
 }
 
 .strategy-card-img {

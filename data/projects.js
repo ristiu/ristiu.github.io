@@ -27,12 +27,9 @@ const projects = [
     
     strategyVol: 1,
     strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
-    strategyCardImage: "assets/images/o2o-strategy-card-opt.png",
-    heroImage: "assets/images/efishery-hero.gif",
-    screenshots: ["assets/images/o2o-whatsapp-opt.png"],
-
-    
-      }
+    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.png",
+    heroImage: "assets/portfolio/efishery-hero.gif",
+    screenshots: ["assets/portfolio/o2o-whatsapp-opt.png"],
 
   },
   {
@@ -61,12 +58,12 @@ const projects = [
 
     whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. 50% of company revenue going through one product category makes every label choice feel less like a UI decision and more like a business policy.\n\nWhat I learned: a good pricing system is invisible to the user and irreplaceable to the business. The goal was never to make pricing more prominent. It was to make the right price feel obvious at the right moment, without the user noticing the system behind it.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision. The escalation to VP and CEO wasn't bureaucracy. It was the system working as it should when the risk is real.",
 
-    heroImage: "assets/images/traveloka-hero.gif",
+    heroImage: "assets/portfolio/traveloka-hero.gif",
 
     sectionImages: [
-      { url: "assets/hotel-booking/gestalt-before-after-wireframe.png", caption: "Before: similar colors representing unrelated information, no clear grouping. After: Gestalt principles applied, grouped by type.", section: "situation" },
-      { url: "assets/hotel-booking/gestalt-principles.png",             caption: "Gestalt law of Similarity and Proximity: the theoretical foundation for the redesign",                                              section: "direction" },
-      { url: "assets/hotel-booking/hotel-card-old-vs-new.png",          caption: "Old hotel card design vs new. Pricing, credibility, and hotel info now in distinct visual clusters.",                               section: "direction" }
+      { url: "assets/portfolio/gestalt-before-after-wireframe.png", caption: "Before: similar colors representing unrelated information, no clear grouping. After: Gestalt principles applied, grouped by type.", section: "situation" },
+      { url: "assets/portfolio/gestalt-principles.png",             caption: "Gestalt law of Similarity and Proximity: the theoretical foundation for the redesign",                                              section: "direction" },
+      { url: "assets/portfolio/hotel-card-old-vs-new.png",          caption: "Old hotel card design vs new. Pricing, credibility, and hotel info now in distinct visual clusters.",                               section: "direction" }
     ]
   },
   {
@@ -79,7 +76,7 @@ const projects = [
     year: "",
     role: "UX Researcher",
     tags: ["Service Design", "Field Research", "Data Analysis", "UX Research", "Supply Chain", "Warehouse Operations"],
-    heroImage: "assets/images/warehouse-hero.gif",
+    heroImage: "assets/portfolio/warehouse-hero.gif",
 
     hook: "How do you speed up warehouse picking when the bottleneck isn't the people — it's the system they're trapped in?",
 
@@ -145,7 +142,7 @@ const projects = [
 
     whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended wasn't the lenticular photo itself. It was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
-    heroImage: "assets/images/casio-hero.gif",
+    heroImage: "assets/portfolio/casio-hero.gif",
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },
@@ -164,7 +161,7 @@ const projects = [
     folderColor: "#ffffff",
     title: "Collective Case Study as Fractional UX Lead",
     company: "Context Labs · Design Consultancy",
-    heroImage: "assets/images/logo-context-labs.png",
+    heroImage: "assets/portfolio/logo-context-labs.png",
     description: "As Fractional Design Lead, embedded AI design workflows while helping establish design expectations and the hiring roadmap for the first design team. Acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
     clients: [
       {
@@ -215,7 +212,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/leadership/leadership-principles.png",
+            url: "assets/portfolio-leadership/leadership-principles.png",
             caption: "Purpose, People, Process — the three principles I use to sustain a high-performing team"
           },
           {
@@ -271,7 +268,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/playground/design-workshop.png",
+            url: "assets/portfolio-playground/design-workshop.png",
             caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {
