@@ -8,66 +8,32 @@ const projects = [
     industry: "Agriculture",
     year: "2023",
     role: "Design Manager with a team of 4",
-    tags: ["Ecommerce", "Strategy", "Omnichannel", "Field Research", "Agriculture", "UX Research"],
+    tags: ["Ecommerce", "Design Strategy", "Omnichannel", "Ethnography", "Agriculture", "UX Research"],
 
     hook: "How do you reduce the cost of field officers when maintaining human services for every farmer is unsustainable?",
 
-    situation: "Fish farmers in rural East Java order supplies by calling field officers. One officer serves maybe 10 farmers, doesn't work 24 hours, and delays cost orders. We built an app — farmers found it frustrating and kept calling anyway. The company was paying for field officers to do work that could be handled differently, and it wasn't scaling.",
+    situation: "Fish farmers in rural area order supplies by calling field officers by phone. One officer doesn't work 24 hours, and resulted in delays that orders. We built an app, called eFisheryku yet majority farmers found it frustrating and kept calling anyway to order a supplies. The company only counted on field officers, and field officers feels burnout due to so many tasks and it wasn't scaling.",
 
-    insight: "We went to East Java expecting farmers couldn't use apps. That was wrong. 90% of them were already on WhatsApp every day. The problem wasn't capability — it was that we assumed everyone would want to use the app. We designed one solution and expected it to fit everyone. It didn't.",
+    insight: "90% of them were already on WhatsApp every day. But the app adoption is stagnant at 19%, We assumed every farmer would learned to use the app. We designed one solution and expected it to fit everyone. But It didn't.",
 
-    direction: "Instead of forcing farmers into the app, we built a second path. WhatsApp for farmers who prefer it. App for farmers who don't.\n\nI framed this with the team using BCA's model — they don't force everyone to mobile. Some customers go to the teller. Some use ATM. Some use the app. We did the same thing.\n\nI wrote the strategy document to align product, marketing, data, and engineering. Everyone was working in silos. I brought them together with one framework: Value Creation vs. Value Capture — what farmers actually need versus what we want from them.\n\nWhat we killed: the assumption that everyone can use an app. That was the real blocker.",
-
-    contribution: "Design Manager with a team of 4. I owned the strategy direction, did the field research, wrote the cross-functional alignment document, and made the design calls for both WhatsApp and the app.",
+    direction: "Instead of forcing farmers into the app, we built a second path. WhatsApp for farmers who prefer it that build on top of exisiting habits. App for farmers who don't.\n\nI framed this with the team using BCA's model of interfacing they don't force everyone to mobile. Some customers go to the teller. Some use ATM. Some use the app. \n\nMe, my team, and head of design initiate to wrote the design strategy document to align product, marketing, data, and engineering. Since there's a tendenyc everyone was working in silos. We brought them together with framework: Value Creation vs. Value Capture or What farmers actually need versus what we want from them.\n\nIn that what we killed was the assumption that everyone can use an app. That was the real blocker. My contribution as Design Manager with a team of 4. I owned the strategy direction, did the field research, wrote the cross-functional design workshop to align the team, and made the design calls for both WhatsApp and the app.",
 
     impact: [
-      "+35% self-transaction adoption — up from 20% baseline, rural low-tech users",
-      "+16.5% conversion uplift — quick order feature built on this strategy",
-      "5,000 MAU — 6 months post-launch",
-      "Field officer role shifted from order-taking to account management"
+      "+35% self-transaction adoption, up from 19% baseline, rural low-tech users",
+      "+16.5% conversion uplift, quick order feature built on this design strategy",
+      "5,000 MAU, 6 months post-launch",
     ],
 
-    whatShifted: "Before: a field officer spent most of their day taking orders. After: farmers could order at 2am when they realised they needed fish food.\n\nField officers stopped doing operational tasks and started doing relationship work — the kind that actually needs a person. The goal was never to make farmers use the product more. It was to make them need us less, for the things that didn't need us.",
-
+    
     strategyVol: 1,
     strategyTitle: "Reflection on self transaction's Beli Pakan as hygiene volume driver",
-    strategyCardImage: "assets/images/o2o-strategy-card-opt.jpg",
+    strategyCardImage: "assets/images/o2o-strategy-card-opt.png",
     heroImage: "assets/images/efishery-hero.gif",
-    screenshots: ["assets/images/o2o-whatsapp-opt.jpg"],
+    screenshots: ["assets/images/o2o-whatsapp-opt.png"],
 
-    projectPlanning: [
-      {
-        label: "Kick off project",
-        description: "output and outcome alignment, design and research process, roles involved, timeline estimation",
-        bold: true,
-        image: "assets/images/offline-to-online-2.jpeg"
-      },
-      {
-        label: "Field Visit & Hypothesis Dumping",
-        description: "",
-        bold: false,
-        image: "assets/images/offline-to-online-1.jpeg"
-      },
-      {
-        label: "Prioritisation",
-        description: "",
-        bold: false,
-        image: ""
+    
       }
-    ]
-  },
-  {
-    id: "reorder-lifecycle",
-    folderColor: "#ffffff",
-    title: "",
-    subtitle: "",
-    company: "",
-    industry: "",
-    year: "",
-    role: "",
-    impact: [],
-    situation: "",
-    contribution: ""
+
   },
   {
     id: "price-perception",
