@@ -26,7 +26,7 @@ const projects = [
 
     
     strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.jpg",
-    heroImage: "assets/portfolio/efishery-hero.gif",
+    heroImage: "assets/portfolio/efishery-hero.mp4",
 
   },
   {
@@ -52,7 +52,7 @@ const projects = [
 
     whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. I exposed to pricing principle which integrity, traveloka famous for 'honest price' guarantees you pay exactly what you see. No hidden booking fees, sudden that inflate your total when checking out.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision",
 
-    heroImage: "assets/portfolio/traveloka-hero.gif",
+    heroImage: "assets/portfolio/traveloka-hero.mp4",
     sectionImages: [
       { url: "assets/portfolio/before-after-hotel.jpg", section: "situation" },
 
@@ -68,7 +68,7 @@ const projects = [
     year: "",
     role: "UX Researcher",
     tags: ["Service Design", "Data Analysis", "Service Prototyping", "Warehouse Operations"],
-    heroImage: "assets/portfolio/warehouse-hero.gif",
+    heroImage: "assets/portfolio/warehouse-hero.mp4",
 
     hook: "How do you optimize up warehouse picking processes that accomodate varying order volumes and variant SKUs?",
 
@@ -132,7 +132,7 @@ const projects = [
 
     whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
-    heroImage: "assets/portfolio/casio-hero.gif",
+    heroImage: "assets/portfolio/casio-hero.mp4",
 
     sectionImages: [
       { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },

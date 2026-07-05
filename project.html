@@ -141,10 +141,12 @@
 
       const heroImg = content.querySelector('.project-hero-mainimg');
       if (heroImg) {
-        // Wait for hero image — 5s fallback so it never stays hidden
         const fallback = setTimeout(revealContent, 5000);
-        heroImg.addEventListener('load', () => { clearTimeout(fallback); revealContent(); }, { once: true });
-        heroImg.addEventListener('error', () => { clearTimeout(fallback); revealContent(); }, { once: true });
+        const onReady = () => { clearTimeout(fallback); revealContent(); };
+        const loadEvent = heroImg.tagName === 'VIDEO' ? 'canplay' : 'load';
+        heroImg.addEventListener(loadEvent, onReady, { once: true });
+        heroImg.addEventListener('error', onReady, { once: true });
+        if (heroImg.tagName === 'VIDEO' && heroImg.readyState >= 3) onReady();
       } else {
         revealContent();
       }
@@ -444,7 +446,10 @@
             ${p.company ? `<p class="project-hero-company">${p.company}</p>` : ''}
           </div>
           <div class="project-hero-imgwrap">
-            <img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" onload="this.classList.add('is-loaded')" />
+            ${p.heroImage.endsWith('.mp4')
+              ? `<video class="project-hero-mainimg" src="${p.heroImage}" autoplay loop muted playsinline></video>`
+              : `<img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" onload="this.classList.add('is-loaded')" />`
+            }
             <div class="hero-tags js-hero-tags">
               ${p.tags.map((t, i) => {
                 const pos = TAG_POSITIONS[i % TAG_POSITIONS.length];
