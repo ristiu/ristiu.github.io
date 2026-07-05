@@ -46,7 +46,7 @@
           <p>
             <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I'm Risti!
           </p>
-          <p>a <strong class="hero-note-bold">product builder</strong> specialize in design and research.</p>
+          <p>a <strong class="hero-note-bold preview-trigger" data-img="assets/portfolio/builder-sm.png">product builder</strong> specialize in design and research.</p>
           <svg class="hero-note-divider" viewBox="0 0 120 10" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2,5 C8,3.5 14,7 22,4.5 C30,2 38,6.5 46,5 C54,3.5 60,7.5 70,4 C79,1 88,7 98,5.5 C106,4 113,6 118,5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
           </svg>
@@ -80,20 +80,20 @@
     <section class="section" data-track="playground_mention" style="margin-left:-1.25rem;padding-left:0;">
       <div class="tree-node-wrapper">
         <p class="tree-node-text">Lately I'm building with
-          <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/offline-to-online-2.jpeg">AI ◁°_°▷</strong>
+          <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/AI-sm.png">AI ◁°_°▷</strong>
           and getting my hands on with analog craft. It's how I keep the taste calibrated. Check my <a href="playground.html" class="accent" style="text-decoration:underline;text-underline-offset:3px;">playground</a> here</p>
       </div>
     </section>
 
     <!-- Footer -->
     <section class="section footer-links">
-      <a class="footer-action preview-trigger" data-img="assets/portfolio/reorder-lifecycle-2.jpeg" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
+      <a class="footer-action preview-trigger" data-img="assets/portfolio/resume-sm.png" href="https://drive.google.com/file/d/1tx4Blaz3qlt0tcIFIC0cZeSXAPF0ws94/view?usp=drive_link" target="_blank" rel="noopener">
         Download Resume
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-      <a class="footer-action preview-trigger" data-img="assets/portfolio/offline-to-online-1.jpeg" href="https://www.linkedin.com/in/ristiu/" target="_blank" rel="noopener">
+      <a class="footer-action preview-trigger" data-img="assets/portfolio/linkedin-sm.png" href="https://www.linkedin.com/in/ristiu/" target="_blank" rel="noopener">
         Connect via LinkedIn
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -571,7 +571,6 @@
         const trigger = e.target.closest('.preview-trigger');
         if (trigger) {
           preview.classList.remove('visible');
-          previewImg.src = '';
         }
       });
     }
