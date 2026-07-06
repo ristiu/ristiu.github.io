@@ -294,22 +294,22 @@
       });
     }
 
-    // Debounced re-layout — fires after media heights settle
-    let layoutTimer;
-    function scheduleLayout() {
-      clearTimeout(layoutTimer);
-      layoutTimer = setTimeout(layoutCards, 60);
+    // Debounced re-layout — fires after media heights settle (desktop only)
+    if (window.innerWidth >= 700) {
+      let layoutTimer;
+      function scheduleLayout() {
+        clearTimeout(layoutTimer);
+        layoutTimer = setTimeout(layoutCards, 60);
+      }
+      layoutCards();
+      document.querySelectorAll('#canvas-root img').forEach(img => {
+        if (!img.complete) img.addEventListener('load', scheduleLayout);
+      });
+      document.querySelectorAll('#canvas-root video').forEach(v => {
+        v.addEventListener('loadedmetadata', scheduleLayout);
+      });
+      window.addEventListener('load', layoutCards);
     }
-
-    // Run immediately, then re-run each time an image or video reports its real height
-    layoutCards();
-    document.querySelectorAll('#canvas-root img').forEach(img => {
-      if (!img.complete) img.addEventListener('load', scheduleLayout);
-    });
-    document.querySelectorAll('#canvas-root video').forEach(v => {
-      v.addEventListener('loadedmetadata', scheduleLayout);
-    });
-    window.addEventListener('load', layoutCards);
 
     const root = document.getElementById('canvas-root');
 
@@ -330,23 +330,20 @@
     const isMobile = window.innerWidth < 700;
 
     if (isMobile) {
-      // Horizontal row on mobile — swipe left/right to explore
-      const cards = root.querySelectorAll('.card');
-      const cardW = 270;
-      const gap = 28;
-      const topBase = 100;
-      const topOffsets = [0, 0, 0];
-      const tilts = [-2, 1.5, -1];
+      // Horizontal row on mobile — all cards in one scrollable line
+      const cards = [...root.querySelectorAll('.card')];
+      const cardW = 260;
+      const gap   = 24;
+      const topBase = 80;
+      const TILTS = [-2.5, 1.8, -1.2, 2, -1.5, 1.2, -2, 1.8, -1, 2.2];
       cards.forEach((card, i) => {
-        card.style.left  = (gap + i * (cardW + gap)) + 'px';
-        card.style.top   = (topBase + (topOffsets[i] || 0)) + 'px';
-        card.style.width = cardW + 'px';
-        card.style.transform = `rotate(${tilts[i] || 0}deg)`;
+        card.style.left      = (gap + i * (cardW + gap)) + 'px';
+        card.style.top       = topBase + 'px';
+        card.style.width     = cardW + 'px';
+        card.style.transform = `rotate(${TILTS[i % TILTS.length]}deg)`;
       });
       scale = 1;
-      // Start centered on first card
-      const firstCardCx = gap + cardW / 2;
-      tx = window.innerWidth / 2 - firstCardCx;
+      tx = gap;
       ty = 60;
     } else {
       scale = 1;
