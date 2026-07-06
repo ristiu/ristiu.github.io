@@ -11,17 +11,17 @@ Open to Design Manager, Design Lead, Design Strategist, and AI-Native Product Bu
 ## Career highlights
 
 - 45M MAU reached across career, multiple products
-- IDR 9.77B GMV in month one of reorder feature at eFishery
+- IDR 9.77B GMV in month one of reorder feature, agriculture tech
 - +16.5% conversion uplift, statistically significant (p-value 0.0026)
 - +35% self-transaction adoption from 19% baseline, rural low-tech users
-- 5,000 MAU on eFishery O2O product, 6 months post-launch
+- 5,000 MAU on O2O product, agriculture tech, 6 months post-launch
 - Design Manager NPS: 8/10 from Product (41 respondents), 9/10 from Engineering
 - 7 years remote leadership across Indonesia, UK, and Germany
 
 ## Work experience
 
-**eFishery — Design Manager** (Indonesia, Agriculture Tech)
-Led O2O design strategy for fish farmers across rural Indonesia. Built omnichannel product — WhatsApp path for low-tech users, app path for others. Team of 4. Field research, ethnography, cross-functional alignment across product, engineering, data, and marketing.
+**Agriculture Tech — Design Manager** (Indonesia)
+Led O2O design strategy for rural farmers across Indonesia. Built omnichannel product — WhatsApp path for low-tech users, app path for others. Team of 4. Field research, ethnography, cross-functional alignment across product, engineering, data, and marketing.
 
 **Traveloka — Interaction Designer** (APAC, Travel)
 Redesigned hotel booking price perception for 35M MAU. Applied Gestalt principles to information hierarchy. Built pricing label ranking system integrated directly into the pricing engine. Solution reviewed by VP of Product, Head of Pricing, and CEO.
