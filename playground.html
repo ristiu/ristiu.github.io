@@ -170,11 +170,31 @@
       letter-spacing: 0.1em;
       pointer-events: none;
     }
+
+    /* Mobile scroll progress bar */
+    #scroll-progress {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(to right, #FF5E32, #f5c842, #00C896, #5B8DEF, #C374F2);
+      z-index: 200;
+      border-radius: 0 2px 2px 0;
+      transition: width 0.08s linear;
+      pointer-events: none;
+    }
+
+    @media (max-width: 699px) {
+      #scroll-progress { display: block; }
+      .zoom-controls { display: none; }
+    }
   </style>
 </head>
 <body>
 
   <a class="back" href="index.html" aria-label="Back">←</a>
+  <div id="scroll-progress"></div>
 
   <div class="zoom-controls">
     <button class="zoom-btn" id="zoom-in">+</button>
@@ -270,32 +290,30 @@
 
   <script src="cursor.js"></script>
   <script>
-    // Column packer — places cards by column without overlap
+    const root = document.getElementById('canvas-root');
+    const isMobile = window.innerWidth < 700;
+
+    // ── Column packer — desktop only ─────────────────────────────
     function layoutCards() {
       const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
       const COL_X     = [60, 400, 760, 1110];
-      const COL_START = [150, 90, 130, 175]; // staggered row starts
-      const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13]; // per-card top nudge
+      const COL_START = [150, 90, 130, 175];
+      const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13];
       const GAP       = 32;
-
       const colTops = [...COL_START];
-
       cards.forEach((card, i) => {
         const col = parseInt(card.dataset.col) || 0;
         const rot = parseFloat(card.dataset.rot) || 0;
         const jitter = JITTER[i % JITTER.length];
         const top = colTops[col] + jitter;
-
         card.style.left      = COL_X[col] + 'px';
         card.style.top       = top + 'px';
         card.style.transform = `rotate(${rot}deg)`;
-
         colTops[col] = top + card.offsetHeight + GAP;
       });
     }
 
-    // Debounced re-layout — fires after media heights settle (desktop only)
-    if (window.innerWidth >= 700) {
+    if (!isMobile) {
       let layoutTimer;
       function scheduleLayout() {
         clearTimeout(layoutTimer);
@@ -311,213 +329,222 @@
       window.addEventListener('load', layoutCards);
     }
 
-    const root = document.getElementById('canvas-root');
-
-    // State
-    let scale = 1;
-    let tx = 0, ty = 0;
-
-    // Momentum
-    let vx = 0, vy = 0;
-    let lastX, lastY, lastT;
-    let dragging = false;
-    let rafId;
-
-    function applyTransform() {
-      root.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    }
-
-    const isMobile = window.innerWidth < 700;
-
+    // ── Mobile: native horizontal scroll ─────────────────────────
     if (isMobile) {
-      // Horizontal row on mobile — all cards in one scrollable line
+      // Enable native horizontal scroll on the html element
+      document.documentElement.style.overflowX = 'auto';
+      document.documentElement.style.overflowY = 'hidden';
+      document.body.style.overflow = 'visible';
+      document.body.style.height = 'auto';
+      document.body.style.touchAction = 'pan-x';
+      document.body.style.cursor = 'default';
+
+      // Canvas as flex row
+      root.style.position = 'relative';
+      root.style.display = 'flex';
+      root.style.flexDirection = 'row';
+      root.style.alignItems = 'flex-start';
+      root.style.gap = '20px';
+      root.style.padding = '80px 24px 100px';
+      root.style.width = 'max-content';
+      root.style.transform = 'none';
+      root.style.willChange = 'auto';
+
+      // Position each card in the row
       const cards = [...root.querySelectorAll('.card')];
-      const cardW = 260;
-      const gap   = 24;
-      const topBase = 80;
       const TILTS = [-2.5, 1.8, -1.2, 2, -1.5, 1.2, -2, 1.8, -1, 2.2];
       cards.forEach((card, i) => {
-        card.style.left      = (gap + i * (cardW + gap)) + 'px';
-        card.style.top       = topBase + 'px';
-        card.style.width     = cardW + 'px';
+        card.style.position  = 'relative';
+        card.style.left      = '';
+        card.style.top       = '';
+        card.style.width     = '260px';
+        card.style.flexShrink = '0';
         card.style.transform = `rotate(${TILTS[i % TILTS.length]}deg)`;
       });
-      scale = 1;
-      tx = gap;
-      ty = 60;
+
+      // Fade in without zoom entrance
+      root.style.opacity = '1';
+      root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
+      root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
+
+      // Colorful progress bar
+      const bar = document.getElementById('scroll-progress');
+      function updateBar() {
+        const maxScroll = document.documentElement.scrollWidth - window.innerWidth;
+        const pct = maxScroll > 0 ? (window.scrollX / maxScroll) * 100 : 0;
+        bar.style.width = pct + '%';
+      }
+      window.addEventListener('scroll', updateBar, { passive: true });
+      updateBar();
+
     } else {
-      scale = 1;
+      // ── Desktop: canvas pan + zoom ──────────────────────────────
+      let scale = 1;
+      let tx = 0, ty = 0;
+      let vx = 0, vy = 0;
+      let lastX, lastY, lastT;
+      let dragging = false;
+      let rafId;
+
+      function applyTransform() {
+        root.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      }
+
       const canvasCenterX = 600;
       const canvasCenterY = 260;
-      tx = window.innerWidth  / 2 - canvasCenterX * scale;
-      ty = window.innerHeight / 2 - canvasCenterY * scale;
-    }
+      tx = window.innerWidth  / 2 - canvasCenterX;
+      ty = window.innerHeight / 2 - canvasCenterY;
 
-    // ── Zoom-from-far entrance ────────────────────────────────────
-    // Save the final resting state
-    const finalScale = scale, finalTx = tx, finalTy = ty;
+      // Zoom-from-far entrance
+      const finalScale = scale, finalTx = tx, finalTy = ty;
+      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      const startScale = finalScale * 0.22;
+      tx = cx - (cx - finalTx) * (startScale / finalScale);
+      ty = cy - (cy - finalTy) * (startScale / finalScale);
+      scale = startScale;
 
-    // Start zoomed way out, centered on the same point
-    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-    const startScale = finalScale * 0.22;
-    tx = cx - (cx - finalTx) * (startScale / finalScale);
-    ty = cy - (cy - finalTy) * (startScale / finalScale);
-    scale = startScale;
-    applyTransform();
-
-    // Fade in immediately, then spring to final scale after browser commits initial paint
-    // Keep canvas hidden until page fade-in has started (~100ms delay)
-    root.style.opacity = '0';
-    root.style.transition = 'none';
-    applyTransform();
-
-    // Start videos immediately — mobile browsers allow muted autoplay, no gesture needed
-    root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
-
-    setTimeout(() => {
-      root.style.opacity = '1';
-      root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
-      scale = finalScale; tx = finalTx; ty = finalTy;
+      root.style.opacity = '0';
+      root.style.transition = 'none';
       applyTransform();
-      root.addEventListener('transitionend', () => {
-        root.style.transition = '';
-        root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
-      }, { once: true });
-    }, 100);
 
-    // ── Pan with momentum ────────────────────────────────────────
-    function stopMomentum() {
-      cancelAnimationFrame(rafId);
-      vx = 0; vy = 0;
-    }
+      root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
 
-    function startMomentum() {
-      cancelAnimationFrame(rafId);
-      const FRICTION = 0.88;
-      function step() {
-        if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) return;
-        vx *= FRICTION;
-        vy *= FRICTION;
-        tx += vx;
-        ty += vy;
+      setTimeout(() => {
+        root.style.opacity = '1';
+        root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
+        scale = finalScale; tx = finalTx; ty = finalTy;
         applyTransform();
+        root.addEventListener('transitionend', () => {
+          root.style.transition = '';
+          root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
+        }, { once: true });
+      }, 100);
+
+      // Pan with momentum
+      function stopMomentum() {
+        cancelAnimationFrame(rafId);
+        vx = 0; vy = 0;
+      }
+
+      function startMomentum() {
+        cancelAnimationFrame(rafId);
+        const FRICTION = 0.88;
+        function step() {
+          if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) return;
+          vx *= FRICTION; vy *= FRICTION;
+          tx += vx; ty += vy;
+          applyTransform();
+          rafId = requestAnimationFrame(step);
+        }
         rafId = requestAnimationFrame(step);
       }
-      rafId = requestAnimationFrame(step);
-    }
 
-    document.addEventListener('pointerdown', e => {
-      if (e.target.closest('a, button')) return;
-      stopMomentum();
-      dragging = true;
-      lastX = e.clientX; lastY = e.clientY; lastT = Date.now();
-      vx = 0; vy = 0;
-      document.body.classList.add('grabbing');
-      e.target.setPointerCapture?.(e.pointerId);
-    });
+      document.addEventListener('pointerdown', e => {
+        if (e.target.closest('a, button')) return;
+        stopMomentum();
+        dragging = true;
+        lastX = e.clientX; lastY = e.clientY; lastT = Date.now();
+        vx = 0; vy = 0;
+        document.body.classList.add('grabbing');
+        e.target.setPointerCapture?.(e.pointerId);
+      });
 
-    document.addEventListener('pointermove', e => {
-      if (!dragging) return;
-      const now = Date.now();
-      const dt = Math.max(now - lastT, 1);
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      // Rolling velocity sample
-      vx = dx / dt * 16;
-      vy = dy / dt * 16;
-      tx += dx; ty += dy;
-      lastX = e.clientX; lastY = e.clientY; lastT = now;
-      applyTransform();
-    });
-
-    document.addEventListener('pointerup', () => {
-      if (!dragging) return;
-      dragging = false;
-      document.body.classList.remove('grabbing');
-      startMomentum();
-    });
-
-    document.addEventListener('pointercancel', () => {
-      dragging = false;
-      document.body.classList.remove('grabbing');
-    });
-
-    // ── Zoom (wheel scroll = pan, ctrl+wheel / pinch = zoom) ────
-    document.addEventListener('wheel', e => {
-      e.preventDefault();
-      stopMomentum();
-
-      if (e.ctrlKey || e.metaKey) {
-        // Pinch-to-zoom or ctrl+scroll
-        const zoomFactor = e.deltaY < 0 ? 1.06 : 0.94;
-        const newScale = Math.min(Math.max(scale * zoomFactor, 0.15), 5);
-        const mx = e.clientX, my = e.clientY;
-        tx = mx - (mx - tx) * (newScale / scale);
-        ty = my - (my - ty) * (newScale / scale);
-        scale = newScale;
-      } else {
-        // Trackpad two-finger pan
-        tx -= e.deltaX;
-        ty -= e.deltaY;
-      }
-      applyTransform();
-    }, { passive: false });
-
-    // ── Touch (mobile pinch + pan) ───────────────────────────────
-    let touches = {};
-    let pinchDist0, pinchScale0, pinchTx0, pinchTy0, pinchMx, pinchMy;
-
-    document.addEventListener('touchstart', e => {
-      stopMomentum();
-      [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
-      if (!isMobile && Object.keys(touches).length === 2) {
-        const [a, b] = Object.values(touches);
-        pinchDist0 = Math.hypot(b.x - a.x, b.y - a.y);
-        pinchScale0 = scale;
-        pinchTx0 = tx; pinchTy0 = ty;
-        pinchMx = (a.x + b.x) / 2; pinchMy = (a.y + b.y) / 2;
-      }
-    }, { passive: true });
-
-    document.addEventListener('touchmove', e => {
-      e.preventDefault();
-      [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
-      const ids = Object.keys(touches);
-      if (ids.length === 1) {
-        const t = touches[ids[0]];
-        tx += t.x - lastX; ty += t.y - lastY;
-        lastX = t.x; lastY = t.y;
+      document.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const now = Date.now();
+        const dt = Math.max(now - lastT, 1);
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        vx = dx / dt * 16; vy = dy / dt * 16;
+        tx += dx; ty += dy;
+        lastX = e.clientX; lastY = e.clientY; lastT = now;
         applyTransform();
-      } else if (!isMobile && ids.length === 2) {
-        const [a, b] = Object.values(touches);
-        const dist = Math.hypot(b.x - a.x, b.y - a.y);
-        const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), 5);
-        tx = pinchMx - (pinchMx - pinchTx0) * (newScale / pinchScale0);
-        ty = pinchMy - (pinchMy - pinchTy0) * (newScale / pinchScale0);
+      });
+
+      document.addEventListener('pointerup', () => {
+        if (!dragging) return;
+        dragging = false;
+        document.body.classList.remove('grabbing');
+        startMomentum();
+      });
+
+      document.addEventListener('pointercancel', () => {
+        dragging = false;
+        document.body.classList.remove('grabbing');
+      });
+
+      // Wheel: pan or zoom
+      document.addEventListener('wheel', e => {
+        e.preventDefault();
+        stopMomentum();
+        if (e.ctrlKey || e.metaKey) {
+          const zoomFactor = e.deltaY < 0 ? 1.06 : 0.94;
+          const newScale = Math.min(Math.max(scale * zoomFactor, 0.15), 5);
+          const mx = e.clientX, my = e.clientY;
+          tx = mx - (mx - tx) * (newScale / scale);
+          ty = my - (my - ty) * (newScale / scale);
+          scale = newScale;
+        } else {
+          tx -= e.deltaX; ty -= e.deltaY;
+        }
+        applyTransform();
+      }, { passive: false });
+
+      // Touch: pinch + pan (tablet / desktop touch screen)
+      let touches = {};
+      let pinchDist0, pinchScale0, pinchTx0, pinchTy0, pinchMx, pinchMy;
+
+      document.addEventListener('touchstart', e => {
+        stopMomentum();
+        [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
+        if (Object.keys(touches).length === 2) {
+          const [a, b] = Object.values(touches);
+          pinchDist0 = Math.hypot(b.x - a.x, b.y - a.y);
+          pinchScale0 = scale;
+          pinchTx0 = tx; pinchTy0 = ty;
+          pinchMx = (a.x + b.x) / 2; pinchMy = (a.y + b.y) / 2;
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchmove', e => {
+        e.preventDefault();
+        [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
+        const ids = Object.keys(touches);
+        if (ids.length === 1) {
+          const t = touches[ids[0]];
+          tx += t.x - lastX; ty += t.y - lastY;
+          lastX = t.x; lastY = t.y;
+          applyTransform();
+        } else if (ids.length === 2) {
+          const [a, b] = Object.values(touches);
+          const dist = Math.hypot(b.x - a.x, b.y - a.y);
+          const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), 5);
+          tx = pinchMx - (pinchMx - pinchTx0) * (newScale / pinchScale0);
+          ty = pinchMy - (pinchMy - pinchTy0) * (newScale / pinchScale0);
+          scale = newScale;
+          applyTransform();
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', e => {
+        [...e.changedTouches].forEach(t => { delete touches[t.identifier]; });
+        if (Object.keys(touches).length === 0) startMomentum();
+      }, { passive: true });
+
+      // Zoom buttons
+      function zoomTo(factor) {
+        stopMomentum();
+        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        const newScale = Math.min(Math.max(scale * factor, 0.15), 5);
+        tx = cx - (cx - tx) * (newScale / scale);
+        ty = cy - (cy - ty) * (newScale / scale);
         scale = newScale;
         applyTransform();
       }
-    }, { passive: false });
 
-    document.addEventListener('touchend', e => {
-      [...e.changedTouches].forEach(t => { delete touches[t.identifier]; });
-      if (Object.keys(touches).length === 0) startMomentum();
-    }, { passive: true });
-
-    // ── Zoom buttons ─────────────────────────────────────────────
-    function zoomTo(factor) {
-      stopMomentum();
-      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-      const newScale = Math.min(Math.max(scale * factor, 0.15), 5);
-      tx = cx - (cx - tx) * (newScale / scale);
-      ty = cy - (cy - ty) * (newScale / scale);
-      scale = newScale;
-      applyTransform();
+      document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));
+      document.getElementById('zoom-out').addEventListener('click', () => zoomTo(0.8));
     }
-
-    document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));
-    document.getElementById('zoom-out').addEventListener('click', () => zoomTo(0.8));
-
   </script>
 </body>
 </html>
