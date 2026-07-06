@@ -1143,7 +1143,7 @@ a:hover { color: var(--accent); }
   }
 
   .project-hero-imgwrap::after {
-    background: radial-gradient(ellipse 90% 59% at 50% 55%, transparent 36%, #fff 68%);
+    background: radial-gradient(ellipse 90% 75% at 50% 54%, transparent 32%, #fff 75%);
   }
 
   .project-hero-mainimg {
