@@ -112,27 +112,52 @@
     }
     .zoom-btn:hover, .zoom-btn:active { opacity: 1; }
 
+    /* Perspective wrapper — desktop 3D tilt context */
+    #canvas-perspective {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      perspective: 1200px;
+      perspective-origin: 50% 50%;
+    }
+
     /* Cards */
     .card {
       position: absolute;
       width: 300px;
-      background: #ffffff;
+      background: transparent;
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
       cursor: default;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1.2), box-shadow 0.35s ease;
+      will-change: transform;
     }
 
-    .card img {
+    .card:hover {
+      transform: rotate(var(--rot, 0deg)) translateY(-8px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 6px 20px rgba(0,0,0,0.07);
+      z-index: 10;
+    }
+
+    .card img,
+    .card video {
       width: 100%;
       display: block;
       object-fit: cover;
+      transition: transform 0.55s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .card:hover img,
+    .card:hover video {
+      transform: scale(1.07);
     }
 
     /* Cards fade in on page load */
     .card {
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, transform 0.35s cubic-bezier(0.2, 0, 0, 1.2), box-shadow 0.35s ease;
     }
     .card.is-visible {
       opacity: 1;
@@ -145,6 +170,7 @@
       line-height: 1.7;
       color: var(--ink);
       opacity: 0.8;
+      background: transparent;
     }
 
     /* Note cards (text only) */
@@ -156,8 +182,11 @@
     }
 
     .card.card--note .card-caption {
+      position: static;
       padding: 0;
       font-size: 13px;
+      background: none;
+      color: var(--ink);
       opacity: 0.85;
     }
 
@@ -209,6 +238,7 @@
   </div>
 
 
+  <div id="canvas-perspective">
   <div id="canvas-root">
 
     <!-- Add your cards here. Use left/top to position them on the infinite canvas. -->
@@ -294,6 +324,7 @@
 
 
   </div>
+  </div>
 
   <script src="cursor.js"></script>
   <script>
@@ -313,9 +344,9 @@
         const rot = parseFloat(card.dataset.rot) || 0;
         const jitter = JITTER[i % JITTER.length];
         const top = colTops[col] + jitter;
-        card.style.left      = COL_X[col] + 'px';
-        card.style.top       = top + 'px';
-        card.style.transform = `rotate(${rot}deg)`;
+        card.style.left = COL_X[col] + 'px';
+        card.style.top  = top + 'px';
+        card.style.setProperty('--rot', rot + 'deg');
         colTops[col] = top + card.offsetHeight + GAP;
       });
     }
@@ -338,6 +369,9 @@
 
     // ── Mobile: native horizontal scroll ─────────────────────────
     if (isMobile) {
+      // Flatten perspective wrapper so native scroll works
+      document.getElementById('canvas-perspective').style.display = 'contents';
+
       // Enable native horizontal scroll on the html element
       document.documentElement.style.overflow = 'auto';
       document.documentElement.style.height = 'auto';
@@ -387,16 +421,48 @@
 
     } else {
       // ── Desktop: canvas pan + zoom ──────────────────────────────
+      const perspEl = document.getElementById('canvas-perspective');
       let scale = 1;
       let tx = 0, ty = 0;
       let vx = 0, vy = 0;
+      let tiltX = 0, tiltY = 0;
+      const MAX_TILT = 2.5, TILT_K = 0.055;
       let lastX, lastY, lastT;
       let dragging = false;
       let rafId;
 
+      // Cursor float (water drift)
+      let floatX = 0, floatY = 0, targetFloatX = 0, targetFloatY = 0, floatRafId = null;
+
       function applyTransform() {
-        root.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        root.style.transform = `translate(${tx + floatX}px, ${ty + floatY}px) scale(${scale})`;
+        perspEl.style.transform = `rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg)`;
       }
+
+      function resetTilt() {
+        perspEl.style.transition = 'transform 0.6s cubic-bezier(0.2, 0, 0, 1)';
+        perspEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        setTimeout(() => { perspEl.style.transition = ''; tiltX = 0; tiltY = 0; }, 600);
+      }
+
+      function tickFloat() {
+        floatX += (targetFloatX - floatX) * 0.05;
+        floatY += (targetFloatY - floatY) * 0.05;
+        applyTransform();
+        if (Math.abs(targetFloatX - floatX) > 0.05 || Math.abs(targetFloatY - floatY) > 0.05) {
+          floatRafId = requestAnimationFrame(tickFloat);
+        } else {
+          floatRafId = null;
+        }
+      }
+
+      document.addEventListener('mousemove', e => {
+        if (dragging) return;
+        const vcx = window.innerWidth / 2, vcy = window.innerHeight / 2;
+        targetFloatX = ((e.clientX - vcx) / vcx) * 28;
+        targetFloatY = ((e.clientY - vcy) / vcy) * 18;
+        if (!floatRafId) floatRafId = requestAnimationFrame(tickFloat);
+      });
 
       const canvasCenterX = 600;
       const canvasCenterY = 260;
@@ -438,9 +504,11 @@
         cancelAnimationFrame(rafId);
         const FRICTION = 0.88;
         function step() {
-          if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) return;
+          if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) { resetTilt(); return; }
           vx *= FRICTION; vy *= FRICTION;
           tx += vx; ty += vy;
+          tiltX += (Math.max(-MAX_TILT, Math.min(MAX_TILT, -vy * TILT_K)) - tiltX) * 0.14;
+          tiltY += (Math.max(-MAX_TILT, Math.min(MAX_TILT,  vx * TILT_K)) - tiltY) * 0.14;
           applyTransform();
           rafId = requestAnimationFrame(step);
         }
@@ -450,6 +518,7 @@
       document.addEventListener('pointerdown', e => {
         if (e.target.closest('a, button')) return;
         stopMomentum();
+        perspEl.style.transition = '';
         dragging = true;
         lastX = e.clientX; lastY = e.clientY; lastT = Date.now();
         vx = 0; vy = 0;
@@ -466,6 +535,8 @@
         vx = dx / dt * 16; vy = dy / dt * 16;
         tx += dx; ty += dy;
         lastX = e.clientX; lastY = e.clientY; lastT = now;
+        tiltX += (Math.max(-MAX_TILT, Math.min(MAX_TILT, -vy * TILT_K)) - tiltX) * 0.22;
+        tiltY += (Math.max(-MAX_TILT, Math.min(MAX_TILT,  vx * TILT_K)) - tiltY) * 0.22;
         applyTransform();
       });
 
