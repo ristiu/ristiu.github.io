@@ -69,19 +69,20 @@
     /* Back link */
     .back {
       position: fixed;
-      top: 24px; left: 28px;
+      top: 24px; left: 20px;
       font-family: var(--mono);
       font-size: 1.4rem;
       color: var(--ink);
       text-decoration: none;
-      opacity: 0.4;
       z-index: 100;
       transition: opacity 0.15s;
-      /* larger tap target on mobile */
-      padding: 8px;
-      margin: -8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
-    .back:hover { opacity: 1; color: var(--accent); }
+    .back:hover { opacity: 0.7; }
 
     /* Zoom controls */
     .zoom-controls {
@@ -175,7 +176,7 @@
     #scroll-track {
       display: none;
       position: fixed;
-      top: 33px; left: 64px; right: 20px;
+      top: 39px; left: 80px; right: 20px;
       height: 3px;
       background: rgba(0,0,0,0.08);
       border-radius: 2px;
