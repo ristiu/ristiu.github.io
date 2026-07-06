@@ -2102,12 +2102,12 @@ ol li, ul li {
   border-radius: 20px;
 }
 .client-link {
-  font-size: 0.8rem;
   color: rgba(0,0,0,0.3);
   text-decoration: none;
   line-height: 1;
+  vertical-align: middle;
+  margin-left: 4px;
   transition: color 0.15s;
-  margin-left: auto;
 }
 .client-link:hover { color: var(--color-ink); }
 .client-description {
