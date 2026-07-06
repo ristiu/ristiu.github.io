@@ -1250,14 +1250,7 @@ a:hover { color: var(--accent); }
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to right, #fff 0px, transparent 26px),
-    linear-gradient(to left, #fff 0px, transparent 16px),
-    linear-gradient(to bottom, #fff 0px, transparent 108px),
-    linear-gradient(to top, #fff 0px, transparent 159px),
-    linear-gradient(to top, #fff 0px, transparent 164px),
-    linear-gradient(to left, #fff 0px, transparent 121px),
-    radial-gradient(ellipse at bottom right, #fff 0%, transparent 216px);
+  background: radial-gradient(ellipse 75% 53% at 44% 50%, transparent 47%, #fff 76%);
   z-index: 2;
   pointer-events: none;
 }

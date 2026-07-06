@@ -717,8 +717,13 @@
   <!-- DEV ONLY: Vignette tuner — only loads on localhost -->
   <script>
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-    const DEFAULTS = { left: 26, right: 16, top: 108, bottom: 159, bottomExtra: 164, rightExtra: 121, cornerBR: 216 };
-    const vals = { ...DEFAULTS };
+    // — Radial mode (experimental) —
+    const radialVals = { cx: 44, cy: 50, rx: 75, ry: 53, inner: 47, feather: 29 };
+
+    // — Linear mode (matches prod) —
+    const linearVals = { left: 26, right: 16, top: 108, bottom: 159, bottomExtra: 164, rightExtra: 121, cornerBR: 216 };
+
+    let mode = 'radial'; // start in radial mode for experimentation
 
     const panel = document.createElement('div');
     panel.id = 'vignette-tuner';
@@ -730,22 +735,35 @@
       width: 260px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     `;
 
-    function applyVignette() {
+    function getStyleEl() {
       let el = document.getElementById('vignette-dev-style');
       if (!el) { el = document.createElement('style'); el.id = 'vignette-dev-style'; document.head.appendChild(el); }
-      el.textContent = `.project-hero-imgwrap::after {
-  background:
-    linear-gradient(to right, #fff 0px, transparent ${vals.left}px),
-    linear-gradient(to left, #fff 0px, transparent ${vals.right}px),
-    linear-gradient(to bottom, #fff 0px, transparent ${vals.top}px),
-    linear-gradient(to top, #fff 0px, transparent ${vals.bottom}px),
-    linear-gradient(to top, #fff 0px, transparent ${vals.bottomExtra}px),
-    linear-gradient(to left, #fff 0px, transparent ${vals.rightExtra}px),
-    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${vals.cornerBR}px);
-}`;
+      return el;
     }
 
-    function makeSlider(label, key, min, max) {
+    function applyVignette() {
+      const el = getStyleEl();
+      if (mode === 'radial') {
+        const v = radialVals;
+        el.textContent = `.project-hero-imgwrap::after {
+  background: radial-gradient(ellipse ${v.rx}% ${v.ry}% at ${v.cx}% ${v.cy}%, transparent ${v.inner}%, #fff ${v.inner + v.feather}%);
+}`;
+      } else {
+        const v = linearVals;
+        el.textContent = `.project-hero-imgwrap::after {
+  background:
+    linear-gradient(to right, #fff 0px, transparent ${v.left}px),
+    linear-gradient(to left, #fff 0px, transparent ${v.right}px),
+    linear-gradient(to bottom, #fff 0px, transparent ${v.top}px),
+    linear-gradient(to top, #fff 0px, transparent ${v.bottom}px),
+    linear-gradient(to top, #fff 0px, transparent ${v.bottomExtra}px),
+    linear-gradient(to left, #fff 0px, transparent ${v.rightExtra}px),
+    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${v.cornerBR}px);
+}`;
+      }
+    }
+
+    function makeSlider(label, vals, key, min, max) {
       const row = document.createElement('div');
       row.style.cssText = 'display:flex; align-items:center; gap:8px; margin:6px 0;';
       const lbl = document.createElement('span');
@@ -761,47 +779,89 @@
         vals[key] = +input.value;
         num.textContent = vals[key];
         applyVignette();
-        updateCopy();
       });
       row.append(lbl, input, num);
       return row;
     }
 
     function getCSSText() {
-      return `linear-gradient(to right, #fff 0px, transparent ${vals.left}px),\n    linear-gradient(to left, #fff 0px, transparent ${vals.right}px),\n    linear-gradient(to bottom, #fff 0px, transparent ${vals.top}px),\n    linear-gradient(to top, #fff 0px, transparent ${vals.bottom}px),\n    linear-gradient(to top, #fff 0px, transparent ${vals.bottomExtra}px),\n    linear-gradient(to left, #fff 0px, transparent ${vals.rightExtra}px),\n    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${vals.cornerBR}px)`;
+      if (mode === 'radial') {
+        const v = radialVals;
+        return `radial-gradient(ellipse ${v.rx}% ${v.ry}% at ${v.cx}% ${v.cy}%, transparent ${v.inner}%, #fff ${v.inner + v.feather}%)`;
+      } else {
+        const v = linearVals;
+        return `linear-gradient(to right, #fff 0px, transparent ${v.left}px),\n    linear-gradient(to left, #fff 0px, transparent ${v.right}px),\n    linear-gradient(to bottom, #fff 0px, transparent ${v.top}px),\n    linear-gradient(to top, #fff 0px, transparent ${v.bottom}px),\n    linear-gradient(to top, #fff 0px, transparent ${v.bottomExtra}px),\n    linear-gradient(to left, #fff 0px, transparent ${v.rightExtra}px),\n    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${v.cornerBR}px)`;
+      }
     }
 
+    // — Build panels —
     const title = document.createElement('div');
-    title.style.cssText = 'font-weight:bold; margin-bottom:10px; opacity:0.9;';
+    title.style.cssText = 'font-weight:bold; margin-bottom:8px; opacity:0.9;';
     title.textContent = '⚙ Vignette Tuner';
+
+    // Mode toggle
+    const toggleRow = document.createElement('div');
+    toggleRow.style.cssText = 'display:flex; gap:6px; margin-bottom:10px;';
+    const btnRadial  = document.createElement('button');
+    const btnLinear  = document.createElement('button');
+    [btnRadial, btnLinear].forEach(b => {
+      b.style.cssText = `flex:1; padding:4px; border:1px solid rgba(255,255,255,0.3);
+        border-radius:4px; font-family:monospace; font-size:11px; cursor:pointer; background:transparent; color:#fff;`;
+    });
+    btnRadial.textContent = 'Radial';
+    btnLinear.textContent = 'Linear (prod)';
+
+    const radialSliders = document.createElement('div');
+    radialSliders.append(
+      makeSlider('center X', radialVals, 'cx', 0, 100),
+      makeSlider('center Y', radialVals, 'cy', 0, 100),
+      makeSlider('width %', radialVals, 'rx', 10, 200),
+      makeSlider('height %', radialVals, 'ry', 10, 200),
+      makeSlider('inner edge', radialVals, 'inner', 0, 100),
+      makeSlider('feather', radialVals, 'feather', 0, 100)
+    );
+
+    const linearSliders = document.createElement('div');
+    linearSliders.style.display = 'none';
+    linearSliders.append(
+      makeSlider('left', linearVals, 'left', 0, 400),
+      makeSlider('right', linearVals, 'right', 0, 400),
+      makeSlider('top', linearVals, 'top', 0, 400),
+      makeSlider('bottom', linearVals, 'bottom', 0, 600),
+      makeSlider('bottom x2', linearVals, 'bottomExtra', 0, 600),
+      makeSlider('right extra', linearVals, 'rightExtra', 0, 400),
+      makeSlider('corner BR', linearVals, 'cornerBR', 0, 800)
+    );
+
+    function setMode(m) {
+      mode = m;
+      btnRadial.style.background = m === 'radial' ? '#f90' : 'transparent';
+      btnRadial.style.color      = m === 'radial' ? '#000' : '#fff';
+      btnLinear.style.background = m === 'linear' ? '#f90' : 'transparent';
+      btnLinear.style.color      = m === 'linear' ? '#000' : '#fff';
+      radialSliders.style.display = m === 'radial' ? '' : 'none';
+      linearSliders.style.display = m === 'linear' ? '' : 'none';
+      applyVignette();
+    }
+
+    btnRadial.addEventListener('click', () => setMode('radial'));
+    btnLinear.addEventListener('click', () => setMode('linear'));
+    toggleRow.append(btnRadial, btnLinear);
 
     const copyBtn = document.createElement('button');
     copyBtn.style.cssText = `margin-top:10px; width:100%; padding:6px; background:#f90;
       color:#000; border:none; border-radius:4px; font-family:monospace;
       font-size:11px; cursor:pointer; font-weight:bold;`;
     copyBtn.textContent = 'Copy CSS';
-
-    function updateCopy() {}
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(getCSSText());
       copyBtn.textContent = 'Copied!';
       setTimeout(() => copyBtn.textContent = 'Copy CSS', 1500);
     });
 
-    panel.append(
-      title,
-      makeSlider('left', 'left', 0, 400),
-      makeSlider('right', 'right', 0, 400),
-      makeSlider('top', 'top', 0, 400),
-      makeSlider('bottom', 'bottom', 0, 600),
-      makeSlider('bottom x2', 'bottomExtra', 0, 600),
-      makeSlider('corner BR', 'cornerBR', 0, 800),
-      makeSlider('right extra', 'rightExtra', 0, 400),
-      copyBtn
-    );
-
+    panel.append(title, toggleRow, radialSliders, linearSliders, copyBtn);
     document.body.appendChild(panel);
-    applyVignette();
+    setMode('radial');
   }
   </script>
 </body>
