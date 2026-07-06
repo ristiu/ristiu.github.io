@@ -175,8 +175,8 @@
     #scroll-progress {
       display: none;
       position: fixed;
-      bottom: 0; left: 0;
-      height: 4px;
+      top: 0; left: 0;
+      height: 3px;
       width: 0%;
       background: linear-gradient(to right, #FF5E32, #f5c842, #00C896, #5B8DEF, #C374F2);
       z-index: 200;
@@ -355,12 +355,16 @@
       const cards = [...root.querySelectorAll('.card')];
       const TILTS = [-2.5, 1.8, -1.2, 2, -1.5, 1.2, -2, 1.8, -1, 2.2];
       cards.forEach((card, i) => {
-        card.style.position  = 'relative';
-        card.style.left      = '';
-        card.style.top       = '';
-        card.style.width     = '260px';
-        card.style.flexShrink = '0';
-        card.style.transform = `rotate(${TILTS[i % TILTS.length]}deg)`;
+        card.style.position       = 'relative';
+        card.style.left           = '';
+        card.style.top            = '';
+        card.style.width          = '260px';
+        card.style.flexShrink     = '0';
+        card.style.transform      = `rotate(${TILTS[i % TILTS.length]}deg)`;
+        card.style.maxHeight      = 'calc(100vh - 160px)';
+        card.style.overflowY      = 'auto';
+        card.style.touchAction    = 'pan-y';
+        card.style.webkitOverflowScrolling = 'touch';
       });
 
       // Fade in without zoom entrance
