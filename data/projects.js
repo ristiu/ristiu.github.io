@@ -154,31 +154,37 @@ const projects = [
       {
         client: "Japan Foundation",
         industry: "Public Institution",
+        url: "https://ja.jpf.go.jp/id/",
         description: "Facilitated HAND's Online Design Thinking workshop for 80+ participants during the pandemic, focused on plastic research and sustainable design methods."
       },
       {
         client: "Epsylon",
         industry: "Ads Management",
+        url: "https://epsylonhome.com/",
         description: "Led end-to-end UX redesign for a 30-year-old enterprise advertising platform. Conducted UX audit, established a Design System, and validated changes through usability testing on highest-risk operational flows."
       },
       {
         client: "Pintaria",
         industry: "Edutech",
+        url: "https://campus.quipper.com/pintaria",
         description: "Design research to improve conversion rate. Product iteration to capture revenue from Kartu Prakerja participants."
       },
       {
         client: "Wisataone",
         industry: "Travel",
+        url: "https://www.instagram.com/wisataoneid/",
         description: "UI design for Europe trip planning. Shipped."
       },
       {
         client: "Vaya Constellar",
         industry: "Sales Distribution",
+        url: "https://vayaconstellar.com/",
         description: "Reponsible for developing company storytelling pitch narratives to communicate organizational vision alongside with managing director that serve +150 community and 15 small and medium-sized enterprises (SMEs). Directing company logos and brand identity systems and manage vendor selection for production."
       },
       {
         client: "Teacup Project",
-        industry: "Community Service",
+        industry: "Community",
+        url: "https://www.instagram.com/project.teacups/",
         description: "Designed visual sticker pack design during women international days ."
       },
     ]

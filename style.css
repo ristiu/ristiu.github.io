@@ -2083,7 +2083,7 @@ ol li, ul li {
 }
 .client-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.35rem;
 }
@@ -2101,6 +2101,15 @@ ol li, ul li {
   padding: 2px 8px;
   border-radius: 20px;
 }
+.client-link {
+  font-size: 0.8rem;
+  color: rgba(0,0,0,0.3);
+  text-decoration: none;
+  line-height: 1;
+  transition: color 0.15s;
+  margin-left: auto;
+}
+.client-link:hover { color: var(--color-ink); }
 .client-description {
   font-size: 0.9rem;
   color: rgba(0,0,0,0.65);
