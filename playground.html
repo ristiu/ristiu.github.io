@@ -175,7 +175,7 @@
     #scroll-track {
       display: none;
       position: fixed;
-      top: 31px; left: 64px; right: 20px;
+      top: 33px; left: 64px; right: 20px;
       height: 3px;
       background: rgba(0,0,0,0.08);
       border-radius: 2px;
@@ -337,12 +337,12 @@
     // ── Mobile: native horizontal scroll ─────────────────────────
     if (isMobile) {
       // Enable native horizontal scroll on the html element
-      document.documentElement.style.overflowX = 'auto';
-      document.documentElement.style.overflowY = 'hidden';
-      document.documentElement.style.touchAction = 'pan-x';
+      document.documentElement.style.overflow = 'auto';
+      document.documentElement.style.height = 'auto';
+      document.documentElement.style.touchAction = 'auto';
       document.body.style.overflow = 'visible';
       document.body.style.height = 'auto';
-      document.body.style.touchAction = 'pan-x';
+      document.body.style.touchAction = 'auto';
       document.body.style.cursor = 'default';
 
       // Canvas as flex row
@@ -351,7 +351,7 @@
       root.style.flexDirection = 'row';
       root.style.alignItems = 'flex-start';
       root.style.gap = '20px';
-      root.style.padding = '80px 24px 100px';
+      root.style.padding = '72px 32px 40px';
       root.style.width = 'max-content';
       root.style.transform = 'none';
       root.style.willChange = 'auto';
@@ -366,10 +366,6 @@
         card.style.width          = '260px';
         card.style.flexShrink     = '0';
         card.style.transform      = `rotate(${TILTS[i % TILTS.length]}deg)`;
-        card.style.maxHeight      = 'calc(100vh - 160px)';
-        card.style.overflowY      = 'auto';
-        card.style.touchAction    = 'pan-y';
-        card.style.webkitOverflowScrolling = 'touch';
       });
 
       // Fade in without zoom entrance
