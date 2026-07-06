@@ -20,6 +20,7 @@
 
     :root {
       --ink: #000000;
+      --ink-muted: #666666;
       --accent: #FF5E32;
       --mono: 'JetBrains Mono', monospace;
       --serif: 'Newsreader', serif;
@@ -170,6 +171,10 @@
       color: var(--ink-muted);
       background: transparent;
     }
+    .card-caption strong {
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
 
     /* Note cards (text only) */
     .card.card--note {
@@ -266,42 +271,52 @@
     </div>
     -->
 
+    <!-- AI & Vibe Coding cards first -->
+
     <!-- Army Bookmark -->
     <div class="card" data-col="0" data-rot="-2.5" style="width:300px;">
       <video src="assets/portfolio-playground/playground-army-bookmark.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Concert Info for BTS</strong><span class="card-tag">AI &amp; Vibe Coding</span><br><br>A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
-    </div>
-
-    <!-- Exhibition -->
-    <div class="card" data-col="1" data-rot="1.8">
-      <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
-      <p class="card-caption" style="opacity:1;"><strong>Exhibition</strong><span class="card-tag">Analogue Craft</span><br><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
-    </div>
-
-    <!-- Coloring Book -->
-    <div class="card" data-col="2" data-rot="-1.2">
-      <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><br><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
+      <p class="card-caption"><strong>Concert Info for BTS</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
     </div>
 
     <!-- Fortune Cookie -->
     <div class="card" data-col="3" data-rot="2" style="width:300px;">
       <video src="assets/portfolio-playground/playground-fortune-cookie.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Slice of fortune cookie</strong><span class="card-tag">AI &amp; Vibe Coding</span><br><br>Design challenge here is to learn vibe coding with zero cost! (no subscription at all only effort!)<br><br><a href="https://orange-table.github.io/slice-of-fortune-/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">orange-table.github.io/slice-of-fortune</a></p>
+      <p class="card-caption"><strong>Slice of fortune cookie</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>Design challenge here is to learn vibe coding with zero cost! (no subscription at all only effort!)<br><a href="https://orange-table.github.io/slice-of-fortune-/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">orange-table.github.io/slice-of-fortune</a></p>
+    </div>
+
+    <!-- Noodle Sankey -->
+    <div class="card" data-col="2" data-rot="-1.8" style="width:340px;">
+      <img src="assets/portfolio-playground/playground-noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
+      <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</p>
+    </div>
+
+    <!-- Analogue Craft cards -->
+
+    <!-- Exhibition -->
+    <div class="card" data-col="1" data-rot="1.8">
+      <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
+      <p class="card-caption" style="opacity:1;"><strong>Design Project Catalogue</strong><span class="card-tag">Analogue Craft</span><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
+    </div>
+
+    <!-- Coloring Book -->
+    <div class="card" data-col="2" data-rot="-1.2">
+      <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
+      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
     </div>
 
     <!-- Personalize Clock -->
     <div class="card" data-col="0" data-rot="-1.5" style="width:300px;">
       <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Personalize clock</strong><span class="card-tag">Analogue Craft</span><br><br>Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as they want.</p>
+      <p class="card-caption"><strong>Personalize clock</strong><span class="card-tag">Analogue Craft</span><br>Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as they want.</p>
     </div>
 
     <!-- Wood USB Cover -->
     <div class="card" data-col="1" data-rot="1.2" style="width:300px;">
       <img src="assets/portfolio-playground/playground-usb-1.avif" alt="Wood USB cover" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/playground-usb-3.avif" alt="Wood USB cover detail" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Wood waste exploration for USB Cover</strong><span class="card-tag">Analogue Craft</span><br><br>Souvenir made from local wood waste (rosewood, pine, coconut). Made for ISYF & Microsoft. Sold out now!</p>
+      <p class="card-caption"><strong>Wood waste exploration for USB Cover</strong><span class="card-tag">Analogue Craft</span><br>Souvenir made from local wood waste (rosewood, pine, coconut). Made for ISYF & Microsoft. Sold out now!</p>
     </div>
 
     <!-- Transforming Tradition -->
@@ -309,26 +324,20 @@
       <img src="assets/portfolio-playground/stamp-enamel.jpg" alt="Transforming Tradition enamel pins" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/stamp-jacket.jpg" alt="Transforming Tradition jacket patch" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/stamp-paper.jpg" alt="Transforming Tradition paper stamps" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Transforming Tradition</strong><span class="card-tag">Analogue Craft</span><br><br>Indonesia has no official travel souvenir. We borrowed from Dayak Kenyah and Kayan tradition — where tattoos mark every place wandered, and turned it into collectible stamps, stickers, badges, and pins that represent each region.</p>
+      <p class="card-caption"><strong>Transforming Tradition</strong><span class="card-tag">Analogue Craft</span><br>Indonesia has no official travel souvenir. We borrowed from Dayak Kenyah and Kayan tradition — where tattoos mark every place wandered, and turned it into collectible stamps, stickers, badges, and pins that represent each region.</p>
     </div>
 
     <!-- Fan -->
     <div class="card" data-col="0" data-rot="1.8" style="width:300px;">
       <img src="assets/portfolio-playground/fan-before.jpg" alt="Fan before — all white factory finish" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/fan-after2.jpg" alt="Fan after detail" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>How to make an industrialized product feel less industrial?</strong><span class="card-tag">Analogue Craft</span><br><br>Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where to buy it.</p>
+      <p class="card-caption"><strong>How to make an industrialized product feel less industrial?</strong><span class="card-tag">Analogue Craft</span><br>Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where to buy it.</p>
     </div>
 
     <!-- Wooden Box -->
     <div class="card" data-col="1" data-rot="-1.4" style="width:300px;">
       <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Wooden Box Creation</strong><span class="card-tag">Analogue Craft</span><br><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</p>
-    </div>
-
-    <!-- Noodle Sankey -->
-    <div class="card" data-col="2" data-rot="-1.8" style="width:340px;">
-      <img src="assets/portfolio-playground/playground-noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><span class="card-tag">AI &amp; Vibe Coding</span><br><br>I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</p>
+      <p class="card-caption"><strong>Wooden Box Creation</strong><span class="card-tag">Analogue Craft</span><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</p>
     </div>
 
 
