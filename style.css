@@ -1250,7 +1250,7 @@ a:hover { color: var(--accent); }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 75% 53% at 44% 50%, transparent 47%, #fff 76%);
+  background: radial-gradient(ellipse 58% 59% at 50% 50%, transparent 36%, #fff 68%);
   z-index: 2;
   pointer-events: none;
 }
