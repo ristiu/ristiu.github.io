@@ -470,7 +470,7 @@
     document.addEventListener('touchstart', e => {
       stopMomentum();
       [...e.changedTouches].forEach(t => { touches[t.identifier] = { x: t.clientX, y: t.clientY }; });
-      if (Object.keys(touches).length === 2) {
+      if (!isMobile && Object.keys(touches).length === 2) {
         const [a, b] = Object.values(touches);
         pinchDist0 = Math.hypot(b.x - a.x, b.y - a.y);
         pinchScale0 = scale;
@@ -488,7 +488,7 @@
         tx += t.x - lastX; ty += t.y - lastY;
         lastX = t.x; lastY = t.y;
         applyTransform();
-      } else if (ids.length === 2) {
+      } else if (!isMobile && ids.length === 2) {
         const [a, b] = Object.values(touches);
         const dist = Math.hypot(b.x - a.x, b.y - a.y);
         const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), 5);
