@@ -713,5 +713,96 @@
     // Back button — View Transitions handles the fade automatically
     // (no manual veil needed)
   </script>
+
+  <!-- DEV ONLY: Vignette tuner — only loads on localhost -->
+  <script>
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    const DEFAULTS = { left: 120, right: 120, top: 120, bottom: 300, rightExtra: 200, bottomExtra: 120, cornerBR: 200 };
+    const vals = { ...DEFAULTS };
+
+    const panel = document.createElement('div');
+    panel.id = 'vignette-tuner';
+    panel.style.cssText = `
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      background: rgba(0,0,0,0.85); color: #fff;
+      font-family: monospace; font-size: 12px;
+      padding: 14px 16px; border-radius: 8px;
+      width: 260px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    `;
+
+    function applyVignette() {
+      let el = document.getElementById('vignette-dev-style');
+      if (!el) { el = document.createElement('style'); el.id = 'vignette-dev-style'; document.head.appendChild(el); }
+      el.textContent = `.project-hero-imgwrap::after {
+  background:
+    linear-gradient(to right, #fff 0px, transparent ${vals.left}px),
+    linear-gradient(to left, #fff 0px, transparent ${vals.right}px),
+    linear-gradient(to bottom, #fff 0px, transparent ${vals.top}px),
+    linear-gradient(to top, #fff 0px, transparent ${vals.bottom}px),
+    linear-gradient(to top, #fff 0px, transparent ${vals.bottomExtra}px),
+    linear-gradient(to left, #fff 0px, transparent ${vals.rightExtra}px),
+    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${vals.cornerBR}px);
+}`;
+    }
+
+    function makeSlider(label, key, min, max) {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; align-items:center; gap:8px; margin:6px 0;';
+      const lbl = document.createElement('span');
+      lbl.style.cssText = 'width:76px; opacity:0.6; flex-shrink:0;';
+      lbl.textContent = label;
+      const input = document.createElement('input');
+      input.type = 'range'; input.min = min; input.max = max; input.value = vals[key];
+      input.style.cssText = 'flex:1; accent-color:#f90;';
+      const num = document.createElement('span');
+      num.style.cssText = 'width:30px; text-align:right;';
+      num.textContent = vals[key];
+      input.addEventListener('input', () => {
+        vals[key] = +input.value;
+        num.textContent = vals[key];
+        applyVignette();
+        updateCopy();
+      });
+      row.append(lbl, input, num);
+      return row;
+    }
+
+    function getCSSText() {
+      return `linear-gradient(to right, #fff 0px, transparent ${vals.left}px),\n    linear-gradient(to left, #fff 0px, transparent ${vals.right}px),\n    linear-gradient(to bottom, #fff 0px, transparent ${vals.top}px),\n    linear-gradient(to top, #fff 0px, transparent ${vals.bottom}px),\n    linear-gradient(to top, #fff 0px, transparent ${vals.bottomExtra}px),\n    linear-gradient(to left, #fff 0px, transparent ${vals.rightExtra}px),\n    radial-gradient(ellipse at bottom right, #fff 0%, transparent ${vals.cornerBR}px)`;
+    }
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-weight:bold; margin-bottom:10px; opacity:0.9;';
+    title.textContent = '⚙ Vignette Tuner';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.style.cssText = `margin-top:10px; width:100%; padding:6px; background:#f90;
+      color:#000; border:none; border-radius:4px; font-family:monospace;
+      font-size:11px; cursor:pointer; font-weight:bold;`;
+    copyBtn.textContent = 'Copy CSS';
+
+    function updateCopy() {}
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(getCSSText());
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => copyBtn.textContent = 'Copy CSS', 1500);
+    });
+
+    panel.append(
+      title,
+      makeSlider('left', 'left', 0, 400),
+      makeSlider('right', 'right', 0, 400),
+      makeSlider('top', 'top', 0, 400),
+      makeSlider('bottom', 'bottom', 0, 600),
+      makeSlider('bottom x2', 'bottomExtra', 0, 600),
+      makeSlider('corner BR', 'cornerBR', 0, 800),
+      makeSlider('right extra', 'rightExtra', 0, 400),
+      copyBtn
+    );
+
+    document.body.appendChild(panel);
+    applyVignette();
+  }
+  </script>
 </body>
 </html>

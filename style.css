@@ -1251,11 +1251,13 @@ a:hover { color: var(--accent); }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, #fff 0px, transparent 120px),
-    linear-gradient(to left, #fff 0px, transparent 120px),
-    linear-gradient(to bottom, #fff 0px, transparent 120px),
-    linear-gradient(to top, #fff 0px, transparent 300px),
-    linear-gradient(to left, #fff 0px, transparent 200px);
+    linear-gradient(to right, #fff 0px, transparent 26px),
+    linear-gradient(to left, #fff 0px, transparent 16px),
+    linear-gradient(to bottom, #fff 0px, transparent 127px),
+    linear-gradient(to top, #fff 0px, transparent 92px),
+    linear-gradient(to top, #fff 0px, transparent 131px),
+    linear-gradient(to left, #fff 0px, transparent 92px),
+    radial-gradient(ellipse at bottom right, #fff 0%, transparent 216px);
   z-index: 2;
   pointer-events: none;
 }
