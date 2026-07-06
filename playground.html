@@ -69,20 +69,21 @@
     /* Back link */
     .back {
       position: fixed;
-      top: 24px; left: 20px;
+      top: 24px; left: 28px;
       font-family: var(--mono);
-      font-size: 1.4rem;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
       color: var(--ink);
       text-decoration: none;
       z-index: 100;
       transition: opacity 0.15s;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.65);
-      box-shadow: 0 1px 6px rgba(0,0,0,0.18);
-      display: flex; align-items: center; justify-content: center;
+      opacity: 0.85;
+      text-shadow: 0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8);
+      padding: 8px;
+      margin: -8px;
     }
-    .back:hover { opacity: 0.7; }
+    .back:hover { opacity: 1; }
 
     /* Zoom controls */
     .zoom-controls {
@@ -176,7 +177,7 @@
     #scroll-track {
       display: none;
       position: fixed;
-      top: 42px; left: 68px; right: 20px;
+      top: 42px; left: 64px; right: 20px;
       height: 3px;
       background: rgba(0,0,0,0.08);
       border-radius: 2px;
