@@ -201,43 +201,48 @@
     -->
 
     <!-- Army Bookmark -->
-    <!-- Concert Info -->
-    <div class="card" style="left: 80px; top: 150px; width: 300px; transform: rotate(-2.5deg);">
+    <div class="card" data-col="0" data-rot="-2.5" style="width:300px;">
       <video src="assets/portfolio-playground/playground-army-bookmark.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       <p class="card-caption"><strong>Concert Info for BTS</strong><br><br>A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
     </div>
 
     <!-- Exhibition -->
-    <div class="card" style="left: 420px; top: 195px; transform: rotate(1.8deg);">
+    <div class="card" data-col="1" data-rot="1.8">
       <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
       <p class="card-caption" style="opacity:1;"><strong>Exhibition</strong><br><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
     </div>
 
     <!-- Coloring Book -->
-    <div class="card" style="left: 760px; top: 115px; transform: rotate(-1.2deg);">
+    <div class="card" data-col="2" data-rot="-1.2">
       <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       <p class="card-caption"><strong>Freestyle Coloring Book</strong><br><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
     </div>
 
     <!-- Fortune Cookie -->
-    <div class="card" style="left: 1100px; top: 165px; width: 300px; transform: rotate(2deg);">
+    <div class="card" data-col="3" data-rot="2" style="width:300px;">
       <video src="assets/portfolio-playground/playground-fortune-cookie.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       <p class="card-caption"><strong>Slice of fortune cookie</strong><br><br>Design challenge here is to learn vibe coding with zero cost! (no subscription at all only effort!)<br><br><a href="https://orange-table.github.io/slice-of-fortune-/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">orange-table.github.io/slice-of-fortune</a></p>
     </div>
 
     <!-- Personalize Clock -->
-    <div class="card" style="left: 80px; top: 790px; width: 300px; transform: rotate(-1.5deg);">
+    <div class="card" data-col="0" data-rot="-1.5" style="width:300px;">
       <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
       <p class="card-caption"><strong>Personalize clock</strong><br><br>Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as they want.</p>
     </div>
 
     <!-- Wood USB Cover -->
-    <div class="card" style="left: 420px; top: 830px; width: 300px; transform: rotate(1.2deg);">
+    <div class="card" data-col="1" data-rot="1.2" style="width:300px;">
       <img src="assets/portfolio-playground/playground-usb-1.avif" alt="Wood USB cover" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/playground-usb-2.jpg" alt="Wood USB cover detail" style="width:100%;display:block;" />
       <img src="assets/portfolio-playground/playground-usb-3.avif" alt="Wood USB cover detail" style="width:100%;display:block;" />
       <p class="card-caption"><strong>Wood waste exploration for USB Cover</strong><br><br>Souvenir made from local wood waste (rosewood, pine, coconut). Made for ISYF & Microsoft. Sold out now!</p>
+    </div>
+
+    <!-- Noodle Sankey -->
+    <div class="card" data-col="2" data-rot="-1.8" style="width:340px;">
+      <img src="assets/portfolio-playground/noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
+      <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><br><br>I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</p>
     </div>
 
 
@@ -245,6 +250,34 @@
 
   <script src="cursor.js"></script>
   <script>
+    // Column packer — places cards by column without overlap
+    function layoutCards() {
+      const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
+      const COL_X     = [60, 390, 720, 1060];
+      const COL_START = [150, 90, 130, 175]; // staggered row starts
+      const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13]; // per-card top nudge
+      const GAP       = 32;
+
+      const colTops = [...COL_START];
+
+      cards.forEach((card, i) => {
+        const col = parseInt(card.dataset.col) || 0;
+        const rot = parseFloat(card.dataset.rot) || 0;
+        const jitter = JITTER[i % JITTER.length];
+        const top = colTops[col] + jitter;
+
+        card.style.left      = COL_X[col] + 'px';
+        card.style.top       = top + 'px';
+        card.style.transform = `rotate(${rot}deg)`;
+
+        colTops[col] = top + card.offsetHeight + GAP;
+      });
+    }
+
+    // Run once DOM is ready, re-run after all media loads in case heights changed
+    layoutCards();
+    window.addEventListener('load', layoutCards);
+
     const root = document.getElementById('canvas-root');
 
     // State

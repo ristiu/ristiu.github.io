@@ -251,6 +251,296 @@ const projects = [
         ]
       },
       {
+        id: "directing-design-system",
+        title: "Directing Design System & Illustration with Hyperlocal Concept",
+        sections: [
+          {
+            type: "intro",
+            text: "When I first joined, each designer had their own UI kit, complicating cross-project collaboration and causing issues for engineers. Facilitating company hypergrowth."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/design-system.jpg",
+            caption: "Hyperlocal design system directing UI consistency across 10 platforms"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Hyperlocal as the Main Concept",
+            subtitle: "From fragmented kits to one shared system",
+            body: "We unsung Hyperlocal as the main concept. Key activities that I facilitate included: Tinkering UI Design principles, UI audits, readability testing with the user, contrast color testing, establish close collaboration with engineering, branding teams, up until directed the execution by UI Designers & Illustrator.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "How's the impact to company wide?",
+            stats: [
+              "Supported company hypergrowth that applied 10 crucial platforms for farmers, agents, buyers, and country expansion",
+              "The design system is widely adopted across the company, reducing time on recreating components and allowing more tinkering time for more iteration"
+            ],
+            quotes: []
+          }
+        ]
+      },
+      {
+        id: "armor-ally",
+        title: "Bridging Design & Business, on Engaging Non-Designers at All Levels",
+        sections: [
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/armor-ally.jpg",
+            caption: "Bridging design and business by engaging non-designers at every level"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Set Business Goals as Common Ground",
+            subtitle: "",
+            body: "Designers with a business-aware mindset tend to contribute significantly. As a design leader, act as a 'translator' of business goals into actionable design strategies.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Be an ally, not a barrier with rigid design approach",
+            subtitle: "",
+            body: "To build trust, I adapt my design approach based on what a stakeholder needs most — whether that is speed, visual appeal, or strategic alignment. While I pivot my methods to support them, I always keep user-centered design as the non-negotiable core value.\n\nBy becoming a stakeholder thinking partner can reduce the friction of top-down and bottom-up cultures.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Build spider web of stakeholder",
+            subtitle: "",
+            body: "I establish a structured system for myself and my senior team members to manage relationships across the company. This ensures we are systematically managing expectations at all levels and staying connected to every corner of the business.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "4 |",
+            title: "Find shared non-work interests",
+            subtitle: "",
+            body: "At the end of the day, we are social creatures. I encourage bonding over shared interests like food or sports to build rapport. However, I don't force a connection. If the personal \"vibe\" isn't there, I keep the focus on high-value work conversations and prioritize stakeholders who are open and receptive.",
+            quotes: [
+              "Our stakeholders suit is so thick — they think 'collaboration' means everyone agrees with me."
+            ]
+          },
+          {
+            type: "impact",
+            body: "How's non design stakeholder view design team that I manage?",
+            stats: [],
+            quotes: [
+              "... I noticed Risti receives positive feedback 360, from Heads of Product and many PM — CPO",
+              "Risti good at setting up simple frameworking to facilitate discussion — AVP Pricing Management"
+            ]
+          }
+        ]
+      },
+      {
+        id: "leading-through-changes",
+        title: "Leading through changes: What Strategies Provoke Humility and Resilience During Challenging Times?",
+        sections: [
+          {
+            type: "intro",
+            text: "My peers noted that I excel in anticipatory planning especially during crises. My best practices include:"
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/weather.jpg",
+            caption: "Leading through change — humility and resilience as strategy"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Keep People Relations Intact",
+            subtitle: "",
+            body: "My approach to damage control during restructuring and efficiency focuses on both people and context. While the business context can be learned, the most challenging aspect is managing changes in relational dynamics among people. The first rule is to keep team counterparts remain intact — like to keep IxD & PM tandem, unless it's last resort.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Strategize with Realistic Optimism",
+            subtitle: "",
+            body: "I practice realistic optimism by striking a balance between the pessimism of the intellect and the optimism of the will to map out the risk, worst to best case scenarios. But along the way, keep celebrate small wins.\n\nFor managers, maintaining this balance is crucial, because team need you to stay strategic to navigate through challenging situations.",
+            quotes: [
+              "Your ability to stay calm even in stressful situations, has made working together a lot easier — Interaction Designer"
+            ]
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Provoke Transparency with Team",
+            subtitle: "",
+            body: "By doing this facilitate team members to understand situation as it is, ultimately building resilience by keeping everyone informed about the potential path forward.\n\nKnowing what to share directly, indirectly, even what to leave unsaid, all delivered in a timely manner.",
+            quotes: [
+              "Risti demonstrated emotional intelligence, even extending to her own manager (me!) — Head of Product Design"
+            ]
+          },
+          {
+            type: "impact",
+            body: "How's the impact to the team? Pulse Check, among other design team we scored highest scores satisfaction in transparency, direction and empowerment (3.8/5), reflect ability to empower the team and provide clear guidance.",
+            stats: [],
+            quotes: [
+              "...as it takes skills and effort to keep up with change, Design team is very adaptive to it — Product Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "raising-team-bar",
+        title: "Raising Team Bar for Strategic Influence",
+        sections: [
+          {
+            type: "intro",
+            text: "\"Bad leaders stagnate. Good leaders determined to grow, great leaders grow the people around them, and in the process grow themselves\" - Adam Grant, Organizational Psychologist\n\nMy approach to raising the team bar centers on practical team growth."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/strength-interest.jpg",
+            caption: "Raising the team bar through strength-based growth and collective wins"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Encourage teamwork NOT competition amongst team members",
+            subtitle: "",
+            body: "Avoid excessive competition since it can divide — it's counterproductive.\n\nRather than pushing for individual wins, emphasize winning as a team.",
+            quotes: [
+              "What I've really valued is your consistent support and encouragement, which have created a really enjoyable room for me and teams to speed up our growth — Interaction Designer"
+            ]
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Emphasize Teamwork for High-Quality Work",
+            subtitle: "",
+            body: "Assign tasks based on individual strengths. Complement weaknesses with skills from other team members. Set team goals such as: (1) Actionable Insights (2) Quality of Deliverables. Manager + Team members contribute to ensure collective success.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "How's the impact to the team? NPS Stakeholder reflect commitment to growth for excellence: Quality of Deliverables (8/10) from PMs, (9/10) from Engineering, indicating the teamwork not only meets, but often exceeds expectations.",
+            stats: [],
+            quotes: [
+              "Strong report storytelling really help us, PM, to use to convince our business stakeholders to drive impact — Product Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "empowering-individual-growth",
+        title: "Empowering Individual Growth & Career Development",
+        sections: [
+          {
+            type: "intro",
+            text: "\"There is a difference between motivating team and stressing them out\"\n\nMy approach to raising the team bar centers on practical individual growth."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/goal-setting.jpg",
+            caption: "Empowering individual growth through goal setting rooted in personal aspiration"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Growth Happens in Practice",
+            subtitle: "",
+            body: "Pairing less experienced members with seasoned professionals, and attracting strong candidates.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Evaluate where standards are dropping before set ambitious goals",
+            subtitle: "",
+            body: "I believe in setting clear, ambitious goals. It's crucial not to set standards based on outliers — pushing too hard can set the team up for failure.\n\nRecognize that not everyone wants to grow at the same pace.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Establish Boundaries with Individual Goal Setting",
+            subtitle: "",
+            body: "NOT everyone wants to grow, so growth is individual responsibility.\n\nManager ensures feedback loops are active and goal setting is rooted on the individual aspiration, then aligning with day to day project.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "How's the impact to the team? Pulse Check — Growth scored the highest at (3.5/5) among other design team.",
+            stats: [],
+            quotes: [
+              "Risti maintains high standards for projects and team, even to herself. She's dedicated to her team's growth improvement. — Product Researcher"
+            ]
+          }
+        ]
+      },
+      {
+        id: "ai-embed-design-workflow",
+        title: "AI-Embed Design Workflow Minimize *Language Friction & Quick Prototyping",
+        sections: [
+          {
+            type: "intro",
+            text: "We experimented with various AI tools, and V0 (Vercel) emerged as the most effective solution for our discovery and delivery process.\n\nThe Prerequisites for Success: For this to work Product Manager, Designer, and Engineer must maintain an \"exploration mindset.\" Shifting the workflow requires a willingness to challenge the status quo and collaborate in entirely new ways."
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "The Results of Using V0 as the Primary Delivery Tool",
+            subtitle: "Pros",
+            body: "It's proven to speed discovery and delivery process. Shared Language: Design + PM — All speak in UI flows & working interactions. Design + Engineering — Communicate in code prototypes generated by AI.\n\nFocus shifts from building layout to validating ideas with the users. Minimizes rework and misinterpretation; design & eng converge faster.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "The Trade-off",
+            subtitle: "Cons",
+            body: "We noticed a decline in job satisfaction as roles shifted primarily toward \"Quality Control\".",
+            quotes: []
+          }
+        ]
+      },
+      {
+        id: "remote-leadership",
+        title: "Remote Leadership, on Building Culture Without Borders",
+        sections: [
+          {
+            type: "intro",
+            text: "With a decade of experience, including 7 years working remotely in Indonesia, and across the UK and Germany. I prioritize visibility to eliminate the uncertainty in distributed environments. My framework focuses on three pillars:"
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/fun-bonding.jpg",
+            caption: "Building culture without borders — remote rituals that keep teams human"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Radical Transparency",
+            subtitle: "",
+            body: "Weekly Blockbusters: Structured updates focusing addressing blockers.\n\nWIP over Perfection: Encouraging over-communication and early-stage sharing to reduce silos.\n\nThe Capacity Map: Using Jira as a visual workload guide rather than a surveillance tool.\n\nCloud-First Workflow: Eliminating local files, all artifacts (Figma, Notion) are public and shareable by default.\n\nThe User Manual: Every team member maintains a \"How to Work with Me\" doc. This covers: How I prefer to receive feedback. My \"Emergency\" vs. \"Casual\" contact channels.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Autonomy & Purpose",
+            subtitle: "",
+            body: "Goal Alignment: Connecting every task to a shared team objective to ensure individual autonomy is backed by collective purpose.\n\nThe \"Golden Window\": Maximizing the 2–3 hour timezone overlap (e.g., SE Asia and UK) for high-impact synchronous collaboration.\n\n1:1: Weekly \"pulse check\" meetings dedicated to well-being and personal support rather than just status updates.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Intentional Fun Ritual",
+            subtitle: "",
+            body: "Protected Social Syncs: Monthly non-work rituals designed to replicate \"watercooler\" spontaneity in a digital space.\n\nShared Traditions: Building team identity through collaborative activities. My team once created a Spotify playlist together.",
+            quotes: []
+          }
+        ]
+      },
+      {
         id: "facilitating-design-workshop",
         title: "Facilitating Design Workshop for Strategic Levers and Collaborative Culture",
         sections: [

@@ -272,9 +272,7 @@
         return { el, ...spreads[i] };
       });
 
-      overlay.offsetWidth; // reflow
-
-      requestAnimationFrame(() => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         els.forEach(({ el, dx, dy, rot }, i) => {
           el.style.transition = `transform 0.5s cubic-bezier(0.2,0.85,0.25,1) ${i * 40}ms, opacity 0.18s ease ${i * 40}ms`;
           el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
@@ -291,7 +289,7 @@
             window.location.href = href;
           }, 200);
         }, 420);
-      });
+      }));
     }
 
     // ── Leadership: blank post-it burst ─────────────────────────
@@ -361,8 +359,7 @@
         return el;
       });
 
-      overlay.offsetWidth;
-      requestAnimationFrame(() => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         els.forEach(({ el, dx, dy, rot }, i) => {
           el.style.transition = `transform 0.5s cubic-bezier(0.2,0.85,0.25,1) ${i * 45}ms, opacity 0.18s ease ${i * 45}ms`;
           el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
@@ -382,7 +379,7 @@
           });
           setTimeout(() => { overlay.remove(); window.location.href = href; }, 200);
         }, 430);
-      });
+      }));
     }
 
     // ── Context Labs: letter burst ────────────────────────────────
@@ -428,8 +425,7 @@
         return { el, ...spreads[i] };
       });
 
-      overlay.offsetWidth;
-      requestAnimationFrame(() => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         els.forEach(({ el, dx, dy, rot }, i) => {
           el.style.transition = `transform 0.48s cubic-bezier(0.2,0.85,0.25,1) ${i * 30}ms, opacity 0.16s ease ${i * 30}ms`;
           el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
@@ -442,16 +438,18 @@
           });
           setTimeout(() => { overlay.remove(); window.location.href = href; }, 180);
         }, 400);
-      });
+      }));
     }
 
     // Card click handler
+    const isTouch = window.matchMedia('(hover: none)').matches;
+
     list.querySelectorAll('.stack-card').forEach(card => {
       const href = card.getAttribute('href');
       if (!href || href === '#') return;
       const tags = getProjectTags(href);
 
-      card.addEventListener('click', (e) => {
+      function activateCard(e) {
         e.preventDefault();
 
         const projectTitle = card.querySelector('.stack-card-title')?.textContent?.trim();
@@ -464,7 +462,16 @@
         if (href.includes('#context-labs')) { letterBurst(card, href); return; }
 
         burstAndNavigate(card, href, tags);
-      });
+      }
+
+      if (isTouch) {
+        card.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          activateCard(e);
+        }, { passive: false });
+      } else {
+        card.addEventListener('click', activateCard);
+      }
     });
 
     // ── Scroll position: save on leave, restore on back ──────
