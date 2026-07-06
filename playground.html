@@ -172,21 +172,26 @@
     }
 
     /* Mobile scroll progress bar */
-    #scroll-progress {
+    #scroll-track {
       display: none;
       position: fixed;
-      top: 0; left: 0;
+      top: 31px; left: 64px; right: 20px;
       height: 3px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 2px;
+      z-index: 200;
+      pointer-events: none;
+    }
+    #scroll-progress {
+      height: 100%;
       width: 0%;
       background: linear-gradient(to right, #FF5E32, #f5c842, #00C896, #5B8DEF, #C374F2);
-      z-index: 200;
-      border-radius: 0 2px 2px 0;
+      border-radius: 2px;
       transition: width 0.08s linear;
-      pointer-events: none;
     }
 
     @media (max-width: 699px) {
-      #scroll-progress { display: block; }
+      #scroll-track { display: block; }
       .zoom-controls { display: none; }
     }
   </style>
@@ -194,7 +199,7 @@
 <body>
 
   <a class="back" href="index.html" aria-label="Back">←</a>
-  <div id="scroll-progress"></div>
+  <div id="scroll-track"><div id="scroll-progress"></div></div>
 
   <div class="zoom-controls">
     <button class="zoom-btn" id="zoom-in">+</button>
