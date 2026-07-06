@@ -1,0 +1,52 @@
+# Risti Ulfha — AI-Native Product Builder, Design Lead & UX Research Strategist
+
+## Who I am
+
+Risti Ulfha is a product designer, UX research strategist, and design manager with 10+ years of experience building products across APAC, APJ, European Economic Area, Jakarta, Indonesia, Australia, and New Zealand.
+
+She specializes in design strategy, field research and ethnography, omnichannel product systems, AI-embedded design workflows, and building high-performing design teams. She combines old-guard product instincts with an AI-curious mindset — actively building with AI tools including V0, Claude, and vibe coding.
+
+Open to Design Manager, Design Lead, Design Strategist, and AI-Native Product Builder roles at multinational companies across APJ, APAC, European Economic Area, Jakarta, Australia, and New Zealand.
+
+## Career highlights
+
+- 45M MAU reached across career, multiple products
+- IDR 9.77B GMV in month one of reorder feature at eFishery
+- +16.5% conversion uplift, statistically significant (p-value 0.0026)
+- +35% self-transaction adoption from 19% baseline, rural low-tech users
+- 5,000 MAU on eFishery O2O product, 6 months post-launch
+- Design Manager NPS: 8/10 from Product (41 respondents), 9/10 from Engineering
+- 7 years remote leadership across Indonesia, UK, and Germany
+
+## Work experience
+
+**eFishery — Design Manager** (Indonesia, Agriculture Tech)
+Led O2O design strategy for fish farmers across rural Indonesia. Built omnichannel product — WhatsApp path for low-tech users, app path for others. Team of 4. Field research, ethnography, cross-functional alignment across product, engineering, data, and marketing.
+
+**Traveloka — Interaction Designer** (APAC, Travel)
+Redesigned hotel booking price perception for 35M MAU. Applied Gestalt principles to information hierarchy. Built pricing label ranking system integrated directly into the pricing engine. Solution reviewed by VP of Product, Head of Pricing, and CEO.
+
+**Warung Pintar — UX Researcher** (Indonesia, Supply Chain)
+Optimized warehouse logistics through timed field observation and service prototyping. Identified that picking duration correlated with SKU line variety, not quantity. Result: 6.7x faster picking time. Designed picker app UI for diverse literacy levels.
+
+**Context Labs — Fractional UX Lead** (Indonesia)
+Embedded AI design workflows. Established design expectations and hiring roadmap for first design team. Clients across public institutions, advertising, edutech, and travel.
+
+**Casio Design Japan / Chiba University / Institut Teknologi Bandung — Design Researcher** (APJ)
+Cross-cultural trend forecasting across 150 participants in Japan and Indonesia. Forecast validated within 3 years — Instagram Boomerang and analog camera resurgence confirmed predicted signals.
+
+## Skills
+
+Product design, UX research, design strategy, design management, ethnographic field research, service design, omnichannel design, design systems, AI workflow integration, trend forecasting, cross-functional leadership, remote team leadership, data-design collaboration.
+
+## Industries
+
+Agriculture tech, travel, supply chain, retail, consumer electronics, edutech, advertising, public institutions.
+
+## Regions
+
+Jakarta, Indonesia, Southeast Asia, APAC, APJ, Japan, UK, Germany, European Economic Area, Australia, New Zealand.
+
+## Portfolio
+
+https://ristiu.github.io/
