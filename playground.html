@@ -239,9 +239,31 @@
       <p class="card-caption"><strong>Wood waste exploration for USB Cover</strong><br><br>Souvenir made from local wood waste (rosewood, pine, coconut). Made for ISYF & Microsoft. Sold out now!</p>
     </div>
 
+    <!-- Transforming Tradition -->
+    <div class="card" data-col="3" data-rot="-1.5" style="width:300px;">
+      <img src="assets/portfolio-playground/stamp-enamel.jpg" alt="Transforming Tradition enamel pins" style="width:100%;display:block;" />
+      <img src="assets/portfolio-playground/stamp-jacket.jpg" alt="Transforming Tradition jacket patch" style="width:100%;display:block;" />
+      <img src="assets/portfolio-playground/stamp-paper.jpg" alt="Transforming Tradition paper stamps" style="width:100%;display:block;" />
+      <p class="card-caption"><strong>Transforming Tradition</strong><br><br>Indonesia has no official travel souvenir. We borrowed from Dayak Kenyah and Kayan tradition — where tattoos mark every place wandered, and turned it into collectible stamps, stickers, badges, and pins that represent each region.</p>
+    </div>
+
+    <!-- Fan -->
+    <div class="card" data-col="0" data-rot="1.8" style="width:300px;">
+      <img src="assets/portfolio-playground/fan-before.jpg" alt="Fan before — all white factory finish" style="width:100%;display:block;" />
+      <img src="assets/portfolio-playground/fan-after1.jpg" alt="Fan after — wood texture added by hand" style="width:100%;display:block;" />
+      <img src="assets/portfolio-playground/fan-after2.jpg" alt="Fan after detail" style="width:100%;display:block;" />
+      <p class="card-caption"><strong>How to make an industrialized product feel less industrial?</strong><br><br>Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where to buy it.</p>
+    </div>
+
+    <!-- Wooden Box -->
+    <div class="card" data-col="1" data-rot="-1.4" style="width:300px;">
+      <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
+      <p class="card-caption"><strong>Wooden Box Creation</strong><br><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</p>
+    </div>
+
     <!-- Noodle Sankey -->
     <div class="card" data-col="2" data-rot="-1.8" style="width:340px;">
-      <img src="assets/portfolio-playground/noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
+      <img src="assets/portfolio-playground/playground-noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
       <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><br><br>I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</p>
     </div>
 
@@ -253,7 +275,7 @@
     // Column packer — places cards by column without overlap
     function layoutCards() {
       const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
-      const COL_X     = [60, 390, 720, 1060];
+      const COL_X     = [60, 400, 760, 1110];
       const COL_START = [150, 90, 130, 175]; // staggered row starts
       const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13]; // per-card top nudge
       const GAP       = 32;
@@ -274,8 +296,21 @@
       });
     }
 
-    // Run once DOM is ready, re-run after all media loads in case heights changed
+    // Debounced re-layout — fires after media heights settle
+    let layoutTimer;
+    function scheduleLayout() {
+      clearTimeout(layoutTimer);
+      layoutTimer = setTimeout(layoutCards, 60);
+    }
+
+    // Run immediately, then re-run each time an image or video reports its real height
     layoutCards();
+    document.querySelectorAll('#canvas-root img').forEach(img => {
+      if (!img.complete) img.addEventListener('load', scheduleLayout);
+    });
+    document.querySelectorAll('#canvas-root video').forEach(v => {
+      v.addEventListener('loadedmetadata', scheduleLayout);
+    });
     window.addEventListener('load', layoutCards);
 
     const root = document.getElementById('canvas-root');
