@@ -201,13 +201,14 @@ body {
   margin: 0;
   position: relative;
   text-align: left;
-  padding-left: 10px;
+  padding-left: 26px;
 }
 
 /* Current role — black chip with white italic serif, sits below the red note */
 .hero-current-role {
   position: absolute;
   left: -14px;
+  right: -14px;
   bottom: calc(-5rem - 10px + 38px);
   z-index: 6;
   transform: rotate(-1.5deg);
@@ -217,24 +218,34 @@ body {
 .hero-current-role-frame {
   position: relative;
   display: inline-block;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0.45rem 0.7rem;
   background: #ffffff;
   font-family: 'Newsreader', serif;
   font-style: italic;
   font-weight: 400;
   font-size: 0.85rem;
-  line-height: 1;
+  line-height: 1.25;
   color: var(--ink);
   border: 1px solid rgba(0, 0, 0, 0.65);
   white-space: nowrap;
 }
 
-/* selection handles — corner squares + one mid-point vertex, like a design tool text frame */
+@media (max-width: 380px) {
+  .hero-current-role {
+    left: -34px;
+  }
+  .hero-current-role-frame {
+    font-size: 0.7rem;
+    white-space: normal;
+  }
+}
+
+/* selection handles — corner squares + one mid-point vertex, all anchored to the frame itself */
 .hero-current-role-frame::before,
 .hero-current-role-frame::after,
-.hero-current-role::before,
-.hero-current-role::after,
-.hero-current-role-frame span.vertex {
+.hero-current-role-frame span.handle {
   content: '';
   position: absolute;
   width: 6px;
@@ -245,9 +256,9 @@ body {
 }
 .hero-current-role-frame::before { top: -3px; left: -3px; }
 .hero-current-role-frame::after  { bottom: -3px; right: -3px; }
-.hero-current-role::before { top: -3px; right: -3px; }
-.hero-current-role::after  { bottom: -3px; left: -3px; }
-.hero-current-role-frame .vertex { top: -3px; left: 50%; transform: translateX(-50%); }
+.hero-current-role-frame .handle--tr { top: -3px; right: -3px; }
+.hero-current-role-frame .handle--bl { bottom: -3px; left: -3px; }
+.hero-current-role-frame .handle--top { top: -3px; left: 50%; transform: translateX(-50%); }
 
 @keyframes role-stamp-in {
   0%   { opacity: 0; transform: rotate(-1.5deg) scale(1.12) translateY(-4px); }
