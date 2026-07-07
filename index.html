@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Risti Ulfha — Product Designer & UX Research Lead | 45M MAU</title>
+  <title>Risti Ulfha — UX Lead, Product Designer & Design Manager | 45M MAU</title>
+  <link rel="canonical" href="https://ristiu.github.io/" />
   <meta name="description" content="Portfolio of Risti Ulfha — AI-native product builder, design lead, and UX research strategist. 10+ years across APAC, APJ, European Economic Area, Jakarta, Australia, and New Zealand. 45M MAU. Design Manager, Design Strategist, fractional UX lead." />
   <meta property="og:title" content="Risti Ulfha — Product Designer & UX Research Lead" />
   <meta property="og:description" content="10+ years building products across eFishery, Traveloka, Warung Pintar, and more. Design strategy, field research, and omnichannel systems." />
@@ -81,9 +82,10 @@
         <img class="hero-stamp-bg" src="assets/stamp.svg" alt="" aria-hidden="true" />
         <p class="hero-stamp-text">I treat portfolio as a trailer, not the full film.</p>
       </div>
+      <p class="hero-current-role"><span class="hero-current-role-frame">Currently Fractional UX Lead at Context Labs<span class="vertex" aria-hidden="true"></span></span></p>
 
     </div>
-    <div class="illustration-group" style="opacity:0;transition:opacity 0.8s ease;">
+    <div class="illustration-group" style="opacity:0;transform:translateY(18px) scale(0.97);transition:opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);">
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
     </div>
     <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
@@ -143,8 +145,10 @@
         wrap.classList.add('hero-note-wrap--settled');
         const stamp = document.querySelector('.hero-stamp');
         if (stamp) stamp.style.animation = 'none';
+        const role = document.querySelector('.hero-current-role');
+        if (role) role.style.animation = 'none';
         const ilGroup = document.querySelector('.illustration-group');
-        if (ilGroup) ilGroup.style.opacity = '1';
+        if (ilGroup) { ilGroup.style.opacity = '1'; ilGroup.style.transform = 'none'; }
         return;
       }
 
@@ -157,7 +161,7 @@
         wrap.classList.add('hero-note-wrap--settled');
 
         const ilGroup = document.querySelector('.illustration-group');
-        if (ilGroup) ilGroup.style.opacity = '1';
+        if (ilGroup) { ilGroup.style.opacity = '1'; ilGroup.style.transform = 'translateY(0) scale(1)'; }
       }, 1400);
 
       // Clear stamp animation after it ends so CSS hover transform works
@@ -204,11 +208,11 @@
 
     const allCards = [
       { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#product-trends',       img: 'assets/portfolio/visual-trends-1.jpeg',    tabLabel: 'Casio',        tabLogo: 'assets/portfolio/logo-casio.png',         tabL: '8%',  cardW: '100%', cardR: '-1.2deg' },
-      { title: 'Optimizing Warehouse Logistics',    subtitle: 'with Service Prototyping',                               href: 'project.html#warehouse-logistics',  img: '',                                       tabLabel: 'Warung Pintar', tabLogo: 'assets/portfolio/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
-      { title: 'Improving Price Perception',        subtitle: 'in Hotel Booking Discovery with Gestalt Principles',     href: 'project.html#price-perception',    img: 'assets/portfolio/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/portfolio/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
-      { title: 'Collective case study as Fractional UX lead',  subtitle: 'Client-facing design consultancy',                    href: 'project.html#context-labs',        img: '',                                       tabLabel: 'Context Labs', tabLogo: 'assets/portfolio/logo-context-labs.png',  tabL: '55%', cardW: '100%' },
-      { title: 'Shaping Product Vision',            subtitle: 'with Offline to Online Design Strategy',                 href: 'project.html#offline-to-online',   img: 'assets/portfolio/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/portfolio/logo-efishery.png',      tabL: '30%', cardW: '100%' },
-      { title: 'Leadership and Team Management',    subtitle: 'to Build High Performing Team',                          href: 'project.html#leadership',          img: 'assets/portfolio/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
+      { title: 'Cutting Fulfillment Time on Warehouse', subtitle: 'with Service Prototyping',                            href: 'project.html#warehouse-logistics',  img: '',                                       tabLabel: 'Warung Pintar', tabLogo: 'assets/portfolio/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
+      { title: 'Reducing Drop off by Reframing Pricing Element', subtitle: 'in Hotel Booking Discovery with Gestalt Principles', href: 'project.html#price-perception',    img: 'assets/portfolio/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/portfolio/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
+      { title: 'Leading Fractional UX Across Client Engagements', subtitle: 'Client-facing design consultancy',         href: 'project.html#context-labs',        img: '',                                       tabLabel: 'Context Labs', tabLogo: 'assets/portfolio/logo-context-labs.png',  tabL: '55%', cardW: '100%' },
+      { title: 'Shaping Product Vision in Offline to Online Channel', subtitle: 'Omnichannel Design Strategy', href: 'project.html#offline-to-online',   img: 'assets/portfolio/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/portfolio/logo-efishery.png',      tabL: '30%', cardW: '100%' },
+      { title: 'Reflection of Building High-Performing Teams', subtitle: 'Leadership & Management Principle',           href: 'project.html#leadership',          img: 'assets/portfolio/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
     ];
 
     // Build a lookup: project id → first 3 sectionImages
