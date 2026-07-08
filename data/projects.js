@@ -89,8 +89,7 @@ const projects = [
     whatShifted: "Coldplay said \"if you never try, you'll never know.\" I came in with zero warehouse context. During service prototyping, too many variables in one experiment makes it hard to isolate what worked — that honesty shaped how I design experiments now.\n\nIt's a huge risk to build something untested when warehouse investment is on the line. So before touching the real warehouse, we ran a service prototype with the full team — VP, data scientists, PMs, and engineers — everyone felt the experience firsthand. That session surfaced things no diagram would have caught: the tools needed, the flow gaps. Each scale of test had its own objective and measurement. Mini zones built from data, dummy orders that replicated real profiles.",
 
     sectionImages: [
-      { url: "https://static.wixstatic.com/media/242cb7_68b9577e5e5b43f2ba8c550838a39d3a~mv2.jpg",  caption: "Warung — the micro retail stores Warung Pintar serves",                        section: "situation" },
-      { url: "assets/portfolio/warehouse-scatter-plot.jpg", caption: "Picking duration vs SKU quantity and SKU line count — the data that revealed the real bottleneck", section: "situation" },
+      { url: "https://static.wixstatic.com/media/242cb7_68b9577e5e5b43f2ba8c550838a39d3a~mv2.jpg",  caption: "Warung — the micro retail stores Warung Pintar serves",                        section: "situation", afterPara: 0 },
       { url: "https://static.wixstatic.com/media/242cb7_f69062528b57422ba517613f41f46bed~mv2.png", caption: "Picking duration correlates with SKU line variety — not quantity",             section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_716a0c48ae634ab2990d3eb6d563f4f7~mv2.png", caption: "No pattern between quantity and duration. Variety is the real driver.",        section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_091fea75ec054b76ad38bb38b6eaee63~mv2.png", caption: "Planning before the warehouse simulation",                                      section: "direction", afterPara: 1 },
@@ -134,7 +133,6 @@ const projects = [
     heroImage: "assets/portfolio/casio-hero.mp4",
 
     sectionImages: [
-      { url: "https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png",                   caption: "Tracking trend signals across past and present to project forward",                                             section: "situation" },
       { url: "https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif",                   caption: "The lenticular concept: a photo that shifts and moves depending on viewing angle",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png",                   caption: "Tap to connect: NFC chip links the printed photo to its full series in the cloud",                            section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg",                   caption: "Exploring the end to end experience, from capture to print to interaction",                                    section: "direction" },
