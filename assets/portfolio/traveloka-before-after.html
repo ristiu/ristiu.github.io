@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Card Design, Before / After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5f4;
+    --card: #ffffff;
+    --ink: #111111;
+    --ink-soft: #6b6b6b;
+    --line: #e4e4e2;
+    --radius-card: 24px;
+    --radius-phone: 40px;
+
+    /* Traveloka-ish palette used inside the phone screens */
+    --tv-blue: #4a90e2;
+    --tv-blue-dark: #3a7bd0;
+    --tv-blue-deep: #2f6cc0;
+    --tv-link: #29b6f6;
+    --tv-orange: #ff5e1f;
+    --tv-green: #43a047;
+    --tv-star: #ffb300;
+    --tv-text: #313541;
+    --tv-muted: #8a919e;
+    --tv-border: #e8eaee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    background: #fff;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     PREVIEW SHELL (tabs + caption + phone frame)
+     ============================================================ */
+
+  .ba-section {
+    background: var(--bg);
+    border-radius: var(--radius-card);
+    max-width: 720px;
+    margin: 48px auto;
+    padding: 40px 24px 48px;
+  }
+
+  .ba-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    width: fit-content;
+    margin: 0 auto 20px;
+  }
+
+  .ba-tab {
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  .ba-tab:hover { background: #efefee; }
+  .ba-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .ba-tab[aria-selected="true"] { background: var(--ink); color: #fff; }
+
+  .ba-caption {
+    text-align: center;
+    max-width: 440px;
+    margin: 0 auto 28px;
+    min-height: 3.2em;
+  }
+  .ba-caption .ba-tag {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .ba-caption p { font-size: 15px; line-height: 1.55; }
+
+  .ba-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .ba-phone {
+    width: min(340px, 82vw);
+    aspect-ratio: 9 / 18;
+    background: #ffffff;
+    border-radius: var(--radius-phone);
+    padding: 10px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+  }
+
+  .ba-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--radius-phone) - 10px);
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ba-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .ba-panel.is-active { opacity: 1; pointer-events: auto; }
+
+  .ba-scroll {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: #f2f4f7;
+  }
+  .ba-scroll::-webkit-scrollbar { display: none; }
+
+  .ba-hint {
+    writing-mode: vertical-rl;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    user-select: none;
+    animation: ba-nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes ba-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ba-hint { animation: none; }
+    .ba-tab, .ba-panel { transition: none; }
+  }
+
+  @media (max-width: 560px) {
+    .ba-hint { display: none; }
+    .ba-section { padding: 32px 16px 40px; margin: 24px 12px; }
+  }
+
+  /* ============================================================
+     IN-PHONE UI (shared)
+     ============================================================ */
+
+  .tv {
+    font-family: 'Roboto', -apple-system, sans-serif;
+    color: var(--tv-text);
+    font-size: 12px;
+  }
+
+  .tv-header {
+    background: linear-gradient(180deg, var(--tv-blue) 0%, var(--tv-blue-dark) 100%);
+    color: #fff;
+    padding: 14px 14px 12px;
+    flex-shrink: 0;
+  }
+  .tv-header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tv-header-title {
+    flex: 1;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .tv-header-title strong { font-size: 15px; font-weight: 500; display: block; }
+  .tv-header-title span { font-size: 10px; opacity: 0.85; }
+  .tv-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.95;
+  }
+
+  .tv-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .tv-chip {
+    background: #fff;
+    color: var(--tv-blue);
+    font-weight: 500;
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .tv-chip.is-active {
+    background: var(--tv-blue-deep);
+    color: #fff;
+  }
+
+  .tv-thumb {
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+  }
+
+  .tv-stars { color: var(--tv-star); font-size: 10px; letter-spacing: 1px; }
+  .tv-payhotel { color: var(--tv-link); font-size: 10px; font-weight: 500; }
+  .tv-loc { color: var(--tv-muted); font-size: 10px; margin-top: 2px; }
+  .tv-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 3px;
+    font-size: 9.5px;
+    color: var(--tv-muted);
+  }
+  .tv-rating-num { color: var(--tv-green); font-weight: 700; }
+  .tv-dots { color: var(--tv-green); letter-spacing: 1px; font-size: 8px; }
+  .tv-strike {
+    color: var(--tv-muted);
+    text-decoration: line-through;
+    font-size: 10px;
+  }
+  .tv-price {
+    color: var(--tv-orange);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .tv-points {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--tv-muted);
+    margin-top: 2px;
+  }
+  .tv-points b { color: var(--tv-link); font-weight: 500; }
+  .tv-coin {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--tv-link);
+    color: #fff;
+    font-size: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     BEFORE SCREEN, old hotel card
+     ============================================================ */
+
+  .old-card {
+    background: #fff;
+    margin-bottom: 8px;
+  }
+  .old-card-body {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+  }
+  .old-card .tv-thumb {
+    width: 92px;
+    height: 118px;
+  }
+  .old-card-info { flex: 1; min-width: 0; }
+  .old-card-name { font-size: 13px; font-weight: 500; line-height: 1.3; }
+  .old-card-price-block {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--tv-border);
+  }
+  .old-card-deal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-top: 1px solid var(--tv-border);
+    padding: 8px 12px;
+    font-size: 10px;
+    color: var(--tv-muted);
+  }
+  .old-card-deal .tv-coin { background: var(--tv-blue); }
+
+  .old-bottombar {
+    flex-shrink: 0;
+    display: flex;
+    background: #fff;
+    border-top: 1px solid var(--tv-border);
+  }
+  .old-bottombar span {
+    flex: 1;
+    text-align: center;
+    padding: 11px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--tv-blue);
+  }
+  .old-bottombar span + span { border-left: 1px solid var(--tv-border); }
+
+  /* ============================================================
+     AFTER SCREEN, new hotel card
+     ============================================================ */
+
+  .new-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--tv-blue-deep);
+    color: #fff;
+    font-size: 10.5px;
+    line-height: 1.45;
+    padding: 10px 14px;
+  }
+  .new-banner-icon { font-size: 16px; }
+
+  .new-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--tv-text);
+    padding: 12px 12px 8px;
+  }
+
+  .new-picks {
+    display: flex;
+    gap: 8px;
+    padding: 0 12px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .new-picks::-webkit-scrollbar { display: none; }
+  .new-pick {
+    position: relative;
+    flex-shrink: 0;
+    width: 210px;
+    height: 118px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .new-pick::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.55) 100%);
+  }
+  .new-pick-inner {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .new-pick-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .new-pick-name { font-size: 11px; font-weight: 700; max-width: 130px; line-height: 1.3; }
+  .new-pick-rating {
+    font-size: 8px;
+    text-align: right;
+    line-height: 1.4;
+  }
+  .new-pick-rating b {
+    display: inline-block;
+    background: var(--tv-link);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 9px;
+  }
+  .new-pick-bottom { margin-top: auto; }
+  .new-pick-price { font-size: 13px; font-weight: 700; }
+  .new-pick-promo { font-size: 8.5px; opacity: 0.9; }
+
+  .new-card {
+    display: flex;
+    background: #fff;
+    border-radius: 6px;
+    margin: 0 12px 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .new-card .tv-thumb {
+    width: 104px;
+    position: relative;
+  }
+  .new-card-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--tv-green);
+    color: #fff;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .new-card-info {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+  }
+  .new-card-name { font-size: 12.5px; font-weight: 500; line-height: 1.3; }
+  .new-deal {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--tv-green);
+    font-size: 9.5px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .new-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .new-price-unit { font-size: 9px; color: var(--tv-muted); }
+  .new-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9.5px;
+    color: var(--tv-muted);
+    margin-top: 3px;
+  }
+</style>
+</head>
+<body>
+
+<section class="ba-section">
+
+  <div class="ba-tabs" role="tablist" aria-label="Hotel card design version">
+    <button class="ba-tab" role="tab" id="tab-before" aria-selected="true" aria-controls="panel-before">Before</button>
+    <button class="ba-tab" role="tab" id="tab-after" aria-selected="false" aria-controls="panel-after">After</button>
+  </div>
+
+  <div class="ba-caption">
+    <span class="ba-tag" data-caption-tag>Old hotel card</span>
+    <p data-caption-text>No information grouping between hotel info, pricing info, and credibility info.</p>
+  </div>
+
+  <div class="ba-stage">
+    <div class="ba-phone">
+      <div class="ba-screen">
+
+        <!-- ============ BEFORE: old hotel card design ============ -->
+        <div class="ba-panel is-active tv" role="tabpanel" id="panel-before" aria-labelledby="tab-before" tabindex="0">
+          <div class="tv-header">
+            <div class="tv-header-row">
+              <span class="tv-icon">&#8592;</span>
+              <div class="tv-header-title">
+                <strong>Bali</strong>
+                <span>16 Sep 2018, 1 night(s)</span>
+              </div>
+              <span class="tv-icon">&#9906;</span>
+              <span class="tv-icon">&#8943;</span>
+            </div>
+            <div class="tv-chips">
+              <span class="tv-chip is-active">All</span>
+              <span class="tv-chip">Budget</span>
+              <span class="tv-chip">Luxury</span>
+              <span class="tv-chip">Pay at Hotel</span>
+            </div>
+          </div>
+
+          <div class="ba-scroll">
+            <!-- card 1 -->
+            <div class="old-card">
+              <div class="old-card-body">
+                <div class="tv-thumb" style="background-image: linear-gradient(135deg, #cfd8dc, #90a4ae);"></div>
+                <div class="old-card-info">
+                  <div class="old-card-name">Grandmas Plus Hotel - Legian</div>
+                  <div><span class="tv-stars">&#9733;&#9733;&#9733;</span> <span class="tv-payhotel">Pay at Hotel Available</span></div>
+                  <div class="tv-loc">&#9906; Legian, Bali</div>
+                  <div class="tv-rating-row">Rating <span class="tv-rating-num">8.7/10</span> <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (416)</div>
+                  <div class="old-card-price-block">
+                    <div class="tv-strike">Rp 396.686/room/night</div>
+                    <div class="tv-price">Rp 271.296</div>
+                    <div class="tv-points"><span class="tv-coin">P</span> Starts from <b>108 Points</b></div>
+                  </div>
+                </div>
+              </div>
+              <div class="old-card-deal"><span class="tv-coin">%</span> Mobile exclusive: save 15%</div>
+            </div>
+
+            <!-- card 2 -->
+            <div class="old-card">
+              <div class="old-card-body">
+                <div class="tv-thumb" style="background-image: linear-gradient(135deg, #4fc3f7, #0277bd);"></div>
+                <div class="old-card-info">
+                  <div class="old-card-name">Kutabex Beachfront Hotel</div>
+                  <div><span class="tv-stars">&#9733;&#9733;&#9733;</span> <span class="tv-payhotel">Pay at Hotel Available</span></div>
+                  <div class="tv-loc">&#9906; Kuta, Bali</div>
+                  <div class="tv-rating-row">Rating <span class="tv-rating-num">8.5/10</span> <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (252)</div>
+                  <div class="old-card-price-block">
+                    <div class="tv-strike">Rp 920.076/room/night</div>
+                    <div class="tv-price">Rp 552.045</div>
+                    <div class="tv-points"><span class="tv-coin">P</span> Starts from <b>220 Points</b></div>
+                  </div>
+                </div>
+              </div>
+              <div class="old-card-deal"><span class="tv-coin">%</span> Last minute deal - 40.0% off!</div>
+            </div>
+
+            <!-- card 3 -->
+            <div class="old-card">
+              <div class="old-card-body">
+                <div class="tv-thumb" style="background-image: linear-gradient(135deg, #a5d6a7, #558b2f);"></div>
+                <div class="old-card-info">
+                  <div class="old-card-name">Instyle Kuta Hotel Bali</div>
+                  <div><span class="tv-stars">&#9733;&#9733;&#9733;&#9733;</span></div>
+                  <div class="tv-loc">&#9906; Legian, Bali</div>
+                  <div class="tv-rating-row">Rating <span class="tv-rating-num">8.6/10</span> <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (205)</div>
+                  <div class="old-card-price-block">
+                    <div class="tv-strike">Rp 480.000/room/night</div>
+                    <div class="tv-price">Rp 336.000</div>
+                    <div class="tv-points"><span class="tv-coin">P</span> Starts from <b>134 Points</b></div>
+                  </div>
+                </div>
+              </div>
+              <div class="old-card-deal"><span class="tv-coin">%</span> Weekend deal - 30.0% off!</div>
+            </div>
+          </div>
+
+          <div class="old-bottombar">
+            <span>&#9776; Filter</span>
+            <span>&#8645; Sort</span>
+            <span>&#9906; Map</span>
+          </div>
+        </div>
+
+        <!-- ============ AFTER: new hotel card design ============ -->
+        <div class="ba-panel tv" role="tabpanel" id="panel-after" aria-labelledby="tab-after" tabindex="0">
+          <div class="tv-header">
+            <div class="tv-header-row">
+              <span class="tv-icon">&#8592;</span>
+              <div class="tv-header-title">
+                <strong>Bali</strong>
+                <span>16 Sep 2018, 1 night(s)</span>
+              </div>
+              <span class="tv-icon">&#9906;</span>
+              <span class="tv-icon">&#8943;</span>
+            </div>
+            <div class="tv-chips">
+              <span class="tv-chip is-active">All</span>
+              <span class="tv-chip">Budget</span>
+              <span class="tv-chip">Luxury</span>
+              <span class="tv-chip">Pay at Hotel</span>
+            </div>
+          </div>
+
+          <div class="new-banner">
+            <span class="new-banner-icon">&#128519;</span>
+            <span>All price include Tax. No transaction fee, no hidden charge</span>
+          </div>
+
+          <div class="ba-scroll">
+            <div class="new-section-title">Popular Picks</div>
+            <div class="new-picks">
+              <div class="new-pick" style="background-image: linear-gradient(135deg, #37474f, #1a237e);">
+                <div class="new-pick-inner">
+                  <div class="new-pick-top">
+                    <div>
+                      <div class="new-pick-name">Premier Inn Bali</div>
+                      <div class="tv-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                      <div style="font-size:8.5px; margin-top:2px;">&#9906; Marina Bay</div>
+                    </div>
+                    <div class="new-pick-rating">Rating<br><b>&#10022; 8.9</b></div>
+                  </div>
+                  <div class="new-pick-bottom">
+                    <div class="new-pick-price">Rp 1.460.502</div>
+                  </div>
+                </div>
+              </div>
+              <div class="new-pick" style="background-image: linear-gradient(135deg, #5d4037, #263238);">
+                <div class="new-pick-inner">
+                  <div class="new-pick-top">
+                    <div>
+                      <div class="new-pick-name">Holiday Out Bali</div>
+                      <div class="tv-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                      <div style="font-size:8.5px; margin-top:2px;">&#9906; Marina Bay</div>
+                    </div>
+                    <div class="new-pick-rating">Rating<br><b>&#10022; 8.9</b></div>
+                  </div>
+                  <div class="new-pick-bottom">
+                    <div class="new-pick-price">Rp 1.260.920</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- card 1 -->
+            <div class="new-card">
+              <div class="tv-thumb" style="background-image: linear-gradient(135deg, #b0bec5, #607d8b);">
+                <span class="new-card-badge">&#9992;</span>
+              </div>
+              <div class="new-card-info">
+                <div class="new-card-name">The Anvata Beach Resort Bali</div>
+                <div><span class="tv-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span class="tv-payhotel">Pay at Hotel Available</span></div>
+                <div class="tv-loc">&#9906; Legian, Bali</div>
+                <div class="tv-rating-row"><span style="color:var(--tv-link);">&#128077;</span> <span class="tv-rating-num" style="color:var(--tv-link);">8.6</span> (1334) &nbsp;|&nbsp; <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (9210)</div>
+                <div class="new-deal">&#9992; Flight customer deal</div>
+                <div class="tv-strike">Rp 550.766</div>
+                <div class="new-price-row">
+                  <span class="tv-price">Rp 327.231</span>
+                  <span class="new-price-unit">/room/night</span>
+                </div>
+                <div class="new-meta-row">inclusive of tax &nbsp;|&nbsp; <span class="tv-coin">P</span> <b style="color:var(--tv-link); font-weight:500;">545 Points</b></div>
+              </div>
+            </div>
+
+            <!-- card 2 -->
+            <div class="new-card">
+              <div class="tv-thumb" style="background-image: linear-gradient(135deg, #ff8a65, #4e342e);">
+                <span class="new-card-badge">&#9992;</span>
+              </div>
+              <div class="new-card-info">
+                <div class="new-card-name">Atanaya By Century Park</div>
+                <div><span class="tv-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+                <div class="tv-loc">&#9906; Legian, Bali</div>
+                <div class="tv-rating-row"><span style="color:var(--tv-link);">&#128077;</span> <span class="tv-rating-num" style="color:var(--tv-link);">8.6</span> (1334) &nbsp;|&nbsp; <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (9210)</div>
+                <div class="new-deal">&#9992; Flight customer deal</div>
+                <div class="tv-strike">Rp 540.000</div>
+                <div class="new-price-row">
+                  <span class="tv-price">Rp 310.000</span>
+                  <span class="new-price-unit">/room/night</span>
+                </div>
+                <div class="new-meta-row">inclusive of tax &nbsp;|&nbsp; <span class="tv-coin">P</span> <b style="color:var(--tv-link); font-weight:500;">545 Points</b></div>
+              </div>
+            </div>
+
+            <!-- card 3 -->
+            <div class="new-card">
+              <div class="tv-thumb" style="background-image: linear-gradient(135deg, #81d4fa, #01579b);">
+                <span class="new-card-badge">&#9992;</span>
+              </div>
+              <div class="new-card-info">
+                <div class="new-card-name">Kutabex Beachfront Hotel</div>
+                <div><span class="tv-stars">&#9733;&#9733;&#9733;</span> <span class="tv-payhotel">Pay at Hotel Available</span></div>
+                <div class="tv-loc">&#9906; Kuta, Bali</div>
+                <div class="tv-rating-row"><span style="color:var(--tv-link);">&#128077;</span> <span class="tv-rating-num" style="color:var(--tv-link);">8.5</span> (980) &nbsp;|&nbsp; <span class="tv-dots">&#9679;&#9679;&#9679;&#9679;&#9675;</span> (252)</div>
+                <div class="new-deal">&#9992; Flight customer deal</div>
+                <div class="tv-strike">Rp 920.076</div>
+                <div class="new-price-row">
+                  <span class="tv-price">Rp 552.045</span>
+                  <span class="new-price-unit">/room/night</span>
+                </div>
+                <div class="new-meta-row">inclusive of tax &nbsp;|&nbsp; <span class="tv-coin">P</span> <b style="color:var(--tv-link); font-weight:500;">220 Points</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+(function () {
+  var captions = {
+    'tab-before': {
+      tag: 'Old hotel card',
+      text: 'No information grouping between hotel info, pricing info, and credibility info.'
+    },
+    'tab-after': {
+      tag: 'New hotel card',
+      text: 'Information is now grouped logically, The decision-making info such as, hotel photo is more prominently displayed, pricing element is clearly visible.'
+    }
+  };
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ba-tab'));
+  var tagEl = document.querySelector('[data-caption-tag]');
+  var textEl = document.querySelector('[data-caption-text]');
+
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var active = t === tab;
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.classList.toggle('is-active', active);
+      if (active) {
+        var scroller = panel.querySelector('.ba-scroll');
+        if (scroller) scroller.scrollTop = 0;
+      }
+    });
+    tagEl.textContent = captions[tab.id].tag;
+    textEl.textContent = captions[tab.id].text;
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab); });
+    tab.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        select(next);
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

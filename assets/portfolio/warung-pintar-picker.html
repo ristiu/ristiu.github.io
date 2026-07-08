@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warung Pintar Picker App, Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5f4;
+    --card: #ffffff;
+    --ink: #111111;
+    --ink-soft: #6b6b6b;
+    --line: #e4e4e2;
+    --radius-card: 24px;
+    --radius-phone: 40px;
+
+    /* Warung Pintar palette, sampled from the design */
+    --wp-yellow: #f6cf57;
+    --wp-black: #111111;
+    --wp-green: #00be6c;
+    --wp-blue: #2f7cc6;
+    --wp-blue-soft: #a9c7e8;
+    --wp-gray: #e5e5e5;
+    --wp-gray-soft: #f5f5f5;
+    --wp-text: #1c1c1c;
+    --wp-muted: #9a9a9a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    background: #fff;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     PREVIEW SHELL (tabs + caption + phone frame)
+     ============================================================ */
+
+  .ba-section {
+    background: var(--bg);
+    border-radius: var(--radius-card);
+    max-width: 720px;
+    margin: 48px auto;
+    padding: 40px 24px 48px;
+  }
+
+  .ba-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    width: fit-content;
+    margin: 0 auto 20px;
+  }
+
+  .ba-tab {
+    font: inherit;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+  }
+  .ba-tab:hover { background: #efefee; }
+  .ba-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .ba-tab[aria-selected="true"] { background: var(--ink); color: #fff; }
+
+  .ba-caption {
+    text-align: center;
+    max-width: 460px;
+    margin: 0 auto 28px;
+    min-height: 3.2em;
+  }
+  .ba-caption .ba-tag {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .ba-caption p { font-size: 15px; line-height: 1.55; }
+
+  .ba-stage {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ba-phone {
+    width: min(340px, 82vw);
+    aspect-ratio: 9 / 18;
+    background: #111;
+    border-radius: var(--radius-phone);
+    padding: 10px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+  }
+
+  .ba-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--radius-phone) - 10px);
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ba-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .ba-panel.is-active { opacity: 1; pointer-events: auto; }
+
+  .ba-scroll {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: var(--wp-gray-soft);
+  }
+  .ba-scroll::-webkit-scrollbar { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wp-scanline { animation: none !important; }
+    .ba-tab, .ba-panel { transition: none; }
+  }
+
+  @media (max-width: 560px) {
+    .ba-section { padding: 32px 12px 40px; margin: 24px 12px; }
+    .ba-tab { padding: 10px 12px; font-size: 12px; }
+  }
+
+  /* ============================================================
+     IN-PHONE UI, Warung Pintar picker
+     ============================================================ */
+
+  .wp {
+    font-family: 'Nunito Sans', -apple-system, sans-serif;
+    color: var(--wp-text);
+    font-size: 12px;
+  }
+
+  .wp-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--wp-black);
+    color: #fff;
+    padding: 16px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .wp-back { font-size: 15px; line-height: 1; opacity: 0.9; }
+
+  .wp-icon { display: inline-block; vertical-align: -3px; }
+
+  /* --- Order Assigned (Pesanan Masuk) --- */
+  .wp-card {
+    background: #fff;
+    border-radius: 8px;
+    margin: 12px 12px 0;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+
+  .wp-progress-label { font-size: 12px; font-weight: 600; }
+  .wp-progress-bar {
+    height: 8px;
+    background: var(--wp-gray);
+    border-radius: 999px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .wp-progress-fill {
+    height: 100%;
+    width: 14%;
+    background: var(--wp-green);
+    border-radius: 999px;
+  }
+  .wp-progress-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--wp-green);
+    margin-top: 6px;
+  }
+
+  .wp-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 14px;
+  }
+  .wp-cluster-name { font-size: 13px; font-weight: 700; }
+  .wp-cluster.is-disabled {
+    background: #ececec;
+    box-shadow: none;
+  }
+  .wp-cluster.is-disabled .wp-cluster-name { color: var(--wp-muted); }
+  .wp-pie {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: conic-gradient(var(--wp-green) 0 25%, #dff5ea 25% 100%);
+  }
+  .wp-pie.is-empty {
+    background: transparent;
+    border: 2px solid #cfcfcf;
+  }
+
+  /* --- Order Picking (Cluster detail) --- */
+  .wp-sheet {
+    background: #fff;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 6px 14px 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+
+  .wp-sku-head { padding: 10px 0 12px; }
+  .wp-sku-loc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .wp-sku-loc-left { display: flex; align-items: center; gap: 8px; }
+  .wp-sku-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 800;
+    margin-top: 8px;
+  }
+  .wp-divider { border-top: 1.5px solid #d7dbe0; }
+
+  .wp-uom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 6px;
+  }
+  .wp-uom-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .wp-uom-left b { font-weight: 800; }
+  .wp-uom-note { font-size: 11px; color: #b5b5b5; }
+
+  .wp-pick-row {
+    display: flex;
+    align-items: center;
+    padding: 15px 0 15px 14px;
+    border-bottom: 1px solid #efefef;
+  }
+  .wp-pick-row:last-child { border-bottom: 0; }
+  .wp-pick-qty {
+    width: 26px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .wp-pick-arrow {
+    color: #c9c9c9;
+    font-size: 14px;
+    margin: 0 14px;
+  }
+  .wp-pick-basket {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .wp-pick-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .wp-checkbox {
+    width: 24px; height: 24px;
+    border: 1.5px solid var(--wp-blue-soft);
+    background: #f7fafd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wp-checkbox svg { display: none; }
+  .wp-checkbox.is-checked {
+    background: var(--wp-green);
+    border-color: var(--wp-green);
+  }
+  .wp-checkbox.is-checked svg { display: block; }
+
+  .wp-pick-row.is-done { background: #f4fbf7; }
+  .wp-pick-row.is-done .wp-pick-qty,
+  .wp-pick-row.is-done .wp-pick-basket { color: var(--wp-muted); }
+  .wp-pick-row.is-done .wp-pick-basket svg { opacity: 0.55; }
+
+  /* --- Scan Rack (Pindai Kode SKU Rak) --- */
+  .wp-scan-modes {
+    display: flex;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .wp-scan-mode {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0 10px;
+    border-bottom: 2px solid transparent;
+    color: #9a9a9a;
+  }
+  .wp-scan-mode.is-active {
+    color: var(--wp-black);
+    border-bottom-color: var(--wp-yellow);
+  }
+
+  .wp-camera {
+    flex: 1;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 40%, #3a3a3a 0%, #161616 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wp-viewfinder {
+    position: relative;
+    width: 68%;
+    aspect-ratio: 1.4 / 1;
+  }
+  .wp-corner {
+    position: absolute;
+    width: 26px; height: 26px;
+    border: 3px solid var(--wp-yellow);
+  }
+  .wp-corner.tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+  .wp-corner.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .wp-corner.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+  .wp-corner.br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+  .wp-scanline {
+    position: absolute;
+    left: 8%; right: 8%;
+    height: 2px;
+    background: var(--wp-yellow);
+    box-shadow: 0 0 10px var(--wp-yellow);
+    animation: wp-scan 2.2s ease-in-out infinite;
+  }
+  @keyframes wp-scan {
+    0%, 100% { top: 12%; }
+    50% { top: 85%; }
+  }
+  .wp-camera-hint {
+    position: absolute;
+    bottom: 16px;
+    left: 0; right: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 11px;
+    opacity: 0.85;
+  }
+  .wp-scan-footer {
+    background: #111;
+    padding: 4px 0 8px;
+    flex-shrink: 0;
+  }
+  .wp-scan-btn {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 8px 12px;
+    background: var(--wp-yellow);
+    color: var(--wp-black);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-align: center;
+    border: 0;
+    border-radius: 8px;
+    padding: 13px 0;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<section class="ba-section">
+
+  <div class="ba-tabs" role="tablist" aria-label="Picker app screen">
+    <button class="ba-tab" role="tab" id="tab-assigned" aria-selected="true" aria-controls="panel-assigned">Order Assigned</button>
+    <button class="ba-tab" role="tab" id="tab-picking" aria-selected="false" aria-controls="panel-picking">Order Picking</button>
+    <button class="ba-tab" role="tab" id="tab-scan" aria-selected="false" aria-controls="panel-scan">Scan Rack</button>
+  </div>
+
+  <div class="ba-caption">
+    <span class="ba-tag" data-caption-tag>Order Assigned</span>
+    <p data-caption-text>Total clusters to pick within the shift. One glance shows what is done and what is next.</p>
+  </div>
+
+  <div class="ba-stage">
+    <div class="ba-phone">
+      <div class="ba-screen">
+
+        <!-- ============ SCREEN 1: Order Assigned ============ -->
+        <div class="ba-panel is-active wp" role="tabpanel" id="panel-assigned" aria-labelledby="tab-assigned" tabindex="0">
+          <div class="wp-header"><span class="wp-back">&#8249;</span> Pesanan Masuk</div>
+          <div class="ba-scroll">
+            <div class="wp-card">
+              <div class="wp-progress-label">Total Cluster yang selesai dikerjakan</div>
+              <div class="wp-progress-bar"><div class="wp-progress-fill"></div></div>
+              <div class="wp-progress-num">14%</div>
+            </div>
+
+            <div class="wp-card wp-cluster">
+              <span class="wp-cluster-name">Cluster 2</span>
+              <span class="wp-pie"></span>
+            </div>
+
+            <div class="wp-card wp-cluster is-disabled">
+              <span class="wp-cluster-name">Cluster 3</span>
+              <span class="wp-pie is-empty"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 2: Order Picking ============ -->
+        <div class="ba-panel wp" role="tabpanel" id="panel-picking" aria-labelledby="tab-picking" tabindex="0">
+          <div class="wp-header"><span class="wp-back">&#8249;</span> Cluster 1</div>
+          <div class="ba-scroll">
+            <div class="wp-sheet">
+
+              <div class="wp-sku-head">
+                <div class="wp-sku-loc">
+                  <span class="wp-sku-loc-left">
+                    <svg class="wp-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                    A13
+                  </span>
+                  <svg class="wp-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f7cc6" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 8v5M8 10.5h5"/></svg>
+                </div>
+                <div class="wp-sku-name">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M3 4h2l2.5 12h11L21 8H7"/><circle cx="9.5" cy="19.5" r="1.4" fill="#444"/><circle cx="16.5" cy="19.5" r="1.4" fill="#444"/></svg>
+                  Aqua Botol 1.5 L
+                </div>
+              </div>
+
+              <div class="wp-divider"></div>
+
+              <!-- UOM group: Dus -->
+              <div class="wp-uom">
+                <span class="wp-uom-left">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#8a8a8a"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5zM5 9.2l7 3.9 7-3.9"/></svg>
+                  Total: <b>28 Dus</b>
+                </span>
+                <span class="wp-uom-note">1 Dus = 19 Botol</span>
+              </div>
+
+              <div class="wp-pick-row is-done">
+                <span class="wp-pick-qty">5</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  A
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox is-checked">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                  </span>
+                </span>
+              </div>
+
+              <div class="wp-pick-row is-done">
+                <span class="wp-pick-qty">6</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  B
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox is-checked">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                  </span>
+                </span>
+              </div>
+
+              <div class="wp-pick-row">
+                <span class="wp-pick-qty">7</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  C
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox"></span>
+                </span>
+              </div>
+
+              <div class="wp-pick-row">
+                <span class="wp-pick-qty">10</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  E
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox"></span>
+                </span>
+              </div>
+
+              <!-- UOM group: Botol -->
+              <div class="wp-uom">
+                <span class="wp-uom-left">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#8a8a8a"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5zM5 9.2l7 3.9 7-3.9"/></svg>
+                  Total: <b>28 Botol</b>
+                </span>
+              </div>
+
+              <div class="wp-pick-row is-done">
+                <span class="wp-pick-qty">5</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  A
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox is-checked">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                  </span>
+                </span>
+              </div>
+
+              <div class="wp-pick-row">
+                <span class="wp-pick-qty">6</span>
+                <span class="wp-pick-arrow">&#10230;</span>
+                <span class="wp-pick-basket">
+                  <svg class="wp-icon" width="14" height="14" viewBox="0 0 24 24" fill="#555"><path d="M4 8h16l-1.5 11h-13L4 8zm3 3v5m5-5v5m5-5v5" stroke="#fff" stroke-width="1.2"/></svg>
+                  B
+                </span>
+                <span class="wp-pick-actions">
+                  <svg class="wp-icon" width="15" height="15" viewBox="0 0 24 24" fill="#2f7cc6"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7a1 1 0 0 0 0-1.4L18.4 3.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.75L20.7 7z"/></svg>
+                  <span class="wp-checkbox"></span>
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 3: Scan Rack ============ -->
+        <div class="ba-panel wp" role="tabpanel" id="panel-scan" aria-labelledby="tab-scan" tabindex="0">
+          <div class="wp-header"><span class="wp-back">&#8249;</span> Pindai Kode SKU Rak</div>
+          <div class="wp-camera">
+            <div class="wp-viewfinder">
+              <span class="wp-corner tl"></span>
+              <span class="wp-corner tr"></span>
+              <span class="wp-corner bl"></span>
+              <span class="wp-corner br"></span>
+              <div class="wp-scanline"></div>
+            </div>
+            <div class="wp-camera-hint">Arahkan kamera ke kode SKU pada rak</div>
+          </div>
+          <div class="wp-scan-footer">
+            <button class="wp-scan-btn" type="button">PINDAI RAK</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function () {
+  var captions = {
+    'tab-assigned': {
+      tag: 'Order Assigned',
+      text: 'Total clusters to pick within the shift. One glance shows what is done and what is next.'
+    },
+    'tab-picking': {
+      tag: 'Order Picking',
+      text: 'One SKU, two units of measure. Quantities split across the cluster baskets, ticked as they go in.'
+    },
+    'tab-scan': {
+      tag: 'Scan Rack',
+      text: 'Scanning the rack confirms the right item before it leaves the shelf. A guardrail for new, contract-based pickers.'
+    }
+  };
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ba-tab'));
+  var tagEl = document.querySelector('[data-caption-tag]');
+  var textEl = document.querySelector('[data-caption-text]');
+
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var active = t === tab;
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.classList.toggle('is-active', active);
+      if (active) {
+        var scroller = panel.querySelector('.ba-scroll');
+        if (scroller) scroller.scrollTop = 0;
+      }
+    });
+    tagEl.textContent = captions[tab.id].tag;
+    textEl.textContent = captions[tab.id].text;
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab); });
+    tab.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        select(next);
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

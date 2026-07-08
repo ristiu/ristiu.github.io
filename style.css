@@ -1118,6 +1118,13 @@ a:hover { color: var(--accent); }
     min-height: 380px;
   }
 
+  /* Tagged hero: wrapper must hug the media exactly so tag percentage
+     positions land inside the visible frame, not in the padded gutter. */
+  .project-main .project-hero--tagged .project-hero-imgwrap {
+    padding: 0;
+    min-height: 0;
+  }
+
   /* Push Outcome below the fold — hook aligns with hero (same max-width + centering) */
   .project-main #section-hook {
     max-width: 600px;
@@ -1212,6 +1219,13 @@ a:hover { color: var(--accent); }
     padding: 60px 0 32px;
     min-height: 260px;
     background: #ffffff;
+  }
+
+  /* Tagged hero: wrapper must hug the media exactly so tag percentage
+     positions land inside the visible frame, not in the padded gutter. */
+  .project-hero--tagged .project-hero-imgwrap {
+    padding: 0;
+    min-height: 0;
   }
 
   .project-hero-imgwrap::after {
@@ -1774,6 +1788,24 @@ ol li, ul li {
   display: block;
   border-radius: 5px;
   box-shadow: none;
+}
+
+/* Diagram/screenshot-style images: show at half width so the source
+   resolution is never stretched up past its native size (avoids pixelation). */
+.section-photo--contained {
+  display: flex;
+  justify-content: center;
+}
+.section-photo--contained img {
+  width: 50%;
+  min-width: 260px;
+}
+
+@media (max-width: 599px) {
+  .section-photo--contained img {
+    width: 80%;
+    min-width: 0;
+  }
 }
 
 /* ─── Native page transitions (Chrome 126+) ─────────────── */
