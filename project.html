@@ -25,7 +25,7 @@
   .ba-section {
     --ba-bg: #f5f5f4;
     --ba-card: #ffffff;
-    --ba-ink: #000000;
+    --ba-ink: #212121;
     --ba-ink-soft: #666666;
     --ba-line: #e4e4e2;
     --ba-radius-card: 5px;
@@ -780,7 +780,19 @@
     transform: scale(0.4);
     transition: fill-opacity 0.3s ease, transform 0.3s ease;
   }
-  .pdc-dots.is-drawn .pdc-dot { fill-opacity: 0.35; transform: scale(1); }
+  .pdc-dots.is-drawn .pdc-dot {
+    fill-opacity: 0.35;
+    transform: scale(1);
+    animation: pdc-twinkle 2.6s ease-in-out infinite;
+    animation-delay: var(--tw-delay, 0s);
+  }
+  @keyframes pdc-twinkle {
+    0%, 100% { fill-opacity: 0.22; }
+    50%      { fill-opacity: 0.62; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pdc-dots.is-drawn .pdc-dot { animation: none; }
+  }
   .pdc-band { fill: rgba(47, 124, 198, 0.14); opacity: 0; transition: opacity 0.6s ease 0.4s; }
   .pdc-trend {
     fill: none;
@@ -807,7 +819,7 @@
     margin: 20px 0;
     /* Fixed, shorter than the iframe itself — crops out the Google Trends
        logo footer and trailing blank space below the chart. */
-    height: 350px;
+    height: 300px;
   }
   .gt-frame iframe {
     display: block;
@@ -816,15 +828,124 @@
     border: 0;
   }
   @media (max-width: 640px) {
-    .gt-frame { height: 350px; }
+    .gt-frame { height: 300px; }
     .gt-frame iframe { height: 560px; }
+  }
+
+  /* ── Service prototyping stage stepper (warehouse-logistics) ──
+     Lean ruler-style: one line, tick marks, uniform dots, labels
+     below only — matches a minimal milestone-timeline reference. */
+  .wps-lean {
+    position: relative;
+    display: flex;
+    padding-top: 22px;
+    overflow-x: auto;
+  }
+  .wps-lean-hline {
+    position: absolute;
+    top: 22px;
+    left: 4px;
+    right: 4px;
+    height: 1px;
+    background: #ccc;
+  }
+  .wps-lean-step {
+    position: relative;
+    flex: 1 0 130px;
+    min-width: 130px;
+    padding: 18px 12px 0 12px;
+  }
+  .wps-lean-tick {
+    position: absolute;
+    top: 4px;
+    left: 12px;
+    width: 1px;
+    height: 18px;
+    background: #ccc;
+  }
+  .wps-lean-dot {
+    position: absolute;
+    top: 22px;
+    left: 12px;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #212121;
+    transition: transform 0.25s ease;
+    z-index: 1;
+  }
+  .wps-lean-dot--current { background: #e0453c; }
+  .wps-lean-step:hover .wps-lean-dot { transform: translate(-50%, -50%) scale(1.4); }
+  .content-section p.wps-lean-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    color: var(--ink-muted, #666);
+    margin-top: 18px;
+  }
+  .wps-lean-label strong { color: var(--ink); font-weight: 700; }
+  .wps-lean-sub { color: var(--ink-muted, #666); }
+
+  /* ── V1 vs V2 picking comparison table (warehouse-logistics) ── */
+  .wpc-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .wpc-table {
+    width: 100%;
+    min-width: 480px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .wpc-table th,
+  .wpc-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e4e4e2;
+    vertical-align: top;
+  }
+  .wpc-table th {
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .wpc-table td:first-child {
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .wpc-table td {
+    color: var(--ink-muted, #666);
+  }
+  .wpc-table tbody tr:hover { background: #f5f5f4; }
+  .wpc-highlight {
+    color: #00be6c !important;
+    font-weight: 700;
+  }
+  @media (max-width: 640px) {
+    .wpc-table { min-width: 420px; font-size: 10px; }
+    .wpc-table th, .wpc-table td { padding: 8px 8px; }
   }
 
   /* ── Trend timeline: past / present / future (product-trends / Casio) ──
      Single-column, matches the site's existing paragraph + inline-photo style. */
-  .ty-label {
+  .content-section p.ty-label {
     font-family: var(--mono);
     font-weight: 700;
+  }
+  .ty-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1;
+    color: #ffffff;
+    background: rgba(33,33,33,0.76);
+    border-radius: 5px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    margin-bottom: 8px;
   }
 
   /* ── Venn diagram: past / present / future overlap (product-trends / Casio) ── */
@@ -836,30 +957,10 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 46px;
+    justify-content: center;
     flex-shrink: 0;
     padding: 26px 0;
-  }
-  @media (max-width: 640px) {
-    .venn-circles { align-self: center; gap: 30px; }
-  }
-  .venn-connectors {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .venn-connectors path {
-    fill: none;
-    stroke: #9b9aef;
-    stroke-width: 1.4;
-    opacity: 0.55;
-  }
-  .venn-connectors circle {
-    fill: #4c6ef5;
+    perspective: 700px;
   }
   .venn-circle {
     position: relative;
@@ -873,22 +974,48 @@
     justify-content: center;
     text-align: center;
     flex-shrink: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
   }
+  .venn-circle:hover {
+    transform: perspective(700px) rotateX(10deg) rotateY(-14deg) scale(1.1);
+    z-index: 2;
+  }
+
+  /* Wrapper carries the continuous float; inner circle carries the hover
+     tilt — separate elements so the two motions never fight each other. */
+  .venn-float {
+    display: flex;
+    animation: venn-float 6s ease-in-out infinite;
+  }
+  .venn-float--1 { animation-duration: 6.4s; animation-delay: 0s; }
+  .venn-float--2 { animation-duration: 7.6s; animation-delay: -2.2s; }
+  .venn-float--3 { animation-duration: 7.0s; animation-delay: -4.1s; }
+  @keyframes venn-float {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(4px, -9px); }
+    50%  { transform: translate(-3px, -13px); }
+    75%  { transform: translate(-6px, -4px); }
+    100% { transform: translate(0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .venn-float { animation: none; }
+  }
+
+  .venn-float + .venn-float { margin-left: -34px; }
   @media (max-width: 640px) {
     .venn-circle { width: 108px; height: 108px; }
+    .venn-float + .venn-float { margin-left: -22px; }
   }
 
-  /* 2012–2013: dotted outline, nothing filled in yet */
-  .venn-circle--1 {
-    background: transparent;
-    border: 2px dashed #9b9aef;
-  }
-
-  /* 2014 / 2016: soft glow blob, like a light source coming into focus */
+  /* All three: soft glow blob, growing more solid/confident past → future */
+  .venn-circle--1,
   .venn-circle--2,
   .venn-circle--3 {
     background: transparent;
   }
+  .venn-circle--1::before,
   .venn-circle--2::before,
   .venn-circle--3::before {
     content: '';
@@ -898,6 +1025,9 @@
     z-index: -1;
     filter: blur(10px);
   }
+  .venn-circle--1::before {
+    background: radial-gradient(circle, #e7e6fb 0%, #e7e6fb 42%, transparent 72%);
+  }
   .venn-circle--2::before {
     background: radial-gradient(circle, #9b9aef 0%, #9b9aef 42%, transparent 72%);
   }
@@ -906,33 +1036,42 @@
   }
 
   .venn-year {
+    font-family: var(--mono);
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     color: #33399e;
   }
   .venn-circle--3 .venn-year,
   .venn-circle--3 .venn-sub { color: #ffffff; }
   @media (max-width: 640px) {
-    .venn-year { font-size: 11px; }
-    .venn-sub { font-size: 10px; }
+    .venn-year { font-size: 10px; }
+    .venn-sub { font-size: 9px; }
   }
   .venn-sub {
-    font-size: 14px;
+    font-family: var(--mono);
+    font-size: 13px;
     color: #4650c9;
     margin-top: 2px;
   }
-  .venn-circle--2,
-  .venn-circle--3 {
+  /* Floating motion lives on the glow layer, not the circle itself,
+     so hover-zoom (on .venn-circle) never fights with the animation. */
+  .venn-circle--1::before,
+  .venn-circle--2::before,
+  .venn-circle--3::before {
     animation: venn-pulse 5s ease-in-out infinite;
   }
-  .venn-circle--2 { animation-duration: 5.4s; animation-delay: -1.4s; }
-  .venn-circle--3 { animation-duration: 5.0s; animation-delay: -2.6s; }
+  .venn-circle--1::before { animation-duration: 7.2s; animation-delay: 0s; }
+  .venn-circle--2::before { animation-duration: 8.4s; animation-delay: -2.4s; }
+  .venn-circle--3::before { animation-duration: 7.8s; animation-delay: -4.6s; }
   @keyframes venn-pulse {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50%      { transform: translateY(-6px) scale(1.02); }
+    0%   { transform: translate(0, 0) scale(1); }
+    25%  { transform: translate(3px, -6px) scale(1.03); }
+    50%  { transform: translate(-2px, -9px) scale(1.01); }
+    75%  { transform: translate(-4px, -3px) scale(1.04); }
+    100% { transform: translate(0, 0) scale(1); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .venn-circle--2, .venn-circle--3 { animation: none; }
+    .venn-circle--1::before, .venn-circle--2::before, .venn-circle--3::before { animation: none; }
   }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -1195,8 +1334,8 @@
       const articles = p.articles || [];
 
       // Retro palette — warm, muted, pulled from the "scattered cards" reference
-      const CARD_COLORS   = ['#C2CCBE', '#EDE4A0', '#EEBCAA', '#000000', '#F5F0E8'];
-      const CARD_INKS     = ['#000000', '#000000', '#000000', '#ffffff', '#000000'];
+      const CARD_COLORS   = ['#C2CCBE', '#EDE4A0', '#EEBCAA', '#212121', '#F5F0E8'];
+      const CARD_INKS     = ['#212121', '#212121', '#212121', '#ffffff', '#212121'];
       const CARD_DIVIDERS = ['rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(255,255,255,0.15)', 'rgba(0,0,0,0.09)'];
       const STACK_ROTS    = [-7, 5, -4, 8, -6, 3];
       const STACK_TX      = [10, -14, 18, -8, 12, -6];
@@ -1338,7 +1477,7 @@
             card.dataset.savedInk     = card.style.getPropertyValue('--card-ink');
             card.dataset.savedDivider = card.style.getPropertyValue('--card-divider');
             card.style.setProperty('--card-bg', '#ffffff');
-            card.style.setProperty('--card-ink', '#000000');
+            card.style.setProperty('--card-ink', '#212121');
             card.style.setProperty('--card-divider', 'rgba(0,0,0,0.09)');
           } else {
             card.style.setProperty('--card-bg',      card.dataset.savedBg      || '');
@@ -1413,13 +1552,13 @@
 
       // Tagged hero — full image with floating tag chips
       const TAG_POSITIONS = [
-        { top:    '10%', left:  '8%'  },
-        { top:    '8%',  right: '10%' },
-        { top:    '42%', left:  '6%'  },
-        { bottom: '12%', right: '8%'  },
-        { bottom: '10%', left:  '12%' },
-        { top:    '24%', right: '6%'  },
-        { bottom: '32%', left:  '10%' },
+        { top:    '6%',  left:  '6%'  },
+        { bottom: '34%', right: '6%'  },
+        { bottom: '14%', left:  '8%'  },
+        { bottom: '6%',  right: '10%' },
+        { top:    '30%', left:  '30%' },
+        { top:    '46%', right: '28%' },
+        { top:    '18%', right: '30%' },
       ];
       const taggedHeroHtml = (p.heroImage && p.tags && p.tags.length) ? `
         <div class="project-hero project-hero--tagged">
@@ -1940,6 +2079,72 @@
           </div>
         </section>`;
 
+      // Service prototyping stage stepper — warehouse-logistics only
+      const wpStepperHtml = p.id !== 'warehouse-logistics' ? '' : `
+        <section class="ba-section" aria-label="Service prototyping test stages">
+          <div class="wps-lean">
+            <div class="wps-lean-hline"></div>
+            <div class="wps-lean-step">
+              <div class="wps-lean-tick"></div>
+              <div class="wps-lean-dot wps-lean-dot--current"></div>
+              <p class="wps-lean-label">Step 01 —<br><strong>Service Prototyping V.2</strong><br><span class="wps-lean-sub">(Miniature Version)</span></p>
+            </div>
+            <div class="wps-lean-step">
+              <div class="wps-lean-tick"></div>
+              <div class="wps-lean-dot"></div>
+              <p class="wps-lean-label">Step 02 —<br><strong>Pre-Production Test V.2</strong><br><span class="wps-lean-sub">(Scale 1:1)</span></p>
+            </div>
+            <div class="wps-lean-step">
+              <div class="wps-lean-tick"></div>
+              <div class="wps-lean-dot"></div>
+              <p class="wps-lean-label">Step 03 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.2</span></p>
+            </div>
+            <div class="wps-lean-step">
+              <div class="wps-lean-tick"></div>
+              <div class="wps-lean-dot"></div>
+              <p class="wps-lean-label">Step 04 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.3</span></p>
+            </div>
+          </div>
+        </section>`;
+
+      // V1 vs V2 picking comparison table — warehouse-logistics only
+      const wpCompareHtml = p.id !== 'warehouse-logistics' ? '' : `
+        <section class="ba-section" aria-label="V1 vs V2 picking comparison">
+          <div class="wpc-table-wrap">
+            <table class="wpc-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>V1 — Discrete Singular</th>
+                  <th>V2 — Zone &amp; Cluster</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Picking approach</td>
+                  <td>One picker, one order at a time</td>
+                  <td>Grouped by zone &amp; cluster/batch</td>
+                </tr>
+                <tr>
+                  <td>Picking duration</td>
+                  <td>Baseline</td>
+                  <td class="wpc-highlight">6.7x faster</td>
+                </tr>
+                <tr>
+                  <td>Best suited for</td>
+                  <td>Low-volume, simple flow</td>
+                  <td>High-volume, high SKU-line variety</td>
+                </tr>
+                <tr>
+                  <td>Adoption</td>
+                  <td>Legacy approach</td>
+                  <td>Adopted in high-volume warehouses post-rollout</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>`;
+
       // Google Trends embed frame — reused inside the trend timeline, product-trends (Casio) only
       const gtFrameHtml = p.id !== 'product-trends' ? '' : `
         <div class="gt-frame">
@@ -1948,30 +2153,59 @@
 
       // Trend timeline: past / present / future — product-trends (Casio) only
       const tyHtml = p.id !== 'product-trends' ? '' : `
+        <div class="content-section" id="section-direction" data-section="approach">
+          <p class="section-heading">Approach & Contribution</p>
+          <p>${p.contribution}</p>
+
           <div class="venn-row">
             <div class="venn-circles">
-              <svg class="venn-connectors" viewBox="0 0 360 180" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M78,40 C130,10 150,10 195,42" />
-                <circle cx="78" cy="40" r="3" />
-                <circle cx="195" cy="42" r="3" />
-                <path d="M195,140 C240,168 260,168 288,138" />
-                <circle cx="195" cy="140" r="3" />
-                <circle cx="288" cy="138" r="3" />
-              </svg>
-              <div class="venn-circle venn-circle--1"><span class="venn-year">2012-2013</span><span class="venn-sub">Past</span></div>
-              <div class="venn-circle venn-circle--2"><span class="venn-year">2014</span><span class="venn-sub">Present</span></div>
-              <div class="venn-circle venn-circle--3"><span class="venn-year">2016</span><span class="venn-sub">Future</span></div>
+              <div class="venn-float venn-float--1"><div class="venn-circle venn-circle--1"><span class="venn-year">2012-2013</span><span class="venn-sub">Past</span></div></div>
+              <div class="venn-float venn-float--2"><div class="venn-circle venn-circle--2"><span class="venn-year">2014</span><span class="venn-sub">Present</span></div></div>
+              <div class="venn-float venn-float--3"><div class="venn-circle venn-circle--3"><span class="venn-year">2016</span><span class="venn-sub">Future</span></div></div>
             </div>
           </div>
-          <p><span class="ty-label">2012–2013 — Blast from the past.</span> Facebook integrating across apps. Cloud storage quietly growing. Smartphones rising among youth. Early signals of photo sharing culture.</p>
+          <p>We mapped youth lifestyle shifts across three eras to pinpoint upcoming market influences:</p>
+
+          <p><span class="ty-tag">2012–2013 — Past</span><br>Early photo-sharing culture took root alongside rising smartphone adoption, app integration, and cloud storage.</p>
           <div class="section-photos js-section-photos">
             <figure class="section-photo">
               <img src="https://static.wixstatic.com/media/242cb7_5c2b375bb3dd46e58ba5e5bc0b535be1~mv2.png" alt="" loading="lazy" referrerpolicy="no-referrer" />
             </figure>
           </div>
-          <p><span class="ty-label">2014 — Present.</span> Instagram arrived with #ootd and retro filters. Smartphones became everyone's device, not just youth. Cheap cameras made photo-taking frictionless and storage a problem. Selfie sticks happened.</p>
+
+          <p><span class="ty-tag">2014 — Present</span><br>Photography became frictionless. Instagram arrived with #ootd and retro filters, and cheap smartphone cameras created a data storage crunch.</p>
           ${gtFrameHtml}
-          <p><span class="ty-label">2016 — The forecast.</span> Looking at past and present signals, we projected what would matter next.</p>`;
+
+          <p><span class="ty-tag">2016 — Future Forecast</span><br>Projecting these signals revealed our core design prompt: What if the boundary between physical permanence and digital convenience became blurred?</p>
+          <div class="section-photos js-section-photos">
+            <figure class="section-photo">
+              <img src="https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" />
+            </figure>
+          </div>
+
+          <p>To bridge this gap, we designed an end-to-end physical-digital hybrid ecosystem:</p>
+
+          <p>Dynamic Physical — We explored lenticular prints that shift and move based on the viewing angle. Testing revealed users were deeply intrigued by a "morphing" effect card over flat or 3D variants.</p>
+          <div class="section-photos js-section-photos">
+            <figure class="section-photo">
+              <img src="https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif" alt="" loading="lazy" referrerpolicy="no-referrer" />
+            </figure>
+          </div>
+
+          <p>Hardware Innovation — I helped design a camera rig to capture the precise sequential angles required for the physical lenticular effect.</p>
+          <div class="section-photos js-section-photos">
+            <figure class="section-photo">
+              <img src="assets/portfolio/lenticular-booth.jpg" alt="" loading="lazy" />
+            </figure>
+          </div>
+
+          <p>NFC & Cloud Integration — We embedded an NFC chip into each printed card. Tapping the physical card with a smartphone instantly pulled the entire underlying digital photo series from the cloud.</p>
+          <div class="section-photos js-section-photos">
+            <figure class="section-photo">
+              <img src="https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png" alt="" loading="lazy" referrerpolicy="no-referrer" />
+            </figure>
+          </div>
+        </div>`;
 
       // Helper: render inline photos for a given section
       function renderPhotoGroup(section, imgs) {
@@ -2000,7 +2234,7 @@
           <p class="section-heading">Situation</p>
           ${p.situation ? `<p>${p.situation}</p>` : ''}
           ${sectionPhotosAfter('situation', 0)}
-          ${p.insight ? `<p>${p.insight}</p>` : ''}
+          ${p.insight ? p.insight.split('\n\n').map(para => `<p>${para}</p>`).join('') : ''}
           ${chartHtml}
           ${sectionPhotos('situation')}
         </div>` : '';
@@ -2010,7 +2244,7 @@
       const directionFirstPara = directionParas[0] || '';
       const directionRestParas = directionParas.slice(1).join('\n\n');
 
-      const cardHtml = (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
+      const cardHtml = p.id === 'product-trends' ? tyHtml : (p.projectPlanning && p.projectPlanning.length) || p.strategyCardImage ? `
         <div class="content-section" id="section-direction" data-section="approach">
           <p class="section-heading">Approach & Contribution</p>
           ${directionFirstPara ? `<p>${directionFirstPara}</p>` : ''}
@@ -2027,7 +2261,7 @@
         </div>` : (p.direction ? `
         <div class="content-section" id="section-direction" data-section="approach">
           <p class="section-heading">Approach & Contribution</p>
-          ${directionParas.map((para, i) => `<p>${para}</p>${i === 0 ? tyHtml : ''}${sectionPhotosAfter('direction', i)}`).join('')}
+          ${directionParas.map((para, i) => `<p>${para}</p>${i === 0 ? tyHtml : ''}${i === 2 ? wpStepperHtml : ''}${sectionPhotosAfter('direction', i)}`).join('')}
           ${p.contribution ? `<p>${p.contribution}</p>` : ''}
           ${sectionPhotos('direction')}
           ${uiFrameHtml}
@@ -2043,6 +2277,7 @@
             <div class="shifted-img"><img src="${p.screenshots[0]}" alt="" loading="lazy" /></div>
           </div>` : p.whatShifted.split('\n\n').map(para => `<p>${para}</p>`).join('')}
           ${sectionPhotos('whatShifted')}
+          ${wpCompareHtml}
         </div>` : '';
 
       return `
@@ -2273,6 +2508,7 @@
         c.setAttribute('r', 1.6);
         c.setAttribute('class', 'pdc-dot');
         c.style.transitionDelay = delay + 'ms';
+        c.style.setProperty('--tw-delay', (Math.random() * 2.6).toFixed(2) + 's');
         return c;
       }
       function pathFrom(pts) {

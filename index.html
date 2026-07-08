@@ -618,7 +618,7 @@
     // ── Per-leaf cursor avoidance + swoosh ───────────────────
     function lerp(a, b, t) { return a + (b - a) * t; }
 
-    function initLeafAvoidance(el, radius, strength, swooshScale) {
+    function initLeafAvoidance(el, radius, strength) {
       let tx = 0, ty = 0, cx = 0, cy = 0, rafId;
       el.style.willChange = 'transform';
 
@@ -643,11 +643,8 @@
           const s = (1 - dist / radius) * strength;
           tx = -(dx / dist) * s;
           ty = -(dy / dist) * s;
-          startSwoosh();
-          setSwooshVolume((1 - dist / radius) * swooshScale);
         } else {
           tx = 0; ty = 0;
-          stopSwoosh(); // stop sound when cursor leaves radius
         }
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(animate);
@@ -655,14 +652,13 @@
 
       document.addEventListener('mouseleave', () => {
         tx = 0; ty = 0;
-        stopSwoosh();
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(animate);
       });
     }
 
     const leafBig = document.querySelector('.illustration');
-    if (leafBig) initLeafAvoidance(leafBig, 200, 100, 1.0); // larger radius + more movement
+    if (leafBig) initLeafAvoidance(leafBig, 200, 100); // larger radius + more movement
 
     // ── Audio engine ─────────────────────────────────────────
     let audioCtx = null;
@@ -686,45 +682,6 @@
     document.addEventListener('pointerdown', unlockAudio);
     document.addEventListener('touchstart', unlockAudio);
     document.addEventListener('keydown', unlockAudio);
-
-    let swooshNode = null, swooshGain = null;
-
-    function startSwoosh() {
-      const ctx = getAudioCtx();
-      if (swooshNode) return;
-      const bufferSize = ctx.sampleRate * 0.5;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-      swooshNode = ctx.createBufferSource();
-      swooshNode.buffer = buffer;
-      swooshNode.loop = true;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 300;
-      filter.Q.value = 0.4;
-      swooshGain = ctx.createGain();
-      swooshGain.gain.value = 0;
-      swooshNode.connect(filter);
-      filter.connect(swooshGain);
-      swooshGain.connect(ctx.destination);
-      swooshNode.start();
-    }
-
-    function setSwooshVolume(vol) {
-      if (!swooshGain) return;
-      swooshGain.gain.setTargetAtTime(vol * 0.09, audioCtx.currentTime, 0.08);
-    }
-
-    function stopSwoosh() {
-      if (!swooshGain) return;
-      swooshGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
-      setTimeout(() => {
-        if (swooshNode) { try { swooshNode.stop(); } catch(e){} swooshNode = null; swooshGain = null; }
-      }, 400);
-    }
-
-    // swoosh is now handled inside initLeafAvoidance per leaf
 
     function playTick() {
       const ctx = getAudioCtx();

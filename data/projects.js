@@ -8,7 +8,7 @@ const projects = [
     industry: "Agriculture",
     year: "2023",
     role: "Design Manager with a team of 4",
-    tags: ["Ecommerce", "Design Strategy", "Omnichannel", "Ethnography", "Agriculture", "UX Research"],
+    tags: ["Ecommerce", "Design Strategy", "Omnichannel", "Agriculture"],
 
     hook: "How do you reduce the cost of field officers when maintaining human services for every farmer is unsustainable?",
 
@@ -94,12 +94,10 @@ const projects = [
       { url: "https://static.wixstatic.com/media/242cb7_716a0c48ae634ab2990d3eb6d563f4f7~mv2.png", caption: "No pattern between quantity and duration. Variety is the real driver.",        section: "insight" },
       { url: "https://static.wixstatic.com/media/242cb7_091fea75ec054b76ad38bb38b6eaee63~mv2.png", caption: "Planning before the warehouse simulation",                                      section: "direction", afterPara: 1 },
       { url: "https://static.wixstatic.com/media/242cb7_7bf9baabc9b543fcbbb271cdcf0ddcd9~mv2.png", caption: "Cross-functional team acting as pickers and checkers",                         section: "direction", afterPara: 1 },
-      { url: "https://static.wixstatic.com/media/242cb7_916a8b112d83419da4deeb1ca8a36501~mv2.png", caption: "Service prototyping strategy — each scale of test had its own objective",      section: "direction" },
       { url: "https://static.wixstatic.com/media/242cb7_148734a84e524d9e93c52d6b2760e0b2~mv2.png", caption: "Field observation during production rollout",                                   section: "contribution" },
       { url: "https://static.wixstatic.com/media/242cb7_f68d87b518304760908d0f446d7f5589~mv2.png", caption: "Timed activity tracking using Google Sheets script",                           section: "contribution" },
       { url: "https://static.wixstatic.com/media/242cb7_4d3f607b4ea7412a932be163a273bf5c~mv2.png", caption: "Sorting to rack: a redundant step consuming 30–50% of picker time",            section: "contribution" },
-      { url: "https://static.wixstatic.com/media/242cb7_9a3b2fbd544341d68cac703d7188177b~mv2.png", caption: "Picker app — designed for visual clarity across literacy levels",              section: "contribution" },
-      { url: "https://static.wixstatic.com/media/242cb7_bfff809fd4ea400dab78049817081f12~mv2.png", caption: "V2 zone & cluster picking: 6.7x faster than V1 discrete singular picking",    section: "whatShifted" }
+      { url: "https://static.wixstatic.com/media/242cb7_9a3b2fbd544341d68cac703d7188177b~mv2.png", caption: "Picker app — designed for visual clarity across literacy levels",              section: "contribution" }
     ]
   },
   {
@@ -120,25 +118,19 @@ const projects = [
       "Analog camera resurgence confirmed the predicted retro nuance trend",
     ],
 
-    situation: "We ran the full study across 150 participants in Indonesia and Japan",
+    situation: "We conducted a cross-cultural ethnographic study with 150 participants in Indonesia and Japan, tracking youth behavior from 2012 to 2014. Our research decoded a clear disconnect between digital convenience and physical permanence, identifying three driving signals:",
 
-    insight: "By studying user habits from 2012 to 2014, the team identified three main signals driving how youth interact with imagery.\n\nThe Rise of Retro: Heavily filtered photos gave way to close-to-natural retro filters (largely accelerated by Instagram and the #ootd movement). The team forecasted that old-school and retro elements would remain highly appealing.\n\nThe Digital Storage Burden: As cheap smartphones with great cameras flooded the market, users began taking duplicate/redundant pictures of the same moment. This created an immediate need for greater mobile storage space.\n\nThe Lasting Value of the Physical: While digital files are easily lost over a decade, participants noted that physical, printed photos from 10 years ago were still safely intact. The research showed a strong, lingering desire to keep memories physically tangible.\n\nSocial Dynamics: Users habitually took multiple shots to pick just one perfect image for social media, often focusing on group photos (3 to 6 people) due to a strong sense of community and togetherness. Appear retro trends in fashion, music, and digital aesthetics (e.g., photo filters) show cyclical patterns of older aesthetics appeal to newer generations. Smartphone cameras and social media (Instagram) have accelerated and globalized retro trends.\n\nSmartphones have transformed photography into an instant yet ubiquitous activity, leading to exponential data storage explosion.the team proposed a physical-digital hybrid solution to blur the boundaries between real and virtual photos.",
+    insight: "The Rise of Retro: Youth behavior shifted away from heavy digital filters toward natural, analog aesthetics (accelerated by early Instagram and #ootd trends). We flagged that this old-school nuance was a cyclical macro-trend impacting music, fashion, and product design.\n\nThe Digital Storage Burden: The explosion of cheap, high-quality smartphone cameras made photo-taking effortless but disposable. Users habitually shot 3 to 6 redundant group photos of a single moment just to pick one \"perfect\" shot for social media, creating a massive storage crisis.\n\nThe Value of the Physical: Early digital photos were easily lost during device changes, whereas physical prints remained safely intact. Users were highly selective printing only the most meaningful milestones as physical mementos.\n\nSeeing the pattern as opportunity, our team proposed a physical-digital hybrid product that blurred the boundaries between real and virtual photography.",
 
-    direction: "We decoded youth lifestyle trends across three time periods to answer: what's trending, why, and what's driving it and what would be the influences that matter in the near future? After seeing the patterns we explored a concept that blur digital and physical realms using lenticular photos, the kind that shift and move depending on the angle you view them. Physical, but alive. We tested reactions with three sample cards: a flat photo, a morphing lenticular photo, and a 3D lenticular photo. People were genuinely intrigued by the morphing one, it's like combination of physical and digital.\n\n We came with so many proposals but the question that stick to us is, what if the boundary between physical and digital photos disappeared. Smartphone cameras were getting good and cheap. Storage was filling up fast. Instagram had just shown up. Nobody yet knew what came next. 6 out of 10 targeted consumers admitted their digital photos from 10 years ago were gone. The printed ones from the same decade were still sitting safely in a wardrobe. Digital was convenient. Physical was more lasting. People wanted both, and nothing was giving them both at once. We explored building it end to end. NFC chip embedded in the printed photo, tap it with your phone, and it pulls the full photo series from the cloud. We even designed a 360 degree adjustable camera rig to capture the right angles for the lenticular effect.",
+    direction: "",
 
-    contribution: "As a Design Researcher. I synthesized the ethnographic research end to end across all 150 participants in both countries for the trend signals, and led the design concept from lenticular photo prototyping.",
+    contribution: "As the Design Researcher, I synthesized the end-to-end ethnographic data across 150 participants and led the design concept from trend forecasting through to physical prototyping.",
 
     whatShifted: "The forecast held up. Boomerang launched on Instagram, built on the same morphing-photo instinct we'd prototyped earlier with physical cards. Analog cameras came back, exactly the retro nuance we'd flagged. I remember being genuinely amazed watching it happen in real time.\n\nWhat stuck with me long after this project ended was learning that trends move in cycles, not lines. What looks retro today repeats because people are wired to circle back to what felt good before. I still use that lens now. When something looks new, I ask what older pattern it's actually replaying.",
 
     heroImage: "assets/portfolio/casio-hero.mp4",
 
-    sectionImages: [
-      { url: "https://static.wixstatic.com/media/242cb7_8c0ed5b4e8a447f293d44a73fc42f031~mv2.gif",                   caption: "The lenticular concept: a photo that shifts and moves depending on viewing angle",                            section: "direction" },
-      { url: "https://static.wixstatic.com/media/242cb7_d6fe5dc389024891931ac46d0328f9be~mv2.png",                   caption: "Tap to connect: NFC chip links the printed photo to its full series in the cloud",                            section: "direction" },
-      { url: "https://static.wixstatic.com/media/242cb7_c30a698baede4a01871b4483987dc436~mv2.jpg",                   caption: "Exploring the end to end experience, from capture to print to interaction",                                    section: "direction" },
-      { url: "assets/portfolio/lenticular-booth.jpg",                                                                                 caption: "Industrial lenticular printers, A modular camera rig to capture the lenticular effect",                     section: "direction" },
-      { url: "https://static.wixstatic.com/media/242cb7_1a274806132d42d1ad30a1d48ef42cd9~mv2.png",                   caption: "Connected experience concept: tap, choose an action, link to cloud gallery",                                   section: "contribution" }
-    ]
+    sectionImages: []
   },
   {
     id: "context-labs",
