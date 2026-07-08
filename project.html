@@ -48,7 +48,7 @@
     background: var(--ba-bg);
     border-radius: var(--ba-radius-card);
     max-width: 100%;
-    margin: 12px 0 0;
+    margin: 20px 0;
     padding: 40px 24px 48px;
     /* Prevent Safari from auto-boosting font size in this narrow mock-phone column,
        which wraps text onto extra lines and stretches every card taller. */
@@ -173,7 +173,7 @@
 
   @media (max-width: 560px) {
     .ba-hint { display: none; }
-    .ba-section { padding: 28px 14px 36px; margin: 12px 0 0; }
+    .ba-section { padding: 28px 14px 36px; margin: 20px 0; }
     .ba-phone { width: min(320px, 84vw); }
   }
 
@@ -479,9 +479,8 @@
   /* ── Warung Pintar picker mockup (warehouse-logistics case study) ── */
   .ba-section {
     --wp-yellow: #f6cf57;
-    --wp-black: #111111;
+    --wp-black: var(--ink, #212121);
     --wp-green: #00be6c;
-    --wp-blue: #2f7cc6;
     --wp-blue-soft: #a9c7e8;
     --wp-gray: #e5e5e5;
     --wp-gray-soft: #f5f5f5;
@@ -603,7 +602,7 @@
     font-weight: 800;
     margin-top: 8px;
   }
-  .wp-divider { border-top: 1.5px solid #d7dbe0; }
+  .wp-divider { border-top: 1.5px solid var(--ba-line, #e4e4e2); }
 
   .wp-uom {
     display: flex;
@@ -757,23 +756,23 @@
     font-size: 10px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--ba-ink, #000);
+    color: var(--ba-ink, #212121);
     margin-bottom: 8px;
   }
   .pdc-svg-wrap svg { display: block; width: 100%; height: auto; }
-  .pdc-axis-line { stroke: #4a4a4a; stroke-width: 1; }
+  .pdc-axis-line { stroke: var(--ba-ink-soft, #666666); stroke-width: 1; }
   .pdc-grid-line { stroke: #eeeeeb; stroke-width: 1; stroke-dasharray: 2 3; }
-  .pdc-tick { font-size: 8px; fill: #4a4a4a; font-family: var(--mono); }
+  .pdc-tick { font-size: 8px; fill: var(--ba-ink-soft, #666666); font-family: var(--mono); }
   .pdc-axis-label {
     font-family: var(--mono);
     font-weight: 700;
-    fill: var(--ba-ink, #000);
+    fill: var(--ba-ink, #212121);
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
   .pdc-dot {
-    fill: #111111;
+    fill: var(--ba-ink, #212121);
     fill-opacity: 0;
     transform-box: fill-box;
     transform-origin: center;
@@ -835,11 +834,31 @@
   /* ── Service prototyping stage stepper (warehouse-logistics) ──
      Lean ruler-style: one line, tick marks, uniform dots, labels
      below only — matches a minimal milestone-timeline reference. */
+  .wps-lean-wrap { position: relative; }
+  .wps-lean-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 36px;
+    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 80%);
+    pointer-events: none;
+  }
   .wps-lean {
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e4e4e2;
+  }
+  .wps-lean::-webkit-scrollbar { height: 8px; }
+  .wps-lean::-webkit-scrollbar-track { background: #e4e4e2; border-radius: 4px; }
+  .wps-lean::-webkit-scrollbar-thumb { background: #9a9a9a; border-radius: 4px; }
+  .wps-lean::-webkit-scrollbar-thumb:hover { background: #7a7a7a; }
+  .wps-lean-track {
     position: relative;
     display: flex;
+    width: max-content;
+    min-width: 100%;
     padding-top: 22px;
-    overflow-x: auto;
   }
   .wps-lean-hline {
     position: absolute;
@@ -847,7 +866,7 @@
     left: 4px;
     right: 4px;
     height: 1px;
-    background: #ccc;
+    background: var(--ba-line, #e4e4e2);
   }
   .wps-lean-step {
     position: relative;
@@ -861,7 +880,7 @@
     left: 12px;
     width: 1px;
     height: 18px;
-    background: #ccc;
+    background: var(--ba-line, #e4e4e2);
   }
   .wps-lean-dot {
     position: absolute;
@@ -874,9 +893,17 @@
     background: #212121;
     transition: transform 0.25s ease;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .wps-lean-dot--current { background: #e0453c; }
-  .wps-lean-step:hover .wps-lean-dot { transform: translate(-50%, -50%) scale(1.4); }
+  .wps-lean-dot--lg { width: 16px; height: 16px; }
+  .wps-lean-dot--check {
+    width: 22px;
+    height: 22px;
+    background: #212121;
+  }
+  .wps-lean-step:hover .wps-lean-dot { transform: translate(-50%, -50%) scale(1.25); }
   .content-section p.wps-lean-label {
     font-family: var(--mono);
     font-size: 10px;
@@ -886,12 +913,48 @@
   }
   .wps-lean-label strong { color: var(--ink); font-weight: 700; }
   .wps-lean-sub { color: var(--ink-muted, #666); }
+  .content-section p.wps-lean-objective {
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    color: var(--ink-muted, #666);
+    margin-top: 12px;
+    max-width: 220px;
+  }
+  .wps-lean-objective strong { color: var(--ink); font-weight: 700; }
+  .wps-lean-step--divider {
+    border-left: 1px dashed var(--ba-line, #e4e4e2);
+    padding-left: 16px;
+  }
+
+  .wp-photo-caption {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-muted, #666);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
 
   /* ── V1 vs V2 picking comparison table (warehouse-logistics) ── */
-  .wpc-table-wrap {
+  .wpc-table-wrap { position: relative; }
+  .wpc-table-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 36px;
+    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 80%);
+    pointer-events: none;
+  }
+  .wpc-table-scroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e4e4e2;
   }
+  .wpc-table-scroll::-webkit-scrollbar { height: 8px; }
+  .wpc-table-scroll::-webkit-scrollbar-track { background: #e4e4e2; border-radius: 4px; }
+  .wpc-table-scroll::-webkit-scrollbar-thumb { background: #9a9a9a; border-radius: 4px; }
+  .wpc-table-scroll::-webkit-scrollbar-thumb:hover { background: #7a7a7a; }
   .wpc-table {
     width: 100%;
     min-width: 480px;
@@ -1025,21 +1088,23 @@
     z-index: -1;
     filter: blur(10px);
   }
+  /* Reuses the Traveloka blue family (#4a90e2 / #2f6cc0) instead of a
+     one-off palette, so the site isn't carrying two near-identical blues. */
   .venn-circle--1::before {
-    background: radial-gradient(circle, #e7e6fb 0%, #e7e6fb 42%, transparent 72%);
+    background: radial-gradient(circle, rgba(74,144,226,0.18) 0%, rgba(74,144,226,0.18) 42%, transparent 72%);
   }
   .venn-circle--2::before {
-    background: radial-gradient(circle, #9b9aef 0%, #9b9aef 42%, transparent 72%);
+    background: radial-gradient(circle, #4a90e2 0%, #4a90e2 42%, transparent 72%);
   }
   .venn-circle--3::before {
-    background: radial-gradient(circle, #4c6ef5 0%, #4c6ef5 46%, transparent 74%);
+    background: radial-gradient(circle, #2f6cc0 0%, #2f6cc0 46%, transparent 74%);
   }
 
   .venn-year {
     font-family: var(--mono);
     font-weight: 700;
     font-size: 15px;
-    color: #33399e;
+    color: #3a7bd0;
   }
   .venn-circle--3 .venn-year,
   .venn-circle--3 .venn-sub { color: #ffffff; }
@@ -1050,7 +1115,7 @@
   .venn-sub {
     font-family: var(--mono);
     font-size: 13px;
-    color: #4650c9;
+    color: #3a7bd0;
     margin-top: 2px;
   }
   /* Floating motion lives on the glow layer, not the circle itself,
@@ -2082,27 +2147,35 @@
       // Service prototyping stage stepper — warehouse-logistics only
       const wpStepperHtml = p.id !== 'warehouse-logistics' ? '' : `
         <section class="ba-section" aria-label="Service prototyping test stages">
-          <div class="wps-lean">
-            <div class="wps-lean-hline"></div>
-            <div class="wps-lean-step">
-              <div class="wps-lean-tick"></div>
-              <div class="wps-lean-dot wps-lean-dot--current"></div>
-              <p class="wps-lean-label">Step 01 —<br><strong>Service Prototyping V.2</strong><br><span class="wps-lean-sub">(Miniature Version)</span></p>
-            </div>
-            <div class="wps-lean-step">
-              <div class="wps-lean-tick"></div>
-              <div class="wps-lean-dot"></div>
-              <p class="wps-lean-label">Step 02 —<br><strong>Pre-Production Test V.2</strong><br><span class="wps-lean-sub">(Scale 1:1)</span></p>
-            </div>
-            <div class="wps-lean-step">
-              <div class="wps-lean-tick"></div>
-              <div class="wps-lean-dot"></div>
-              <p class="wps-lean-label">Step 03 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.2</span></p>
-            </div>
-            <div class="wps-lean-step">
-              <div class="wps-lean-tick"></div>
-              <div class="wps-lean-dot"></div>
-              <p class="wps-lean-label">Step 04 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.3</span></p>
+          <div class="wps-lean-wrap">
+            <div class="wps-lean">
+              <div class="wps-lean-track">
+                <div class="wps-lean-hline"></div>
+                <div class="wps-lean-step">
+                  <div class="wps-lean-tick"></div>
+                  <div class="wps-lean-dot wps-lean-dot--check">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#00be6c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                  </div>
+                  <p class="wps-lean-label">Step 01 —<br><strong>Service Prototyping V.2</strong><br><span class="wps-lean-sub">(Miniature Version)</span></p>
+                  <p class="wps-lean-objective"><strong>Objective:</strong><br>Testing an activity on warehouse for: packaging, picking, checking, sealing, sorting</p>
+                </div>
+                <div class="wps-lean-step">
+                  <div class="wps-lean-tick"></div>
+                  <div class="wps-lean-dot"></div>
+                  <p class="wps-lean-label">Step 02 —<br><strong>Pre-Production Test V.2</strong><br><span class="wps-lean-sub">(Scale 1:1)</span></p>
+                </div>
+                <div class="wps-lean-step wps-lean-step--divider">
+                  <div class="wps-lean-tick"></div>
+                  <div class="wps-lean-dot wps-lean-dot--lg"></div>
+                  <p class="wps-lean-label">Step 03 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.2</span></p>
+                  <p class="wps-lean-objective"><strong>Objective:</strong><br>1) Testing V.2 on scale 1:1<br><br>Determine whether it works better than Version V.1</p>
+                </div>
+                <div class="wps-lean-step">
+                  <div class="wps-lean-tick"></div>
+                  <div class="wps-lean-dot wps-lean-dot--lg"></div>
+                  <p class="wps-lean-label">Step 04 —<br><strong>Production Test</strong><br><span class="wps-lean-sub">Model V.3</span></p>
+                </div>
+              </div>
             </div>
           </div>
         </section>`;
@@ -2111,6 +2184,7 @@
       const wpCompareHtml = p.id !== 'warehouse-logistics' ? '' : `
         <section class="ba-section" aria-label="V1 vs V2 picking comparison">
           <div class="wpc-table-wrap">
+          <div class="wpc-table-scroll">
             <table class="wpc-table">
               <thead>
                 <tr>
@@ -2143,7 +2217,16 @@
               </tbody>
             </table>
           </div>
+          </div>
         </section>`;
+
+      // Timed picking observation photo — warehouse-logistics only
+      const wpDataImgHtml = p.id !== 'warehouse-logistics' ? '' : `
+        <div class="section-photos js-section-photos">
+          <figure class="section-photo">
+            <img src="https://static.wixstatic.com/media/242cb7_f68d87b518304760908d0f446d7f5589~mv2.png/v1/fill/w_1200,h_478,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Time%20picking%20observation.png" alt="" loading="lazy" referrerpolicy="no-referrer" />
+          </figure>
+        </div>`;
 
       // Google Trends embed frame — reused inside the trend timeline, product-trends (Casio) only
       const gtFrameHtml = p.id !== 'product-trends' ? '' : `
@@ -2262,7 +2345,7 @@
         <div class="content-section" id="section-direction" data-section="approach">
           <p class="section-heading">Approach & Contribution</p>
           ${directionParas.map((para, i) => `<p>${para}</p>${i === 0 ? tyHtml : ''}${i === 2 ? wpStepperHtml : ''}${sectionPhotosAfter('direction', i)}`).join('')}
-          ${p.contribution ? `<p>${p.contribution}</p>` : ''}
+          ${p.contribution ? p.contribution.split('\n\n').map((para, i) => `<p>${para}</p>${i === 0 ? wpDataImgHtml : ''}`).join('') : ''}
           ${sectionPhotos('direction')}
           ${uiFrameHtml}
         </div>` : '');
