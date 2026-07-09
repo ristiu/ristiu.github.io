@@ -583,6 +583,11 @@
 
     if (!isTouchDevice) {
       function anchorPreview(trigger) {
+        // CSS `zoom` on <html> renders getBoundingClientRect() in already-
+        // zoomed pixels, but any style.left/top we set on a descendant gets
+        // scaled by zoom again on render — so raw rect values must be
+        // divided by the zoom factor before being assigned back as styles.
+        const zoom = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
         const pw  = preview.offsetWidth  || 70;
         const ph  = preview.offsetHeight || 70;
         const vw  = window.innerWidth;
@@ -594,8 +599,8 @@
         if (x + pw > vw - gap) x = r.left - pw - gap;
         if (y < gap) y = gap;
         if (y + ph > vh - gap) y = vh - ph - gap;
-        preview.style.left = x + 'px';
-        preview.style.top  = y + 'px';
+        preview.style.left = (x + window.scrollX) / zoom + 'px';
+        preview.style.top  = (y + window.scrollY) / zoom + 'px';
       }
 
       document.addEventListener('mouseover', (e) => {

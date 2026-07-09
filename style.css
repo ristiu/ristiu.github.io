@@ -20,6 +20,15 @@ html {
   overflow-x: hidden;
 }
 
+/* Desktop-only 120% scale — same mechanism as the browser's own Cmd+ zoom,
+   so the whole layout (including every embedded component) reflows at the
+   larger size instead of just stretching pixels. Mobile is untouched. */
+@media (min-width: 900px) {
+  html {
+    zoom: 1.2;
+  }
+}
+
 /* ─── Paper container ────────────────────────────────────── */
 .paper {
   background: #ffffff;
@@ -937,7 +946,7 @@ a:hover { color: var(--accent); }
 
 /* ─── Hover thumbnail preview ────────────────────────────── */
 .hover-preview {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 70px;
