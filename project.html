@@ -91,8 +91,13 @@
     text-align: center;
     max-width: 440px;
     margin: 0 auto 28px;
-    min-height: 3.2em;
   }
+  /* Each mockup reserves height for only its OWN longest tab (not shared
+     across projects), and text sits flush at the top — any leftover space
+     collects below, not split above/below — so the phone stays put when
+     switching tabs without padding the box more than it needs. */
+  .ba-caption--traveloka { min-height: 192px; }
+  .ba-caption--wp { min-height: 168px; }
   .ba-caption .ba-tag {
     display: block;
     font-family: var(--mono);
@@ -811,6 +816,7 @@
 
   /* ── Google Trends embed (product-trends / Casio case study) ── */
   .gt-frame {
+    position: relative;
     background: #ffffff;
     border-radius: 5px;
     overflow: hidden;
@@ -825,10 +831,45 @@
     width: 100%;
     height: 620px;
     border: 0;
+    position: relative;
+    z-index: 0;
   }
   @media (max-width: 640px) {
     .gt-frame { height: 300px; }
     .gt-frame iframe { height: 560px; }
+  }
+
+  /* Loading placeholder — Google Trends embeds are unreliable (rate limits,
+     slow cross-origin load); show a lazy shimmer instead of a blank box
+     until the iframe actually fires 'load'. */
+  .gt-skeleton {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #ffffff;
+    padding: 20px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  .gt-frame.is-loaded .gt-skeleton {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .gt-skeleton-bar,
+  .gt-skeleton-chart {
+    background: linear-gradient(90deg, #eeeeec 25%, #f6f6f4 50%, #eeeeec 75%);
+    background-size: 200% 100%;
+    animation: gt-shimmer 1.6s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  .gt-skeleton-bar { height: 12px; margin-bottom: 10px; }
+  .gt-skeleton-chart { height: 190px; margin-top: 16px; }
+  @keyframes gt-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gt-skeleton-bar, .gt-skeleton-chart { animation: none; }
   }
 
   /* ── Service prototyping stage stepper (warehouse-logistics) ──
@@ -839,9 +880,12 @@
     content: '';
     position: absolute;
     top: 0; right: 0; bottom: 0;
-    width: 36px;
-    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 80%);
+    width: 56px;
+    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 55%, var(--ba-bg, #f5f5f4) 100%);
     pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .wps-lean-wrap::after { width: 64px; background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 45%, var(--ba-bg, #f5f5f4) 100%); }
   }
   .wps-lean {
     overflow-x: auto;
@@ -941,9 +985,12 @@
     content: '';
     position: absolute;
     top: 0; right: 0; bottom: 0;
-    width: 36px;
-    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 80%);
+    width: 56px;
+    background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 55%, var(--ba-bg, #f5f5f4) 100%);
     pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .wpc-table-wrap::after { width: 64px; background: linear-gradient(to right, transparent, var(--ba-bg, #f5f5f4) 45%, var(--ba-bg, #f5f5f4) 100%); }
   }
   .wpc-table-scroll {
     overflow-x: auto;
@@ -1037,12 +1084,28 @@
     justify-content: center;
     text-align: center;
     flex-shrink: 0;
-    transform-style: preserve-3d;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: default;
   }
-  .venn-circle:hover {
-    transform: perspective(700px) rotateX(10deg) rotateY(-14deg) scale(1.1);
+  /* The shape (glow circle) carries the hover zoom + 3D tilt; the text
+     labels are separate siblings so they stay flat and legible, never
+     rotating with the circle. */
+  /* Outer shape: continuous float drift only (translate/scale keyframes). */
+  .venn-shape {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  /* Inner bg: the actual glow + hover zoom/3D-tilt, kept on its own element
+     so it never fights the outer shape's continuous float animation. */
+  .venn-shape-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .venn-circle:hover .venn-shape-bg {
+    transform: perspective(700px) rotateX(10deg) rotateY(-14deg) scale(1.22);
     z-index: 2;
   }
 
@@ -1072,62 +1135,53 @@
     .venn-float + .venn-float { margin-left: -22px; }
   }
 
-  /* All three: soft glow blob, growing more solid/confident past → future */
-  .venn-circle--1,
-  .venn-circle--2,
-  .venn-circle--3 {
-    background: transparent;
-  }
-  .venn-circle--1::before,
-  .venn-circle--2::before,
-  .venn-circle--3::before {
-    content: '';
-    position: absolute;
-    inset: -10%;
-    border-radius: 50%;
-    z-index: -1;
+  /* All three: soft glow blob, growing more solid/confident past → future.
+     Reuses the Traveloka blue family (#4a90e2 / #2f6cc0) instead of a
+     one-off palette, so the site isn't carrying two near-identical blues. */
+  .venn-shape-bg--1 {
+    background: radial-gradient(circle, rgba(74,144,226,0.18) 0%, rgba(74,144,226,0.18) 42%, transparent 72%);
     filter: blur(10px);
   }
-  /* Reuses the Traveloka blue family (#4a90e2 / #2f6cc0) instead of a
-     one-off palette, so the site isn't carrying two near-identical blues. */
-  .venn-circle--1::before {
-    background: radial-gradient(circle, rgba(74,144,226,0.18) 0%, rgba(74,144,226,0.18) 42%, transparent 72%);
-  }
-  .venn-circle--2::before {
+  .venn-shape-bg--2 {
     background: radial-gradient(circle, #4a90e2 0%, #4a90e2 42%, transparent 72%);
+    filter: blur(10px);
   }
-  .venn-circle--3::before {
+  .venn-shape-bg--3 {
     background: radial-gradient(circle, #2f6cc0 0%, #2f6cc0 46%, transparent 74%);
+    filter: blur(10px);
   }
 
   .venn-year {
+    position: relative;
+    z-index: 1;
     font-family: var(--mono);
-    font-weight: 700;
+    font-weight: 400;
     font-size: 15px;
     color: #3a7bd0;
   }
-  .venn-circle--3 .venn-year,
-  .venn-circle--3 .venn-sub { color: #ffffff; }
+  .venn-float--2 .venn-year,
+  .venn-float--2 .venn-sub,
+  .venn-float--3 .venn-year,
+  .venn-float--3 .venn-sub { color: #ffffff; }
   @media (max-width: 640px) {
     .venn-year { font-size: 10px; }
     .venn-sub { font-size: 9px; }
   }
   .venn-sub {
+    position: relative;
+    z-index: 1;
     font-family: var(--mono);
+    font-weight: 400;
     font-size: 13px;
     color: #3a7bd0;
     margin-top: 2px;
   }
-  /* Floating motion lives on the glow layer, not the circle itself,
-     so hover-zoom (on .venn-circle) never fights with the animation. */
-  .venn-circle--1::before,
-  .venn-circle--2::before,
-  .venn-circle--3::before {
-    animation: venn-pulse 5s ease-in-out infinite;
-  }
-  .venn-circle--1::before { animation-duration: 7.2s; animation-delay: 0s; }
-  .venn-circle--2::before { animation-duration: 8.4s; animation-delay: -2.4s; }
-  .venn-circle--3::before { animation-duration: 7.8s; animation-delay: -4.6s; }
+  /* Floating motion lives on the outer shape wrapper, independent from the
+     hover zoom/tilt transform on the inner bg, so the two never fight. */
+  .venn-shape { animation: venn-pulse 5s ease-in-out infinite; }
+  .venn-float--1 .venn-shape { animation-duration: 7.2s; animation-delay: 0s; }
+  .venn-float--2 .venn-shape { animation-duration: 8.4s; animation-delay: -2.4s; }
+  .venn-float--3 .venn-shape { animation-duration: 7.8s; animation-delay: -4.6s; }
   @keyframes venn-pulse {
     0%   { transform: translate(0, 0) scale(1); }
     25%  { transform: translate(3px, -6px) scale(1.03); }
@@ -1136,7 +1190,7 @@
     100% { transform: translate(0, 0) scale(1); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .venn-circle--1::before, .venn-circle--2::before, .venn-circle--3::before { animation: none; }
+    .venn-shape { animation: none; }
   }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -1328,6 +1382,18 @@
         heroImg.addEventListener(loadEvent, onReady, { once: true });
         heroImg.addEventListener('error', onReady, { once: true });
         if (heroImg.tagName === 'VIDEO' && heroImg.readyState >= 3) onReady();
+
+        // Mobile Safari sometimes shows a play button if the muted/autoplay
+        // attributes don't take effect from markup alone — reinforce as
+        // JS properties and force-start playback.
+        if (heroImg.tagName === 'VIDEO') {
+          heroImg.muted = true;
+          heroImg.playsInline = true;
+          const tryPlay = () => heroImg.play().catch(() => {});
+          tryPlay();
+          heroImg.addEventListener('loadedmetadata', tryPlay, { once: true });
+          document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+        }
       } else {
         revealContent();
       }
@@ -1570,7 +1636,7 @@
         </div>
         <div class="project-body">
           <div class="content-section">
-            <p>${p.description}</p>
+            ${p.description.split('\n\n').map(para => `<p>${para}</p>`).join('')}
           </div>
           <div class="content-section">
             <p class="section-heading">Clients</p>
@@ -1633,7 +1699,7 @@
           </div>
           <div class="project-hero-imgwrap">
             ${p.heroImage.endsWith('.mp4')
-              ? `<video class="project-hero-mainimg" src="${p.heroImage}" autoplay loop muted playsinline></video>`
+              ? `<video class="project-hero-mainimg" src="${p.heroImage}" autoplay loop muted playsinline webkit-playsinline disablePictureInPicture preload="auto"></video>`
               : `<img class="project-hero-mainimg" src="${p.heroImage}" alt="${p.title}" onload="this.classList.add('is-loaded')" />`
             }
             <div class="hero-tags js-hero-tags">
@@ -1678,7 +1744,7 @@
             <button class="ba-tab" role="tab" id="tab-after" aria-selected="true" aria-controls="panel-after">After</button>
           </div>
 
-          <div class="ba-caption">
+          <div class="ba-caption ba-caption--traveloka">
             <span class="ba-tag" data-caption-tag>New hotel card</span>
             <p data-caption-text>Information is now grouped logically, The decision-making info such as, hotel photo is more prominently displayed, pricing element is clearly visible.</p>
           </div>
@@ -1903,7 +1969,7 @@
             <button class="ba-tab" role="tab" id="tab-scan" aria-selected="false" aria-controls="panel-scan">Scan Rack</button>
           </div>
 
-          <div class="ba-caption">
+          <div class="ba-caption ba-caption--wp">
             <p data-caption-text>Pickers came from diverse local backgrounds, some not fluent in Bahasa Indonesia. I designed the UI using visual cues that worked across literacy levels.</p>
           </div>
 
@@ -2231,7 +2297,12 @@
       // Google Trends embed frame — reused inside the trend timeline, product-trends (Casio) only
       const gtFrameHtml = p.id !== 'product-trends' ? '' : `
         <div class="gt-frame">
-          <iframe loading="lazy" src="https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22%23ootd%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%2C%7B%22keyword%22%3A%22%2Fm%2F0_yklrp%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%2C%7B%22keyword%22%3A%22ootd%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-420&eq=date%3D2012-01-01%25202014-12-23%26geo%3DID%26q%3D%2523ootd%2C%252Fm%252F0_yklrp%2Cootd" title="Google Trends: OOTD search interest in Indonesia"></iframe>
+          <div class="gt-skeleton" aria-hidden="true">
+            <div class="gt-skeleton-bar" style="width:55%"></div>
+            <div class="gt-skeleton-bar" style="width:35%"></div>
+            <div class="gt-skeleton-chart"></div>
+          </div>
+          <iframe loading="lazy" onload="this.closest('.gt-frame').classList.add('is-loaded')" src="https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22%23ootd%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%2C%7B%22keyword%22%3A%22%2Fm%2F0_yklrp%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%2C%7B%22keyword%22%3A%22ootd%22%2C%22geo%22%3A%22ID%22%2C%22time%22%3A%222012-01-01%202014-12-23%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-420&eq=date%3D2012-01-01%25202014-12-23%26geo%3DID%26q%3D%2523ootd%2C%252Fm%252F0_yklrp%2Cootd" title="Google Trends: OOTD search interest in Indonesia"></iframe>
         </div>`;
 
       // Trend timeline: past / present / future — product-trends (Casio) only
@@ -2242,9 +2313,9 @@
 
           <div class="venn-row">
             <div class="venn-circles">
-              <div class="venn-float venn-float--1"><div class="venn-circle venn-circle--1"><span class="venn-year">2012-2013</span><span class="venn-sub">Past</span></div></div>
-              <div class="venn-float venn-float--2"><div class="venn-circle venn-circle--2"><span class="venn-year">2014</span><span class="venn-sub">Present</span></div></div>
-              <div class="venn-float venn-float--3"><div class="venn-circle venn-circle--3"><span class="venn-year">2016</span><span class="venn-sub">Future</span></div></div>
+              <div class="venn-float venn-float--1"><div class="venn-circle"><div class="venn-shape"><div class="venn-shape-bg venn-shape-bg--1"></div></div><span class="venn-year">2012-2013</span><span class="venn-sub">Past</span></div></div>
+              <div class="venn-float venn-float--2"><div class="venn-circle"><div class="venn-shape"><div class="venn-shape-bg venn-shape-bg--2"></div></div><span class="venn-year">2014</span><span class="venn-sub">Present</span></div></div>
+              <div class="venn-float venn-float--3"><div class="venn-circle"><div class="venn-shape"><div class="venn-shape-bg venn-shape-bg--3"></div></div><span class="venn-year">2016</span><span class="venn-sub">Future</span></div></div>
             </div>
           </div>
           <p>We mapped youth lifestyle shifts across three eras to pinpoint upcoming market influences:</p>

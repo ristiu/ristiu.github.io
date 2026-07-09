@@ -140,7 +140,7 @@ const projects = [
     folderColor: "#ffffff",
     title: "Collective Case Study as Fractional UX Lead",
     company: "Context Labs",
-    description: "As Design consultant with various of hat (such as Fractional Design Lead and also being HI-C), what i do was embedded AI design workflows while acting as a bridge between design and executive leadership for design strategy, product discovery, and design execution.",
+    description: "As a Design Consultant doing the \"Fractional Design Lead\" and High-Impact IC (HI-IC) thing, I basically act as the bridge between executive leadership and the execution that delivers value for my client.\n\nBecause of my background in design leadership, I used to zoom out and zoom in to handle everything from high-level design strategy and product discovery to final execution. Lately, what works for me on embedding AI into the workflow, is using it for \"vibe coding\" to quickly spin up micro-apps and tools that automate redundant tasks, and accelerating prototypes so we can review it to user/stakeholder faster.",
     clients: [
       {
         client: "Japan Foundation",
