@@ -2,8 +2,8 @@ const projects = [
   {
     id: "offline-to-online",
     folderColor: "#ffffff",
-    title: "Shaping Product Vision Through Omnichannel O2O Design Strategy",
-    subtitle: "with Offline to Online Design Strategy",
+    title: "Shaping Omni-channel Product Vision",
+    subtitle: "Design Strategy",
     company: "eFishery",
     industry: "Agriculture",
     year: "2023",
@@ -34,8 +34,8 @@ const projects = [
   {
     id: "price-perception",
     folderColor: "#ffffff",
-    title: "Improving Price Perception in Hotel Booking Discovery",
-    subtitle: "with Gestalt Principles",
+    title: "Redesigning Hotel Booking Discovery",
+    subtitle: "Optimizing Pricing Element for 35M Users",
     company: "Traveloka",
     industry: "Pricing, Travel, Ecommerce",
     tags: ["Design Interaction", "Gestalt Principles", "Pricing Enginee", "Ecommerce"],
@@ -63,7 +63,7 @@ const projects = [
   {
     id: "warehouse-logistics",
     folderColor: "#ffffff",
-    title: "Improving Warehouse Logistics Efficiency",
+    title: "Reducing Warehouse Fullfilment Time",
     subtitle: "Service Prototyping",
     company: "Warung Pintar",
     industry: "Supply Chain, Retail",
@@ -138,7 +138,7 @@ const projects = [
     id: "context-labs",
     type: "list",
     folderColor: "#ffffff",
-    title: "Collective Case Study as Fractional UX Lead",
+    title: "Leading Fractional UX Across Client",
     company: "Context Labs",
     description: "As a Design Consultant doing the \"Fractional Design Lead\" and High-Impact IC (HI-IC) thing, I basically act as the bridge between executive leadership and the execution that delivers value for my client.\n\nBecause of my background in design leadership, I used to zoom out and zoom in to handle everything from high-level design strategy and product discovery to final execution. Lately, what works for me on embedding AI into the workflow, is using it for \"vibe coding\" to quickly spin up micro-apps and tools that automate redundant tasks, and accelerating prototypes so we can review it to user/stakeholder faster.",
     clients: [

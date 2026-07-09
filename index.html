@@ -216,11 +216,11 @@
 
     const allCards = [
       { title: 'Forecasting Visual Product Trends', subtitle: 'Japan & Indonesia Youth Segment',                        href: 'project.html#product-trends',       img: 'assets/portfolio/visual-trends-1.jpeg',    tabLabel: 'Casio',        tabLogo: 'assets/portfolio/logo-casio.png',         tabL: '8%',  cardW: '100%', cardR: '-1.2deg' },
-      { title: 'Cutting Fulfillment Time on Warehouse', subtitle: 'with Service Prototyping',                            href: 'project.html#warehouse-logistics',  img: '',                                       tabLabel: 'Warung Pintar', tabLogo: 'assets/portfolio/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
-      { title: 'Reducing Drop off by Reframing Pricing Element', subtitle: 'in Hotel Booking Discovery with Gestalt Principles', href: 'project.html#price-perception',    img: 'assets/portfolio/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/portfolio/logo-traveloka.png',     tabL: '20%', cardW: '100%' },
-      { title: 'Leading Fractional UX Across Client Engagements', subtitle: 'Client-facing design consultancy',         href: 'project.html#context-labs',        img: '',                                       tabLabel: 'Context Labs', tabLogo: 'assets/portfolio/logo-context-labs.png',  tabL: '55%', cardW: '100%' },
-      { title: 'Shaping Product Vision in Offline to Online Channel', subtitle: 'Omnichannel Design Strategy', href: 'project.html#offline-to-online',   img: 'assets/portfolio/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/portfolio/logo-efishery.png',      tabL: '30%', cardW: '100%' },
-      { title: 'Reflection of Building High-Performing Teams', subtitle: 'Leadership & Management Principle',           href: 'project.html#leadership',          img: 'assets/portfolio/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg'  },
+      { title: 'Reducing Warehouse Fullfilment Time', subtitle: 'with Service Prototyping',                            href: 'project.html#warehouse-logistics',  img: '',                                       tabLabel: 'Warung Pintar', tabLogo: 'assets/portfolio/logo-warung-pintar.png', tabL: '62%', cardW: '100%' },
+      { title: 'Redesigning Hotel Booking Discovery', subtitle: 'Optimizing Pricing Element for 35M Users', href: 'project.html#price-perception',    img: 'assets/portfolio/price-perception-1.jpeg',  tabLabel: 'Traveloka',    tabLogo: 'assets/portfolio/logo-traveloka.png',     tabL: '20%', cardW: '100%', cardGap: '-158px' },
+      { title: 'Leading Fractional UX Across Client', subtitle: 'Client-facing design consultancy',         href: 'project.html#context-labs',        img: '',                                       tabLabel: 'Context Labs', tabLogo: 'assets/portfolio/logo-context-labs.png',  tabL: '55%', cardW: '100%', cardGap: '-168px' },
+      { title: 'Shaping Omni-channel Product Vision', subtitle: 'Design Strategy', href: 'project.html#offline-to-online',   img: 'assets/portfolio/offline-to-online-2.jpeg', tabLabel: 'eFishery',     tabLogo: 'assets/portfolio/logo-efishery.png',      tabL: '30%', cardW: '100%', cardGap: '-158px' },
+      { title: 'Reflection of Building High-Performing Teams', subtitle: 'Leadership & Management Principle',           href: 'project.html#leadership',          img: 'assets/portfolio/resume-thumb.jpg',         tabLabel: '',             tabLogo: '',                                     tabL: '44%', cardW: '100%', cardR: '1.0deg', cardGap: '-158px'  },
     ];
 
     // Build a lookup: project id → first 3 sectionImages
@@ -259,7 +259,7 @@
         const peekImgs = getPeekImages(c.href);
         const isVisited = visitedCards.includes((c.href || '').split('#')[1]);
         return `
-        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}${isVisited ? ' is-visited' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}">
+        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}${isVisited ? ' is-visited' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}${c.cardGap ? `;--card-gap:${c.cardGap}` : ''}">
           ${c.tabLogo ? `<span class="stack-card-tab-label"><img class="stack-card-tab-logo" src="${c.tabLogo}" alt="${c.tabLabel}" /></span>` : ''}
           <span class="stack-card-title">${c.title}</span>
           <span class="stack-card-sub">${c.subtitle}</span>
