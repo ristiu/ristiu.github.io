@@ -737,7 +737,7 @@ a:hover { color: var(--accent); }
   font-size: 14px;
   font-weight: inherit;
   line-height: 1.15;
-  margin-bottom: 1px;
+  margin-bottom: 6px;
   position: relative;
   z-index: 3;
 }
