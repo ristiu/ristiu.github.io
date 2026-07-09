@@ -775,6 +775,33 @@ a:hover { color: var(--accent); }
   color: var(--ink);
 }
 
+.stack-card-sparkle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Visited this session — keep the folder-color state without needing hover */
+.stack-card.is-visited {
+  background: var(--folder-color, #C2CCBE);
+  border-color: transparent;
+}
+.stack-card.is-visited::before {
+  background: var(--folder-color, #C2CCBE);
+  border-color: transparent;
+}
+.stack-card.is-visited::after {
+  opacity: 1;
+}
+.stack-card.is-visited .stack-card-sub {
+  color: var(--ink);
+}
+
 @media (hover: hover) {
   .stack-container .stack-card:hover {
     transform: translateY(-32px);
@@ -2040,7 +2067,7 @@ ol li, ul li {
 .article-card-title {
   font-family: var(--serif);
   font-size: 1.15rem;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--card-ink, var(--color-ink));
   margin: 0 0 0.75rem;
   line-height: 1.4;

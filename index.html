@@ -48,8 +48,15 @@
     }
     @keyframes vt-out { to { opacity: 0; } }
     @keyframes vt-in  { from { opacity: 0; } to { opacity: 1; } }
+    html.pre-scroll { visibility: hidden; }
   </style>
-  <script>history.scrollRestoration = 'manual';</script>
+  <script>
+    history.scrollRestoration = 'manual';
+    if (sessionStorage.getItem('scrollY') !== null) {
+      document.documentElement.classList.add('pre-scroll');
+      setTimeout(() => document.documentElement.classList.remove('pre-scroll'), 1500);
+    }
+  </script>
 </head>
 <body>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>
@@ -239,24 +246,46 @@
       return projectTagMap[id] || [];
     }
 
+    // A hard reload (not just navigating back within the session) resets
+    // visited-folder colors back to default.
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+      sessionStorage.removeItem('visitedCards');
+    }
+    const visitedCards = JSON.parse(sessionStorage.getItem('visitedCards') || '[]');
+
     list.innerHTML = `
       <p class="stack-description">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
       ${allCards.map((c, i) => {
         const peekImgs = getPeekImages(c.href);
+        const isVisited = visitedCards.includes((c.href || '').split('#')[1]);
         return `
-        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}">
+        <a class="stack-card${i === allCards.length - 1 ? ' stack-card--top' : ''}${isVisited ? ' is-visited' : ''}" href="${c.href}" style="--stack-i:${i + 1};--folder-color:${FOLDER_COLORS[i]};--tab-l:${c.tabL};--card-w:${c.cardW}${c.cardR ? `;--card-r:${c.cardR}` : ''}">
           ${c.tabLogo ? `<span class="stack-card-tab-label"><img class="stack-card-tab-logo" src="${c.tabLogo}" alt="${c.tabLabel}" /></span>` : ''}
           <span class="stack-card-title">${c.title}</span>
           <span class="stack-card-sub">${c.subtitle}</span>
+          ${c.href.includes('#leadership') ? `<img class="stack-card-sparkle" src="assets/portfolio/sparkle-leadership.gif" alt="" aria-hidden="true" />` : ''}
         </a>`;
       }).join('')}
     `;
+
+    // Visited folders keep their hover/tap color for the rest of the session,
+    // and reset back to default on reload / new session.
+    function markVisited(href) {
+      const id = (href || '').split('#')[1];
+      if (!id) return;
+      const visited = JSON.parse(sessionStorage.getItem('visitedCards') || '[]');
+      if (!visited.includes(id)) {
+        visited.push(id);
+        sessionStorage.setItem('visitedCards', JSON.stringify(visited));
+      }
+    }
 
     // Burst tags from folder tab → navigate
     function burstAndNavigate(card, href, tags) {
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
       sessionStorage.setItem('folderColor', card.style.getPropertyValue('--folder-color'));
+      markVisited(href);
 
       card.classList.add('is-tapped');
       card.style.transform = 'translateY(-20px)';
@@ -321,6 +350,7 @@
     function postItBurst(card, href) {
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
+      markVisited(href);
       card.classList.add('is-tapped');
 
       card.style.transform = 'translateY(-20px) scale(1.02)';
@@ -412,6 +442,7 @@
       sessionStorage.setItem('returnCardI', card.style.getPropertyValue('--stack-i'));
       sessionStorage.setItem('scrollY', window.scrollY);
       sessionStorage.setItem('folderColor', card.style.getPropertyValue('--folder-color'));
+      markVisited(href);
       card.classList.add('is-tapped');
       card.style.transform = 'translateY(-20px)';
 
@@ -516,12 +547,14 @@
     });
 
 
-    // Restore scroll — runs on full page load (View Transition fade covers the jump)
+    // Restore scroll — page stays hidden (see html.pre-scroll in <head>) until
+    // this runs, so the browser never paints the wrong (top) position first.
     const savedY = sessionStorage.getItem('scrollY');
     if (savedY !== null) {
       sessionStorage.removeItem('scrollY');
       window.scrollTo({ top: parseInt(savedY, 10), behavior: 'instant' });
     }
+    document.documentElement.classList.remove('pre-scroll');
 
     window.addEventListener('pageshow', (e) => {
       // Reset card hover/focus states
