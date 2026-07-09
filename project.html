@@ -59,7 +59,7 @@
   .ba-tabs {
     display: flex;
     gap: 4px;
-    background: #ececea;
+    background: var(--ba-line, #e4e4e2);
     border: 0;
     border-radius: 5px;
     padding: 4px;
@@ -857,7 +857,7 @@
   }
   .gt-skeleton-bar,
   .gt-skeleton-chart {
-    background: linear-gradient(90deg, #eeeeec 25%, #f6f6f4 50%, #eeeeec 75%);
+    background: linear-gradient(90deg, var(--ba-line, #e4e4e2) 25%, var(--ba-bg, #f5f5f4) 50%, var(--ba-line, #e4e4e2) 75%);
     background-size: 200% 100%;
     animation: gt-shimmer 1.6s ease-in-out infinite;
     border-radius: 4px;
@@ -1029,7 +1029,7 @@
   .wpc-table td {
     color: var(--ink-muted, #666);
   }
-  .wpc-table tbody tr:hover { background: #f5f5f4; }
+  .wpc-table tbody tr:hover { background: var(--ba-bg, #f5f5f4); }
   .wpc-highlight {
     color: #00be6c !important;
     font-weight: 700;
