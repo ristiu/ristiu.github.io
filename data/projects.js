@@ -192,91 +192,6 @@ const projects = [
     articleBg: "#4A5AE8",
     articles: [
       {
-        id: "high-performing-team",
-        title: "Building High Performing Team",
-        sections: [
-          {
-            type: "intro",
-            text: "In leadership, the same logic applies as in design: focus on what actually moves people. For me, that comes down to three principles: Purpose, People, and Process."
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/high-performing-team.jpg",
-            caption: "Purpose, People, Process, the three principles I use to sustain a high-performing team"
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "Purpose",
-            subtitle: "Shared sense of direction",
-            body: "The team works best when everyone knows where they're going and why it matters. Ambitious but achievable challenges, matched to individual strengths, tend to produce outcomes that are both portfolio-worthy for the person and high-impact for the collective.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "People",
-            subtitle: "Psychological safety as a foundation",
-            body: "The environment should make it safe to share half-baked ideas, take risks, and stay playful. Regular 1:1s help reduce the power distance, not just checking on work, but getting to know the person behind the role.",
-            quotes: [
-              "Risti puts in effort to get to know me as a person. My home life she knows best — she assigns me work that plays to my strength. — Sr. Interaction Designer",
-              "What I appreciate the most from Risti are the candidness, the openness, the trust. I feel those 3 things come simultaneously in building the confidence in me. — Sr. UX Writer"
-            ]
-          },
-          {
-            type: "section",
-            number: "3 |",
-            title: "Process",
-            subtitle: "Feedback and quality as growth levers",
-            body: "Reflection and retrospectives are embedded into the workflow, turning feedback into a mechanism for continuous improvement rather than a one-time event. High-quality output is the primary way to earn trust across the organization. Tried applying a spider web framework to the team, and it helps manage relationships systematically so expectations stay calibrated at every level.",
-            quotes: [
-              "Risti is a high performer, that holds to the farmer-first vision and incorporates it with company strategy. — CPO"
-            ]
-          },
-          {
-            type: "impact",
-            body: "From the yearly NPS Stakeholder survey, we surveyed 41 respondents from Product, Engineering, Data and Marketing. Turns out, through transparency and supportive leadership, 85% of collaborators and team members enjoy a productive partnership that consistently drives objectives as a team (PM: 8/10 & Engineering: 9/10).",
-            stats: [],
-            note: "Measured as proof of a high-performing team, not a delusional claim ^^",
-            quotes: [
-              "Risti's team has the capacity to own the goal and the problem. They help PMs drive the business. — Sr. Product Manager"
-            ]
-          }
-        ]
-      },
-      {
-        id: "directing-design-system",
-        title: "Directing Design System & Illustration with Hyperlocal Concept",
-        sections: [
-          {
-            type: "intro",
-            text: "Early on, each designer had their own UI kit. It caused complications during handoff to engineers and made it hard for the design team to maintain consistency. The challenge: bring it together without slowing down a company that was already scaling fast."
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/design-system.jpg",
-            caption: "Hyperlocal design system directing UI consistency across 10 platforms"
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "Hyperlocal as the Main Concept",
-            subtitle: "From fragmented kits to one shared system",
-            body: "Hyperlocal became the unifying concept. The work covered UI design principles, UI audits, readability testing with users, contrast color testing, and close collaboration with engineering and branding teams. Direction ran all the way through to execution by UI Designers and Illustrators.",
-            quotes: []
-          },
-          {
-            type: "impact",
-            body: "The design system supported company hypergrowth across 10 crucial platforms serving farmers, agents, buyers, and country expansion. Adoption spread company-wide, with the biggest impact felt by the marketing and engineering teams. Now there's one shared visual language built on the hyperlocal concept.",
-            stats: [
-              "Supported company hypergrowth that applied 10 crucial platforms for farmers, agents, buyers, and country expansion",
-              "The design system is widely adopted across the company, reducing time on recreating components and allowing more tinkering time for more iteration"
-            ],
-            quotes: []
-          }
-        ]
-      },
-      {
         id: "armor-ally",
         title: "Bridging Design & Business, on Engaging Non-Designers at All Levels",
         sections: [
@@ -340,6 +255,217 @@ const projects = [
         ]
       },
       {
+        id: "data-design-alliance",
+        title: "Data >< Design Alliance for Greater Impact",
+        sections: [
+          {
+            type: "intro",
+            text: "One thing I lean into as a design manager is a close partnership with the Data team. Qualitative and quantitative together drive results that neither can reach alone."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/design-data.jpg",
+            caption: "Data & Product Design producing actionable insight, Product Management influencing business strategy with user-focused value"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "How the alliance works",
+            subtitle: "Three roles, one feedback loop",
+            body: "",
+            quotes: []
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/data-design-alliance.html",
+            caption: "Data & Product Design produce actionable insight. Product Management influences business strategy with user-focused value."
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "What we built together",
+            subtitle: "Reports that drove real decisions",
+            body: "Reports and research that drove real decisions:\n\n- Identifying Loyal User Segments\n- Hypothesis Testing for Churn Predictors\n- Warehouse Fulfillment Time Optimisation\n- A/B Testing\n- and more",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "The collaboration improved purchasing efficiency and enhanced loyal segment retention. +16.5% conversion rate uplift, statistically significant at p-value 0.0026. 30% churn reduction in one business line through loyal segment strategy.",
+            stats: [
+              "+16.5% conversion rate uplift — statistically significant, p-value 0.0026",
+              "−30% churn in 1 business line — through loyal segment strategy"
+            ],
+            quotes: [
+              "Design team excels at strategizing team collaboration, ensuring clear actionable and effective facilitation between product, business, and data teams. — Sr. Data Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "high-performing-team",
+        title: "Building High Performing Team",
+        sections: [
+          {
+            type: "intro",
+            text: "In leadership, the same logic applies as in design: focus on what actually moves people. For me, that comes down to three principles: Purpose, People, and Process."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/high-performing-team.jpg",
+            caption: "Purpose, People, Process, the three principles I use to sustain a high-performing team"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Purpose",
+            subtitle: "Shared sense of direction",
+            body: "The team works best when everyone knows where they're going and why it matters. Ambitious but achievable challenges, matched to individual strengths, tend to produce outcomes that are both portfolio-worthy for the person and high-impact for the collective.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "People",
+            subtitle: "Psychological safety as a foundation",
+            body: "The environment should make it safe to share half-baked ideas, take risks, and stay playful. Regular 1:1s help reduce the power distance, not just checking on work, but getting to know the person behind the role.",
+            quotes: [
+              "Risti puts in effort to get to know me as a person. My home life she knows best — she assigns me work that plays to my strength. — Sr. Interaction Designer",
+              "What I appreciate the most from Risti are the candidness, the openness, the trust. I feel those 3 things come simultaneously in building the confidence in me. — Sr. UX Writer"
+            ]
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Process",
+            subtitle: "Feedback and quality as growth levers",
+            body: "Reflection and retrospectives are embedded into the workflow, turning feedback into a mechanism for continuous improvement rather than a one-time event. High-quality output is the primary way to earn trust across the organization. Tried applying a spider web framework to the team, and it helps manage relationships systematically so expectations stay calibrated at every level.",
+            quotes: [
+              "Risti is a high performer, that holds to the farmer-first vision and incorporates it with company strategy. — CPO"
+            ]
+          },
+          {
+            type: "impact",
+            body: "From the yearly NPS Stakeholder survey, we surveyed 41 respondents from Product, Engineering, Data and Marketing. Turns out, through transparency and supportive leadership, 85% of collaborators and team members enjoy a productive partnership that consistently drives objectives as a team (PM: 8/10 & Engineering: 9/10).",
+            stats: [],
+            note: "Measured as proof of a high-performing team, not a delusional claim ^^",
+            quotes: [
+              "Risti's team has the capacity to own the goal and the problem. They help PMs drive the business. — Sr. Product Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "raising-team-bar",
+        title: "Raising Team Bar for Strategic Influence",
+        sections: [
+          {
+            type: "quote",
+            text: "Bad leaders stagnate. Good leaders are determined to grow. Great leaders grow the people around them, and in the process grow themselves.",
+            author: "Adam Grant"
+          },
+          {
+            type: "intro",
+            text: "Raising the bar isn't about pushing harder. It's about creating the conditions where the team wants to grow."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/strength-interest.jpg",
+            caption: "Raising the team bar through strength-based growth and collective wins"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Encourage teamwork NOT competition amongst team members",
+            subtitle: "",
+            body: "Competition within a team divides more than it motivates. What actually moves people is winning together. The focus stays on collective goals, not individual comparison. As a team lead, everyone comes with different strengths and gaps. The real question is how to balance that through team composition, less like a manager assigning tasks, more like a football coach building a lineup where each player's strength covers someone else's weakness.",
+            quotes: [
+              "What I've really valued is your consistent support and encouragement, which have created a really enjoyable room for me and teams to speed up our growth — Interaction Designer"
+            ]
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Emphasize Teamwork for High-Quality Work",
+            subtitle: "",
+            body: "Tasks get assigned based on individual strengths, with team members complementing each other's gaps. Team goals anchor everything: actionable insights and quality of deliverables. Manager and team members both contribute to making sure those goals land.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "The NPS Stakeholder survey reflects what the team built together. Quality of deliverables scored 8/10 from PMs and 9/10 from Engineering. The teamwork didn't just meet expectations. It often exceeded them. So... kudos to the team!",
+            stats: [],
+            quotes: [
+              "Strong report storytelling really help us, PM, to use to convince our business stakeholders to drive impact — Product Manager"
+            ]
+          }
+        ]
+      },
+      {
+        id: "remote-leadership",
+        title: "Remote Leadership, on Building Culture Without Borders",
+        sections: [
+          {
+            type: "intro",
+            text: "Distance doesn't break teams. Invisible uncertainty does. That's the one thing a decade of remote work across Indonesia, the UK, and Germany made undeniably clear. The framework that helped comes down to three pillars:"
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/fun-bonding.jpg",
+            caption: "Building culture without borders — remote rituals that keep teams human"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Radical Transparency",
+            subtitle: "",
+            body: "To support radical transparency, weekly structured updates keep blockers visible before they become blockers. Work in progress gets shared early, not when it's polished. A capacity map in Jira functions as a workload guide, not a surveillance tool. Everything lives in the cloud by default, Figma, Notion, all public and shareable. Each team member keeps a short \"How to Work with Me\" doc covering how they prefer feedback and when to reach them for urgent versus casual things.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Autonomy & Purpose",
+            subtitle: "",
+            body: "Every task connects back to a shared team objective, so individual autonomy is backed by collective purpose, not just personal preference. The 2 to 3 hour timezone overlap between Southeast Asia and the UK becomes the golden window for high-impact synchronous work. Weekly 1:1s stay focused on wellbeing and personal support, not status updates.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Intentional Fun Ritual",
+            subtitle: "",
+            body: "Remote teams lose the watercooler. In an office you can suddenly meet peers during lunch, in the pantry, a hallway conversation, afternoon chat after hours, commuting together. In a remote setting none of that happens by accident. It has to be prepared, not waited for. Monthly social syncs with no work agenda. Shared traditions that build identity over time. Once, the team built a Spotify playlist together. Small thing. Stayed with people longer than most retrospectives did.",
+            quotes: []
+          }
+        ]
+      },
+      {
+        id: "ai-embed-design-workflow",
+        title: "AI-Embed Design Workflow Minimize *Language Friction & Quick Prototyping",
+        sections: [
+          {
+            type: "intro",
+            text: "We experimented with various AI tools. V0 by Vercel emerged as the most effective for our discovery and delivery process (because it's free, late 2025).\n\nBut tools alone don't shift a workflow. For this to work, PM, Designer, and Engineer all need an exploration mindset. A willingness to challenge how things get done and collaborate in ways that feel unfamiliar at first."
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "The Results of Using V0 as the Primary Delivery Tool",
+            subtitle: "Pros",
+            body: "It's proven to speed up both discovery and delivery.\n\nShared language between Design and PM: everyone speaks in UI flows and working interactions instead of static mockups and verbal descriptions.\n\nShared language between Design and Engineering: communication happens in code prototypes generated by AI. Less handoff friction, less misinterpretation.\n\nThe focus shifts from building layouts to validating ideas with users. Design and engineering converge faster.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "The Trade-off",
+            subtitle: "Cons",
+            body: "We noticed a lot of tweaking around editability and stylistic control. The output needed more grooming than expected, and that shifted some of the designer's role toward quality control rather than creation.\n\nAs of 2026, looking back, the flow is getting better. This reflection may change.",
+            quotes: []
+          }
+        ]
+      },
+      {
         id: "leading-through-changes",
         title: "Leading through changes: What Strategies Provoke Humility and Resilience During Challenging Times?",
         sections: [
@@ -391,47 +517,47 @@ const projects = [
         ]
       },
       {
-        id: "raising-team-bar",
-        title: "Raising Team Bar for Strategic Influence",
+        id: "facilitating-design-workshop",
+        title: "Facilitating Design Workshop for Strategic Levers and Collaborative Culture",
         sections: [
           {
-            type: "quote",
-            text: "Bad leaders stagnate. Good leaders are determined to grow. Great leaders grow the people around them, and in the process grow themselves.",
-            author: "Adam Grant"
+            type: "intro",
+            text: "Workshops fail when the goal is unclear or co-owned by no one. The ones that work tend to have a sharp question going in, the right people in the room, and a clear output coming out. This is a reflection of what I do when facilitating workshops with PMs and Heads across strategic and cultural themes."
           },
           {
-            type: "intro",
-            text: "Raising the bar isn't about pushing harder. It's about creating the conditions where the team wants to grow."
+            type: "quote",
+            text: "Great things in business are never done by one person. They're done by a team of people.",
+            author: "Steve Jobs"
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/strength-interest.jpg",
-            caption: "Raising the team bar through strength-based growth and collective wins"
+            url: "assets/portfolio-leadership/design-workshop.jpg",
+            caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {
             type: "section",
             number: "1 |",
-            title: "Encourage teamwork NOT competition amongst team members",
-            subtitle: "",
-            body: "Competition within a team divides more than it motivates. What actually moves people is winning together. The focus stays on collective goals, not individual comparison. As a team lead, everyone comes with different strengths and gaps. The real question is how to balance that through team composition, less like a manager assigning tasks, more like a football coach building a lineup where each player's strength covers someone else's weakness.",
-            quotes: [
-              "What I've really valued is your consistent support and encouragement, which have created a really enjoyable room for me and teams to speed up our growth — Interaction Designer"
-            ]
+            title: "Strategic Lever",
+            subtitle: "Value creation and long-term thinking",
+            body: "Thematic workshops focused on what actually moves the business. Examples include value creation sessions, long-term product roadmap planning, and hypothesis collection for experimentation. The goal is always a decision the team can act on, not a pile of sticky notes.",
+            quotes: []
           },
           {
             type: "section",
             number: "2 |",
-            title: "Emphasize Teamwork for High-Quality Work",
-            subtitle: "",
-            body: "Tasks get assigned based on individual strengths, with team members complementing each other's gaps. Team goals anchor everything: actionable insights and quality of deliverables. Manager and team members both contribute to making sure those goals land.",
+            title: "Collaborative Culture",
+            subtitle: "Making space between top-down and bottom-up",
+            body: "Thematic workshops focused on how the team works together. Examples include roadmap check-ins that balance top-down direction with bottom-up input, and retrospectives across multiple departments. The format matters less than who is actually in the room and whether they feel safe enough to be honest.",
             quotes: []
           },
           {
-            type: "impact",
-            body: "The NPS Stakeholder survey reflects what the team built together. Quality of deliverables scored 8/10 from PMs and 9/10 from Engineering. The teamwork didn't just meet expectations. It often exceeded them. So... kudos to the team!",
-            stats: [],
+            type: "section",
+            number: "3 |",
+            title: "My Principle as Facilitator",
+            subtitle: "From kickoff to actionable item",
+            body: "Sessions open with shared goal-setting so no one is guessing what we are trying to accomplish. Then the right frameworks get curated for the room, Value vs. Effort, Hypothesis Dumping, Ideation, to focus energy on the target. During the session the work is keeping that energy pointed at outcomes, not conversations that circle. At the end, output becomes clear next steps.",
             quotes: [
-              "Strong report storytelling really help us, PM, to use to convince our business stakeholders to drive impact — Product Manager"
+              "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
             ]
           }
         ]
@@ -489,160 +615,34 @@ const projects = [
         ]
       },
       {
-        id: "ai-embed-design-workflow",
-        title: "AI-Embed Design Workflow Minimize *Language Friction & Quick Prototyping",
+        id: "directing-design-system",
+        title: "Directing Design System & Illustration with Hyperlocal Concept",
         sections: [
           {
             type: "intro",
-            text: "We experimented with various AI tools. V0 by Vercel emerged as the most effective for our discovery and delivery process (because it's free, late 2025).\n\nBut tools alone don't shift a workflow. For this to work, PM, Designer, and Engineer all need an exploration mindset. A willingness to challenge how things get done and collaborate in ways that feel unfamiliar at first."
+            text: "Early on, each designer had their own UI kit. It caused complications during handoff to engineers and made it hard for the design team to maintain consistency. The challenge: bring it together without slowing down a company that was already scaling fast."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/design-system.jpg",
+            caption: "Hyperlocal design system directing UI consistency across 10 platforms"
           },
           {
             type: "section",
             number: "1 |",
-            title: "The Results of Using V0 as the Primary Delivery Tool",
-            subtitle: "Pros",
-            body: "It's proven to speed up both discovery and delivery.\n\nShared language between Design and PM: everyone speaks in UI flows and working interactions instead of static mockups and verbal descriptions.\n\nShared language between Design and Engineering: communication happens in code prototypes generated by AI. Less handoff friction, less misinterpretation.\n\nThe focus shifts from building layouts to validating ideas with users. Design and engineering converge faster.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "The Trade-off",
-            subtitle: "Cons",
-            body: "We noticed a lot of tweaking around editability and stylistic control. The output needed more grooming than expected, and that shifted some of the designer's role toward quality control rather than creation.\n\nAs of 2026, looking back, the flow is getting better. This reflection may change.",
-            quotes: []
-          }
-        ]
-      },
-      {
-        id: "remote-leadership",
-        title: "Remote Leadership, on Building Culture Without Borders",
-        sections: [
-          {
-            type: "intro",
-            text: "Distance doesn't break teams. Invisible uncertainty does. That's the one thing a decade of remote work across Indonesia, the UK, and Germany made undeniably clear. The framework that helped comes down to three pillars:"
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/fun-bonding.jpg",
-            caption: "Building culture without borders — remote rituals that keep teams human"
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "Radical Transparency",
-            subtitle: "",
-            body: "To support radical transparency, weekly structured updates keep blockers visible before they become blockers. Work in progress gets shared early, not when it's polished. A capacity map in Jira functions as a workload guide, not a surveillance tool. Everything lives in the cloud by default, Figma, Notion, all public and shareable. Each team member keeps a short \"How to Work with Me\" doc covering how they prefer feedback and when to reach them for urgent versus casual things.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "Autonomy & Purpose",
-            subtitle: "",
-            body: "Every task connects back to a shared team objective, so individual autonomy is backed by collective purpose, not just personal preference. The 2 to 3 hour timezone overlap between Southeast Asia and the UK becomes the golden window for high-impact synchronous work. Weekly 1:1s stay focused on wellbeing and personal support, not status updates.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "3 |",
-            title: "Intentional Fun Ritual",
-            subtitle: "",
-            body: "Remote teams lose the watercooler. In an office you can suddenly meet peers during lunch, in the pantry, a hallway conversation, afternoon chat after hours, commuting together. In a remote setting none of that happens by accident. It has to be prepared, not waited for. Monthly social syncs with no work agenda. Shared traditions that build identity over time. Once, the team built a Spotify playlist together. Small thing. Stayed with people longer than most retrospectives did.",
-            quotes: []
-          }
-        ]
-      },
-      {
-        id: "facilitating-design-workshop",
-        title: "Facilitating Design Workshop for Strategic Levers and Collaborative Culture",
-        sections: [
-          {
-            type: "intro",
-            text: "Workshops fail when the goal is unclear or co-owned by no one. The ones that work tend to have a sharp question going in, the right people in the room, and a clear output coming out. This is a reflection of what I do when facilitating workshops with PMs and Heads across strategic and cultural themes."
-          },
-          {
-            type: "quote",
-            text: "Great things in business are never done by one person. They're done by a team of people.",
-            author: "Steve Jobs"
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/design-workshop.jpg",
-            caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "Strategic Lever",
-            subtitle: "Value creation and long-term thinking",
-            body: "Thematic workshops focused on what actually moves the business. Examples include value creation sessions, long-term product roadmap planning, and hypothesis collection for experimentation. The goal is always a decision the team can act on, not a pile of sticky notes.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "Collaborative Culture",
-            subtitle: "Making space between top-down and bottom-up",
-            body: "Thematic workshops focused on how the team works together. Examples include roadmap check-ins that balance top-down direction with bottom-up input, and retrospectives across multiple departments. The format matters less than who is actually in the room and whether they feel safe enough to be honest.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "3 |",
-            title: "My Principle as Facilitator",
-            subtitle: "From kickoff to actionable item",
-            body: "Sessions open with shared goal-setting so no one is guessing what we are trying to accomplish. Then the right frameworks get curated for the room, Value vs. Effort, Hypothesis Dumping, Ideation, to focus energy on the target. During the session the work is keeping that energy pointed at outcomes, not conversations that circle. At the end, output becomes clear next steps.",
-            quotes: [
-              "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
-            ]
-          }
-        ]
-      },
-      {
-        id: "data-design-alliance",
-        title: "Data >< Design Alliance for Greater Impact",
-        sections: [
-          {
-            type: "intro",
-            text: "One thing I lean into as a design manager is a close partnership with the Data team. Qualitative and quantitative together drive results that neither can reach alone."
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/design-data.jpg",
-            caption: "Data & Product Design producing actionable insight, Product Management influencing business strategy with user-focused value"
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "How the alliance works",
-            subtitle: "Three roles, one feedback loop",
-            body: "",
-            quotes: []
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/data-design-alliance.html",
-            caption: "Data & Product Design produce actionable insight. Product Management influences business strategy with user-focused value."
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "What we built together",
-            subtitle: "Reports that drove real decisions",
-            body: "Reports and research that drove real decisions:\n\n- Identifying Loyal User Segments\n- Hypothesis Testing for Churn Predictors\n- Warehouse Fulfillment Time Optimisation\n- A/B Testing\n- and more",
+            title: "Hyperlocal as the Main Concept",
+            subtitle: "From fragmented kits to one shared system",
+            body: "Hyperlocal became the unifying concept. The work covered UI design principles, UI audits, readability testing with users, contrast color testing, and close collaboration with engineering and branding teams. Direction ran all the way through to execution by UI Designers and Illustrators.",
             quotes: []
           },
           {
             type: "impact",
-            body: "The collaboration improved purchasing efficiency and enhanced loyal segment retention. +16.5% conversion rate uplift, statistically significant at p-value 0.0026. 30% churn reduction in one business line through loyal segment strategy.",
+            body: "The design system supported company hypergrowth across 10 crucial platforms serving farmers, agents, buyers, and country expansion. Adoption spread company-wide, with the biggest impact felt by the marketing and engineering teams. Now there's one shared visual language built on the hyperlocal concept.",
             stats: [
-              "+16.5% conversion rate uplift — statistically significant, p-value 0.0026",
-              "−30% churn in 1 business line — through loyal segment strategy"
+              "Supported company hypergrowth that applied 10 crucial platforms for farmers, agents, buyers, and country expansion",
+              "The design system is widely adopted across the company, reducing time on recreating components and allowing more tinkering time for more iteration"
             ],
-            quotes: [
-              "Design team excels at strategizing team collaboration, ensuring clear actionable and effective facilitation between product, business, and data teams. — Sr. Data Manager"
-            ]
+            quotes: []
           }
         ]
       }
