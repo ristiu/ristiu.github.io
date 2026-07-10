@@ -1117,14 +1117,24 @@ a:hover { color: var(--accent); }
     flex-direction: column;
     width: 200px;
     flex-shrink: 0;
-    position: sticky;
-    top: 40px;
+    position: static;
     align-self: flex-start;
     height: auto;
     padding: 0 24px 24px 0;
     box-sizing: border-box;
     background: #ffffff;
     z-index: 1;
+  }
+
+  /* JS-driven pin (position:sticky is unreliable here because the page
+     uses CSS `zoom` for desktop scaling, which breaks sticky positioning
+     in most browsers). js-sidenav-pin.js toggles this class on scroll. */
+  .project-sidenav.is-pinned {
+    position: fixed;
+    top: 40px;
+  }
+  .project-sidenav.is-pin-spacer {
+    visibility: hidden;
   }
 
   .project-main {
@@ -1191,7 +1201,7 @@ a:hover { color: var(--accent); }
   color: var(--ink);
   text-decoration: none;
   opacity: 0.5;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
   display: block;
   transition: opacity 0.2s ease;
   line-height: 1;
@@ -1202,8 +1212,9 @@ a:hover { color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
+}
+.project-sidenav-meta:empty {
+  display: none;
 }
 
 .sidenav-company {
@@ -1920,7 +1931,7 @@ ol li, ul li {
 .article-page {
   min-height: 100vh;
   background: transparent;
-  padding: 4rem 2rem 8rem;
+  padding: 0 2rem 8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
