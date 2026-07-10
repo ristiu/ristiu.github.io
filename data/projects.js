@@ -31,7 +31,7 @@ const projects = [
     heroImage: "assets/portfolio/efishery-hero.mp4",
     sectionImages: [
       { url: "assets/portfolio/ponds.jpg", section: "situation" },
-      { url: "assets/portfolio/wa-app.png", section: "direction", afterPara: 1, caption: "Farmer try to order supply from WA vs App. It show comparison that we have to addressed technology based on farmer ability" },
+      { url: "assets/portfolio/wa-app.png", section: "direction", afterPara: 1, caption: "Farmer sentiment when trying to order supply from WA vs App. The report show the comparison that we have to addressed technology based on farmer ability" },
     ],
 
   },
@@ -56,12 +56,12 @@ const projects = [
 
     contribution: "My role as Interaction Designer. I handled both the back-office pricing label framework and the consumer-facing redesign. The solution went through escalation to VP of Product, Head of Pricing, and CEO before launch. Since hotel bookings represented big chunck of Traveloka's revenue at the time, so even small changes is matters for the business.",
 
-    whatShifted: "This was the first time I worked on something where the design decision carried direct revenue risk at scale. I exposed to pricing principle which integrity, traveloka famous for 'honest price' guarantees you pay exactly what you see. No hidden booking fees, sudden that inflate your total when checking out.\n\nWorking inside a large corporation also taught me that small changes need a lot of alignment. Different levels, different business lines, all with legitimate stakes in the same decision",
+    whatShifted: "This was the first time working on something where a design decision carried direct revenue risk at scale. Being exposed to Traveloka's pricing principle was eye-opening. The company is famous for \"honest price\" what you see is what you pay, no hidden booking fees, no sudden charges inflating your total at checkout. Every label choice had to hold up against that standard.\n\nTraveloka was also the largest design organisation I've been part of. More than 100 designers at the time, across different roles, function and business unit. Working at that scale changed how I think about alignment. Small changes need sign-off from multiple levels and business lines, all with legitimate stakes in the same decision. That's not bureaucracy. That's what responsible design looks like when the surface area is that big.",
 
     heroImage: "assets/portfolio/traveloka-hero.mp4",
     sectionImages: [
       { url: "assets/portfolio/before-after-hotel.jpg", section: "situation" },
-
+      { url: "assets/portfolio/tvlk-fellow.jpg", section: "whatShifted" },
     ]
   },
   {
