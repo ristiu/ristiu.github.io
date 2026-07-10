@@ -1399,6 +1399,14 @@
       }
     }
 
+    function renderArticleBody(body) {
+      if (!body) return '';
+      if (!body.includes('\n- ')) return `<p>${body}</p>`;
+      const [intro, ...rest] = body.split('\n- ');
+      const items = rest.map(item => `<li>${item.trim()}</li>`).join('');
+      return `<p>${intro.trim()}</p><ul class="article-list">${items}</ul>`;
+    }
+
     function renderArticleSections(sections) {
       return (sections || []).map(s => {
         if (s.type === 'intro') {
@@ -1408,17 +1416,22 @@
             <p>${s.text}</p>
             <cite>${s.author}</cite>
           </blockquote>`;
+        } else if (s.type === 'quote') {
+          return `<blockquote class="article-quote">${s.text}${s.author ? ` — ${s.author}` : ''}</blockquote>`;
         } else if (s.type === 'image') {
+          const isHtml = (s.url || '').endsWith('.html');
           return `<figure class="article-figure">
-            <img src="${s.url}" alt="" loading="lazy" />
-            ${s.caption ? `<figcaption>${s.caption}</figcaption>` : ''}
+            ${isHtml
+              ? `<iframe src="${s.url}" loading="lazy" class="article-figure-embed" title="${s.caption || ''}"></iframe>`
+              : `<img src="${s.url}" alt="${s.caption || ''}" loading="lazy" />`}
           </figure>`;
         } else if (s.type === 'section') {
           const quotes = (s.quotes || []).map(q => `<blockquote class="article-quote">${q}</blockquote>`).join('');
+          const body = renderArticleBody(s.body);
           return `<div class="article-section">
             <p class="article-section-label"><span class="article-section-number">${s.number}</span> ${s.title}</p>
             <p class="article-section-subtitle">${s.subtitle}</p>
-            <p>${s.body}</p>
+            ${body}
             ${quotes}
           </div>`;
         } else if (s.type === 'impact') {
@@ -1470,7 +1483,7 @@
       const CARD_DIVIDERS = ['rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(0,0,0,0.09)', 'rgba(255,255,255,0.15)', 'rgba(0,0,0,0.09)'];
       const STACK_ROTS    = [-7, 5, -4, 8, -6, 3];
       const STACK_TX      = [10, -14, 18, -8, 12, -6];
-      const SPREAD_ROTS   = [-2.2, 0.8, -1.5, 2, -1, 1.5];
+      const SPREAD_ROTS   = [-1, 0.4, -0.7, 0.9, -0.5, 0.7];
 
       const cardsHtml = articles.map((a, i) => {
         const intro = (a.sections || []).find(s => s.type === 'intro');

@@ -197,7 +197,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "In leadership, I apply the same logic I use in design: focus on what actually moves people. For me, that comes down to three principles to sustain a high-performing team which are Purpose, People, and Process."
+            text: "In leadership, the same logic applies as in design: focus on what actually moves people. For me, that comes down to three principles: Purpose, People, and Process."
           },
           {
             type: "image",
@@ -209,7 +209,7 @@ const projects = [
             number: "1 |",
             title: "Purpose",
             subtitle: "Shared sense of direction",
-            body: "I align the team around a clear vision, strategy, and direction. By setting ambitious yet achievable challenges through a strength-based approach, I encourage outcomes that are both portfolio-worthy for the individual and high-impact for the collective.",
+            body: "The team works best when everyone knows where they're going and why it matters. Ambitious but achievable challenges, matched to individual strengths, tend to produce outcomes that are both portfolio-worthy for the person and high-impact for the collective.",
             quotes: []
           },
           {
@@ -217,7 +217,7 @@ const projects = [
             number: "2 |",
             title: "People",
             subtitle: "Psychological safety as a foundation",
-            body: "I facilitate an environment where team members feel safe to share ideas, take risks, and stay playful. Through regular 1:1s, I aim to reduce power dynamics and build genuine openness by getting to know the person behind the role.",
+            body: "The environment should make it safe to share half-baked ideas, take risks, and stay playful. Regular 1:1s help reduce the power distance, not just checking on work, but getting to know the person behind the role.",
             quotes: [
               "Risti puts in effort to get to know me as a person. My home life she knows best — she assigns me work that plays to my strength. — Sr. Interaction Designer",
               "What I appreciate the most from Risti are the candidness, the openness, the trust. I feel those 3 things come simultaneously in building the confidence in me. — Sr. UX Writer"
@@ -228,19 +228,16 @@ const projects = [
             number: "3 |",
             title: "Process",
             subtitle: "Feedback and quality as growth levers",
-            body: "I embed reflection and retrospectives into our workflow, turning feedback into a mechanism for intentional, continuous improvement. High-quality output is our primary way to earn trust across the organization. To manage this I establish a spider web framework for the team and senior design members to manage relationships systematically. This approach ensures we are managing expectations at all levels.",
+            body: "Reflection and retrospectives are embedded into the workflow, turning feedback into a mechanism for continuous improvement rather than a one-time event. High-quality output is the primary way to earn trust across the organization. Tried applying a spider web framework to the team, and it helps manage relationships systematically so expectations stay calibrated at every level.",
             quotes: [
               "Risti is a high performer, that holds to the farmer-first vision and incorporates it with company strategy. — CPO"
             ]
           },
           {
             type: "impact",
-            body: "Through transparency and supportive leadership, 85% of collaborators and team members enjoy a productive partnership that consistently drives objectives as a team.",
-            stats: [
-              "PM: 8/10 — 41 respondents from Product, Engineering, Data and Marketing",
-              "Engineering: 9/10"
-            ],
-            note: "Measured as proof of a high-performing team, not a delusional claim",
+            body: "From the yearly NPS Stakeholder survey, we surveyed 41 respondents from Product, Engineering, Data and Marketing. Turns out, through transparency and supportive leadership, 85% of collaborators and team members enjoy a productive partnership that consistently drives objectives as a team (PM: 8/10 & Engineering: 9/10).",
+            stats: [],
+            note: "Measured as proof of a high-performing team, not a delusional claim ^^",
             quotes: [
               "Risti's team has the capacity to own the goal and the problem. They help PMs drive the business. — Sr. Product Manager"
             ]
@@ -253,7 +250,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "When I first joined, each designer had their own UI kit, complicating cross-project collaboration and causing issues for engineers. Facilitating company hypergrowth."
+            text: "Early on, each designer had their own UI kit. It caused complications during handoff to engineers and made it hard for the design team to maintain consistency. The challenge: bring it together without slowing down a company that was already scaling fast."
           },
           {
             type: "image",
@@ -265,12 +262,12 @@ const projects = [
             number: "1 |",
             title: "Hyperlocal as the Main Concept",
             subtitle: "From fragmented kits to one shared system",
-            body: "We unsung Hyperlocal as the main concept. Key activities that I facilitate included: Tinkering UI Design principles, UI audits, readability testing with the user, contrast color testing, establish close collaboration with engineering, branding teams, up until directed the execution by UI Designers & Illustrator.",
+            body: "Hyperlocal became the unifying concept. The work covered UI design principles, UI audits, readability testing with users, contrast color testing, and close collaboration with engineering and branding teams. Direction ran all the way through to execution by UI Designers and Illustrators.",
             quotes: []
           },
           {
             type: "impact",
-            body: "How's the impact to company wide?",
+            body: "The design system supported company hypergrowth across 10 crucial platforms serving farmers, agents, buyers, and country expansion. Adoption spread company-wide, with the biggest impact felt by the marketing and engineering teams. Now there's one shared visual language built on the hyperlocal concept.",
             stats: [
               "Supported company hypergrowth that applied 10 crucial platforms for farmers, agents, buyers, and country expansion",
               "The design system is widely adopted across the company, reducing time on recreating components and allowing more tinkering time for more iteration"
@@ -284,6 +281,10 @@ const projects = [
         title: "Bridging Design & Business, on Engaging Non-Designers at All Levels",
         sections: [
           {
+            type: "intro",
+            text: "The first setup isn't to design well. It's to make sure the right people understand how design brings value to the business and the team dynamic. Only then does the work land the way it should."
+          },
+          {
             type: "image",
             url: "assets/portfolio-leadership/armor-ally.jpg",
             caption: "Bridging design and business by engaging non-designers at every level"
@@ -293,7 +294,7 @@ const projects = [
             number: "1 |",
             title: "Set Business Goals as Common Ground",
             subtitle: "",
-            body: "Designers with a business-aware mindset tend to contribute significantly. As a design leader, act as a 'translator' of business goals into actionable design strategies.",
+            body: "Designers with a business-aware mindset contribute more. The role of a design leader here is to translate business goals into design directions the team can actually act on.",
             quotes: []
           },
           {
@@ -301,7 +302,7 @@ const projects = [
             number: "2 |",
             title: "Be an ally, not a barrier with rigid design approach",
             subtitle: "",
-            body: "To build trust, I adapt my design approach based on what a stakeholder needs most — whether that is speed, visual appeal, or strategic alignment. While I pivot my methods to support them, I always keep user-centered design as the non-negotiable core value.\n\nBy becoming a stakeholder thinking partner can reduce the friction of top-down and bottom-up cultures.",
+            body: "Building trust means showing others we are reliable and transparent. One tactical way to do that is reading the room, understanding what the other person actually needs right now, whether that is speed, visual clarity, or strategic framing. The process can change and adapt, but the anchor stays fixed: user-centered design as the core value to maintain. Becoming a thinking partner reduces the friction between top-down and bottom-up cultures.",
             quotes: []
           },
           {
@@ -309,15 +310,20 @@ const projects = [
             number: "3 |",
             title: "Build spider web of stakeholder",
             subtitle: "",
-            body: "I establish a structured system for myself and my senior team members to manage relationships across the company. This ensures we are systematically managing expectations at all levels and staying connected to every corner of the business.",
+            body: "A spider web diagram is a visual mapping technique that helps understand how different individuals, groups, or teams interact. Applied to the team and senior members, it keeps relationships managed systematically so expectations stay calibrated at every level.",
             quotes: []
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/stakeholder-spiderweb.html",
+            caption: "Spider web stakeholder map: Advocates, Skeptics, Informed followers, Monitored"
           },
           {
             type: "section",
             number: "4 |",
             title: "Find shared non-work interests",
             subtitle: "",
-            body: "At the end of the day, we are social creatures. I encourage bonding over shared interests like food or sports to build rapport. However, I don't force a connection. If the personal \"vibe\" isn't there, I keep the focus on high-value work conversations and prioritize stakeholders who are open and receptive.",
+            body: "People connect over shared interests outside of work. Bonding over food or sports builds rapport that carries into collaboration. But connection shouldn't be forced. If the personal vibe isn't there, the focus stays on high-value work conversations with people who are genuinely open.",
             quotes: [
               "Our stakeholders suit is so thick — they think 'collaboration' means everyone agrees with me."
             ]
@@ -339,7 +345,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "My peers noted that I excel in anticipatory planning especially during crises. My best practices include:"
+            text: "The feedback that comes up most from peers is, I stay calm and strategic when things get unclear. As I reflect on those moments, I realise there are a few things I consistently do:"
           },
           {
             type: "image",
@@ -351,7 +357,7 @@ const projects = [
             number: "1 |",
             title: "Keep People Relations Intact",
             subtitle: "",
-            body: "My approach to damage control during restructuring and efficiency focuses on both people and context. While the business context can be learned, the most challenging aspect is managing changes in relational dynamics among people. The first rule is to keep team counterparts remain intact — like to keep IxD & PM tandem, unless it's last resort.",
+            body: "Damage control during restructuring and efficiency cuts has two layers: the business context and the people dynamics. Business context can be learned. Relational dynamics are harder to repair once broken. The first rule is keeping team counterparts intact, keeping IxD and PM tandems together, unless it's truly the last resort.",
             quotes: []
           },
           {
@@ -359,7 +365,7 @@ const projects = [
             number: "2 |",
             title: "Strategize with Realistic Optimism",
             subtitle: "",
-            body: "I practice realistic optimism by striking a balance between the pessimism of the intellect and the optimism of the will to map out the risk, worst to best case scenarios. But along the way, keep celebrate small wins.\n\nFor managers, maintaining this balance is crucial, because team need you to stay strategic to navigate through challenging situations.",
+            body: "Realistic optimism means striking a balance between the pessimism of the intellect and the optimism of the will. Map the risk. Plan for worst to best case scenarios. But along the way, celebrate the small wins.\n\nFor managers, maintaining this balance matters most when the team needs someone to stay strategic through the chaos.",
             quotes: [
               "Your ability to stay calm even in stressful situations, has made working together a lot easier — Interaction Designer"
             ]
@@ -369,14 +375,14 @@ const projects = [
             number: "3 |",
             title: "Provoke Transparency with Team",
             subtitle: "",
-            body: "By doing this facilitate team members to understand situation as it is, ultimately building resilience by keeping everyone informed about the potential path forward.\n\nKnowing what to share directly, indirectly, even what to leave unsaid, all delivered in a timely manner.",
+            body: "The team can handle uncertainty better than most managers assume. What I've learned is that keeping people informed builds resilience faster than protecting them from the truth. What to share directly, what to share later, and what to leave unsaid. It's deeply situational. But getting the timing right is what holds a team together when things are uncertain.",
             quotes: [
               "Risti demonstrated emotional intelligence, even extending to her own manager (me!) — Head of Product Design"
             ]
           },
           {
             type: "impact",
-            body: "How's the impact to the team? Pulse Check, among other design team we scored highest scores satisfaction in transparency, direction and empowerment (3.8/5), reflect ability to empower the team and provide clear guidance.",
+            body: "Every year the design department, led by the Head of Design, runs a Pulse Check with the team. The intention is to reflect on how we lead and get better as an organisation. The last one came back with the highest scores in transparency, direction, and empowerment at 3.8/5, highest across all design teams. Turns out the things I did all this time got noticed and appreciated by the team.",
             stats: [],
             quotes: [
               "...as it takes skills and effort to keep up with change, Design team is very adaptive to it — Product Manager"
@@ -389,8 +395,13 @@ const projects = [
         title: "Raising Team Bar for Strategic Influence",
         sections: [
           {
+            type: "quote",
+            text: "Bad leaders stagnate. Good leaders are determined to grow. Great leaders grow the people around them, and in the process grow themselves.",
+            author: "Adam Grant"
+          },
+          {
             type: "intro",
-            text: "\"Bad leaders stagnate. Good leaders determined to grow, great leaders grow the people around them, and in the process grow themselves\" - Adam Grant, Organizational Psychologist\n\nMy approach to raising the team bar centers on practical team growth."
+            text: "Raising the bar isn't about pushing harder. It's about creating the conditions where the team wants to grow."
           },
           {
             type: "image",
@@ -402,7 +413,7 @@ const projects = [
             number: "1 |",
             title: "Encourage teamwork NOT competition amongst team members",
             subtitle: "",
-            body: "Avoid excessive competition since it can divide — it's counterproductive.\n\nRather than pushing for individual wins, emphasize winning as a team.",
+            body: "Competition within a team divides more than it motivates. What actually moves people is winning together. The focus stays on collective goals, not individual comparison. As a team lead, everyone comes with different strengths and gaps. The real question is how to balance that through team composition, less like a manager assigning tasks, more like a football coach building a lineup where each player's strength covers someone else's weakness.",
             quotes: [
               "What I've really valued is your consistent support and encouragement, which have created a really enjoyable room for me and teams to speed up our growth — Interaction Designer"
             ]
@@ -412,12 +423,12 @@ const projects = [
             number: "2 |",
             title: "Emphasize Teamwork for High-Quality Work",
             subtitle: "",
-            body: "Assign tasks based on individual strengths. Complement weaknesses with skills from other team members. Set team goals such as: (1) Actionable Insights (2) Quality of Deliverables. Manager + Team members contribute to ensure collective success.",
+            body: "Tasks get assigned based on individual strengths, with team members complementing each other's gaps. Team goals anchor everything: actionable insights and quality of deliverables. Manager and team members both contribute to making sure those goals land.",
             quotes: []
           },
           {
             type: "impact",
-            body: "How's the impact to the team? NPS Stakeholder reflect commitment to growth for excellence: Quality of Deliverables (8/10) from PMs, (9/10) from Engineering, indicating the teamwork not only meets, but often exceeds expectations.",
+            body: "The NPS Stakeholder survey reflects what the team built together. Quality of deliverables scored 8/10 from PMs and 9/10 from Engineering. The teamwork didn't just meet expectations. It often exceeded them. So... kudos to the team!",
             stats: [],
             quotes: [
               "Strong report storytelling really help us, PM, to use to convince our business stakeholders to drive impact — Product Manager"
@@ -430,8 +441,13 @@ const projects = [
         title: "Empowering Individual Growth & Career Development",
         sections: [
           {
+            type: "quote",
+            text: "There is a difference between motivating a team and stressing them out.",
+            author: ""
+          },
+          {
             type: "intro",
-            text: "\"There is a difference between motivating team and stressing them out\"\n\nMy approach to raising the team bar centers on practical individual growth."
+            text: "Individual growth doesn't happen by pushing harder. It happens when the conditions are right and the goals feel personal."
           },
           {
             type: "image",
@@ -443,7 +459,7 @@ const projects = [
             number: "1 |",
             title: "Growth Happens in Practice",
             subtitle: "",
-            body: "Pairing less experienced members with seasoned professionals, and attracting strong candidates.",
+            body: "Self-improvement isn't just theory. It requires actively applying new skills and mindsets to daily work. Real development comes from doing, reflecting, and adapting through real experiences, not just reading about them.\n\nIn practice, that looks like pairing team members with someone more expert in what they need, senior with junior, strength with weakness. And when hiring, the mindset is attracting candidates who can complement the team's existing gaps, not just add more of what's already there.",
             quotes: []
           },
           {
@@ -451,7 +467,7 @@ const projects = [
             number: "2 |",
             title: "Evaluate where standards are dropping before set ambitious goals",
             subtitle: "",
-            body: "I believe in setting clear, ambitious goals. It's crucial not to set standards based on outliers — pushing too hard can set the team up for failure.\n\nRecognize that not everyone wants to grow at the same pace.",
+            body: "Clear, ambitious goals matter. But setting standards based on outliers sets the team up for failure. Before raising the bar, it's worth understanding where things are actually dropping first. Not everyone grows at the same pace, and that's not a problem to fix.",
             quotes: []
           },
           {
@@ -459,12 +475,12 @@ const projects = [
             number: "3 |",
             title: "Establish Boundaries with Individual Goal Setting",
             subtitle: "",
-            body: "NOT everyone wants to grow, so growth is individual responsibility.\n\nManager ensures feedback loops are active and goal setting is rooted on the individual aspiration, then aligning with day to day project.",
+            body: "Not everyone wants to grow at the same speed, and that's okay. Growth is ultimately individual responsibility. What a manager can do is keep the feedback loop active and make sure goal setting starts from personal aspiration first, then connects to the day to day work. Not everyone grows at the same pace, and that's not a problem to fix by the manager.",
             quotes: []
           },
           {
             type: "impact",
-            body: "How's the impact to the team? Pulse Check — Growth scored the highest at (3.5/5) among other design team.",
+            body: "In the yearly Pulse Check, growth scored highest at 3.5/5 across all design teams. The number matters less than what it signals. For me it meant people felt supported in moving forward at their own pace.",
             stats: [],
             quotes: [
               "Risti maintains high standards for projects and team, even to herself. She's dedicated to her team's growth improvement. — Product Researcher"
@@ -478,14 +494,14 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "We experimented with various AI tools, and V0 (Vercel) emerged as the most effective solution for our discovery and delivery process.\n\nThe Prerequisites for Success: For this to work Product Manager, Designer, and Engineer must maintain an \"exploration mindset.\" Shifting the workflow requires a willingness to challenge the status quo and collaborate in entirely new ways."
+            text: "We experimented with various AI tools. V0 by Vercel emerged as the most effective for our discovery and delivery process (because it's free, late 2025).\n\nBut tools alone don't shift a workflow. For this to work, PM, Designer, and Engineer all need an exploration mindset. A willingness to challenge how things get done and collaborate in ways that feel unfamiliar at first."
           },
           {
             type: "section",
             number: "1 |",
             title: "The Results of Using V0 as the Primary Delivery Tool",
             subtitle: "Pros",
-            body: "It's proven to speed discovery and delivery process. Shared Language: Design + PM — All speak in UI flows & working interactions. Design + Engineering — Communicate in code prototypes generated by AI.\n\nFocus shifts from building layout to validating ideas with the users. Minimizes rework and misinterpretation; design & eng converge faster.",
+            body: "It's proven to speed up both discovery and delivery.\n\nShared language between Design and PM: everyone speaks in UI flows and working interactions instead of static mockups and verbal descriptions.\n\nShared language between Design and Engineering: communication happens in code prototypes generated by AI. Less handoff friction, less misinterpretation.\n\nThe focus shifts from building layouts to validating ideas with users. Design and engineering converge faster.",
             quotes: []
           },
           {
@@ -493,7 +509,7 @@ const projects = [
             number: "2 |",
             title: "The Trade-off",
             subtitle: "Cons",
-            body: "We noticed a decline in job satisfaction as roles shifted primarily toward \"Quality Control\".",
+            body: "We noticed a lot of tweaking around editability and stylistic control. The output needed more grooming than expected, and that shifted some of the designer's role toward quality control rather than creation.\n\nAs of 2026, looking back, the flow is getting better. This reflection may change.",
             quotes: []
           }
         ]
@@ -504,7 +520,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "With a decade of experience, including 7 years working remotely in Indonesia, and across the UK and Germany. I prioritize visibility to eliminate the uncertainty in distributed environments. My framework focuses on three pillars:"
+            text: "Distance doesn't break teams. Invisible uncertainty does. That's the one thing a decade of remote work across Indonesia, the UK, and Germany made undeniably clear. The framework that helped comes down to three pillars:"
           },
           {
             type: "image",
@@ -516,7 +532,7 @@ const projects = [
             number: "1 |",
             title: "Radical Transparency",
             subtitle: "",
-            body: "Weekly Blockbusters: Structured updates focusing addressing blockers.\n\nWIP over Perfection: Encouraging over-communication and early-stage sharing to reduce silos.\n\nThe Capacity Map: Using Jira as a visual workload guide rather than a surveillance tool.\n\nCloud-First Workflow: Eliminating local files, all artifacts (Figma, Notion) are public and shareable by default.\n\nThe User Manual: Every team member maintains a \"How to Work with Me\" doc. This covers: How I prefer to receive feedback. My \"Emergency\" vs. \"Casual\" contact channels.",
+            body: "To support radical transparency, weekly structured updates keep blockers visible before they become blockers. Work in progress gets shared early, not when it's polished. A capacity map in Jira functions as a workload guide, not a surveillance tool. Everything lives in the cloud by default, Figma, Notion, all public and shareable. Each team member keeps a short \"How to Work with Me\" doc covering how they prefer feedback and when to reach them for urgent versus casual things.",
             quotes: []
           },
           {
@@ -524,7 +540,7 @@ const projects = [
             number: "2 |",
             title: "Autonomy & Purpose",
             subtitle: "",
-            body: "Goal Alignment: Connecting every task to a shared team objective to ensure individual autonomy is backed by collective purpose.\n\nThe \"Golden Window\": Maximizing the 2–3 hour timezone overlap (e.g., SE Asia and UK) for high-impact synchronous collaboration.\n\n1:1: Weekly \"pulse check\" meetings dedicated to well-being and personal support rather than just status updates.",
+            body: "Every task connects back to a shared team objective, so individual autonomy is backed by collective purpose, not just personal preference. The 2 to 3 hour timezone overlap between Southeast Asia and the UK becomes the golden window for high-impact synchronous work. Weekly 1:1s stay focused on wellbeing and personal support, not status updates.",
             quotes: []
           },
           {
@@ -532,7 +548,7 @@ const projects = [
             number: "3 |",
             title: "Intentional Fun Ritual",
             subtitle: "",
-            body: "Protected Social Syncs: Monthly non-work rituals designed to replicate \"watercooler\" spontaneity in a digital space.\n\nShared Traditions: Building team identity through collaborative activities. My team once created a Spotify playlist together.",
+            body: "Remote teams lose the watercooler. In an office you can suddenly meet peers during lunch, in the pantry, a hallway conversation, afternoon chat after hours, commuting together. In a remote setting none of that happens by accident. It has to be prepared, not waited for. Monthly social syncs with no work agenda. Shared traditions that build identity over time. Once, the team built a Spotify playlist together. Small thing. Stayed with people longer than most retrospectives did.",
             quotes: []
           }
         ]
@@ -543,7 +559,12 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "Led and facilitated workshops with PMs and Heads to drive strategic leverage across the organization."
+            text: "Workshops fail when the goal is unclear or co-owned by no one. The ones that work tend to have a sharp question going in, the right people in the room, and a clear output coming out. This is a reflection of what I do when facilitating workshops with PMs and Heads across strategic and cultural themes."
+          },
+          {
+            type: "quote",
+            text: "Great things in business are never done by one person. They're done by a team of people.",
+            author: "Steve Jobs"
           },
           {
             type: "image",
@@ -555,7 +576,7 @@ const projects = [
             number: "1 |",
             title: "Strategic Lever",
             subtitle: "Value creation and long-term thinking",
-            body: "Workshops built around what actually moves the business — not just output. We mapped long-term roadmaps, surfaced hypotheses, and tied every idea back to a real lever. The goal was always a decision the team could act on.",
+            body: "Thematic workshops focused on what actually moves the business. Examples include value creation sessions, long-term product roadmap planning, and hypothesis collection for experimentation. The goal is always a decision the team can act on, not a pile of sticky notes.",
             quotes: []
           },
           {
@@ -563,15 +584,15 @@ const projects = [
             number: "2 |",
             title: "Collaborative Culture",
             subtitle: "Making space between top-down and bottom-up",
-            body: "Cross-functional check-ins with product, engineering, data, marketing, and design. Retrospectives built to make it safe to say what isn't working. The format matters less than who's actually in the room.",
+            body: "Thematic workshops focused on how the team works together. Examples include roadmap check-ins that balance top-down direction with bottom-up input, and retrospectives across multiple departments. The format matters less than who is actually in the room and whether they feel safe enough to be honest.",
             quotes: []
           },
           {
             type: "section",
             number: "3 |",
-            title: "My Approach as Facilitator",
-            subtitle: "From kickoff to action in four moves",
-            body: "I open with shared goal-setting so no one's guessing what we're trying to accomplish. Then I curate the right frameworks — Value vs. Effort, Hypothesis Dumping, Ideation — to focus the room. During the session I keep energy pointed at the target, not the conversation. At the end, output becomes clear next steps, not a pile of sticky notes.",
+            title: "My Principle as Facilitator",
+            subtitle: "From kickoff to actionable item",
+            body: "Sessions open with shared goal-setting so no one is guessing what we are trying to accomplish. Then the right frameworks get curated for the room, Value vs. Effort, Hypothesis Dumping, Ideation, to focus energy on the target. During the session the work is keeping that energy pointed at outcomes, not conversations that circle. At the end, output becomes clear next steps.",
             quotes: [
               "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
             ]
@@ -584,7 +605,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "What sets me apart from other design managers is how I lean into a close partnership with the Data team to drive actionable results using qualitative and quantitative data."
+            text: "One thing I lean into as a design manager is a close partnership with the Data team. Qualitative and quantitative together drive results that neither can reach alone."
           },
           {
             type: "image",
@@ -596,20 +617,25 @@ const projects = [
             number: "1 |",
             title: "How the alliance works",
             subtitle: "Three roles, one feedback loop",
-            body: "Data Team quantifies qualitative hypotheses from Product Research. Product Researcher bridges storytelling and data to produce actionable insights — or finds the signal from the Data team in the field. IxD and UX Writer use funnel analysis to inform design decisions. On the other side, Product Manager gains confidence from having both qualitative and quantitative data to influence business strategy.",
+            body: "",
             quotes: []
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/data-design-alliance.html",
+            caption: "Data & Product Design produce actionable insight. Product Management influences business strategy with user-focused value."
           },
           {
             type: "section",
             number: "2 |",
             title: "What we built together",
             subtitle: "Reports that drove real decisions",
-            body: "Sample reports from our close collaboration on strategic levers include: Identifying Loyal User Segments and Hypothesis Testing for Churn Predictors. Each report started from a design or research hypothesis and ended as an input to product and business roadmaps.",
+            body: "Reports and research that drove real decisions:\n\n- Identifying Loyal User Segments\n- Hypothesis Testing for Churn Predictors\n- Warehouse Fulfillment Time Optimisation\n- A/B Testing\n- and more",
             quotes: []
           },
           {
             type: "impact",
-            body: "The collaboration improved purchasing efficiency and enhanced loyal segment retention.",
+            body: "The collaboration improved purchasing efficiency and enhanced loyal segment retention. +16.5% conversion rate uplift, statistically significant at p-value 0.0026. 30% churn reduction in one business line through loyal segment strategy.",
             stats: [
               "+16.5% conversion rate uplift — statistically significant, p-value 0.0026",
               "−30% churn in 1 business line — through loyal segment strategy"

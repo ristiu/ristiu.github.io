@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stakeholder Spider Web</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  .wrap { padding: 32px; }
+  .grid { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+  .label { position: absolute; line-height: 1.4; }
+  .name { font-size: 11px; font-weight: 700; color: #212121; font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  .hint { font-size: 10px; color: #666666; font-family: 'JetBrains Mono', 'Courier New', monospace; margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="grid">
+    <svg viewBox="0 0 300 300" width="300" height="300" style="position:absolute;top:0;left:0;">
+      <line x1="150" y1="150" x2="55"  y2="55"  stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="245" y2="55"  stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="55"  y2="245" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="245" y2="245" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="150" y2="32"  stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="150" y2="268" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="32"  y2="150" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="150" y1="150" x2="268" y2="150" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+      <polygon points="150,54 246,150 150,246 54,150"  fill="none" stroke="#e0e0e0" stroke-width="1"/>
+      <polygon points="150,90 210,150 150,210 90,150"  fill="none" stroke="#e0e0e0" stroke-width="1"/>
+      <polygon points="150,120 180,150 150,180 120,150" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+      <line x1="54"  y1="150" x2="246" y2="150" stroke="#e0e0e0" stroke-width="0.5"/>
+      <line x1="150" y1="54"  x2="150" y2="246" stroke="#e0e0e0" stroke-width="0.5"/>
+      <text x="150" y="20"  text-anchor="middle" font-size="9" fill="#666666" font-family="'JetBrains Mono', 'Courier New', monospace">High influence</text>
+      <text x="150" y="291" text-anchor="middle" font-size="9" fill="#666666" font-family="'JetBrains Mono', 'Courier New', monospace">Low influence</text>
+      <text x="8"   y="150" text-anchor="middle" font-size="9" fill="#666666" font-family="'JetBrains Mono', 'Courier New', monospace" transform="rotate(-90 8 150)">Low trust</text>
+      <text x="292" y="150" text-anchor="middle" font-size="9" fill="#666666" font-family="'JetBrains Mono', 'Courier New', monospace" transform="rotate(90 292 150)">High trust</text>
+      <circle cx="150" cy="150" r="20" fill="#212121"/>
+      <text x="150" y="154" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff" font-family="'JetBrains Mono', 'Courier New', monospace">you</text>
+    </svg>
+
+    <div class="label" style="top:28px;right:16px;text-align:right;">
+      <div class="name">Advocates</div>
+      <div class="hint">Co-create and amplify.</div>
+    </div>
+    <div class="label" style="top:28px;left:16px;text-align:left;">
+      <div class="name">Skeptics</div>
+      <div class="hint">Listen. Rebuild trust.</div>
+    </div>
+    <div class="label" style="bottom:28px;right:16px;text-align:right;">
+      <div class="name">Informed</div>
+      <div class="hint">Keep informed.</div>
+    </div>
+    <div class="label" style="bottom:28px;left:16px;text-align:left;">
+      <div class="name">Monitored</div>
+      <div class="hint">Watch if influence shifts.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
