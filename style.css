@@ -172,7 +172,7 @@ body {
   flex-direction: column;
   justify-content: center;
   position: absolute;
-  bottom: calc(-5rem - 10px - 35px);
+  bottom: calc(-5rem - 10px - 35px + 25px - 10px);
   right: -30px;
   color: #ffffff;
   font-family: var(--mono);
@@ -220,9 +220,9 @@ body {
   position: absolute;
   left: -14px;
   right: -14px;
-  bottom: calc(-5rem - 10px + 38px);
+  bottom: calc(-5rem - 10px + 38px + 25px - 10px);
   z-index: 6;
-  transform: rotate(-1.5deg);
+  transform: rotate(-1.5deg) translateX(20px);
   animation: role-stamp-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.35s backwards;
 }
 
@@ -254,7 +254,7 @@ body {
     bottom: calc(-5rem - 10px + 66px);
   }
   .hero-current-role-frame {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     white-space: nowrap;
   }
 }
@@ -278,9 +278,9 @@ body {
 .hero-current-role-frame .handle--top { top: -3px; left: 50%; transform: translateX(-50%); }
 
 @keyframes role-stamp-in {
-  0%   { opacity: 0; transform: rotate(-1.5deg) scale(1.12) translateY(-4px); }
-  70%  { opacity: 1; transform: rotate(-1.5deg) scale(0.99) translateY(0.5px); }
-  100% { opacity: 1; transform: rotate(-1.5deg) scale(1) translateY(0); }
+  0%   { opacity: 0; transform: rotate(-1.5deg) translateX(20px) scale(1.12) translateY(-4px); }
+  70%  { opacity: 1; transform: rotate(-1.5deg) translateX(20px) scale(0.99) translateY(0.5px); }
+  100% { opacity: 1; transform: rotate(-1.5deg) translateX(20px) scale(1) translateY(0); }
 }
 
 .hero-note-wrap--settled .hero-current-role {
