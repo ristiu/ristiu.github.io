@@ -2381,6 +2381,7 @@
           ${imgs.map((img, i) => `
             <figure class="section-photo${img.url.includes('before-after-hotel') ? ' section-photo--contained' : ''}">
               <img src="${img.url}" alt="" loading="lazy" referrerpolicy="no-referrer" />
+              ${img.caption ? `<figcaption>${img.caption}</figcaption>` : ''}
             </figure>`).join('')}
         </div>`;
       }
@@ -2420,7 +2421,7 @@
               <p class="strategy-card-title">${p.strategyTitle || (p.projectPlanning && p.projectPlanning[0].label) || ''}</p>
               ${p.strategyCardImage ? `<img src="${p.strategyCardImage}" alt="" class="strategy-card-img" loading="lazy" />` : ''}
             </div>
-            <div class="direction-text">${directionRestParas.split('\n\n').map(para => `<p>${para}</p>`).join('')}</div>
+            <div class="direction-text">${directionRestParas.split('\n\n').map((para, i) => `<p>${para}</p>${sectionPhotosAfter('direction', i + 1)}`).join('')}</div>
           </div>
           ${p.contribution ? `<p>${p.contribution}</p>` : ''}
           ${sectionPhotos('direction')}

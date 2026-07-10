@@ -27,8 +27,12 @@ const projects = [
     ],
 
     
-    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.jpg",
+    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.png",
     heroImage: "assets/portfolio/efishery-hero.mp4",
+    sectionImages: [
+      { url: "assets/portfolio/ponds.jpg", section: "situation" },
+      { url: "assets/portfolio/wa-app.png", section: "direction", afterPara: 1, caption: "Farmer try to order supply from WA vs App. It show comparison that we have to addressed technology based on farmer ability" },
+    ],
 
   },
   {

@@ -1639,7 +1639,7 @@ a:hover { color: var(--accent); }
 }
 
 .strategy-card-img {
-  width: 70%;
+  width: 100%;
   display: block;
   margin: 0 auto;
   border-radius: 2px;
@@ -1838,6 +1838,14 @@ ol li, ul li {
   display: block;
   border-radius: 5px;
   box-shadow: none;
+}
+
+.section-photo figcaption {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 /* Diagram/screenshot-style images: show at half width so the source
