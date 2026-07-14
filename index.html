@@ -66,6 +66,105 @@
     <img id="hover-preview-img" src="" alt="" />
   </div>
 
+  <!-- Flying banner — playground feature teaser, banner-towing style -->
+  <style>
+    /* In-flow band between the hero (leaf) and the portfolio intro text,
+       so the banner only appears when the user scrolls through that gap. */
+    .fly-band {
+      position: relative;
+      height: 96px;
+      /* visible so the banner can fly beyond the viewport and return */
+      overflow: visible;
+    }
+    .fly-band.is-dismissed { display: none; }
+    .fly-banner {
+      position: absolute;
+      top: 6px;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fly-banner-patrol 22s ease-in-out infinite alternate;
+      animation-delay: 1s;
+      will-change: transform, left;
+    }
+    .fly-banner:hover { animation-play-state: paused; }
+    /* patrol back and forth along the band, never leaving it —
+       left:100% + translateX(-100%) pins the right edge to the band's right,
+       so the range adapts to any band/banner width */
+    @keyframes fly-banner-patrol {
+      from { left: 100%; transform: translateX(-100%); }
+      to   { left: 0;    transform: translateX(0); }
+    }
+    .fly-banner-img {
+      height: 74px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.22));
+    }
+    .fly-banner-img--sm {
+      height: 60px;
+      margin-left: -22px; /* overlap the lead object a little */
+      transform: rotate(6deg) translateY(6px);
+    }
+    .fly-banner-bubble {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--ink);
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink);
+      white-space: nowrap;
+      box-shadow: 0 8px 14px rgba(0,0,0,0.16), 2px 3px 0 rgba(0,0,0,0.1);
+      transform-origin: left center;
+      animation: fly-banner-wave 2.4s ease-in-out infinite;
+    }
+    /* flag rippling in the wind */
+    @keyframes fly-banner-wave {
+      0%, 100% { transform: rotate(-2deg) translateY(0); }
+      50%      { transform: rotate(2.5deg) translateY(-3px); }
+    }
+    /* tow-rope: little line connecting bubble to the objects ahead of it */
+    .fly-banner-bubble::before {
+      content: '';
+      position: absolute;
+      left: -14px;
+      top: 50%;
+      width: 14px;
+      border-top: 1px dashed var(--ink-muted);
+    }
+    .fly-banner-bubble a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .fly-banner-close {
+      background: none;
+      border: none;
+      padding: 0 0 0 2px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1;
+      color: var(--ink-muted);
+      cursor: pointer;
+    }
+    .fly-banner-close:hover { color: var(--ink); }
+    @media (max-width: 599px) {
+      .fly-band { height: 110px; margin: 10px 0; }
+      .fly-banner { gap: 10px; }
+      .fly-banner-img { height: 56px; }
+      .fly-banner-img--sm { height: 46px; margin-left: -16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fly-band { display: none; }
+    }
+  </style>
+
 <div class="paper">
   <!-- Hero -->
   <div class="hero-wrapper hero-wrapper--yellow">
@@ -98,6 +197,35 @@
     </div>
     <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
   </div>
+
+  <!-- Flying banner band — sits between the leaf and the portfolio intro -->
+  <div class="fly-band" id="fly-band">
+    <div class="fly-banner" id="fly-banner" role="complementary" aria-label="Featured on Playground">
+      <img class="fly-banner-img" src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" />
+      <img class="fly-banner-img fly-banner-img--sm" src="assets/portfolio-playground/cokies.png" alt="Fortune cookie project" />
+      <span class="fly-banner-bubble">
+        Featured on <a href="playground.html">Playground</a>
+        <button class="fly-banner-close" id="fly-banner-close" aria-label="Dismiss">✕</button>
+      </span>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const band = document.getElementById('fly-band');
+      if (sessionStorage.getItem('flyBannerDismissed')) {
+        band.classList.add('is-dismissed');
+        return;
+      }
+      document.getElementById('fly-banner-close').addEventListener('click', () => {
+        band.classList.add('is-dismissed');
+        sessionStorage.setItem('flyBannerDismissed', '1');
+        if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_dismiss');
+      });
+      band.querySelector('a').addEventListener('click', () => {
+        if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_click');
+      });
+    })();
+  </script>
 
   <main class="page" id="main-content">
 
