@@ -782,6 +782,27 @@
     }, { threshold: 0.4 });
 
     document.querySelectorAll('[data-track]').forEach(el => sectionObserver.observe(el));
+
+    // ── Analytics: page scroll depth (25/50/75/100%) ─────────
+    (function () {
+      const thresholds = [25, 50, 75, 100];
+      const fired = new Set();
+      function check() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        const pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+        thresholds.forEach(t => {
+          if (pct >= t && !fired.has(t)) {
+            fired.add(t);
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'scroll_depth', { percent: t, page: 'home' });
+            }
+          }
+        });
+      }
+      window.addEventListener('scroll', check, { passive: true });
+      check();
+    })();
   </script>
 </body>
 </html>

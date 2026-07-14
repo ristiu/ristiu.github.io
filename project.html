@@ -2642,18 +2642,62 @@
 
     function initSectionTracking() {
       const projectId = window.location.hash.replace('#', '');
+
+      // Dwell time per section: start a timer when a section enters view,
+      // flush a section_dwell event with elapsed seconds when it leaves.
+      const dwellStart = {};
+      function flushDwell(section) {
+        const start = dwellStart[section];
+        if (!start) return;
+        delete dwellStart[section];
+        const seconds = Math.round((performance.now() - start) / 1000);
+        if (seconds >= 1 && typeof gtag !== 'undefined') {
+          gtag('event', 'section_dwell', { section, project_id: projectId, seconds });
+        }
+      }
+
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(e => {
-          if (!e.isIntersecting) return;
           const section = e.target.dataset.section;
-          if (section && typeof gtag !== 'undefined') {
-            gtag('event', 'section_viewed', { section, project_id: projectId });
+          if (!section) return;
+          if (e.isIntersecting) {
+            if (!dwellStart[section]) {
+              dwellStart[section] = performance.now();
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'section_viewed', { section, project_id: projectId });
+              }
+            }
+          } else {
+            flushDwell(section);
           }
-          observer.unobserve(e.target);
         });
       }, { threshold: 0.5 });
 
       document.querySelectorAll('[data-section]').forEach(el => observer.observe(el));
+
+      // Flush whatever section is still open when the user navigates away
+      window.addEventListener('pagehide', () => {
+        Object.keys(dwellStart).forEach(flushDwell);
+      });
+
+      // ── Analytics: page scroll depth (25/50/75/100%) ─────────
+      const thresholds = [25, 50, 75, 100];
+      const fired = new Set();
+      function checkScrollDepth() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        const pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+        thresholds.forEach(t => {
+          if (pct >= t && !fired.has(t)) {
+            fired.add(t);
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'scroll_depth', { percent: t, project_id: projectId });
+            }
+          }
+        });
+      }
+      window.addEventListener('scroll', checkScrollDepth, { passive: true });
+      checkScrollDepth();
     }
 
     function initRisoImages() {
