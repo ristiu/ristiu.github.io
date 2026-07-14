@@ -73,34 +73,37 @@
     .fly-band {
       position: relative;
       height: 96px;
-      /* visible so the banner can fly beyond the viewport and return */
-      overflow: visible;
     }
     .fly-band.is-dismissed { display: none; }
+    /* position:fixed (not absolute) so the banner's horizontal patrol isn't
+       clipped by .paper's overflow-x:clip — it truly exits and re-enters
+       the browser window. JS keeps `top` synced to the band's scroll
+       position so it still only appears in that band of the page. */
     .fly-banner {
-      position: absolute;
-      top: 6px;
+      position: fixed;
+      top: 0;
       left: 0;
       display: flex;
       align-items: center;
       gap: 12px;
-      animation: fly-banner-patrol 22s ease-in-out infinite alternate;
+      animation: fly-banner-patrol 22s ease-in-out infinite;
       animation-delay: 1s;
       will-change: transform, left;
     }
     .fly-banner:hover { animation-play-state: paused; }
-    /* patrol back and forth along the band, never leaving it —
-       left:100% + translateX(-100%) pins the right edge to the band's right,
-       so the range adapts to any band/banner width */
+    /* Patrol clear across the viewport and off both edges: at 0%/100% the
+       banner's left edge starts at the viewport's right edge (fully
+       off-screen right); at 50% translateX(-100%) pulls its right edge to
+       the viewport's left edge (fully off-screen left). */
     @keyframes fly-banner-patrol {
-      from { left: 100%; transform: translateX(-100%); }
-      to   { left: 0;    transform: translateX(0); }
+      0%   { left: 100vw; transform: translateX(0); }
+      50%  { left: 0;     transform: translateX(-100%); }
+      100% { left: 100vw; transform: translateX(0); }
     }
     .fly-banner-img {
       height: 74px;
       width: auto;
       display: block;
-      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.22));
     }
     .fly-banner-img--sm {
       height: 60px;
@@ -120,7 +123,6 @@
       font-size: 11px;
       color: var(--ink);
       white-space: nowrap;
-      box-shadow: 0 8px 14px rgba(0,0,0,0.16), 2px 3px 0 rgba(0,0,0,0.1);
       transform-origin: left center;
       animation: fly-banner-wave 2.4s ease-in-out infinite;
     }
@@ -155,7 +157,7 @@
     }
     .fly-banner-close:hover { color: var(--ink); }
     @media (max-width: 599px) {
-      .fly-band { height: 110px; margin: 10px 0; }
+      .fly-band { height: 110px; margin-top: 10px; margin-bottom: 10px; }
       .fly-banner { gap: 10px; }
       .fly-banner-img { height: 56px; }
       .fly-banner-img--sm { height: 46px; margin-left: -16px; }
@@ -212,18 +214,34 @@
   <script>
     (function () {
       const band = document.getElementById('fly-band');
+      const banner = document.getElementById('fly-banner');
       if (sessionStorage.getItem('flyBannerDismissed')) {
         band.classList.add('is-dismissed');
+        banner.style.display = 'none';
         return;
       }
       document.getElementById('fly-banner-close').addEventListener('click', () => {
         band.classList.add('is-dismissed');
+        banner.style.display = 'none';
         sessionStorage.setItem('flyBannerDismissed', '1');
         if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_dismiss');
       });
       band.querySelector('a').addEventListener('click', () => {
         if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_click');
       });
+
+      // Keep the fixed-position banner's vertical spot synced to the band's
+      // scroll position, and only show it while the band is in view.
+      function syncBannerPosition() {
+        if (band.classList.contains('is-dismissed')) return;
+        const rect = band.getBoundingClientRect();
+        const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+        banner.style.display = visible ? 'flex' : 'none';
+        if (visible) banner.style.top = (rect.top + 6) + 'px';
+      }
+      window.addEventListener('scroll', syncBannerPosition, { passive: true });
+      window.addEventListener('resize', syncBannerPosition);
+      syncBannerPosition();
     })();
   </script>
 
