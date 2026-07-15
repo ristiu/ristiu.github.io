@@ -83,22 +83,30 @@
       position: fixed;
       top: 0;
       left: 0;
-      display: flex;
+      display: none; /* JS shows this via IntersectionObserver */
       align-items: center;
       gap: 12px;
-      animation: fly-banner-patrol 22s ease-in-out infinite;
-      animation-delay: 1s;
+      animation:
+        fly-banner-entrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both,
+        fly-banner-marquee 20s linear infinite;
+      animation-delay: 0s, 1.1s;
       will-change: transform, left;
     }
     .fly-banner:hover { animation-play-state: paused; }
-    /* Patrol clear across the viewport and off both edges: at 0%/100% the
-       banner's left edge starts at the viewport's right edge (fully
-       off-screen right); at 50% translateX(-100%) pulls its right edge to
-       the viewport's left edge (fully off-screen left). */
-    @keyframes fly-banner-patrol {
-      0%   { left: 100vw; transform: translateX(0); }
-      50%  { left: 0;     transform: translateX(-100%); }
-      100% { left: 100vw; transform: translateX(0); }
+    /* Fast, one-time entrance: sweeps in from off-screen left to
+       off-screen right quickly. Runs once, then hands off to the slow
+       marquee below (same start/end path, so the handoff is seamless). */
+    @keyframes fly-banner-entrance {
+      from { left: 0vw;   transform: translateX(-100%); }
+      to   { left: 100vw; transform: translateX(0%); }
+    }
+    /* Slow, readable, one-directional loop: left -> right at a crawl,
+       then resets instantly back to fully off-screen left and repeats.
+       CSS animations don't interpolate across the loop boundary, so the
+       reset is a clean cut — not a reverse/ping-pong. */
+    @keyframes fly-banner-marquee {
+      from { left: 0vw;   transform: translateX(-100%); }
+      to   { left: 100vw; transform: translateX(0%); }
     }
     .fly-banner-img {
       height: 74px;
@@ -231,17 +239,36 @@
       });
 
       // Keep the fixed-position banner's vertical spot synced to the band's
-      // scroll position, and only show it while the band is in view.
-      function syncBannerPosition() {
-        if (band.classList.contains('is-dismissed')) return;
+      // scroll position while it's visible.
+      let isVisible = false;
+      function updateTop() {
+        if (!isVisible) return;
         const rect = band.getBoundingClientRect();
-        const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-        banner.style.display = visible ? 'flex' : 'none';
-        if (visible) banner.style.top = (rect.top + 6) + 'px';
+        banner.style.top = (rect.top + 6) + 'px';
       }
-      window.addEventListener('scroll', syncBannerPosition, { passive: true });
-      window.addEventListener('resize', syncBannerPosition);
-      syncBannerPosition();
+
+      // Use IntersectionObserver (not a raw scroll-position check) to decide
+      // visibility — it only fires on real enter/exit crossings, so the
+      // banner doesn't flicker in and out right at the viewport edge.
+      // Setting display:none -> flex restarts the CSS animation from 0%
+      // (off-screen right) every time, which is exactly the "flies in from
+      // outside the window" entrance we want on every scroll-in.
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (band.classList.contains('is-dismissed')) return;
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            updateTop();
+            banner.style.display = 'flex';
+          } else {
+            banner.style.display = 'none';
+          }
+        });
+      }, { threshold: 0.15 });
+      io.observe(band);
+
+      window.addEventListener('scroll', updateTop, { passive: true });
+      window.addEventListener('resize', updateTop);
     })();
   </script>
 
