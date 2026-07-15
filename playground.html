@@ -237,6 +237,109 @@
       transition: width 0.08s linear;
     }
 
+    /* ── Onceover mockup — industrial matte plastic design system ──── */
+    .jf-chassis {
+      --jf-radius-cta: 16px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.5) 0%, transparent 60%),
+        linear-gradient(180deg, #F2ECE2 0%, #E9E1D2 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+      padding: 22px 22px 26px;
+      border-radius: 14px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 10px 24px rgba(0,0,0,0.08);
+    }
+    .jf-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .jf-entry-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+    .jf-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ffffff 0%, #ece5d8 100%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.06);
+      font-size: 9px;
+      color: var(--ink-muted);
+    }
+    .jf-status {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin-bottom: 2px;
+    }
+    .jf-percent {
+      font-family: var(--mono);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    /* Recessed slider track — hollowed-out groove, square corners, a
+       heavy charcoal blocker slides forward to mark progress. */
+    .jf-btn-track {
+      position: relative;
+      height: 10px;
+      background: #DCD3C2;
+      box-shadow: inset 3px 4px 6px rgba(0,0,0,0.12), inset -2px -2px 5px rgba(255,255,255,0.7);
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .jf-btn-fill {
+      position: absolute;
+      inset: 0;
+      width: 75%;
+      background: linear-gradient(180deg, #3a3a3a 0%, #1c1c1c 100%);
+    }
+    /* Button socket — the recessed well the keycap sits inside. Deep
+       drop-off shadow top/left, bright cut-edge reflection bottom/right. */
+    .jf-btn-socket {
+      padding: 8px;
+      background: #E4DBCB;
+      border-radius: calc(var(--jf-radius-cta) + 6px);
+      box-shadow: inset 2px 3px 6px rgba(0,0,0,0.22), inset -2px -2px 4px rgba(255,255,255,0.6);
+    }
+    /* Injection-molded keycap — thick terracotta side wall (via the
+       bottom border), tight bevel top edge that catches a hard white
+       specular highlight, amber gradient face. */
+    .jf-btn-primary {
+      display: block;
+      width: 100%;
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff8f2;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.18);
+      padding: 13px 0;
+      border-radius: var(--jf-radius-cta);
+      border-bottom: 5px solid #8f3a0f;
+      background-image:
+        linear-gradient(to bottom, #EB6C2C 0%, #D4581C 40%, #B8430F 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+      box-shadow: inset 0 2.5px 3px rgba(255,255,255,0.55), inset 0 -2px 3px rgba(0,0,0,0.25);
+      transition: transform 0.12s ease, border-bottom-width 0.12s ease;
+    }
+    .jf-btn-primary:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+
     @media (max-width: 699px) {
       #scroll-track { display: block; }
       .zoom-controls { display: none; }
@@ -277,7 +380,20 @@
 
     <!-- Onceover -->
     <div class="card" data-col="1" data-rot="-2" style="width:300px;">
-      <img src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" style="width:100%;display:block;" />
+      <div class="jf-chassis">
+        <div class="jf-row">
+          <span class="jf-entry-label">◡ MY ENTRY</span>
+          <span class="jf-close">✕</span>
+        </div>
+        <p class="jf-status">READY TO FILL</p>
+        <p class="jf-percent">75%</p>
+        <div class="jf-btn-track">
+          <div class="jf-btn-fill"></div>
+        </div>
+        <div class="jf-btn-socket">
+          <button class="jf-btn-primary" type="button">Fill the Forms</button>
+        </div>
+      </div>
       <p class="card-caption"><strong>Onceover, Chrome Extension for Job Autofills (Unreleased)</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other extension can handle the data fetch, their cold UIs make filling them out feel like a tax return. I realized nobody was addressing the feeling of the experience for job filling form. Onceover taken position from being functional yet delightfull autofills job forms.</p>
     </div>
 
