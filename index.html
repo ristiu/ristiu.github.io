@@ -83,7 +83,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      display: none; /* JS shows this via IntersectionObserver */
+      display: none; /* JS shows this on load, unless already dismissed */
       align-items: center;
       gap: 12px;
       animation:
@@ -238,35 +238,16 @@
         if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_click');
       });
 
-      // Keep the fixed-position banner's vertical spot synced to the band's
-      // scroll position while it's visible.
-      let isVisible = false;
+      // Plays naturally on page load — not gated behind scrolling into
+      // view. The entrance + marquee animation just runs continuously;
+      // scroll only updates *where* it sits vertically (following its
+      // anchor band), so it never restarts or jumps mid-flight.
+      banner.style.display = 'flex';
       function updateTop() {
-        if (!isVisible) return;
         const rect = band.getBoundingClientRect();
         banner.style.top = (rect.top + 6) + 'px';
       }
-
-      // Use IntersectionObserver (not a raw scroll-position check) to decide
-      // visibility — it only fires on real enter/exit crossings, so the
-      // banner doesn't flicker in and out right at the viewport edge.
-      // Setting display:none -> flex restarts the CSS animation from 0%
-      // (off-screen right) every time, which is exactly the "flies in from
-      // outside the window" entrance we want on every scroll-in.
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (band.classList.contains('is-dismissed')) return;
-          isVisible = entry.isIntersecting;
-          if (isVisible) {
-            updateTop();
-            banner.style.display = 'flex';
-          } else {
-            banner.style.display = 'none';
-          }
-        });
-      }, { threshold: 0.15 });
-      io.observe(band);
-
+      updateTop();
       window.addEventListener('scroll', updateTop, { passive: true });
       window.addEventListener('resize', updateTop);
     })();
