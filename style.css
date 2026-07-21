@@ -793,6 +793,29 @@ a:hover { color: var(--accent); }
   z-index: 3;
 }
 
+/* Handwritten doodle highlights — leadership folder cover only */
+.stack-card-doodle {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 4;
+}
+.doodle-line {
+  font-family: 'Square Peg', cursive;
+  font-size: 22px;
+  line-height: 1;
+  color: #9a9a9a;
+  width: fit-content;
+}
+.doodle-line--1 { align-self: flex-start; transform: rotate(-3deg); margin-left: 4px; }
+.doodle-line--2 { align-self: flex-start; transform: rotate(2deg); margin-left: 26px; }
+.doodle-line--3 { align-self: flex-start; transform: rotate(-1.5deg); margin-left: 2px; }
+
 /* Visited this session — keep the folder-color state without needing hover */
 .stack-card.is-visited {
   background: var(--folder-color, #C2CCBE);
@@ -1020,11 +1043,10 @@ a:hover { color: var(--accent); }
 .scroll-hint {
   position: fixed;
   bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--mono);
-  font-size: 1.43rem;
-  color: var(--accent);
+  left: calc(50% - 45px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
   opacity: 0.8;
   animation: nudge 2s ease-in-out infinite;

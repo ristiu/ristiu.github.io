@@ -28,7 +28,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&family=Square+Peg&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZ4SXY87BP"></script>
@@ -205,7 +205,33 @@
     <div class="illustration-group" style="opacity:0;transform:translateY(18px) scale(0.97);transition:opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);">
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
     </div>
-    <a class="scroll-hint" href="#main-content" aria-label="Scroll down">↓</a>
+    <a class="scroll-hint" href="#main-content" aria-label="Scroll down">
+      <svg class="scroll-hint-clip" width="30" height="60" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M 12 68
+                 L 45 180
+                 A 6 6 0 0 0 55 180
+                 L 88 32
+                 A 12 12 0 0 0 76 18
+                 L 24 18
+                 A 12 12 0 0 0 12 30
+                 L 46 132
+                 A 5 5 0 0 0 54 132
+                 L 74 42"
+              stroke="#7A1F14" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+              transform="translate(2,2)"/>
+        <path d="M 12 68
+                 L 45 180
+                 A 6 6 0 0 0 55 180
+                 L 88 32
+                 A 12 12 0 0 0 76 18
+                 L 24 18
+                 A 12 12 0 0 0 12 30
+                 L 46 132
+                 A 5 5 0 0 0 54 132
+                 L 74 42"
+              stroke="#C7301F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
   </div>
 
   <!-- Flying banner band — sits between the leaf and the portfolio intro -->
@@ -417,7 +443,13 @@
           ${c.tabLogo ? `<span class="stack-card-tab-label"><img class="stack-card-tab-logo" src="${c.tabLogo}" alt="${c.tabLabel}" /></span>` : ''}
           <span class="stack-card-title">${c.title}</span>
           <span class="stack-card-sub">${c.subtitle}</span>
-          ${c.href.includes('#leadership') ? `<img class="stack-card-sparkle" src="assets/portfolio/sparkle-leadership.gif" alt="" aria-hidden="true" />` : ''}
+          ${c.href.includes('#leadership') ? `
+          <div class="stack-card-doodle" aria-hidden="true">
+            <span class="doodle-line doodle-line--1">AI Embed Design workflow</span>
+            <span class="doodle-line doodle-line--2">Data &gt;&lt; Design</span>
+            <span class="doodle-line doodle-line--3">Building High Performing Team</span>
+          </div>
+          <img class="stack-card-sparkle" src="assets/portfolio/sparkle-leadership.gif" alt="" aria-hidden="true" />` : ''}
         </a>`;
       }).join('')}
     `;
