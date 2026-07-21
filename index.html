@@ -940,13 +940,16 @@
       if (e.target.closest('a, button')) lastTickTarget = null;
     });
 
-    // Scroll hint hide at bottom, or once past the folder stack
+    // Scroll hint hide at bottom, or once past the first folder card
     const scrollHint = document.querySelector('.scroll-hint');
     const stackContainer = document.getElementById('portfolio-list');
     function updateScrollHint() {
       const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
-      const pastStack = stackContainer && stackContainer.getBoundingClientRect().bottom <= 0;
-      scrollHint.classList.toggle('hidden', nearBottom || pastStack);
+      // Cards overlap with negative margins, so the *second* card reaching
+      // the viewport top is what actually means "past the first folder."
+      const secondCard = stackContainer && stackContainer.querySelectorAll('.stack-card')[1];
+      const pastFirstCard = secondCard && secondCard.getBoundingClientRect().top <= 0;
+      scrollHint.classList.toggle('hidden', nearBottom || pastFirstCard);
     }
     window.addEventListener('scroll', updateScrollHint, { passive: true });
     updateScrollHint();
