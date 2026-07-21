@@ -1056,7 +1056,7 @@ a:hover { color: var(--accent); }
 }
 
 .scroll-hint.ready { opacity: 0.8; pointer-events: auto; }
-.scroll-hint.hidden { opacity: 0; pointer-events: none; }
+.scroll-hint.hidden { opacity: 0; pointer-events: none; transition: opacity 0s; }
 .scroll-hint:hover { opacity: 1; }
 
 @keyframes nudge {
