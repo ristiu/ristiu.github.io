@@ -206,7 +206,7 @@
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
     </div>
     <a class="scroll-hint" href="#main-content" aria-label="Scroll down">
-      <svg class="scroll-hint-clip" width="30" height="60" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="scroll-hint-clip" width="45" height="90" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M 12 68
                  L 45 180
                  A 6 6 0 0 0 55 180
@@ -337,6 +337,8 @@
         if (role) role.style.animation = 'none';
         const ilGroup = document.querySelector('.illustration-group');
         if (ilGroup) { ilGroup.style.opacity = '1'; ilGroup.style.transform = 'none'; }
+        const scrollHintEl = document.querySelector('.scroll-hint');
+        if (scrollHintEl) scrollHintEl.classList.add('ready');
         return;
       }
 
@@ -350,6 +352,9 @@
 
         const ilGroup = document.querySelector('.illustration-group');
         if (ilGroup) { ilGroup.style.opacity = '1'; ilGroup.style.transform = 'translateY(0) scale(1)'; }
+
+        const scrollHintEl = document.querySelector('.scroll-hint');
+        if (scrollHintEl) scrollHintEl.classList.add('ready');
       }, 1400);
 
       // Clear stamp animation after it ends so CSS hover transform works
@@ -935,11 +940,13 @@
       if (e.target.closest('a, button')) lastTickTarget = null;
     });
 
-    // Scroll hint hide at bottom
+    // Scroll hint hide at bottom, or once past the folder stack
     const scrollHint = document.querySelector('.scroll-hint');
+    const stackContainer = document.getElementById('portfolio-list');
     function updateScrollHint() {
       const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
-      scrollHint.classList.toggle('hidden', nearBottom);
+      const pastStack = stackContainer && stackContainer.getBoundingClientRect().bottom <= 0;
+      scrollHint.classList.toggle('hidden', nearBottom || pastStack);
     }
     window.addEventListener('scroll', updateScrollHint, { passive: true });
     updateScrollHint();
