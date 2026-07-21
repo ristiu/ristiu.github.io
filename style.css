@@ -1043,7 +1043,7 @@ a:hover { color: var(--accent); }
 .scroll-hint {
   position: fixed;
   bottom: 2rem;
-  left: calc(50% - 45px);
+  left: calc(50% - 95px);
   display: flex;
   align-items: center;
   justify-content: center;
