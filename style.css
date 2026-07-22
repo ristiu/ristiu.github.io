@@ -2364,6 +2364,25 @@ ol li, ul li {
   margin: 0 0 0.75rem;
 }
 
+/* Mobile only — desktop keeps its own heading treatment inside
+   @media (min-width: 1024px) below, untouched. */
+@media (max-width: 1023px) {
+  .study-case-heading {
+    display: none;
+  }
+}
+
+/* Flying banner (Playground teaser) — mobile only hide. The "Check my
+   playground" link in the Playground subtext already covers the same
+   promotion on mobile, so the floating banner is redundant there;
+   desktop keeps it untouched. */
+@media (max-width: 1023px) {
+  .fly-band,
+  .fly-banner {
+    display: none !important;
+  }
+}
+
 .playground-heading {
   font-family: var(--mono);
   font-size: 1.3rem;
@@ -2842,17 +2861,9 @@ ol li, ul li {
      identically to mobile: fixed position, fades in once the post-it
      settles, hides once the first folder card is scrolled past. */
 
-  /* ── Folder palette refinements ─────────────────────────────
-     !important is required here: each card's color comes from an
-     inline --folder-color custom property (set per-card in the JS
-     template), and only an !important stylesheet rule can override
-     an inline style for the same property on the same element. */
-  .home-cards .stack-card:nth-child(1) {
-    --folder-color: #D9D9D9 !important; /* Casio → light grey */
-  }
-  .home-cards .stack-card:nth-child(3) {
-    --folder-color: #8CA0B3 !important; /* Traveloka → muted greyish-blue */
-  }
+  /* Folder palette (Casio grey, Traveloka muted blue) now lives
+     directly in FOLDER_COLORS in index.html, shared with mobile —
+     no per-breakpoint override needed here anymore. */
 
   /* Stamp graphic recolored to light grey via filter (it's an <img>
      referencing an SVG with its own baked-in blue fill). */
