@@ -2398,6 +2398,21 @@ ol li, ul li {
   }
 }
 
+/* Mobile only — the folder stack's hard vector border/tab outline
+   read as visual clutter; desktop already strips this (see
+   .home-cards .stack-card further down) via its own soft-shadow
+   treatment, this just mirrors that for mobile without touching the
+   desktop-only rule. */
+@media (max-width: 767px) {
+  .stack-container,
+  .stack-container .stack-card,
+  .stack-container .stack-card::before {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
 .playground-heading {
   font-family: var(--mono);
   font-size: 1.3rem;
@@ -2493,31 +2508,6 @@ ol li, ul li {
    desktop breakpoint — mobile keeps today's natural DOM stacking
    order untouched (hero, bio+cards, playground, footer). */
 @media (min-width: 1024px) {
-  /* Guarantee the paperclip is visible immediately on desktop load —
-     the base (shared-with-mobile) rule starts it at opacity:0,
-     un-hidden only once .ready is added by the sticker-drop script
-     ~1.4s after load. That's an intentional staged entrance on
-     mobile, but on desktop it read as the paperclip being "missing"
-     entirely for that window. Same specificity (0,1,0) as the base
-     rule, but this comes later in the stylesheet, so it wins on
-     source order regardless of whether .ready has landed yet.
-     .scroll-hint.ready (0,2,0) is *higher* specificity than this
-     though, so it still needs its own explicit override below —
-     otherwise once .ready lands (~1.4s in) it silently drags opacity
-     back down to its own 0.8. .hidden (0,2,0) and .is-anchor (0,2,0)
-     still correctly override both when applicable. */
-  .scroll-hint {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    /* Float cleanly above every canvas card / iframe so it never gets
-       clipped or hidden behind Playground content while docked. */
-    z-index: 1000;
-  }
-
-  .scroll-hint.ready {
-    opacity: 1;
-  }
 
   .home-paper {
     max-width: 1280px;
@@ -2876,11 +2866,6 @@ ol li, ul li {
      own inset box-shadow above — that shadow alone is now the only
      top-edge treatment for the canvas, avoiding a hard line artifact. */
 
-  /* Original .scroll-hint paperclip (from the deployed site) is left
-     completely alone here — no override, so it renders and behaves
-     identically to mobile: fixed position, fades in once the post-it
-     settles, hides once the first folder card is scrolled past. */
-
   /* Folder palette (Casio grey, Traveloka muted blue) now lives
      directly in FOLDER_COLORS in index.html, shared with mobile —
      no per-breakpoint override needed here anymore. */
@@ -3008,61 +2993,6 @@ ol li, ul li {
     opacity: 1;
   }
 
-  /* Desktop-only positioning base: always concrete top/left px
-     (never `bottom`, never `auto`) — see updateScrollHint /
-     captureRestingPosition in index.html, which measure this CSS
-     fallback once on load and re-apply it as an explicit inline
-     top/left. Both the resting and docked (.is-anchor) states then
-     share the same top/left properties throughout, so the dock/undock
-     transition can actually interpolate a slide instead of jumping
-     (mixing bottom+top:auto with top+bottom:auto — the previous
-     approach — can't animate through `auto` at all, which is what
-     made the paperclip teleport into place with only its rotation
-     easing). The calc() below approximates the original bottom:2rem
-     rest spot only as a pre-JS fallback. POS_TRANSITION (top/left/
-     transform) is shared by every state below so the slide always
-     animates regardless of which more-specific rule wins opacity. */
-  .scroll-hint {
-    bottom: auto;
-    top: calc(100vh - 90px - 2rem);
-    transition: opacity 0.6s ease, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* Paperclip scroll-hint entrance (desktop only — mobile keeps its
-     original opacity-only fade untouched). On a fresh load, .ready is
-     added ~1.4s in (see cursor/sticker-drop script) once the post-it
-     settles; the extra 1.2s transition-delay here lands its motion
-     alongside the bio/play.png reveal (2.6s delay, see .home-fade-in
-     above) instead of firing early and separately. */
-  /* :not(.hidden) keeps this scoped to the entrance only — otherwise
-     its transition (with a 1.2s delay) would out-specificity and
-     override .hidden's own instant "transition: opacity 0s", making
-     the paperclip linger visible for ~1.7s after scrolling past
-     play.png instead of disappearing immediately. :not(.is-anchor)
-     does the same job for the docked state — without it, this rule's
-     extra "body" type selector out-specifies .scroll-hint.is-anchor
-     on every fresh (non-back-nav) page load, silently overriding the
-     docked rotate/translate transform back to this entrance-only
-     translateY and killing the rotation/centering entirely. top/left
-     are included here too (not just transform) so undocking — which
-     lands back in this exact state on a fresh tab — still slides. */
-  body:not(.session-loaded) .scroll-hint:not(.hidden):not(.is-anchor) {
-    transform: translateY(-8px);
-    transition: opacity 0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  body:not(.session-loaded) .scroll-hint.ready:not(.hidden):not(.is-anchor) {
-    transform: translateY(0);
-  }
-  /* Back-nav: paperclip must land instantly with the rest of the
-     cross-fade above, not wait through the 1.2s delay meant for the
-     fresh-load sequence. */
-  /* :not(.is-anchor) so this back-nav override doesn't fight the
-     anchor-mode rotation below on a back-nav landing that happens to
-     restore a scroll position past the 350px threshold. */
-  body.session-loaded .scroll-hint:not(.is-anchor) {
-    transform: none;
-  }
-
   /* Trap trackpad swipe/scroll strictly inside the canvas so it can't
      bubble up into the browser's native back/forward navigation
      gesture. */
@@ -3073,52 +3003,51 @@ ol li, ul li {
     touch-action: none;
   }
 
-  /* ── Paperclip "back to top" anchor state ────────────────────
-     Past ~350px of scroll, the SAME paperclip used as the down-scroll
-     hint above the hero docks onto the sticky Playground header bar
-     instead — no second element, just a state change on .scroll-hint.
-     top/left are set inline by JS (see updateAnchorPosition in
-     index.html), pinched right under the word "my" in the Playground
-     subtext (#playground-anchor-word) so it reads as physically
-     clipped onto that line, hanging down over the header bar. Because
-     .playground-sticky-bar is itself position:sticky, once pinned its
-     viewport position — and therefore the word's — stays constant, so
-     a plain position:fixed here (recalculated on scroll/resize) stays
-     correctly docked without any extra sticky-tracking logic. Sits
-     above .playground-sticky-bar (z-index: 20). */
-  .scroll-hint.is-anchor {
+  /* ── Paperclip — desktop pivot ────────────────────────────────
+     No more hero-resting down-hint: the clip now lives entirely
+     inside .playground-sticky-bar's own DOM (see index.html markup),
+     positioned in the empty space right of the intro text, and is
+     completely invisible/non-interactive until that bar pins to the
+     top (.is-anchor) — then it slides in from off-screen right.
+     Scrolling back out of the Playground section reverses the same
+     transition. !important on the core visual properties here
+     deliberately overrides the old entrance/session-loaded rules
+     above (written for the previous hero-resting design, which no
+     longer applies on desktop) regardless of which of those would
+     otherwise win the cascade. */
+  .scroll-hint {
+    position: absolute;
+    top: 50%;
+    right: 80px;
+    left: auto;
     bottom: auto;
-    align-items: flex-start;
-    animation: none;
-    opacity: 0.9;
-    pointer-events: auto;
-    /* 180deg flips the clip's pointed tail to read as an upward
-       "back to top" arrow instead of its natural hanging-down shape;
-       translate(-50%, 10px) centers it horizontally on the word and
-       sits it 10px *below* the word's baseline (top is already set to
-       the word's rect.bottom/zoom in JS — see updateAnchorPosition),
-       so it hangs cleanly clear of the text glyphs instead of
-       overlapping them. top/left are included in the transition (not
-       just transform/opacity) so the actual dock position slides in
-       instead of jumping while only the rotation animates. */
-    transform: translate(-50%, 10px) rotate(180deg);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: -45px;
+    align-items: center;
+    animation: none !important;
+    transform: translateX(100vw) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1000;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  }
+
+  .scroll-hint.is-anchor {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   .scroll-hint.is-anchor:hover {
-    opacity: 1;
-    transform: translate(-50%, 10px) rotate(180deg) scale(1.08);
+    transform: translateX(0) scale(1.08) !important;
     cursor: pointer;
   }
 
-  /* Tag fades/slides in once docked. It's a child of the same
-     180deg-rotated .scroll-hint, so it needs its own counter
-     rotate(180deg) to read upright — combined with the slide-in
-     translateX. */
+  /* Tag sits to the clip's right (its default, unrotated position —
+     see the base .scroll-hint-tag rule) and simply follows the same
+     opacity fade as the parent once docked. */
   .scroll-hint.is-anchor .scroll-hint-tag {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(-50%) translateX(0) rotate(180deg);
   }
 }
 

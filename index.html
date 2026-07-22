@@ -261,34 +261,6 @@
     <div class="illustration-group" style="opacity:0;transform:translateY(18px) scale(0.97);transition:opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);">
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
     </div>
-    <a class="scroll-hint" href="#main-content" aria-label="Scroll down">
-      <span class="scroll-hint-tag">Home ↰</span>
-      <svg class="scroll-hint-clip" width="45" height="90" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M 12 68
-                 L 45 180
-                 A 6 6 0 0 0 55 180
-                 L 88 32
-                 A 12 12 0 0 0 76 18
-                 L 24 18
-                 A 12 12 0 0 0 12 30
-                 L 46 132
-                 A 5 5 0 0 0 54 132
-                 L 74 42"
-              stroke="#7A1F14" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
-              transform="translate(2,2)"/>
-        <path d="M 12 68
-                 L 45 180
-                 A 6 6 0 0 0 55 180
-                 L 88 32
-                 A 12 12 0 0 0 76 18
-                 L 24 18
-                 A 12 12 0 0 0 12 30
-                 L 46 132
-                 A 5 5 0 0 0 54 132
-                 L 74 42"
-              stroke="#C7301F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
   </div>
 
   <!-- Flying banner band — sits between the leaf and the portfolio intro -->
@@ -355,8 +327,36 @@
         <div class="tree-node-wrapper">
           <p class="tree-node-text playground-subtext">Lately I'm building with
             <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/AI-sm.png">AI ◁°_°▷</strong>
-            and getting <span id="playground-anchor-word">my</span> hands on with analog craft.<br>It's how I keep the taste calibrated. <span class="playground-link-copy">Check my <a href="playground.html" class="accent preview-trigger" data-img="assets/portfolio/slides-sm.jpg" style="text-decoration:underline;text-underline-offset:3px;">playground</a> here</span></p>
+            and getting my hands on with analog craft.<br>It's how I keep the taste calibrated. <span class="playground-link-copy">Check my <a href="playground.html" class="accent preview-trigger" data-img="assets/portfolio/slides-sm.jpg" style="text-decoration:underline;text-underline-offset:3px;">playground</a> here</span></p>
         </div>
+        <a class="scroll-hint" href="#main-content" aria-label="Back to top">
+          <span class="scroll-hint-tag">Home ↰</span>
+          <svg class="scroll-hint-clip" width="45" height="90" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 12 68
+                     L 45 180
+                     A 6 6 0 0 0 55 180
+                     L 88 32
+                     A 12 12 0 0 0 76 18
+                     L 24 18
+                     A 12 12 0 0 0 12 30
+                     L 46 132
+                     A 5 5 0 0 0 54 132
+                     L 74 42"
+                  stroke="#7A1F14" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+                  transform="translate(2,2)"/>
+            <path d="M 12 68
+                     L 45 180
+                     A 6 6 0 0 0 55 180
+                     L 88 32
+                     A 12 12 0 0 0 76 18
+                     L 24 18
+                     A 12 12 0 0 0 12 30
+                     L 46 132
+                     A 5 5 0 0 0 54 132
+                     L 74 42"
+                  stroke="#C7301F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
 
       <iframe class="playground-embed" src="playground.html" title="Playground — full interactive canvas" loading="lazy" onload="this.classList.add('is-visible')" id="playground-iframe"></iframe>
@@ -1036,75 +1036,26 @@
     // Same paperclip element, two jobs depending on scroll depth:
     // - Mobile: unchanged original behavior — hides once past the
     //   first folder card or near the page bottom.
-    // - Desktop: once the Playground header bar actually pins itself
-    //   to the top (position: sticky kicking in — its own rect.top
-    //   hits 0), the paperclip docks onto it (.is-anchor), pinned
-    //   right under the word "my" in the subtext, instead of hiding.
-    //   A fixed pixel scroll threshold would fire long before the bar
-    //   (and the word) are anywhere near the viewport on this page's
-    //   layout, so it's tied to the bar's own pinned state instead —
-    //   clicking the docked clip scrolls back to the hero, and it
-    //   reverts to the plain down-hint once the bar unpins.
+    // - Desktop: completely absent from the hero now (no more
+    //   bottom-center down-hint) — it lives inside the Playground
+    //   sticky bar's own DOM (see index.html markup) and only becomes
+    //   visible once that bar actually pins to the top, sliding in
+    //   from off-screen right (see .scroll-hint desktop CSS). Clicking
+    //   it while docked scrolls back to the hero; scrolling back up
+    //   slides it back out to the right.
     const scrollHint = document.querySelector('.scroll-hint');
     const stackContainer = document.getElementById('portfolio-list');
-    const anchorWord = document.getElementById('playground-anchor-word');
     const stickyBar = document.querySelector('.playground-sticky-bar');
     const isDesktopHint = () => window.matchMedia('(min-width: 1024px)').matches;
-    const zoomFactor = () => parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
-
-    // Both the resting (down-hint) and docked (anchor) states are
-    // always positioned via concrete top/left px values (never
-    // `bottom`, never `auto`) so the CSS transition on top/left can
-    // actually interpolate a smooth slide between them. Mixing
-    // bottom+top:auto (rest) with top+bottom:auto (docked) — the
-    // previous approach — can't be animated at all (auto isn't
-    // interpolable), which is what caused the paperclip to teleport
-    // into place instead of sliding, with only its rotation easing.
-    let restingTop = null, restingLeft = null;
-    function captureRestingPosition() {
-      // Only capture while genuinely at rest (not mid-dock), and
-      // before any inline override is applied, so this reads the
-      // CSS-only fallback position (see .scroll-hint desktop rule).
-      const hadInlineTop = scrollHint.style.top;
-      const hadInlineLeft = scrollHint.style.left;
-      scrollHint.style.top = '';
-      scrollHint.style.left = '';
-      const zoom = zoomFactor();
-      const rect = scrollHint.getBoundingClientRect();
-      restingTop = rect.top / zoom;
-      restingLeft = rect.left / zoom;
-      scrollHint.style.top = hadInlineTop;
-      scrollHint.style.left = hadInlineLeft;
-    }
-
-    function applyRestingPosition() {
-      if (restingTop === null) captureRestingPosition();
-      scrollHint.style.top = restingTop + 'px';
-      scrollHint.style.left = restingLeft + 'px';
-    }
-
-    function updateAnchorPosition() {
-      if (!anchorWord) return;
-      // The site applies CSS zoom: 1.2 on desktop (see html in
-      // style.css) — getBoundingClientRect() returns post-zoom
-      // (rendered) coordinates, but style.left/top are read as
-      // pre-zoom and get the zoom re-applied on paint, so dividing by
-      // the live zoom factor here is what keeps the clip visually
-      // matched to the word instead of drifting outward.
-      const zoom = zoomFactor();
-      const rect = anchorWord.getBoundingClientRect();
-      scrollHint.style.left = ((rect.left + rect.width / 2) / zoom) + 'px';
-      scrollHint.style.top = (rect.bottom / zoom) + 'px';
-    }
 
     // Page-load correction passes (below) can flip the paperclip
     // straight into its docked state on a reload that restores a deep
     // scroll position — that's a state *initialization*, not a user
-    // interaction, so it should land instantly with no visible slide/
-    // rotate animation. Real scroll-driven dock/undock should still
-    // animate normally. isSettled flips true once we're confident the
-    // layout has stabilized (load + fonts both fired) or the user
-    // starts actually scrolling, whichever comes first.
+    // interaction, so it should land instantly with no visible slide
+    // animation. Real scroll-driven dock/undock should still animate
+    // normally. isSettled flips true once we're confident the layout
+    // has stabilized (load + fonts both fired) or the user starts
+    // actually scrolling, whichever comes first.
     let isSettled = false;
     let loadFired = false;
     let fontsFired = !(document.fonts && document.fonts.ready);
@@ -1129,24 +1080,13 @@
         // anywhere from ~9px to ~27px depending on font-load timing
         // at measurement time, vs. 30px+ while still approaching. 40
         // covers that rest-position jitter with margin while still
-        // only firing once actually pinned (not "hits the bottom of
-        // the window" — that was never the intended trigger; the
-        // fixed-position down-hint just happens to rest near the
-        // bottom of the screen pre-dock, which read as if the trigger
-        // were viewport-bottom-based).
+        // only firing once actually pinned.
         const isAnchor = !!stickyBar && stickyBar.getBoundingClientRect().top <= 40;
         scrollHint.classList.toggle('is-anchor', isAnchor);
         scrollHint.classList.remove('hidden');
-        if (isAnchor) {
-          updateAnchorPosition();
-        } else {
-          applyRestingPosition();
-        }
         return;
       }
       scrollHint.classList.remove('is-anchor');
-      scrollHint.style.left = '';
-      scrollHint.style.top = '';
       const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
       // Cards overlap with negative margins, so the *second* card
       // reaching the viewport top is what means "past the first folder."
@@ -1164,63 +1104,40 @@
       isSettled = true;
       updateScrollHintNow();
     }, { passive: true });
-    window.addEventListener('resize', () => {
-      restingTop = null;
-      restingLeft = null;
-      if (isDesktopHint()) {
-        if (scrollHint.classList.contains('is-anchor')) {
-          updateAnchorPosition();
-        } else {
-          captureRestingPosition();
-          applyRestingPosition();
-        }
-      }
-    });
     updateScrollHint();
 
     // On reload, browsers commonly restore the previous scroll
     // position before all images/fonts finish loading. If that first
     // updateScrollHint() call above runs while layout above the
     // sticky bar is still short (hero image, play.png, etc. not yet
-    // loaded), its is-anchor/position read can be wrong — and since
-    // the user is already scrolled where they want to be, no further
-    // scroll event fires to self-correct it, leaving the paperclip
-    // stuck in a stale, wrong position. Force a couple of correction
-    // passes once things actually settle — instant (see
-    // runInstantIfUnsettled), since flipping straight into the docked
-    // state here is page-load initialization, not a user-triggered
-    // dock that should visibly slide/rotate in.
+    // loaded), its is-anchor read can be wrong — and since the user
+    // is already scrolled where they want to be, no further scroll
+    // event fires to self-correct it, leaving the paperclip stuck in
+    // a stale, wrong state. Force a couple of correction passes once
+    // things actually settle — instant (see runInstantIfUnsettled),
+    // since flipping straight into the docked state here is page-load
+    // initialization, not a user-triggered dock that should visibly
+    // slide in.
     window.addEventListener('load', () => {
-      restingTop = null;
-      restingLeft = null;
       updateScrollHint();
       loadFired = true;
       maybeMarkSettled();
     });
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
-        restingTop = null;
-        restingLeft = null;
         updateScrollHint();
         fontsFired = true;
         maybeMarkSettled();
       });
     }
 
-    // Dual-action (desktop only — mobile keeps its original
-    // href="#main-content" jump-to-studies behavior untouched):
-    // docked (.is-anchor) → scroll to hero top; resting, before the
-    // Playground section → scroll down to the Playground section
-    // instead of the generic "#main-content" jump.
-    const playgroundSection = document.querySelector('.home-playground');
+    // Docked (.is-anchor) → scroll back to the hero top. The clip is
+    // invisible/non-interactive (pointer-events:none) until docked, so
+    // no other click behavior is needed.
     scrollHint.addEventListener('click', (e) => {
-      if (!isDesktopHint()) return;
-      if (scrollHint.classList.contains('is-anchor')) {
+      if (isDesktopHint() && scrollHint.classList.contains('is-anchor')) {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (playgroundSection) {
-        e.preventDefault();
-        playgroundSection.scrollIntoView({ behavior: 'smooth' });
       }
     });
 
