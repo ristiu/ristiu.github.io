@@ -119,6 +119,115 @@
     <img id="hover-preview-img" src="" alt="" />
   </div>
 
+  <!-- Flying banner — playground feature teaser, banner-towing style -->
+  <style>
+    /* In-flow band between the hero (leaf) and the portfolio intro text,
+       so the banner only appears when the user scrolls through that gap. */
+    .fly-band {
+      position: relative;
+      height: 96px;
+    }
+    .fly-band.is-dismissed { display: none; }
+    /* position:fixed (not absolute) so the banner's horizontal patrol isn't
+       clipped by .paper's overflow-x:clip — it truly exits and re-enters
+       the browser window. JS keeps `top` synced to the band's scroll
+       position so it still only appears in that band of the page. */
+    .fly-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none; /* JS shows this on load, unless already dismissed */
+      align-items: center;
+      gap: 12px;
+      animation:
+        fly-banner-entrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both,
+        fly-banner-marquee 20s linear infinite;
+      animation-delay: 0s, 1.1s;
+      will-change: transform, left;
+    }
+    .fly-banner:hover { animation-play-state: paused; }
+    /* Fast, one-time entrance: sweeps in from off-screen left to
+       off-screen right quickly. Runs once, then hands off to the slow
+       marquee below (same start/end path, so the handoff is seamless). */
+    @keyframes fly-banner-entrance {
+      from { left: 0vw;   transform: translateX(-100%); }
+      to   { left: 100vw; transform: translateX(0%); }
+    }
+    /* Slow, readable, one-directional loop: left -> right at a crawl,
+       then resets instantly back to fully off-screen left and repeats.
+       CSS animations don't interpolate across the loop boundary, so the
+       reset is a clean cut — not a reverse/ping-pong. */
+    @keyframes fly-banner-marquee {
+      from { left: 0vw;   transform: translateX(-100%); }
+      to   { left: 100vw; transform: translateX(0%); }
+    }
+    .fly-banner-img {
+      height: 74px;
+      width: auto;
+      display: block;
+    }
+    .fly-banner-img--sm {
+      height: 60px;
+      margin-left: -22px; /* overlap the lead object a little */
+      transform: rotate(6deg) translateY(6px);
+    }
+    .fly-banner-bubble {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--ink);
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink);
+      white-space: nowrap;
+      transform-origin: left center;
+      animation: fly-banner-wave 2.4s ease-in-out infinite;
+    }
+    /* flag rippling in the wind */
+    @keyframes fly-banner-wave {
+      0%, 100% { transform: rotate(-2deg) translateY(0); }
+      50%      { transform: rotate(2.5deg) translateY(-3px); }
+    }
+    /* tow-rope: little line connecting bubble to the objects ahead of it */
+    .fly-banner-bubble::before {
+      content: '';
+      position: absolute;
+      left: -14px;
+      top: 50%;
+      width: 14px;
+      border-top: 1px dashed var(--ink-muted);
+    }
+    .fly-banner-bubble a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .fly-banner-close {
+      background: none;
+      border: none;
+      padding: 0 0 0 2px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1;
+      color: var(--ink-muted);
+      cursor: pointer;
+    }
+    .fly-banner-close:hover { color: var(--ink); }
+    @media (max-width: 599px) {
+      .fly-band { height: 110px; margin-top: 10px; margin-bottom: 10px; }
+      .fly-banner { gap: 10px; }
+      .fly-banner-img { height: 56px; }
+      .fly-banner-img--sm { height: 46px; margin-left: -16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fly-band { display: none; }
+    }
+  </style>
+
 <div class="paper home-paper">
 
   <main class="page home-grid" id="main-content">
@@ -181,6 +290,51 @@
       </svg>
     </a>
   </div>
+
+  <!-- Flying banner band — sits between the leaf and the portfolio intro -->
+  <div class="fly-band" id="fly-band">
+    <div class="fly-banner" id="fly-banner" role="complementary" aria-label="Featured on Playground">
+      <img class="fly-banner-img" src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" />
+      <img class="fly-banner-img fly-banner-img--sm" src="assets/portfolio-playground/cokies.png" alt="Fortune cookie project" />
+      <span class="fly-banner-bubble">
+        Featured on <a href="playground.html">Playground</a>
+        <button class="fly-banner-close" id="fly-banner-close" aria-label="Dismiss">✕</button>
+      </span>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const band = document.getElementById('fly-band');
+      const banner = document.getElementById('fly-banner');
+      if (sessionStorage.getItem('flyBannerDismissed')) {
+        band.classList.add('is-dismissed');
+        banner.style.display = 'none';
+        return;
+      }
+      document.getElementById('fly-banner-close').addEventListener('click', () => {
+        band.classList.add('is-dismissed');
+        banner.style.display = 'none';
+        sessionStorage.setItem('flyBannerDismissed', '1');
+        if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_dismiss');
+      });
+      band.querySelector('a').addEventListener('click', () => {
+        if (typeof gtag !== 'undefined') gtag('event', 'fly_banner_click');
+      });
+
+      // Plays naturally on page load — not gated behind scrolling into
+      // view. The entrance + marquee animation just runs continuously;
+      // scroll only updates *where* it sits vertically (following its
+      // anchor band), so it never restarts or jumps mid-flight.
+      banner.style.display = 'flex';
+      function updateTop() {
+        const rect = band.getBoundingClientRect();
+        banner.style.top = (rect.top + 6) + 'px';
+      }
+      updateTop();
+      window.addEventListener('scroll', updateTop, { passive: true });
+      window.addEventListener('resize', updateTop);
+    })();
+  </script>
 
     <!-- Portfolio -->
     <p class="stack-description home-bio">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
