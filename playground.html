@@ -56,6 +56,10 @@
       cursor: grab;
       user-select: none;
       touch-action: none;
+      /* Trackpad horizontal swipe inside the canvas must not bubble
+         into the browser's native back/forward navigation gesture. */
+      overscroll-behavior-x: contain;
+      overscroll-behavior-y: contain;
     }
 
     body.grabbing { cursor: grabbing; }
@@ -70,6 +74,17 @@
     }
 
     /* Back link */
+    html.is-embedded .back { display: none; }
+    html.is-embedded .card img,
+    html.is-embedded .card video {
+      -webkit-user-drag: none;
+      user-drag: none;
+      user-select: none;
+      pointer-events: none;
+    }
+    /* Zoom is locked at 100% when embedded (see the pan/zoom script
+       below) — the +/- buttons would do nothing, so hide them. */
+    html.is-embedded .zoom-controls { display: none; }
     .back {
       position: fixed;
       top: 24px; left: 28px;
@@ -131,13 +146,16 @@
       background: transparent;
       overflow: hidden;
       cursor: default;
-      transform: rotate(var(--rot, 0deg));
-      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1.2), box-shadow 0.35s ease;
+      /* --tiltX/--tiltY are set on #canvas-root by the mousemove
+         handler below and inherit down to every card, giving a
+         shared, subtle floating-in-3D parallax as the pointer moves. */
+      transform: rotate(var(--rot, 0deg)) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
+      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1.2);
       will-change: transform;
     }
 
     .card:hover {
-      transform: rotate(var(--rot, 0deg)) translateY(-8px);
+      transform: rotate(var(--rot, 0deg)) translateY(-8px) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
       z-index: 10;
     }
 
@@ -183,7 +201,6 @@
       width: 260px;
       background: #ffffff;
       padding: 20px 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     .card-tag {
@@ -247,6 +264,17 @@
 
   <a class="back" href="index.html" aria-label="Back">←</a>
   <div id="scroll-track"><div id="scroll-progress"></div></div>
+  <script>
+    // Hide the back-to-homepage control when this page is embedded as
+    // the homepage's own Playground canvas — going "back" to index.html
+    // from inside index.html doesn't make sense there.
+    if (window.self !== window.top) {
+      document.documentElement.classList.add('is-embedded');
+      // Native browser image/video drag ("ghosting") fights with the
+      // canvas's own pointer-based pan — swallow it outright when embedded.
+      document.addEventListener('dragstart', e => e.preventDefault());
+    }
+  </script>
 
   <div class="zoom-controls">
     <button class="zoom-btn" id="zoom-in">+</button>
@@ -360,8 +388,12 @@
     // ── Column packer — desktop only ─────────────────────────────
     function layoutCards() {
       const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
-      const COL_X     = [60, 400, 760, 1110];
-      const COL_START = [150, 90, 130, 175];
+      const COL_X = [60, 400, 760, 1110];
+      // Embedded (homepage) view gets 25px of extra breathing room below
+      // the sticky Playground header bar + its drop-shadow, so the top
+      // row of cards never sits flush against that edge.
+      const embedOffset = document.documentElement.classList.contains('is-embedded') ? 25 : 0;
+      const COL_START = [150, 90, 130, 175].map(v => v + embedOffset);
       const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13];
       const GAP       = 32;
       const colTops = [...COL_START];
@@ -448,7 +480,15 @@
     } else {
       // ── Desktop: canvas pan + zoom ──────────────────────────────
       const perspEl = document.getElementById('canvas-perspective');
+      const isEmbedded = document.documentElement.classList.contains('is-embedded');
+      // Embedded on the homepage: zoom is fully locked at 100% (see the
+      // wheel/pinch/zoomTo guards below) — cards never scale up past
+      // native resolution, and panning stays completely free. Standalone
+      // playground.html keeps its normal 0.15x–5x zoom range.
+      const maxScale = isEmbedded ? 1 : 5;
       let scale = 1;
+      let targetScale = 1;
+      let zoomRafRunning = false;
       let tx = 0, ty = 0;
       let vx = 0, vy = 0;
       let tiltX = 0, tiltY = 0;
@@ -460,9 +500,88 @@
       // Cursor float (water drift)
       let floatX = 0, floatY = 0, targetFloatX = 0, targetFloatY = 0, floatRafId = null;
 
+      // Embedded only: keep the card grid from being panned into blank
+      // white space — clamp tx/ty against the *actual* bounding box of
+      // every card (not the container's own box, which doesn't auto-
+      // size around absolutely-positioned children) plus a fixed 50px
+      // buffer past the outermost edges. Standalone playground.html
+      // keeps unrestricted panning.
+      function computeContentBounds() {
+        const cards = [...root.querySelectorAll('.card')];
+        if (!cards.length) return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        cards.forEach(c => {
+          const left = parseFloat(c.style.left) || 0;
+          const top = parseFloat(c.style.top) || 0;
+          minX = Math.min(minX, left);
+          minY = Math.min(minY, top);
+          maxX = Math.max(maxX, left + c.offsetWidth);
+          maxY = Math.max(maxY, top + c.offsetHeight);
+        });
+        return { minX, minY, maxX, maxY };
+      }
+
+      function clampPan() {
+        if (!isEmbedded) return;
+        const b = computeContentBounds();
+        const BUFFER = 235;
+        const containerWidth = window.innerWidth, containerHeight = window.innerHeight;
+        const contentWidth = (b.maxX - b.minX) * scale;
+        const contentHeight = (b.maxY - b.minY) * scale;
+
+        // Same math as the requested minX/maxX/minY/maxY formula, just
+        // expressed in terms of the content's own min/max (b.minX etc.)
+        // rather than an assumed origin, since the grid doesn't start
+        // at (0,0). When content is narrower/shorter than the
+        // container on an axis, collapsing the range to one exact
+        // point would fully lock dragging on that axis — give it a
+        // +/-BUFFER play range around center instead, so panning
+        // always stays responsive (this is the "unlocked 360°" fix).
+        let minX = (containerWidth - BUFFER) - b.maxX * scale;
+        let maxX = BUFFER - b.minX * scale;
+        if (minX > maxX) {
+          const mid = (containerWidth - contentWidth) / 2 - b.minX * scale;
+          minX = mid - BUFFER; maxX = mid + BUFFER;
+        }
+        let minY = (containerHeight - BUFFER) - b.maxY * scale;
+        let maxY = BUFFER - b.minY * scale;
+        if (minY > maxY) {
+          const mid = (containerHeight - contentHeight) / 2 - b.minY * scale;
+          minY = mid - BUFFER; maxY = mid + BUFFER;
+        }
+
+        // Clamp pan position on every drag frame:
+        tx = Math.min(Math.max(tx, minX), maxX);
+        ty = Math.min(Math.max(ty, minY), maxY);
+      }
+
       function applyTransform() {
+        clampPan();
         root.style.transform = `translate(${tx + floatX}px, ${ty + floatY}px) scale(${scale})`;
         perspEl.style.transform = `rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg)`;
+      }
+
+      // Smooth zoom: scale eases toward targetScale each frame instead
+      // of jumping straight there, so wheel/pinch/button zoom never
+      // feels stuttery. tx/ty are computed for the target scale up
+      // front (see zoomTo/wheel/pinch below) so the zoom still glides
+      // toward the pointer/pinch anchor as it eases in.
+      function tickZoom() {
+        scale += (targetScale - scale) * 0.22;
+        if (Math.abs(targetScale - scale) < 0.001) {
+          scale = targetScale;
+          applyTransform();
+          zoomRafRunning = false;
+          return;
+        }
+        applyTransform();
+        requestAnimationFrame(tickZoom);
+      }
+      function startZoomLerp() {
+        if (!zoomRafRunning) {
+          zoomRafRunning = true;
+          requestAnimationFrame(tickZoom);
+        }
       }
 
       function resetTilt() {
@@ -488,6 +607,14 @@
         targetFloatX = ((e.clientX - vcx) / vcx) * 28;
         targetFloatY = ((e.clientY - vcy) / vcy) * 18;
         if (!floatRafId) floatRafId = requestAnimationFrame(tickFloat);
+
+        // Subtle floating-in-3D tilt shared by every card: a shared
+        // CSS custom property on #canvas-root (inherited by all .card
+        // descendants) driven by pointer position.
+        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+        root.style.setProperty('--tiltY', (nx * 2).toFixed(2) + 'deg');
+        root.style.setProperty('--tiltX', (-ny * 2).toFixed(2) + 'deg');
       });
 
       const canvasCenterX = 600;
@@ -582,14 +709,17 @@
       document.addEventListener('wheel', e => {
         e.preventDefault();
         stopMomentum();
-        if (e.ctrlKey || e.metaKey) {
+        if ((e.ctrlKey || e.metaKey) && !isEmbedded) {
           const zoomFactor = e.deltaY < 0 ? 1.06 : 0.94;
-          const newScale = Math.min(Math.max(scale * zoomFactor, 0.15), 5);
+          const newScale = Math.min(Math.max(targetScale * zoomFactor, 0.15), maxScale);
           const mx = e.clientX, my = e.clientY;
           tx = mx - (mx - tx) * (newScale / scale);
           ty = my - (my - ty) * (newScale / scale);
-          scale = newScale;
+          targetScale = newScale;
+          startZoomLerp();
         } else {
+          // Embedded: even a ctrl/meta + wheel gesture just pans —
+          // zoom is fully locked, only free dragging/panning remains.
           tx -= e.deltaX; ty -= e.deltaY;
         }
         applyTransform();
@@ -620,13 +750,22 @@
           tx += t.x - lastX; ty += t.y - lastY;
           lastX = t.x; lastY = t.y;
           applyTransform();
-        } else if (ids.length === 2) {
+        } else if (ids.length === 2 && !isEmbedded) {
           const [a, b] = Object.values(touches);
           const dist = Math.hypot(b.x - a.x, b.y - a.y);
-          const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), 5);
+          const newScale = Math.min(Math.max(pinchScale0 * (dist / pinchDist0), 0.15), maxScale);
           tx = pinchMx - (pinchMx - pinchTx0) * (newScale / pinchScale0);
           ty = pinchMy - (pinchMy - pinchTy0) * (newScale / pinchScale0);
           scale = newScale;
+          targetScale = newScale;
+          applyTransform();
+        } else if (ids.length === 2 && isEmbedded) {
+          // Embedded: two-finger pinch pans (via the midpoint) instead
+          // of scaling — zoom is fully locked.
+          const [a, b] = Object.values(touches);
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          tx += mx - pinchMx; ty += my - pinchMy;
+          pinchMx = mx; pinchMy = my;
           applyTransform();
         }
       }, { passive: false });
@@ -638,13 +777,14 @@
 
       // Zoom buttons
       function zoomTo(factor) {
+        if (isEmbedded) return; // zoom fully locked when embedded
         stopMomentum();
         const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-        const newScale = Math.min(Math.max(scale * factor, 0.15), 5);
+        const newScale = Math.min(Math.max(targetScale * factor, 0.15), maxScale);
         tx = cx - (cx - tx) * (newScale / scale);
         ty = cy - (cy - ty) * (newScale / scale);
-        scale = newScale;
-        applyTransform();
+        targetScale = newScale;
+        startZoomLerp();
       }
 
       document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));

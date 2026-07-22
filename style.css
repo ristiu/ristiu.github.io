@@ -2333,5 +2333,638 @@ ol li, ul li {
   line-height: 1.6;
 }
 
+/* ─── Homepage: Study Case heading + Playground section (new) ──── */
+.study-case-heading {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.playground-heading {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.playground-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+/* Full playground.html canvas embed — desktop only (see media query
+   below). Hidden by default so mobile keeps the static card list. */
+.playground-embed {
+  display: none;
+}
+
+/* Hidden by default (mobile); shown desktop-only below. */
+.home-cards-play-illustration {
+  display: none;
+}
+
+/* Intro paperclip overlays — desktop only (see media query below).
+   Hidden by default; never interactive even once visible, since they
+   are purely decorative and this also satisfies "must not block
+   interactions" without needing a post-animation JS toggle. */
+.intro-clip {
+  display: none;
+  pointer-events: none;
+}
+
+/* Visual parity with playground.html's .card / .card-caption / .card-tag:
+   transparent card, hover lift + inner image zoom, mono 10px caption. */
+.playground-grid-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1.2);
+  will-change: transform;
+}
+
+.playground-grid-item:hover {
+  transform: translateY(-8px);
+}
+
+.playground-grid-item img,
+.playground-grid-item video {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  clip-path: inset(0);
+  transition: transform 0.55s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.playground-grid-item:hover img,
+.playground-grid-item:hover video {
+  transform: scale(1.07);
+}
+
+.playground-grid-item p {
+  margin-top: 16px;
+  padding: 0 16px 14px 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  background: transparent;
+}
+
+.playground-grid-item p strong {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.playground-grid-item .card-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(0,0,0,0.35);
+}
+
+.playground-grid-item .card-tag::before {
+  content: ' / ';
+  color: rgba(0,0,0,0.2);
+}
+
+/* ─── Homepage: desktop 2-column hero + folder stack grid ───────
+   Only active on the homepage (`.home-paper`) and only above the
+   desktop breakpoint — mobile keeps today's natural DOM stacking
+   order untouched (hero, bio+cards, playground, footer). */
+@media (min-width: 1024px) {
+  .home-paper {
+    max-width: 1280px;
+    padding: 40px 60px 0 60px;
+    /* The shared .paper rule clips overflow-x site-wide; homepage-only
+       override so the post-it's rotated corner and drop-shadow render
+       past its own box uncropped. */
+    overflow-x: visible;
+    overflow: visible;
+  }
+
+  .home-grid {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: minmax(300px, 420px) 1fr;
+    grid-template-areas:
+      "hero   cards"
+      "bio    cards"
+      "footer cards"
+      "playimg playimg"
+      "playground playground";
+    column-gap: 3rem;
+    row-gap: 0;
+    align-items: start;
+    /* Base .page rule adds 5rem of bottom padding — leftover blank
+       space below the full-bleed canvas since Playground is the last
+       row. */
+    padding-bottom: 0;
+  }
+
+  .home-grid .hero-wrapper {
+    grid-area: hero;
+    min-height: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* 3rem (48px), trimmed 20px then another 20px (post-it/stamp/leaf
+       shift) → 8px: shifts the whole hero subtree up in one place
+       rather than touching each nested element's own margin. */
+    padding: 8px 0 0;
+    gap: 1.5rem;
+    /* !important: the entrance-animation JS toggles this element's
+       inline overflow to 'hidden' for the first 1.4s (to mask the
+       post-it's off-screen starting position), which was clipping the
+       stamp's own slide-in from translateX(120vw) during that same
+       window since the stamp is a sibling inside this wrapper. An
+       !important stylesheet rule beats that inline style, so it stays
+       visible throughout. */
+    overflow: visible !important;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Post-it + stamp + role, shifted per the reference mock. */
+  /* Shift via margin, not transform — the sticker-drop animation
+     already owns the transform property for its 1.3s duration (an
+     active animation always wins over the base transform value), so
+     a transform-based shift here would only apply the instant the
+     animation ends, snapping 50px sideways. Margin sits underneath
+     that and applies from frame one, so the whole drop (and its
+     eventual rest state, .hero-note-wrap--settled) plays out already
+     shifted — no jump. */
+  .home-grid .hero-note-wrap {
+    margin-left: 50px;
+    margin-top: 20px;
+  }
+
+  /* Left-aligned with the post-it (its 50px margin-left, see
+     .hero-note-wrap above) so post-it, bio, links, and Playground
+     heading/subtext all share one vertical axis. */
+  .home-bio {
+    grid-area: bio;
+    max-width: 340px;
+    /* 30px bottom margin (was 2rem/28px) — equalized with the gap
+       below the action links, both in the 28-32px range. */
+    margin: -5px 0 30px;
+    margin-left: 50px;
+  }
+
+  .home-cards {
+    grid-area: cards;
+    max-width: 480px;
+    padding-top: 3rem !important;
+    margin-bottom: 0 !important;
+    /* 130px down net -20px "move hero top elements up" = 110px;
+       plus a subtle organic left tilt on the whole stack. */
+    /* Opposite direction from the hero (which moved up) — folder
+       stack moves 10px further down for visual contrast: 110 + 10.
+       Container itself stays straight (no rotate) — the organic feel
+       now comes from tiny per-card tilts instead (see below), so
+       titles/text across the whole stack stay level and readable. */
+    transform: translate(50px, 120px);
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Stamp text: was white-on-blue, but the stamp graphic is now light
+     grey on desktop (see .hero-stamp-bg below), so the copy needs to
+     be dark to stay legible. */
+  .hero-stamp-text {
+    color: #111111;
+  }
+
+  /* Falls from above the top edge of the browser window with a
+     bounce-in easing, landing on the exact same rest transform as
+     the shared sticker-drop keyframes (so .hero-note-wrap--settled
+     still applies cleanly, no snap). The folder stack's own delay
+     (1.05s) already starts right as this drop settles, so the two
+     read as one continuous "impact → fan-out" sequence. */
+  .home-grid .hero-note-wrap {
+    animation-name: sticker-drop-fall;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.25);
+  }
+
+  @keyframes sticker-drop-fall {
+    0% {
+      transform: translateY(-100vh) rotate(-25deg) scale(0.8);
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    58% {
+      transform: translateY(80px) rotate(7deg) scale(1.04);
+    }
+    74% {
+      transform: translateY(30px) rotate(-3.5deg) scale(0.97);
+    }
+    88% {
+      transform: translateY(52px) rotate(-0.8deg) scale(1.01);
+    }
+    100% {
+      transform: translateY(40px) rotate(-1.5deg) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Folder-color wash restored to its committed default (matches the
+     FOLDER_COLORS array) — the resting body color and tab accent are
+     the same color, exactly like every other viewport. */
+
+  .study-case-heading {
+    font-size: 1.2rem;
+    text-align: right;
+    padding-right: 1rem;
+  }
+
+  /* Action links sit directly under the bio text, left column. Bio's
+     own margin-bottom (30px, above) already provides the gap here, so
+     this needs no additional top margin of its own. */
+  .home-footer {
+    grid-area: footer;
+    margin-top: 0;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .home-bio {
+    position: relative;
+    z-index: 10;
+  }
+
+  .home-playground {
+    grid-area: playground;
+    /* Reduced 20px (was 30px) — tightens the gap above the Playground
+       title/sticky header. padding-top below is cancelled out by
+       .playground-sticky-bar's own -50px margin-top (aligns it with
+       the post-it edge), so margin-top here is the only real lever. */
+    margin-top: 10px;
+    padding-top: 50px;
+    /* Base .section rule adds margin-bottom:5rem (80px) — that was
+       showing up as blank whitespace below the full-bleed canvas,
+       since this is the last section on the page. */
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Only the heading/subtext align with the post-it's left edge — the
+     canvas embed below stays full-bleed (see .playground-embed). */
+  .home-playground .playground-sticky-bar {
+    margin-left: 50px;
+  }
+
+  /* Fixed/sticky title bar: a single wrapper around heading + subtext
+     (rather than two independently-offset sticky elements guessing at
+     each other's height, which could overlap) pins the whole block to
+     the viewport top as the user scrolls through the Playground
+     section, with a solid background so the canvas never shows
+     through or overlaps the text underneath. */
+  .home-playground .playground-sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #ffffff;
+    /* -30px (align with post-it) further shifted -20px to tighten
+       vertical spacing under the hero section = -50px. */
+    margin-top: -50px;
+    /* Extra bottom breathing room so the last subtext line never sits
+       flush against (or gets crowded by) the canvas top edge below.
+       Top padding was 12px, reduced by 15px (clamped at 0, can't go
+       negative). */
+    padding: 0 0 18px;
+  }
+
+  .home-playground .playground-heading {
+    margin: 0;
+  }
+
+  .home-playground .tree-node-wrapper {
+    margin-top: 8px;
+  }
+
+  /* Top fade mask over the canvas, directly under the sticky bar —
+     cards panned upward fade smoothly into white instead of cutting
+     off abruptly against the header's bottom edge. */
+  /* Retired the ::after overlay div — it sat on top of (not inside)
+     the canvas frame and could read as a hard white rectangle
+     artifact cutting into the cards underneath. A native mask-image
+     on .playground-embed itself (below) fades content from INSIDE
+     the canvas's own edge instead, cleanly, with no separate
+     positioned element to go wrong. */
+
+  /* Static card list is a mobile fallback; desktop gets the live
+     playground.html canvas embed instead. */
+  .playground-grid {
+    display: none;
+  }
+
+  .playground-embed {
+    display: block;
+    width: 100%;
+    /* +20px, matching the 20px trimmed from the header spacing above,
+       so the canvas fills cleanly to the bottom of the viewport. */
+    height: calc(100vh - 260px);
+    min-height: 400px;
+    overflow: hidden;
+    margin-top: 0;
+    border: none;
+    border-bottom: none;
+    box-shadow: inset 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+    /* Native mask fades cards from inside the canvas's own top edge —
+       replaces the old ::after overlay div, which sat on top of the
+       frame rather than inside it and could read as a hard white
+       rectangle artifact. */
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40px, rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40px, rgba(0, 0, 0, 1) 100%);
+    /* Fresh-load fade-in; .is-visible is toggled on once the iframe
+       fires 'load' (see script near the bottom of the file), and
+       back-nav (.skip-animations/.instant-state) skips straight to
+       fully visible — see the override further down. */
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+
+  .playground-embed.is-visible {
+    opacity: 1;
+  }
+
+  /* ── Sequential entry: post-it drops first (existing sticker-drop,
+     1.3s). Once it settles, the Study Case stack plays a "single
+     folder splits open" micro-interaction — every card starts
+     collapsed onto the first card's position (reads as one white
+     folder) and un-stacks outward into its resting offset, each one
+     ~70px (one card's peek height) behind the previous via --stack-i.
+     Transform + opacity only, GPU composited, no layout shift.
+     Note: no overflow-x:clip on .home-paper/.home-grid — the post-it's
+     rotated corners and drop-shadow need to render past its own box
+     uncropped, so nothing here clips ancestor overflow. */
+
+  .study-case-heading {
+    animation: study-case-fade 0.5s ease 1.15s backwards;
+  }
+
+  @keyframes study-case-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Back/forward return: skip every entrance animation and land
+     straight in the settled state (html.is-back-nav is set as early
+     as possible in <head>, before first paint — see the script
+     there). Only `animation` needs neutralizing since neither rule's
+     own base declaration sets opacity/transform outside the
+     animation, so removing it alone reveals the natural rest state. */
+  html.is-back-nav .study-case-heading,
+  html.is-back-nav .home-cards .stack-card {
+    animation: none !important;
+  }
+
+  /* `backwards` (not `both`) fill: cards sit collapsed through their
+     delay, but once the animation ends the transform releases so the
+     existing hover-lift transition takes over untouched. The final
+     keyframe equals the natural resting state, so there is no snap. */
+  /* 3-step sequence: (1) fully collapsed behind the front cover — a
+     single white folder; (2) a partial peek where the tab headers
+     rise ~40% of the way, still faint; (3) full fan-out landing on
+     the exact current colors/textures/titles. */
+  .home-cards .stack-card {
+    animation: stack-card-unfold 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: calc(1.05s + (var(--stack-i, 1) - 1) * 0.12s);
+    will-change: transform, opacity;
+  }
+
+  @keyframes stack-card-unfold {
+    0% {
+      transform: translate3d(0, calc(-70px * (var(--stack-i, 1) - 1)), 0) scale(0.98);
+      opacity: 0;
+    }
+    55% {
+      transform: translate3d(0, calc(-70px * (var(--stack-i, 1) - 1) * 0.4), 0) scale(0.99);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Retired in favor of restoring the original, already-proven
+     .scroll-hint paperclip (see below) — same element/behavior on
+     both mobile and desktop now, instead of this newer experimental
+     one-off that needed repeated tuning. */
+  .intro-clip {
+    display: none;
+  }
+
+  .home-playground {
+    position: relative;
+  }
+
+  /* Full-bleed canvas: break the iframe out of the padded/centered
+     .home-paper column to span the true viewport width, matching
+     playground.html's own fullscreen layout. No border/outline/
+     box-shadow/overflow:hidden anywhere in its ancestor chain —
+     .home-paper is already overflow:visible (see above). */
+  .playground-embed {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    position: relative;
+    z-index: 1;
+    /* Recessed edge — reads as sitting underneath the elevated hero
+       section above it. */
+    box-shadow: inset 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Removed: a separate divider gradient here duplicated (and, nested
+     inside the new sticky bar, visually clashed with) the iframe's
+     own inset box-shadow above — that shadow alone is now the only
+     top-edge treatment for the canvas, avoiding a hard line artifact. */
+
+  /* Original .scroll-hint paperclip (from the deployed site) is left
+     completely alone here — no override, so it renders and behaves
+     identically to mobile: fixed position, fades in once the post-it
+     settles, hides once the first folder card is scrolled past. */
+
+  /* ── Folder palette refinements ─────────────────────────────
+     !important is required here: each card's color comes from an
+     inline --folder-color custom property (set per-card in the JS
+     template), and only an !important stylesheet rule can override
+     an inline style for the same property on the same element. */
+  .home-cards .stack-card:nth-child(1) {
+    --folder-color: #D9D9D9 !important; /* Casio → light grey */
+  }
+  .home-cards .stack-card:nth-child(3) {
+    --folder-color: #8CA0B3 !important; /* Traveloka → muted greyish-blue */
+  }
+
+  /* Stamp graphic recolored to light grey via filter (it's an <img>
+     referencing an SVG with its own baked-in blue fill). */
+  .hero-stamp-bg {
+    filter: grayscale(1) brightness(1.9);
+  }
+
+  /* Subtle, always-on paper texture on the folder stack (previously
+     hover-only) for a tactile material feel. */
+  .home-cards .stack-card::after {
+    opacity: 0.22;
+  }
+  .home-cards .stack-card:hover::after {
+    opacity: 1;
+  }
+
+  /* No hard vector outlines — soft ambient shadow instead, so the
+     cards read as stacked paper rather than bordered boxes. */
+  .home-cards .stack-card {
+    border: none;
+    filter: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  .home-cards .stack-card::before {
+    border: none;
+  }
+
+  /* Standalone breathing-room row between the action links and the
+     Playground section — its own grid row ("playimg"), centered with
+     generous whitespace above and below, matching the reference. */
+  .home-cards-play-illustration {
+    display: block;
+    grid-area: playimg;
+    justify-self: center;
+    width: auto;
+    max-height: 170px;
+    margin: 48px 0;
+  }
+
+  /* ── Fresh-load entrance fade-in (bio, action links, Playground
+     header, play.png) — skipped entirely on back/forward navigation,
+     see html.is-back-nav / .skip-animations below and the early
+     <head> detector script. */
+  .home-bio,
+  .home-footer,
+  .home-playground .playground-sticky-bar,
+  .home-cards-play-illustration {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: home-fade-in 0.6s ease 2.6s forwards;
+  }
+
+  @keyframes home-fade-in {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  html.is-back-nav .home-bio,
+  html.is-back-nav .home-footer,
+  html.is-back-nav .home-playground .playground-sticky-bar,
+  html.is-back-nav .home-cards-play-illustration {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* .session-loaded is the canonical class name (per the latest spec);
+     .skip-animations and .instant-state are set alongside it by the
+     same detector script for backward compatibility, but since all
+     three always land together, only .session-loaded needs wiring
+     into CSS here — NOT a true `*` wildcard. Split into two groups
+     because .home-cards, .study-case-heading, and .hero-note-wrap
+     have no non-animation base `transform` of their own (so
+     `animation:none` alone reveals their natural rest state, and
+     forcing `transform:none` would wipe out .home-cards's permanent,
+     non-entrance translate(50px,130px)+rotate layout shift). The
+     fade-in elements below declare `transform:translateY(15px)`
+     directly (not just inside the keyframe), so they need the
+     explicit override to actually land at rest. */
+  /* .stack-card keeps its transition — disabling it here was
+     breaking the folder tabs' :hover lift/rotate interaction after a
+     back-navigation, since hover relies on that same transition to
+     animate. Only the entrance keyframes need neutralizing. */
+  body.session-loaded .home-cards .stack-card,
+  body.session-loaded .study-case-heading {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  body.session-loaded .home-cards .stack-card {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), rotate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease, background 0.4s ease !important;
+  }
+
+  body.session-loaded .home-bio,
+  body.session-loaded .home-footer,
+  body.session-loaded .home-playground .playground-sticky-bar,
+  body.session-loaded .home-cards-play-illustration {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  body.session-loaded .playground-embed {
+    transition: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Back/forward return: replace the abrupt "everything just pops in"
+     landing with one swift, cohesive cross-fade of the whole main
+     container. Elements themselves sit in their final settled layout
+     the instant session-loaded lands (see the overrides above) — only
+     the container's own opacity animates, so nothing shifts or
+     re-positions mid-fade. body.page-fade-in is added via a
+     double-rAF in the inline <body> script so the initial opacity:0
+     actually paints before the transition starts. */
+  body.js-fade-fallback #main-content {
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+  }
+  body.js-fade-fallback.page-fade-in #main-content {
+    opacity: 1;
+  }
+
+  /* Paperclip scroll-hint entrance (desktop only — mobile keeps its
+     original opacity-only fade untouched). On a fresh load, .ready is
+     added ~1.4s in (see cursor/sticker-drop script) once the post-it
+     settles; the extra 1.2s transition-delay here lands its motion
+     alongside the bio/play.png reveal (2.6s delay, see .home-fade-in
+     above) instead of firing early and separately. */
+  /* :not(.hidden) keeps this scoped to the entrance only — otherwise
+     its transition (with a 1.2s delay) would out-specificity and
+     override .hidden's own instant "transition: opacity 0s", making
+     the paperclip linger visible for ~1.7s after scrolling past
+     play.png instead of disappearing immediately. */
+  body:not(.session-loaded) .scroll-hint:not(.hidden) {
+    transform: translateY(-8px);
+    transition: opacity 0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s;
+  }
+  body:not(.session-loaded) .scroll-hint.ready:not(.hidden) {
+    transform: translateY(0);
+  }
+  /* Back-nav: paperclip must land instantly with the rest of the
+     cross-fade above, not wait through the 1.2s delay meant for the
+     fresh-load sequence. */
+  body.session-loaded .scroll-hint {
+    transform: none;
+  }
+
+  /* Trap trackpad swipe/scroll strictly inside the canvas so it can't
+     bubble up into the browser's native back/forward navigation
+     gesture. */
+  .playground-embed {
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: contain;
+  }
+}
+
 /* ─── Responsive tweaks ──────────────────────────────────── */
 /* font size stays consistent across all viewports */
