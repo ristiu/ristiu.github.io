@@ -51,6 +51,15 @@
     html.pre-scroll { visibility: hidden; }
   </style>
   <script>
+    // Clean the address bar to the root URL if someone lands on
+    // /index.html directly (old links, manual typing) — same content
+    // either way (GitHub Pages serves index.html at / by default; the
+    // canonical tag above already points here), this just keeps what
+    // shows up in the URL bar/copy-paste tidy. replaceState so it's
+    // silent — no reload, no new history entry.
+    if (location.pathname === '/index.html') {
+      history.replaceState(null, '', '/' + location.search + location.hash);
+    }
     history.scrollRestoration = 'manual';
     if (sessionStorage.getItem('scrollY') !== null) {
       document.documentElement.classList.add('pre-scroll');
