@@ -524,7 +524,10 @@
       function clampPan() {
         if (!isEmbedded) return;
         const b = computeContentBounds();
-        const BUFFER = 235;
+        const BUFFER_X = 235;
+        // Tighter than BUFFER_X — less blank space above/below the
+        // cards when panned to the top/bottom edge.
+        const BUFFER_Y = 50;
         const containerWidth = window.innerWidth, containerHeight = window.innerHeight;
         const contentWidth = (b.maxX - b.minX) * scale;
         const contentHeight = (b.maxY - b.minY) * scale;
@@ -537,17 +540,17 @@
         // point would fully lock dragging on that axis — give it a
         // +/-BUFFER play range around center instead, so panning
         // always stays responsive (this is the "unlocked 360°" fix).
-        let minX = (containerWidth - BUFFER) - b.maxX * scale;
-        let maxX = BUFFER - b.minX * scale;
+        let minX = (containerWidth - BUFFER_X) - b.maxX * scale;
+        let maxX = BUFFER_X - b.minX * scale;
         if (minX > maxX) {
           const mid = (containerWidth - contentWidth) / 2 - b.minX * scale;
-          minX = mid - BUFFER; maxX = mid + BUFFER;
+          minX = mid - BUFFER_X; maxX = mid + BUFFER_X;
         }
-        let minY = (containerHeight - BUFFER) - b.maxY * scale;
-        let maxY = BUFFER - b.minY * scale;
+        let minY = (containerHeight - BUFFER_Y) - b.maxY * scale;
+        let maxY = BUFFER_Y - b.minY * scale;
         if (minY > maxY) {
           const mid = (containerHeight - contentHeight) / 2 - b.minY * scale;
-          minY = mid - BUFFER; maxY = mid + BUFFER;
+          minY = mid - BUFFER_Y; maxY = mid + BUFFER_Y;
         }
 
         // Clamp pan position on every drag frame:

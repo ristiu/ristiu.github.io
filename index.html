@@ -153,6 +153,7 @@
       <img class="illustration" src="assets/portfolio/leaf.gif" alt="" />
     </div>
     <a class="scroll-hint" href="#main-content" aria-label="Scroll down">
+      <span class="scroll-hint-tag">Home ↰</span>
       <svg class="scroll-hint-clip" width="45" height="90" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M 12 68
                  L 45 180
@@ -200,7 +201,7 @@
         <div class="tree-node-wrapper">
           <p class="tree-node-text playground-subtext">Lately I'm building with
             <strong class="preview-trigger" style="color:#000000;" data-img="assets/portfolio/AI-sm.png">AI ◁°_°▷</strong>
-            and getting my hands on with analog craft.<br>It's how I keep the taste calibrated.</p>
+            and getting <span id="playground-anchor-word">my</span> hands on with analog craft.<br>It's how I keep the taste calibrated.</p>
         </div>
       </div>
 
@@ -878,31 +879,79 @@
       if (e.target.closest('a, button')) lastTickTarget = null;
     });
 
-    // Scroll hint hide at bottom, or once past the first folder card
-    // (mobile) / once the Playground section starts entering the
-    // viewport (desktop — entirely gone by the time that section is
-    // reached, not just once play.png itself has fully scrolled off,
-    // since on real viewport heights the two are visible in the same
-    // frame).
+    // Same paperclip element, two jobs depending on scroll depth:
+    // - Mobile: unchanged original behavior — hides once past the
+    //   first folder card or near the page bottom.
+    // - Desktop: once the Playground header bar actually pins itself
+    //   to the top (position: sticky kicking in — its own rect.top
+    //   hits 0), the paperclip docks onto it (.is-anchor), pinned
+    //   right under the word "my" in the subtext, instead of hiding.
+    //   A fixed pixel scroll threshold would fire long before the bar
+    //   (and the word) are anywhere near the viewport on this page's
+    //   layout, so it's tied to the bar's own pinned state instead —
+    //   clicking the docked clip scrolls back to the hero, and it
+    //   reverts to the plain down-hint once the bar unpins.
     const scrollHint = document.querySelector('.scroll-hint');
     const stackContainer = document.getElementById('portfolio-list');
-    const playgroundSection = document.querySelector('.home-playground');
+    const anchorWord = document.getElementById('playground-anchor-word');
+    const stickyBar = document.querySelector('.playground-sticky-bar');
     const isDesktopHint = () => window.matchMedia('(min-width: 1024px)').matches;
+
+    function updateAnchorPosition() {
+      if (!anchorWord) return;
+      // The site applies CSS zoom: 1.2 on desktop (see html in
+      // style.css) — getBoundingClientRect() returns post-zoom
+      // (rendered) coordinates, but style.left/top are read as
+      // pre-zoom and get the zoom re-applied on paint, so dividing by
+      // the live zoom factor here is what keeps the clip visually
+      // matched to the word instead of drifting outward.
+      const zoom = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+      const rect = anchorWord.getBoundingClientRect();
+      scrollHint.style.left = ((rect.left + rect.width / 2) / zoom) + 'px';
+      scrollHint.style.top = (rect.bottom / zoom) + 'px';
+    }
+
     function updateScrollHint() {
-      const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
-      let pastFirstCard;
-      if (isDesktopHint() && playgroundSection) {
-        pastFirstCard = playgroundSection.getBoundingClientRect().top <= window.innerHeight;
-      } else {
-        // Cards overlap with negative margins, so the *second* card
-        // reaching the viewport top is what means "past the first folder."
-        const secondCard = stackContainer && stackContainer.querySelectorAll('.stack-card')[1];
-        pastFirstCard = secondCard && secondCard.getBoundingClientRect().top <= 0;
+      if (isDesktopHint()) {
+        // The bar's sticky rest position lands a few px below 0 (its
+        // own top:0 offset by internal margin/padding) — observed
+        // anywhere from ~9px to ~27px depending on font-load timing
+        // at measurement time, vs. 30px+ while still approaching. 40
+        // covers that rest-position jitter with margin while still
+        // only firing once actually pinned.
+        const isAnchor = !!stickyBar && stickyBar.getBoundingClientRect().top <= 40;
+        scrollHint.classList.toggle('is-anchor', isAnchor);
+        scrollHint.classList.remove('hidden');
+        if (isAnchor) {
+          updateAnchorPosition();
+        } else {
+          scrollHint.style.left = '';
+          scrollHint.style.top = '';
+        }
+        return;
       }
+      scrollHint.classList.remove('is-anchor');
+      scrollHint.style.left = '';
+      scrollHint.style.top = '';
+      const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 40;
+      // Cards overlap with negative margins, so the *second* card
+      // reaching the viewport top is what means "past the first folder."
+      const secondCard = stackContainer && stackContainer.querySelectorAll('.stack-card')[1];
+      const pastFirstCard = secondCard && secondCard.getBoundingClientRect().top <= 0;
       scrollHint.classList.toggle('hidden', nearBottom || pastFirstCard);
     }
     window.addEventListener('scroll', updateScrollHint, { passive: true });
+    window.addEventListener('resize', () => {
+      if (scrollHint.classList.contains('is-anchor')) updateAnchorPosition();
+    });
     updateScrollHint();
+
+    scrollHint.addEventListener('click', (e) => {
+      if (scrollHint.classList.contains('is-anchor')) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
   </script>
 
   <script>

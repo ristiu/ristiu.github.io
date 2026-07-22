@@ -1064,6 +1064,29 @@ a:hover { color: var(--accent); }
   50%       { transform: translateY(5px); }
 }
 
+/* "Home ↰" tag — position:absolute so it never affects the down-hint
+   SVG's flex centering; invisible (opacity:0) except in the desktop
+   .is-anchor docked state, see the @media block below. */
+.scroll-hint-tag {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 6px;
+  transform: translateY(-50%) translateX(-10px);
+  opacity: 0;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 2px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 /* ─── Project two-column layout ─────────────────────────── */
 .project-layout {
   display: flex;
@@ -2942,18 +2965,26 @@ ol li, ul li {
      its transition (with a 1.2s delay) would out-specificity and
      override .hidden's own instant "transition: opacity 0s", making
      the paperclip linger visible for ~1.7s after scrolling past
-     play.png instead of disappearing immediately. */
-  body:not(.session-loaded) .scroll-hint:not(.hidden) {
+     play.png instead of disappearing immediately. :not(.is-anchor)
+     does the same job for the docked state — without it, this rule's
+     extra "body" type selector out-specifies .scroll-hint.is-anchor
+     on every fresh (non-back-nav) page load, silently overriding the
+     docked rotate/translate transform back to this entrance-only
+     translateY and killing the rotation/centering entirely. */
+  body:not(.session-loaded) .scroll-hint:not(.hidden):not(.is-anchor) {
     transform: translateY(-8px);
     transition: opacity 0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s;
   }
-  body:not(.session-loaded) .scroll-hint.ready:not(.hidden) {
+  body:not(.session-loaded) .scroll-hint.ready:not(.hidden):not(.is-anchor) {
     transform: translateY(0);
   }
   /* Back-nav: paperclip must land instantly with the rest of the
      cross-fade above, not wait through the 1.2s delay meant for the
      fresh-load sequence. */
-  body.session-loaded .scroll-hint {
+  /* :not(.is-anchor) so this back-nav override doesn't fight the
+     anchor-mode rotation below on a back-nav landing that happens to
+     restore a scroll position past the 350px threshold. */
+  body.session-loaded .scroll-hint:not(.is-anchor) {
     transform: none;
   }
 
@@ -2963,6 +2994,50 @@ ol li, ul li {
   .playground-embed {
     overscroll-behavior-x: contain;
     overscroll-behavior-y: contain;
+  }
+
+  /* ── Paperclip "back to top" anchor state ────────────────────
+     Past ~350px of scroll, the SAME paperclip used as the down-scroll
+     hint above the hero docks onto the sticky Playground header bar
+     instead — no second element, just a state change on .scroll-hint.
+     top/left are set inline by JS (see updateAnchorPosition in
+     index.html), pinched right under the word "my" in the Playground
+     subtext (#playground-anchor-word) so it reads as physically
+     clipped onto that line, hanging down over the header bar. Because
+     .playground-sticky-bar is itself position:sticky, once pinned its
+     viewport position — and therefore the word's — stays constant, so
+     a plain position:fixed here (recalculated on scroll/resize) stays
+     correctly docked without any extra sticky-tracking logic. Sits
+     above .playground-sticky-bar (z-index: 20). */
+  .scroll-hint.is-anchor {
+    bottom: auto;
+    left: 0;
+    align-items: flex-start;
+    animation: none;
+    opacity: 0.9;
+    pointer-events: auto;
+    /* 180deg flips the clip's pointed tail to read as an upward
+       "back to top" arrow instead of its natural hanging-down shape;
+       translate(-50%, -18%) still centers/overlaps it on the word as
+       before, applied before the rotation. */
+    transform: translate(-50%, -18%) rotate(180deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+
+  .scroll-hint.is-anchor:hover {
+    opacity: 1;
+    transform: translate(-50%, -18%) rotate(180deg) scale(1.08);
+    cursor: pointer;
+  }
+
+  /* Tag fades/slides in once docked. It's a child of the same
+     180deg-rotated .scroll-hint, so it needs its own counter
+     rotate(180deg) to read upright — combined with the slide-in
+     translateX. */
+  .scroll-hint.is-anchor .scroll-hint-tag {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0) rotate(180deg);
   }
 }
 
