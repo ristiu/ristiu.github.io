@@ -2372,14 +2372,29 @@ ol li, ul li {
   }
 }
 
-/* Flying banner (Playground teaser) — mobile only hide. The "Check my
-   playground" link in the Playground subtext already covers the same
-   promotion on mobile, so the floating banner is redundant there;
-   desktop keeps it untouched. */
-@media (max-width: 1023px) {
+/* Flying banner (Playground teaser) — desktop hide, mobile only show. */
+@media (min-width: 1024px) {
   .fly-band,
   .fly-banner {
     display: none !important;
+  }
+}
+
+/* Mobile only — hide the inline Playground cards grid; the "Check my
+   playground here" link in the subtext covers navigation to the full
+   playground.html instead. Desktop shows the live canvas iframe. */
+@media (max-width: 1023px) {
+  .playground-grid {
+    display: none !important;
+  }
+}
+
+/* Desktop only — hide the "Check my playground here" sentence; the
+   live embedded canvas already fills that role there. Mobile keeps it
+   (it's the only way in once the grid above is hidden). */
+@media (min-width: 1024px) {
+  .playground-link-copy {
+    display: none;
   }
 }
 
@@ -2493,7 +2508,11 @@ ol li, ul li {
      still correctly override both when applicable. */
   .scroll-hint {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    /* Float cleanly above every canvas card / iframe so it never gets
+       clipped or hidden behind Playground content while docked. */
+    z-index: 1000;
   }
 
   .scroll-hint.ready {
@@ -2740,9 +2759,10 @@ ol li, ul li {
     /* +20px, matching the 20px trimmed from the header spacing above,
        so the canvas fills cleanly to the bottom of the viewport. */
     height: calc(100vh - 260px);
-    min-height: 400px;
     overflow: hidden;
     margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
     border: none;
     border-bottom: none;
     box-shadow: inset 0 12px 24px -8px rgba(0, 0, 0, 0.12);
@@ -3047,8 +3067,10 @@ ol li, ul li {
      bubble up into the browser's native back/forward navigation
      gesture. */
   .playground-embed {
-    overscroll-behavior-x: contain;
-    overscroll-behavior-y: contain;
+    overscroll-behavior: none !important;
+    overscroll-behavior-x: none !important;
+    overscroll-behavior-y: none !important;
+    touch-action: none;
   }
 
   /* ── Paperclip "back to top" anchor state ────────────────────

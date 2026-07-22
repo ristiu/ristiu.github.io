@@ -58,8 +58,9 @@
       touch-action: none;
       /* Trackpad horizontal swipe inside the canvas must not bubble
          into the browser's native back/forward navigation gesture. */
-      overscroll-behavior-x: contain;
-      overscroll-behavior-y: contain;
+      overscroll-behavior: none;
+      overscroll-behavior-x: none;
+      overscroll-behavior-y: none;
     }
 
     body.grabbing { cursor: grabbing; }
