@@ -205,7 +205,7 @@
         </div>
       </div>
 
-      <iframe class="playground-embed" src="playground.html" title="Playground — full interactive canvas" loading="lazy" onload="this.classList.add('is-visible')"></iframe>
+      <iframe class="playground-embed" src="playground.html" title="Playground — full interactive canvas" loading="lazy" onload="this.classList.add('is-visible')" id="playground-iframe"></iframe>
 
       <div class="playground-grid">
         <a class="playground-grid-item" href="playground.html">
@@ -896,6 +896,38 @@
     const anchorWord = document.getElementById('playground-anchor-word');
     const stickyBar = document.querySelector('.playground-sticky-bar');
     const isDesktopHint = () => window.matchMedia('(min-width: 1024px)').matches;
+    const zoomFactor = () => parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+
+    // Both the resting (down-hint) and docked (anchor) states are
+    // always positioned via concrete top/left px values (never
+    // `bottom`, never `auto`) so the CSS transition on top/left can
+    // actually interpolate a smooth slide between them. Mixing
+    // bottom+top:auto (rest) with top+bottom:auto (docked) — the
+    // previous approach — can't be animated at all (auto isn't
+    // interpolable), which is what caused the paperclip to teleport
+    // into place instead of sliding, with only its rotation easing.
+    let restingTop = null, restingLeft = null;
+    function captureRestingPosition() {
+      // Only capture while genuinely at rest (not mid-dock), and
+      // before any inline override is applied, so this reads the
+      // CSS-only fallback position (see .scroll-hint desktop rule).
+      const hadInlineTop = scrollHint.style.top;
+      const hadInlineLeft = scrollHint.style.left;
+      scrollHint.style.top = '';
+      scrollHint.style.left = '';
+      const zoom = zoomFactor();
+      const rect = scrollHint.getBoundingClientRect();
+      restingTop = rect.top / zoom;
+      restingLeft = rect.left / zoom;
+      scrollHint.style.top = hadInlineTop;
+      scrollHint.style.left = hadInlineLeft;
+    }
+
+    function applyRestingPosition() {
+      if (restingTop === null) captureRestingPosition();
+      scrollHint.style.top = restingTop + 'px';
+      scrollHint.style.left = restingLeft + 'px';
+    }
 
     function updateAnchorPosition() {
       if (!anchorWord) return;
@@ -905,28 +937,56 @@
       // pre-zoom and get the zoom re-applied on paint, so dividing by
       // the live zoom factor here is what keeps the clip visually
       // matched to the word instead of drifting outward.
-      const zoom = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+      const zoom = zoomFactor();
       const rect = anchorWord.getBoundingClientRect();
       scrollHint.style.left = ((rect.left + rect.width / 2) / zoom) + 'px';
       scrollHint.style.top = (rect.bottom / zoom) + 'px';
     }
 
-    function updateScrollHint() {
+    // Page-load correction passes (below) can flip the paperclip
+    // straight into its docked state on a reload that restores a deep
+    // scroll position — that's a state *initialization*, not a user
+    // interaction, so it should land instantly with no visible slide/
+    // rotate animation. Real scroll-driven dock/undock should still
+    // animate normally. isSettled flips true once we're confident the
+    // layout has stabilized (load + fonts both fired) or the user
+    // starts actually scrolling, whichever comes first.
+    let isSettled = false;
+    let loadFired = false;
+    let fontsFired = !(document.fonts && document.fonts.ready);
+    function maybeMarkSettled() {
+      if (loadFired && fontsFired) isSettled = true;
+    }
+    function runInstantIfUnsettled(fn) {
+      if (isSettled) { fn(); return; }
+      const tag = scrollHint.querySelector('.scroll-hint-tag');
+      scrollHint.style.transition = 'none';
+      if (tag) tag.style.transition = 'none';
+      fn();
+      void scrollHint.offsetHeight;
+      scrollHint.style.transition = '';
+      if (tag) tag.style.transition = '';
+    }
+
+    function updateScrollHintNow() {
       if (isDesktopHint()) {
         // The bar's sticky rest position lands a few px below 0 (its
         // own top:0 offset by internal margin/padding) — observed
         // anywhere from ~9px to ~27px depending on font-load timing
         // at measurement time, vs. 30px+ while still approaching. 40
         // covers that rest-position jitter with margin while still
-        // only firing once actually pinned.
+        // only firing once actually pinned (not "hits the bottom of
+        // the window" — that was never the intended trigger; the
+        // fixed-position down-hint just happens to rest near the
+        // bottom of the screen pre-dock, which read as if the trigger
+        // were viewport-bottom-based).
         const isAnchor = !!stickyBar && stickyBar.getBoundingClientRect().top <= 40;
         scrollHint.classList.toggle('is-anchor', isAnchor);
         scrollHint.classList.remove('hidden');
         if (isAnchor) {
           updateAnchorPosition();
         } else {
-          scrollHint.style.left = '';
-          scrollHint.style.top = '';
+          applyRestingPosition();
         }
         return;
       }
@@ -940,18 +1000,93 @@
       const pastFirstCard = secondCard && secondCard.getBoundingClientRect().top <= 0;
       scrollHint.classList.toggle('hidden', nearBottom || pastFirstCard);
     }
-    window.addEventListener('scroll', updateScrollHint, { passive: true });
+    function updateScrollHint() {
+      runInstantIfUnsettled(updateScrollHintNow);
+    }
+    window.addEventListener('scroll', () => {
+      // A real scroll gesture means the user is actively interacting
+      // — from here on, dock/undock should always animate, even if
+      // load/fonts haven't technically both fired yet.
+      isSettled = true;
+      updateScrollHintNow();
+    }, { passive: true });
     window.addEventListener('resize', () => {
-      if (scrollHint.classList.contains('is-anchor')) updateAnchorPosition();
+      restingTop = null;
+      restingLeft = null;
+      if (isDesktopHint()) {
+        if (scrollHint.classList.contains('is-anchor')) {
+          updateAnchorPosition();
+        } else {
+          captureRestingPosition();
+          applyRestingPosition();
+        }
+      }
     });
     updateScrollHint();
 
+    // On reload, browsers commonly restore the previous scroll
+    // position before all images/fonts finish loading. If that first
+    // updateScrollHint() call above runs while layout above the
+    // sticky bar is still short (hero image, play.png, etc. not yet
+    // loaded), its is-anchor/position read can be wrong — and since
+    // the user is already scrolled where they want to be, no further
+    // scroll event fires to self-correct it, leaving the paperclip
+    // stuck in a stale, wrong position. Force a couple of correction
+    // passes once things actually settle — instant (see
+    // runInstantIfUnsettled), since flipping straight into the docked
+    // state here is page-load initialization, not a user-triggered
+    // dock that should visibly slide/rotate in.
+    window.addEventListener('load', () => {
+      restingTop = null;
+      restingLeft = null;
+      updateScrollHint();
+      loadFired = true;
+      maybeMarkSettled();
+    });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        restingTop = null;
+        restingLeft = null;
+        updateScrollHint();
+        fontsFired = true;
+        maybeMarkSettled();
+      });
+    }
+
+    // Dual-action (desktop only — mobile keeps its original
+    // href="#main-content" jump-to-studies behavior untouched):
+    // docked (.is-anchor) → scroll to hero top; resting, before the
+    // Playground section → scroll down to the Playground section
+    // instead of the generic "#main-content" jump.
+    const playgroundSection = document.querySelector('.home-playground');
     scrollHint.addEventListener('click', (e) => {
+      if (!isDesktopHint()) return;
       if (scrollHint.classList.contains('is-anchor')) {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (playgroundSection) {
+        e.preventDefault();
+        playgroundSection.scrollIntoView({ behavior: 'smooth' });
       }
     });
+
+    // Safety net: if the lazy-loaded Playground iframe's `load` event
+    // is ever missed (bfcache restores, odd reload timing), it would
+    // otherwise sit stuck at opacity:0 forever. Once it's near the
+    // viewport, force it visible after a short grace period
+    // regardless of whether `onload` already fired.
+    const playgroundIframe = document.getElementById('playground-iframe');
+    if (playgroundIframe && 'IntersectionObserver' in window) {
+      const iframeVisibilityObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => playgroundIframe.classList.add('is-visible'), 2000);
+            iframeVisibilityObserver.disconnect();
+          }
+        });
+      }, { rootMargin: '200px' });
+      iframeVisibilityObserver.observe(playgroundIframe);
+    }
   </script>
 
   <script>

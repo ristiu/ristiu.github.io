@@ -2459,6 +2459,28 @@ ol li, ul li {
    desktop breakpoint — mobile keeps today's natural DOM stacking
    order untouched (hero, bio+cards, playground, footer). */
 @media (min-width: 1024px) {
+  /* Guarantee the paperclip is visible immediately on desktop load —
+     the base (shared-with-mobile) rule starts it at opacity:0,
+     un-hidden only once .ready is added by the sticker-drop script
+     ~1.4s after load. That's an intentional staged entrance on
+     mobile, but on desktop it read as the paperclip being "missing"
+     entirely for that window. Same specificity (0,1,0) as the base
+     rule, but this comes later in the stylesheet, so it wins on
+     source order regardless of whether .ready has landed yet.
+     .scroll-hint.ready (0,2,0) is *higher* specificity than this
+     though, so it still needs its own explicit override below —
+     otherwise once .ready lands (~1.4s in) it silently drags opacity
+     back down to its own 0.8. .hidden (0,2,0) and .is-anchor (0,2,0)
+     still correctly override both when applicable. */
+  .scroll-hint {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .scroll-hint.ready {
+    opacity: 1;
+  }
+
   .home-paper {
     max-width: 1280px;
     padding: 40px 60px 0 60px;
@@ -2955,6 +2977,26 @@ ol li, ul li {
     opacity: 1;
   }
 
+  /* Desktop-only positioning base: always concrete top/left px
+     (never `bottom`, never `auto`) — see updateScrollHint /
+     captureRestingPosition in index.html, which measure this CSS
+     fallback once on load and re-apply it as an explicit inline
+     top/left. Both the resting and docked (.is-anchor) states then
+     share the same top/left properties throughout, so the dock/undock
+     transition can actually interpolate a slide instead of jumping
+     (mixing bottom+top:auto with top+bottom:auto — the previous
+     approach — can't animate through `auto` at all, which is what
+     made the paperclip teleport into place with only its rotation
+     easing). The calc() below approximates the original bottom:2rem
+     rest spot only as a pre-JS fallback. POS_TRANSITION (top/left/
+     transform) is shared by every state below so the slide always
+     animates regardless of which more-specific rule wins opacity. */
+  .scroll-hint {
+    bottom: auto;
+    top: calc(100vh - 90px - 2rem);
+    transition: opacity 0.6s ease, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
   /* Paperclip scroll-hint entrance (desktop only — mobile keeps its
      original opacity-only fade untouched). On a fresh load, .ready is
      added ~1.4s in (see cursor/sticker-drop script) once the post-it
@@ -2970,10 +3012,12 @@ ol li, ul li {
      extra "body" type selector out-specifies .scroll-hint.is-anchor
      on every fresh (non-back-nav) page load, silently overriding the
      docked rotate/translate transform back to this entrance-only
-     translateY and killing the rotation/centering entirely. */
+     translateY and killing the rotation/centering entirely. top/left
+     are included here too (not just transform) so undocking — which
+     lands back in this exact state on a fresh tab — still slides. */
   body:not(.session-loaded) .scroll-hint:not(.hidden):not(.is-anchor) {
     transform: translateY(-8px);
-    transition: opacity 0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s;
+    transition: opacity 0.5s ease-out 1.2s, transform 0.5s ease-out 1.2s, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   body:not(.session-loaded) .scroll-hint.ready:not(.hidden):not(.is-anchor) {
     transform: translateY(0);
@@ -3011,22 +3055,26 @@ ol li, ul li {
      above .playground-sticky-bar (z-index: 20). */
   .scroll-hint.is-anchor {
     bottom: auto;
-    left: 0;
     align-items: flex-start;
     animation: none;
     opacity: 0.9;
     pointer-events: auto;
     /* 180deg flips the clip's pointed tail to read as an upward
        "back to top" arrow instead of its natural hanging-down shape;
-       translate(-50%, -18%) still centers/overlaps it on the word as
-       before, applied before the rotation. */
-    transform: translate(-50%, -18%) rotate(180deg);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+       translate(-50%, 10px) centers it horizontally on the word and
+       sits it 10px *below* the word's baseline (top is already set to
+       the word's rect.bottom/zoom in JS — see updateAnchorPosition),
+       so it hangs cleanly clear of the text glyphs instead of
+       overlapping them. top/left are included in the transition (not
+       just transform/opacity) so the actual dock position slides in
+       instead of jumping while only the rotation animates. */
+    transform: translate(-50%, 10px) rotate(180deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, top 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .scroll-hint.is-anchor:hover {
     opacity: 1;
-    transform: translate(-50%, -18%) rotate(180deg) scale(1.08);
+    transform: translate(-50%, 10px) rotate(180deg) scale(1.08);
     cursor: pointer;
   }
 
