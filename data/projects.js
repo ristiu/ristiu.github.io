@@ -201,7 +201,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "The first setup isn't to design well. It's to make sure the right people understand how design brings value to the business and the team dynamic. Only then does the work land the way it should."
+            text: "As a design lead, the first setup to manage cross function collaboration is to make sure the right people understand how design brings value to the business and the team dynamic."
           },
           {
             type: "image",
@@ -243,9 +243,7 @@ const projects = [
             title: "Find shared non-work interests",
             subtitle: "",
             body: "People connect over shared interests outside of work. Bonding over food or sports builds rapport that carries into collaboration. But connection shouldn't be forced. If the personal vibe isn't there, the focus stays on high-value work conversations with people who are genuinely open.",
-            quotes: [
-              "Our stakeholders suit is so thick — they think 'collaboration' means everyone agrees with me."
-            ]
+            quotes: []
           },
           {
             type: "impact",
@@ -311,7 +309,7 @@ const projects = [
         sections: [
           {
             type: "intro",
-            text: "In leadership, the same logic applies as in design: focus on what actually moves people. For me, that comes down to three principles: Purpose, People, and Process."
+            text: "My reflection on building high performing team comes down to three principles: Purpose, People, and Process."
           },
           {
             type: "image",
