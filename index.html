@@ -139,15 +139,26 @@
     .fly-band.is-dismissed { display: none; }
     /* position:fixed (not absolute) so the banner's horizontal patrol isn't
        clipped by .paper's overflow-x:clip — it truly exits and re-enters
-       the browser window. JS keeps `top` synced to the band's scroll
-       position so it still only appears in that band of the page. */
-    .fly-banner {
+       the browser window. Vertical tracking lives here (JS writes
+       transform:translateY, never `top`) so it stays purely
+       compositor-driven; horizontal marquee lives on .fly-banner
+       inside, via its own independent transform (translateX). Splitting
+       the two axes across two elements means neither ever touches a
+       layout property, and neither's transform fights the other's. */
+    .fly-banner-vwrap {
       position: fixed;
       top: 0;
       left: 0;
+      width: 100%;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .fly-banner {
+      position: relative;
       display: none; /* JS shows this on load, unless already dismissed */
       align-items: center;
       gap: 12px;
+      pointer-events: auto;
       animation:
         fly-banner-entrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both,
         fly-banner-marquee 20s linear infinite;
@@ -297,19 +308,27 @@
 
   <!-- Flying banner band — sits between the leaf and the portfolio intro -->
   <div class="fly-band" id="fly-band">
-    <div class="fly-banner" id="fly-banner" role="complementary" aria-label="Featured on Playground">
-      <img class="fly-banner-img" src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" />
-      <img class="fly-banner-img fly-banner-img--sm" src="assets/portfolio-playground/cokies.png" alt="Fortune cookie project" />
-      <span class="fly-banner-bubble">
-        Featured on <a href="playground.html">Playground</a>
-        <button class="fly-banner-close" id="fly-banner-close" aria-label="Dismiss">✕</button>
-      </span>
+    <!-- Vertical tracking lives on this outer wrapper (JS writes only
+         transform:translateY here, see updateTop below) — horizontal
+         marquee lives on .fly-banner inside it via its own CSS
+         animation. Two elements, two transforms, so neither ever
+         fights the other or touches a layout property (top/left). -->
+    <div class="fly-banner-vwrap" id="fly-banner-vwrap">
+      <div class="fly-banner" id="fly-banner" role="complementary" aria-label="Featured on Playground">
+        <img class="fly-banner-img" src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" />
+        <img class="fly-banner-img fly-banner-img--sm" src="assets/portfolio-playground/cokies.png" alt="Fortune cookie project" />
+        <span class="fly-banner-bubble">
+          Featured on <a href="playground.html">Playground</a>
+          <button class="fly-banner-close" id="fly-banner-close" aria-label="Dismiss">✕</button>
+        </span>
+      </div>
     </div>
   </div>
   <script>
     (function () {
       const band = document.getElementById('fly-band');
       const banner = document.getElementById('fly-banner');
+      const vwrap = document.getElementById('fly-banner-vwrap');
       if (sessionStorage.getItem('flyBannerDismissed')) {
         band.classList.add('is-dismissed');
         banner.style.display = 'none';
@@ -330,9 +349,15 @@
       // scroll only updates *where* it sits vertically (following its
       // anchor band), so it never restarts or jumps mid-flight.
       banner.style.display = 'flex';
+      // translateY (transform), never `top` — top is a layout property
+      // that has to compete with the browser's own compositor-driven
+      // momentum scroll for main-thread time, which is what made this
+      // visibly lag/catch-up during fast scrolls even throttled to
+      // rAF. transform-only is compositor-side, so it can't fall
+      // behind the same way.
       function updateTop() {
         const rect = band.getBoundingClientRect();
-        banner.style.top = (rect.top + 6) + 'px';
+        vwrap.style.transform = 'translate3d(0, ' + (rect.top + 6) + 'px, 0)';
       }
       updateTop();
       // Throttle to one read/write per animation frame instead of
