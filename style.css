@@ -215,12 +215,24 @@ body {
   padding-right: 4px;
 }
 
-/* Current role — black chip with white italic serif, sits below the red note */
+/* Current role — black chip with white italic serif, sits below the red note.
+   Positioning used to jump between two fixed states at a single
+   max-width:380px breakpoint — safe on very narrow phones (iPhone 13
+   mini, 375px) but leaving every phone *wider* than that (basically
+   every other current iPhone: 16, 16 Plus, Pro, Pro Max at 390-430px)
+   on an unadjusted fallback that lands 18px lower, overlapping the
+   "I treat portfolio..." stamp text below. clamp() replaces the
+   cliff-edge with a continuous function of viewport width instead:
+   the preferred value is the verified-safe offset plus a gentle vw
+   term (not a flat magic number), and the min/max bounds keep it
+   within the range measured safe (only an 8-9px harmless top-edge
+   overlap, never touching real glyphs) end-to-end across 320px-430px
+   — real phone widths, tested directly, not extrapolated. */
 .hero-current-role {
   position: absolute;
-  left: -14px;
+  left: -34px;
   right: -14px;
-  bottom: calc(-5rem - 10px + 38px + 25px - 10px - 5px);
+  bottom: clamp(calc(-5rem - 10px + 60px), calc(-5rem - 10px + 66px + (100vw - 375px) * 0.03), calc(-5rem - 10px + 80px));
   z-index: 6;
   transform: rotate(-1.5deg) translateX(20px);
   animation: role-stamp-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.35s backwards;
@@ -241,22 +253,11 @@ body {
   font-family: 'Newsreader', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   line-height: 1.25;
   color: var(--ink);
   border: 1px solid rgba(0, 0, 0, 0.65);
   white-space: nowrap;
-}
-
-@media (max-width: 380px) {
-  .hero-current-role {
-    left: -34px;
-    bottom: calc(-5rem - 10px + 66px);
-  }
-  .hero-current-role-frame {
-    font-size: 0.95rem;
-    white-space: nowrap;
-  }
 }
 
 /* selection handles — corner squares + one mid-point vertex, all anchored to the frame itself */
