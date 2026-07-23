@@ -304,6 +304,58 @@ const projects = [
         ]
       },
       {
+        id: "empowering-individual-growth",
+        title: "Empowering Individual Growth & Career Development",
+        sections: [
+          {
+            type: "quote",
+            text: "There is a difference between motivating a team and stressing them out.",
+            author: ""
+          },
+          {
+            type: "intro",
+            text: "Individual growth doesn't happen by pushing harder. It happens when the conditions are right and the goals feel personal."
+          },
+          {
+            type: "image",
+            url: "assets/portfolio-leadership/goal-setting.jpg",
+            caption: "Empowering individual growth through goal setting rooted in personal aspiration"
+          },
+          {
+            type: "section",
+            number: "1 |",
+            title: "Growth Happens in Practice",
+            subtitle: "",
+            body: "Self-improvement requires actively applying new skills and mindsets to daily work. Real development comes from doing, reflecting, and adapting through real experiences, not just reading about them.\n\nIn practice, that looks like pairing team members with someone more expert in what they need, senior with junior, strength with weakness. And when hiring, the mindset is attracting candidates who can complement the team's existing gaps, not just add more of what's already there.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "2 |",
+            title: "Evaluate where standards are dropping before set ambitious goals",
+            subtitle: "",
+            body: "Clear, ambitious goals matter. But setting standards based on outliers sets the team up for failure. Before raising the bar, it's worth understanding where things are actually dropping first. Not everyone grows at the same pace, and that's not a problem to fix.",
+            quotes: []
+          },
+          {
+            type: "section",
+            number: "3 |",
+            title: "Establish Boundaries with Individual Goal Setting",
+            subtitle: "",
+            body: "Growth is ultimately individual responsibility. What a manager can do is keep the feedback loop active and make sure goal setting starts from personal aspiration first, then connects to the day to day work. Not everyone grows at the same pace, and that's not a problem to fix by the manager.",
+            quotes: []
+          },
+          {
+            type: "impact",
+            body: "In the yearly Pulse Check, growth scored highest at 3.5/5 across all design teams. The number matters less than what it signals. For me it meant people felt supported in moving forward at their own pace.",
+            stats: [],
+            quotes: [
+              "Risti maintains high standards for projects and team, even to herself. She's dedicated to her team's growth improvement. — Product Researcher"
+            ]
+          }
+        ]
+      },
+      {
         id: "high-performing-team",
         title: "Building High Performing Team",
         sections: [
@@ -560,58 +612,6 @@ const projects = [
             body: "Sessions open with shared goal-setting so no one is guessing what we are trying to accomplish. Then the right frameworks get curated for the room, Value vs. Effort, Hypothesis Dumping, Ideation, to focus energy on the target. During the session the work is keeping that energy pointed at outcomes, not conversations that circle. At the end, output becomes clear next steps.",
             quotes: [
               "Always love to work with the design and research team especially for design workshops. Critical thinking partner I always looked up to. — Head of Product"
-            ]
-          }
-        ]
-      },
-      {
-        id: "empowering-individual-growth",
-        title: "Empowering Individual Growth & Career Development",
-        sections: [
-          {
-            type: "quote",
-            text: "There is a difference between motivating a team and stressing them out.",
-            author: ""
-          },
-          {
-            type: "intro",
-            text: "Individual growth doesn't happen by pushing harder. It happens when the conditions are right and the goals feel personal."
-          },
-          {
-            type: "image",
-            url: "assets/portfolio-leadership/goal-setting.jpg",
-            caption: "Empowering individual growth through goal setting rooted in personal aspiration"
-          },
-          {
-            type: "section",
-            number: "1 |",
-            title: "Growth Happens in Practice",
-            subtitle: "",
-            body: "Self-improvement isn't just theory. It requires actively applying new skills and mindsets to daily work. Real development comes from doing, reflecting, and adapting through real experiences, not just reading about them.\n\nIn practice, that looks like pairing team members with someone more expert in what they need, senior with junior, strength with weakness. And when hiring, the mindset is attracting candidates who can complement the team's existing gaps, not just add more of what's already there.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "2 |",
-            title: "Evaluate where standards are dropping before set ambitious goals",
-            subtitle: "",
-            body: "Clear, ambitious goals matter. But setting standards based on outliers sets the team up for failure. Before raising the bar, it's worth understanding where things are actually dropping first. Not everyone grows at the same pace, and that's not a problem to fix.",
-            quotes: []
-          },
-          {
-            type: "section",
-            number: "3 |",
-            title: "Establish Boundaries with Individual Goal Setting",
-            subtitle: "",
-            body: "Not everyone wants to grow at the same speed, and that's okay. Growth is ultimately individual responsibility. What a manager can do is keep the feedback loop active and make sure goal setting starts from personal aspiration first, then connects to the day to day work. Not everyone grows at the same pace, and that's not a problem to fix by the manager.",
-            quotes: []
-          },
-          {
-            type: "impact",
-            body: "In the yearly Pulse Check, growth scored highest at 3.5/5 across all design teams. The number matters less than what it signals. For me it meant people felt supported in moving forward at their own pace.",
-            stats: [],
-            quotes: [
-              "Risti maintains high standards for projects and team, even to herself. She's dedicated to her team's growth improvement. — Product Researcher"
             ]
           }
         ]
