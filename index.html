@@ -312,8 +312,20 @@
         banner.style.top = (rect.top + 6) + 'px';
       }
       updateTop();
-      window.addEventListener('scroll', updateTop, { passive: true });
-      window.addEventListener('resize', updateTop);
+      // Throttle to one read/write per animation frame instead of
+      // once per scroll event (which can fire many times per frame on
+      // momentum/trackpad scroll) — the unthrottled version fought the
+      // browser's own scroll compositing and read as bumpy/janky.
+      let topRaf = null;
+      function scheduleUpdateTop() {
+        if (topRaf !== null) return;
+        topRaf = requestAnimationFrame(() => {
+          topRaf = null;
+          updateTop();
+        });
+      }
+      window.addEventListener('scroll', scheduleUpdateTop, { passive: true });
+      window.addEventListener('resize', scheduleUpdateTop);
     })();
   </script>
 

@@ -622,6 +622,18 @@ a:hover { color: var(--accent); }
   line-height: 1.65;
 }
 
+/* Browser default :visited link color (often a low-contrast reddish/
+   purple tint) otherwise beats .stack-card's own color on specificity
+   once a card's project link has actually been visited — force it
+   back to the same colors every other (unvisited) card uses. */
+.stack-card:visited,
+.stack-card:visited .stack-card-title {
+  color: var(--ink);
+}
+.stack-card:visited .stack-card-sub {
+  color: rgba(33, 33, 33, 0.72);
+}
+
 .stack-card {
   position: relative;
   display: flex;
