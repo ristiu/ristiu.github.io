@@ -149,14 +149,25 @@
       cursor: default;
       /* --tiltX/--tiltY are set on #canvas-root by the mousemove
          handler below and inherit down to every card, giving a
-         shared, subtle floating-in-3D parallax as the pointer moves. */
-      transform: rotate(var(--rot, 0deg)) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
-      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1.2);
+         shared, subtle floating-in-3D parallax as the pointer moves
+         (ambient only — cards no longer capture their own independent
+         cursor-tracked rotation on hover, that read as fidgety).
+         --cardZ is a per-card resting depth (layoutCards assigns a
+         subtle base value per column for foreground/background
+         hierarchy); hover pops it further via a plain :hover rule
+         below, no rotation involved. */
+      transform: rotate(var(--rot, 0deg)) translateZ(var(--cardZ, 0px)) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
       will-change: transform;
     }
 
     .card:hover {
-      transform: rotate(var(--rot, 0deg)) translateY(-8px) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
+      /* No independent rotation on hover — just a lift + forward Z-pop
+         + slight scale, "depth-based" rather than tilt-based. The
+         ambient rotateX/rotateY parallax keeps inheriting normally
+         (unchanged, whether hovered or not), it's just no longer
+         overridden per-card. */
+      transform: rotate(var(--rot, 0deg)) translateY(-8px) translateZ(30px) scale(1.03) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
+      box-shadow: none;
       z-index: 10;
     }
 
@@ -177,7 +188,11 @@
     /* Cards fade in on page load */
     .card {
       opacity: 0;
-      transition: opacity 0.4s ease, transform 0.35s cubic-bezier(0.2, 0, 0, 1.2), box-shadow 0.35s ease;
+      /* This rule (not the earlier .card block) is the one that
+         actually wins — same selector/specificity, later in source
+         order — so the transition lives here, consolidated in one
+         place instead of split across two same-specificity rules. */
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
     }
     .card.is-visible {
       opacity: 1;
@@ -387,16 +402,32 @@
     const isMobile = window.innerWidth < 700;
 
     // ── Column packer — desktop only ─────────────────────────────
+    // COL_X spacing (400px) is set so that even the widest card (340px,
+    // see the inline width overrides below) still clears the next
+    // column by a 60px minimum gap (400 - 340 = 60) — no two cards can
+    // ever touch horizontally, at any pan position or aspect ratio,
+    // since each column occupies a fixed, non-overlapping horizontal
+    // band. GAP (vertical, within a column) is 48px for the same
+    // reason. Depth: cards alternate a subtle base --cardZ by column
+    // (checkerboard) so they read as sitting at slightly different
+    // depths under the canvas's perspective — small enough (±10px)
+    // that perspective foreshortening never grows a card past its
+    // column's horizontal clearance.
     function layoutCards() {
       const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
-      const COL_X = [60, 400, 760, 1110];
+      const COL_X = [60, 460, 860, 1260];
       // Embedded (homepage) view gets 25px of extra breathing room below
       // the sticky Playground header bar + its drop-shadow, so the top
       // row of cards never sits flush against that edge.
       const embedOffset = document.documentElement.classList.contains('is-embedded') ? 25 : 0;
       const COL_START = [150, 90, 130, 175].map(v => v + embedOffset);
       const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13];
-      const GAP       = 32;
+      // GAP must absorb the largest |JITTER| value too, since jitter
+      // shifts a card's displayed top *after* GAP already set the
+      // next slot's baseline — 56 - 14 (max jitter) = 42px worst case,
+      // still clearing the requested 40px minimum.
+      const GAP       = 56;
+      const COL_Z     = [10, -10, 10, -10];
       const colTops = [...COL_START];
       cards.forEach((card, i) => {
         const col = parseInt(card.dataset.col) || 0;
@@ -404,6 +435,8 @@
         const top = colTops[col] + jitter;
         card.style.left = COL_X[col] + 'px';
         card.style.top  = top + 'px';
+        card.dataset.baseZ = COL_Z[col];
+        card.style.setProperty('--cardZ', COL_Z[col] + 'px');
         // Layout/composition only, per request — no static per-card
         // tilt (data-rot is intentionally ignored here; --rot stays
         // at its 0deg fallback). The mousemove rotateX/rotateY
@@ -662,7 +695,7 @@
 
       function startMomentum() {
         cancelAnimationFrame(rafId);
-        const FRICTION = 0.88;
+        const FRICTION = 0.92;
         function step() {
           if (Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) { resetTilt(); return; }
           vx *= FRICTION; vy *= FRICTION;
