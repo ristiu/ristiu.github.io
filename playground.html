@@ -400,12 +400,15 @@
       const colTops = [...COL_START];
       cards.forEach((card, i) => {
         const col = parseInt(card.dataset.col) || 0;
-        const rot = parseFloat(card.dataset.rot) || 0;
         const jitter = JITTER[i % JITTER.length];
         const top = colTops[col] + jitter;
         card.style.left = COL_X[col] + 'px';
         card.style.top  = top + 'px';
-        card.style.setProperty('--rot', rot + 'deg');
+        // Layout/composition only, per request — no static per-card
+        // tilt (data-rot is intentionally ignored here; --rot stays
+        // at its 0deg fallback). The mousemove rotateX/rotateY
+        // parallax on #canvas-root is untouched, that's a separate
+        // interaction effect, not part of the resting composition.
         colTops[col] = top + card.offsetHeight + GAP;
       });
     }
