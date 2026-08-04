@@ -180,6 +180,21 @@
         -webkit-perspective: 1000px;
         touch-action: pan-y;
       }
+      /* iOS Safari throttles/delays requestAnimationFrame during momentum
+         scroll, so the JS-driven translateY on the fixed-position vwrap
+         (used on desktop to escape .paper's overflow-x:clip) visibly lags
+         and catches up in a stutter once the fling settles. On mobile
+         .paper is already full viewport width (max-width:600px, wider
+         than any phone), so overflow-x:clip never actually clips the
+         marquee there — meaning fixed positioning buys nothing on mobile
+         but costs the rAF lag. Swap to position:sticky, which tracks
+         scroll purely on the compositor thread with zero JS involvement,
+         and is skipped entirely in the script below at this width. */
+      .fly-banner-vwrap {
+        position: sticky;
+        top: 6px;
+        transform: none !important;
+      }
     }
     /* Fast, one-time entrance: sweeps in from off-screen left to
        off-screen right quickly. Runs once, then hands off to the slow
@@ -349,6 +364,17 @@
       // scroll only updates *where* it sits vertically (following its
       // anchor band), so it never restarts or jumps mid-flight.
       banner.style.display = 'flex';
+
+      // Below 768px the CSS above switches .fly-banner-vwrap to
+      // position:sticky, which tracks scroll natively on the compositor
+      // thread. Doing that AND running this rAF-driven translateY loop
+      // at the same time is what caused the visible stutter on iOS —
+      // Safari delays/batches rAF during momentum scroll, so the JS
+      // transform lagged behind the (already correct) sticky position
+      // and then snapped to catch up. Skip the JS path entirely there.
+      const mobileQuery = window.matchMedia('(max-width: 767px)');
+      if (mobileQuery.matches) return;
+
       // translateY (transform), never `top` — top is a layout property
       // that has to compete with the browser's own compositor-driven
       // momentum scroll for main-thread time, which is what made this
