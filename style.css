@@ -1475,7 +1475,7 @@ a:hover { color: var(--accent); }
   width: 40px;
   height: 40px;
   margin: 0;
-  transform: rotate(-12deg);
+  transform: rotate(-20deg);
   z-index: 2;
 }
 
@@ -1500,10 +1500,10 @@ a:hover { color: var(--accent); }
 .leadership-quote-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   background: #ffffff;
   border-radius: 10px;
-  padding: 14px;
+  padding: 12px;
   width: 100%;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05);
   transform: rotate(-1.5deg);
@@ -1534,8 +1534,8 @@ a:hover { color: var(--accent); }
 
 .leadership-quote-portrait {
   flex-shrink: 0;
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border-radius: 8px;
   object-fit: cover;
 }
@@ -1556,7 +1556,7 @@ a:hover { color: var(--accent); }
     width: 56px;
     height: 56px;
     margin-top: 4px;
-    transform: rotate(-12deg);
+    transform: rotate(-20deg);
   }
 
   .leadership-subhero {
@@ -1569,6 +1569,10 @@ a:hover { color: var(--accent); }
     flex: 1;
   }
 
+  .leadership-subhero-col--left {
+    flex: 1.6;
+  }
+
   .leadership-subhero-content--right {
     justify-content: flex-end;
   }
@@ -1577,7 +1581,7 @@ a:hover { color: var(--accent); }
     width: 64px;
     height: 64px;
     flex-shrink: 0;
-    transform: rotate(-12deg);
+    transform: rotate(-20deg);
   }
 }
 
