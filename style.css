@@ -1454,10 +1454,9 @@ a:hover { color: var(--accent); }
 
 .leadership-subhero-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex: 1;
-  min-height: 96px;
-  margin-top: 2px;
+  margin-top: -6px;
 }
 
 .leadership-subhero-content--right {
@@ -1578,8 +1577,8 @@ a:hover { color: var(--accent); }
   }
 
   .leadership-subhero-asset {
-    width: 64px;
-    height: 64px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     transform: rotate(-20deg);
   }
