@@ -13,7 +13,7 @@
   <meta name="twitter:title" content="Case Study — Risti U, Product Designer" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,wght@0,400;0,700;1,400;1,700&family=Square+Peg&display=swap" rel="stylesheet" />
   <!-- Roboto: used only inside the before/after phone mockup UI -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <!-- Nunito Sans: used only inside the Warung Pintar picker phone mockup UI -->
@@ -1521,11 +1521,34 @@
         `;
       }).join('');
 
+      const leadershipSubheroHtml = p.id === 'leadership' ? `
+        <div class="leadership-subhero">
+          <div class="leadership-subhero-col leadership-subhero-col--left">
+            <p class="leadership-doodle-label">Reflection</p>
+            <p class="leadership-subhero-sub">That turns into framework</p>
+            <div class="leadership-subhero-content">
+              <div class="leadership-quote-card">
+                <p class="leadership-quote-text"><mark class="leadership-quote-highlight">"Life can only be understood backwards; but it must be lived forwards"</mark> was written by the Danish philosopher <span class="leadership-quote-name">Søren Kierkegaard</span>.</p>
+                <img class="leadership-quote-portrait hero-asset" src="assets/portfolio-leadership/kikegard.png" alt="Portrait of Søren Kierkegaard" width="140" height="145" loading="lazy" />
+              </div>
+            </div>
+          </div>
+          <div class="leadership-subhero-sep" aria-hidden="true">+</div>
+          <div class="leadership-subhero-col leadership-subhero-col--right">
+            <p class="leadership-doodle-label">Survey/360 Feedback</p>
+            <p class="leadership-subhero-sub">From people I work with</p>
+            <div class="leadership-subhero-content leadership-subhero-content--right">
+              <img class="leadership-subhero-asset hero-asset" src="assets/portfolio-leadership/composition-man--Streamline-Freehand.svg" alt="" aria-hidden="true" loading="lazy" />
+            </div>
+          </div>
+        </div>` : '';
+
       return `
         <div class="article-page">
-          <div class="article-header">
+          <div class="article-header${p.id === 'leadership' ? ' leadership-hero' : ''}">
             <h1 class="article-title">${p.title}</h1>
             <p class="article-company">${p.company}</p>
+            ${leadershipSubheroHtml}
           </div>
           <div class="article-stack">
             ${cardsHtml}
@@ -2604,6 +2627,13 @@
       }
 
       function applyPinState() {
+        if (window.innerWidth < 900) {
+          nav.classList.remove('is-pinned');
+          spacer.style.display = 'none';
+          nav.style.left = '';
+          nav.style.top = '';
+          return;
+        }
         const z = zoomFactor();
         if (window.scrollY + PIN_TOP >= naturalTop) {
           nav.classList.add('is-pinned');
