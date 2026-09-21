@@ -76,14 +76,12 @@
       const isBackNavigation =
         window.navigation?.activation?.navigationType === 'traverse' ||
         (navEntries.length > 0 && navEntry.type === 'back_forward');
-      const isReload = navEntries.length > 0 && navEntry.type === 'reload';
       const hasPlayed = sessionStorage.getItem('has_played_hero_animations') === 'true';
 
-      // Manual refresh always replays the full sequence cleanly, even
-      // if the flag was already set from an earlier load in this tab.
-      if (isReload) sessionStorage.removeItem('has_played_hero_animations');
-
-      if (isBackNavigation || (hasPlayed && !isReload)) {
+      // Once the intro has played in this tab, any return (back/forward
+      // or a manual reload) lands on the settled state. A fresh tab or
+      // window starts the session over, so it plays again there.
+      if (isBackNavigation || hasPlayed) {
         // Existing CSS (html.is-back-nav) already gates the hero/post-it
         // and folder-stack entrance — these are the body-level
         // counterparts from the same detection, kept in sync.
@@ -114,11 +112,18 @@
     // browser already cross-fades the whole page natively across the
     // navigation itself, so this JS fallback would just double up on
     // top of it instead of smoothing anything further.
-    if (document.body.classList.contains('session-loaded') && !document.startViewTransition) {
+    // Exception: a manual reload. View Transitions never run on reload,
+    // and the intro is skipped once it has played, so without this the
+    // page would repaint instantly and the refresh would feel like
+    // nothing happened. The short fade is the feedback.
+    const isReload = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+    if (document.body.classList.contains('session-loaded') && (!document.startViewTransition || isReload)) {
       document.body.classList.add('js-fade-fallback');
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        document.body.classList.add('page-fade-in');
-      }));
+      // rAF is paused while a tab is in the background; the timeout
+      // guarantees the page still becomes visible if that's the case.
+      const reveal = () => document.body.classList.add('page-fade-in');
+      requestAnimationFrame(() => requestAnimationFrame(reveal));
+      setTimeout(reveal, 120);
     }
   </script>
   <div id="terminal-cursor" class="js-terminal-cursor" aria-hidden="true"></div>

@@ -3336,13 +3336,6 @@ ol li, ul li {
      re-positions mid-fade. body.page-fade-in is added via a
      double-rAF in the inline <body> script so the initial opacity:0
      actually paints before the transition starts. */
-  body.js-fade-fallback #main-content {
-    opacity: 0;
-    transition: opacity 0.35s ease-out;
-  }
-  body.js-fade-fallback.page-fade-in #main-content {
-    opacity: 1;
-  }
 
   /* Trap trackpad swipe/scroll strictly inside the canvas so it can't
      bubble up into the browser's native back/forward navigation
@@ -3404,3 +3397,15 @@ ol li, ul li {
 
 /* ─── Responsive tweaks ──────────────────────────────────── */
 /* font size stays consistent across all viewports */
+
+/* Whole-page cross-fade on a back/forward return (browsers without View
+   Transitions) and on every manual reload. Lives outside the desktop
+   media query on purpose: a reload on a phone needs the same feedback.
+   Only #main-content's opacity animates, so nothing shifts mid-fade. */
+body.js-fade-fallback #main-content {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
+body.js-fade-fallback.page-fade-in #main-content {
+  opacity: 1;
+}
