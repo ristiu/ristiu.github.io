@@ -114,17 +114,6 @@ body {
   transform: rotate(12deg) translateY(-4px) scale(1.02);
 }
 
-/* sticker peel corner */
-.hero-note-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, transparent 49%, rgba(0,0,0,0.08) 50%, #ffffff 51%);
-}
-
 .hero-card--note {
   background: var(--accent);
   color: #ffffff;
@@ -303,6 +292,49 @@ body {
 .hero-note-bold {
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Live status dot in the hero greeting */
+.hero-live-dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: #ffffff;
+  vertical-align: middle;
+  margin: 0 0.1em;
+  position: relative;
+  top: -0.05em;
+  animation: hero-live-pulse 2.2s ease-in-out infinite;
+}
+@keyframes hero-live-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
+  50%      { box-shadow: 0 0 0 0.35em rgba(255, 255, 255, 0); }
+}
+/* Location pin in the hero greeting, sized to the text */
+.hero-pin {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.95em;
+  vertical-align: -0.12em;
+  margin: 0 0.05em;
+}
+
+/* Status dot on the chip: accent-coloured so it reads on the pale frame,
+   with a wider, brighter ring and a small beat so it catches the eye. */
+.hero-live-dot--ink {
+  width: 0.6em;
+  height: 0.6em;
+  background: var(--accent);
+  animation: hero-live-pulse-accent 1.8s ease-out infinite;
+}
+@keyframes hero-live-pulse-accent {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 94, 50, 0.85); transform: scale(1); }
+  45%  { transform: scale(1.18); }
+  100% { box-shadow: 0 0 0 0.9em rgba(255, 94, 50, 0); transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-live-dot, .hero-live-dot--ink { animation: none; }
 }
 
 .hero-note-divider {
@@ -2739,8 +2771,19 @@ ol li, ul li {
 }
 
 /* Hidden by default (mobile); shown desktop-only below. */
-.home-cards-play-illustration {
+.home-cards-play {
   display: none;
+  margin: 0;
+}
+.home-cards-play-illustration { display: block; }
+.home-last-update {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: #C2CCBE; /* eFishery folder sage */
+  text-align: center;
+  /* play.png carries empty space under the grass; pull the caption up into it */
+  margin-top: -14px;
 }
 
 /* Intro paperclip overlays — desktop only (see media query below).
@@ -3204,13 +3247,16 @@ ol li, ul li {
   /* Standalone breathing-room row between the action links and the
      Playground section — its own grid row ("playimg"), centered with
      generous whitespace above and below, matching the reference. */
-  .home-cards-play-illustration {
+  .home-cards-play {
     display: block;
     grid-area: playimg;
     justify-self: center;
+    margin: 48px 0;
+  }
+  .home-cards-play-illustration {
     width: auto;
     max-height: 170px;
-    margin: 48px 0;
+    margin: 0 auto;
   }
 
   /* ── Fresh-load entrance fade-in (bio, action links, Playground
@@ -3220,7 +3266,7 @@ ol li, ul li {
   .home-bio,
   .home-footer,
   .home-playground .playground-sticky-bar,
-  .home-cards-play-illustration {
+  .home-cards-play {
     opacity: 0;
     transform: translateY(15px);
     animation: home-fade-in 0.6s ease 2.6s forwards;
@@ -3234,7 +3280,7 @@ ol li, ul li {
   html.is-back-nav .home-bio,
   html.is-back-nav .home-footer,
   html.is-back-nav .home-playground .playground-sticky-bar,
-  html.is-back-nav .home-cards-play-illustration {
+  html.is-back-nav .home-cards-play {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -3270,7 +3316,7 @@ ol li, ul li {
   body.session-loaded .home-bio,
   body.session-loaded .home-footer,
   body.session-loaded .home-playground .playground-sticky-bar,
-  body.session-loaded .home-cards-play-illustration {
+  body.session-loaded .home-cards-play {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;

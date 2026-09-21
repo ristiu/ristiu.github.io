@@ -297,12 +297,12 @@
         <div class="hero-text">
           <p>
             <span class="hello-word"><span class="hello-letter">H</span><span class="hello-letter">e</span><span class="hello-letter">l</span><span class="hello-letter">l</span><span class="hello-letter">o</span></span>, I'm Risti!
+            Currently <svg class="hero-pin" viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1C3.5 1 1.6 2.9 1.6 5.4c0 3.3 4.4 7.6 4.4 7.6s4.4-4.3 4.4-7.6C10.4 2.9 8.5 1 6 1z" fill="currentColor"/><circle cx="6" cy="5.4" r="1.7" fill="#FF5E32"/></svg> <strong class="hero-note-bold">Fractional UX Lead</strong> at <strong class="hero-note-bold">Context Labs</strong>
           </p>
-          <h1 style="margin-bottom:0.75rem;line-height:1.65">To me design is contextual and taste is practiced</h1>
           <svg class="hero-note-divider" viewBox="0 0 120 10" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2,5 C8,3.5 14,7 22,4.5 C30,2 38,6.5 46,5 C54,3.5 60,7.5 70,4 C79,1 88,7 98,5.5 C106,4 113,6 118,5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
           </svg>
-          <p class="hero-note-sub">In the past 10+ years, I've:</p>
+          <h1 style="margin-bottom:0.75rem;line-height:1.65">To me design is contextual and taste is practiced. <span class="hero-note-sub">In the past 10+ years, I've:</span></h1>
           <ul class="hero-note-list">
             <li>contributed to multinationals across APAC, UK, and Japan reaching 35M MAU</li>
             <li>helped early-stage startups find product market fit</li>
@@ -313,7 +313,7 @@
         <img class="hero-stamp-bg" src="assets/stamp.svg" alt="" aria-hidden="true" />
         <p class="hero-stamp-text">I treat portfolio as a trailer, not the full film.</p>
       </div>
-      <p class="hero-current-role"><span class="hero-current-role-frame">Currently Fractional UX Lead at Context Labs<span class="handle handle--tr" aria-hidden="true"></span><span class="handle handle--bl" aria-hidden="true"></span><span class="handle handle--top" aria-hidden="true"></span></span></p>
+      <p class="hero-current-role"><span class="hero-current-role-frame"><span class="hero-live-dot hero-live-dot--ink" aria-hidden="true"></span> Open for new opportunity &amp; collaboration<span class="handle handle--tr" aria-hidden="true"></span><span class="handle handle--bl" aria-hidden="true"></span><span class="handle handle--top" aria-hidden="true"></span></span></p>
 
     </div>
     <div class="illustration-group" style="opacity:0;transform:translateY(18px) scale(0.97);transition:opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);">
@@ -413,7 +413,10 @@
 
     <!-- Sits in its own grid row between the action links and the
          Playground section — see .home-grid's "playimg" row. -->
-    <img class="home-cards-play-illustration" src="assets/portfolio/play.png" alt="" aria-hidden="true" />
+    <figure class="home-cards-play">
+      <img class="home-cards-play-illustration" src="assets/portfolio/play.png" alt="" aria-hidden="true" />
+      <figcaption class="home-last-update">Last update in <time id="last-update" datetime="2026-09-21">21/09/26</time></figcaption>
+    </figure>
 
     <!-- AI + analog -->
     <section class="section home-playground" data-track="playground_mention">
@@ -506,7 +509,32 @@
 
   <script src="data/projects.js"></script>
   <script src="cursor.js"></script>
-  <script src="data/projects.js"></script>
+  <script>
+    // "Last update" caption: the HTML carries a baked date as a fallback,
+    // then the real latest-commit date is pulled from GitHub. Unauthenticated
+    // API calls are rate-limited per IP (60/hr), plenty for a portfolio;
+    // on any failure the baked date simply stays.
+    (function () {
+      var el = document.getElementById('last-update');
+      if (!el || !window.fetch) return;
+      fetch('https://api.github.com/repos/ristiu/ristiu.github.io/commits/main', {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          var iso = data && data.commit && data.commit.committer && data.commit.committer.date;
+          if (!iso) return;
+          var d = new Date(iso);
+          if (isNaN(d)) return;
+          var dd = String(d.getDate()).padStart(2, '0');
+          var mm = String(d.getMonth() + 1).padStart(2, '0');
+          var yy = String(d.getFullYear()).slice(-2);
+          el.textContent = dd + '/' + mm + '/' + yy;
+          el.setAttribute('datetime', iso.slice(0, 10));
+        })
+        .catch(function () {});
+    })();
+  </script>
   <script>
     // Sticker drop → hover wobble
     (function() {
