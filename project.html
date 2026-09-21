@@ -3104,20 +3104,21 @@
       el('text', { 'class': 'rvm-hub-label', x: HUB.x, y: HUB.y + 38, 'text-anchor': 'middle' }, hub).textContent = 'NEGATIVE';
 
       // Size the map, then scroll the window so the focused (Check-In)
-      // bubble starts dead centre. Padding around the SVG lets it be
-      // scrolled far enough that edge nodes can reach the middle too.
+      // bubble starts as close to centre as the map's own edges allow.
+      // Only a sliver of padding around the SVG, so panning stops at the
+      // map instead of running into blank space.
       var scroller = svg.parentElement;
       var win = scroller.parentElement;
       var FOCUS = TREE.filter(function (c) { return c.focus; })[0] || HUB;
-      var VB_W = 840;
+      var VB_W = 840, PAD = 50;
       function rvmFit() {
         var fw = win.clientWidth, fh = win.clientHeight;
         var w = Math.max(fw * 1.05, 560);
         var s = w / VB_W;
         svg.style.width = w + 'px';
-        svg.style.margin = (fh / 2) + 'px ' + (fw / 2) + 'px';
-        scroller.scrollLeft = FOCUS.x * s;
-        scroller.scrollTop = FOCUS.y * s;
+        svg.style.margin = PAD + 'px';
+        scroller.scrollLeft = PAD + FOCUS.x * s - fw / 2;
+        scroller.scrollTop = PAD + FOCUS.y * s - fh / 2;
       }
       rvmFit();
       window.addEventListener('resize', rvmFit);
