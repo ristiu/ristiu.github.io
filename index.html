@@ -313,7 +313,7 @@
         <img class="hero-stamp-bg" src="assets/stamp.svg" alt="" aria-hidden="true" />
         <p class="hero-stamp-text">I treat portfolio as a trailer, not the full film.</p>
       </div>
-      <p class="hero-current-role"><span class="hero-current-role-frame"><span class="hero-live-dot hero-live-dot--ink" aria-hidden="true"></span> Open for new opportunity &amp; collaboration<span class="handle handle--tr" aria-hidden="true"></span><span class="handle handle--bl" aria-hidden="true"></span><span class="handle handle--top" aria-hidden="true"></span></span></p>
+      <p class="hero-current-role"><span class="hero-current-role-frame"><span class="hero-live-dot hero-live-dot--ink" aria-hidden="true"></span> Open to new opportunities &amp; collaboration<span class="handle handle--tr" aria-hidden="true"></span><span class="handle handle--bl" aria-hidden="true"></span><span class="handle handle--top" aria-hidden="true"></span></span></p>
 
     </div>
     <div class="illustration-group" style="opacity:0;transform:translateY(18px) scale(0.97);transition:opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);">
@@ -415,7 +415,7 @@
          Playground section — see .home-grid's "playimg" row. -->
     <figure class="home-cards-play">
       <img class="home-cards-play-illustration" src="assets/portfolio/play.png" alt="" aria-hidden="true" />
-      <figcaption class="home-last-update">Last update in <time id="last-update" datetime="2026-09-21">21/09/26</time></figcaption>
+      <figcaption class="home-last-update">Last update: <time id="last-update" datetime="2026-09-21">21/09/2026</time></figcaption>
     </figure>
 
     <!-- AI + analog -->
@@ -528,7 +528,7 @@
           if (isNaN(d)) return;
           var dd = String(d.getDate()).padStart(2, '0');
           var mm = String(d.getMonth() + 1).padStart(2, '0');
-          var yy = String(d.getFullYear()).slice(-2);
+          var yy = String(d.getFullYear());
           el.textContent = dd + '/' + mm + '/' + yy;
           el.setAttribute('datetime', iso.slice(0, 10));
         })
