@@ -1088,6 +1088,12 @@ a:hover { color: var(--accent); }
   margin-top: 3rem;
   margin-left: -1.25rem;
 }
+/* Below the desktop grid the links sit in the normal text column, flush
+   with the bio paragraph. (Declared after the base rule on purpose: the
+   earlier max-width:599px override loses the cascade to it.) */
+@media (max-width: 1023px) {
+  .footer-links { margin-left: 0; }
+}
 
 .footer-action {
   display: inline-flex;
