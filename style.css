@@ -753,6 +753,10 @@ a:hover { color: var(--accent); }
   margin-bottom: 6px;
   position: relative;
   z-index: 3;
+  /* Keeps the title clear of the discipline tag in the top-right corner.
+     Sized to the widest tag ("Design Consulting", 138px) plus a gap. The
+     leadership card's title ran 28px under its chip without this. */
+  padding-right: 150px;
 }
 
 .stack-card-sub {
@@ -767,6 +771,42 @@ a:hover { color: var(--accent); }
 
 .stack-card:hover .stack-card-sub {
   color: var(--ink);
+}
+
+/* Discipline tag, top-right of each folder.
+
+   Absolutely positioned on purpose. The folders overlap by around 160px
+   and only the top strip of each one is visible, so anything added in flow
+   under the subtitle would push it down into the strip the next folder
+   covers. Pinned to the corner it costs no height at all.
+
+   Transparent fill with a hairline border rather than a filled chip: the
+   folders come in six colours and turn into their own --folder-color on
+   hover, and a filled chip would need a colour that works on all of them.
+   A border in the ink does. Colour states mirror .stack-card-sub so the
+   two read as one piece of secondary text. */
+.stack-card-tag {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  z-index: 3;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(33, 33, 33, 0.72);
+  border: 1px solid rgba(33, 33, 33, 0.28);
+  border-radius: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.stack-card:hover .stack-card-tag,
+.stack-card.is-tapped .stack-card-tag,
+.stack-card.is-visited .stack-card-tag {
+  color: var(--ink);
+  border-color: rgba(33, 33, 33, 0.5);
 }
 
 /* Mobile tap — mirrors the hover color state */
@@ -904,6 +944,60 @@ a:hover { color: var(--accent); }
 
 @media (max-width: 599px) {
   .stack-card { width: var(--card-w, 100%); }
+
+  /* ── Folder overlap on a phone ──
+     The folders overlap by 158 to 168px on desktop, leaving a 67 to 77px
+     strip of each. That strip is not all usable: the NEXT folder's logo tab
+     sticks 24px up above its card, so the real cover line is 43 to 53px
+     down. On a phone every title wraps to two lines and the subtitle then
+     lands at 58 to 70px, which is under the tab on every card but the top
+     one. Measured clearances were -18, -5, -15, -5 and +4px.
+
+     -130 gives a 105px strip and puts the tab at 81px: 11px clear of the
+     deepest subtitle, 23px clear of the rest. The first folder keeps its
+     own 34px top margin, which is why this skips :first-of-type. */
+  .stack-card:not(:first-of-type) {
+    margin-top: -130px;
+  }
+
+  /* ── One gutter, not two ──
+     .page is max-width 340 with 1.25rem of side padding. On a 375px screen
+     the box already centres with 17.5px of margin, so the padding doubled
+     the gutter to 35px and left text only 305px wide. Padding goes; the box
+     shrinks on screens narrower than 340 + gutter so small phones keep the
+     same 17.5px edge they had. The three elements that used a matching
+     negative margin to break out past that padding lose it too, so they
+     stay exactly where they were rather than overshooting to the screen
+     edge. */
+  .page {
+    width: min(340px, calc(100% - 2.5rem));
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .analog-strip,
+  .section--stack {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .footer-links {
+    margin-left: 0;
+  }
+
+  /* The chip steps down on a phone, and the title gives up less width to
+     it. At the desktop 150px reservation a 345px card left titles only
+     163px, and "Shaping Omni-channel Product Vision" wrapped to three
+     lines, pushing its subtitle under the next folder. At 8px the widest
+     chip is about 104px, so 116 clears it and leaves titles 201px, which
+     keeps every one of them to two lines. */
+  .stack-card-tag {
+    top: 9px;
+    right: 12px;
+    font-size: 8px;
+    padding: 3px 5px;
+  }
+  .stack-card-title {
+    padding-right: 116px;
+  }
 }
 
 @media (min-width: 600px) {
