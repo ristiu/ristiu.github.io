@@ -647,30 +647,52 @@
       tx = window.innerWidth  / 2 - canvasCenterX;
       ty = window.innerHeight / 2 - canvasCenterY;
 
-      // Zoom-from-far entrance
-      const finalScale = scale, finalTx = tx, finalTy = ty;
-      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-      const startScale = finalScale * 0.22;
-      tx = cx - (cx - finalTx) * (startScale / finalScale);
-      ty = cy - (cy - finalTy) * (startScale / finalScale);
-      scale = startScale;
-
-      root.style.opacity = '0';
-      root.style.transition = 'none';
-      applyTransform();
+      // Embedded on the homepage: the homepage sets this flag once its
+      // intro has played in this tab (same origin, so sessionStorage is
+      // shared). A reload or return then lands the canvas settled
+      // instead of zooming in from far again, matching the parent page.
+      // Standalone playground.html always plays its entrance.
+      let settled = false;
+      if (isEmbedded) {
+        try { settled = sessionStorage.getItem('has_played_hero_animations') === 'true'; } catch (e) {}
+      }
 
       root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
 
-      setTimeout(() => {
-        root.style.opacity = '1';
-        root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
-        scale = finalScale; tx = finalTx; ty = finalTy;
+      if (settled) {
+        root.style.transition = 'none';
         applyTransform();
-        root.addEventListener('transitionend', () => {
-          root.style.transition = '';
-          root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
-        }, { once: true });
-      }, 100);
+        root.style.opacity = '1';
+        root.querySelectorAll('.card').forEach(card => {
+          card.style.transition = 'none';
+          card.classList.add('is-visible');
+          // Re-enable transitions next frame so hover lift still animates.
+          requestAnimationFrame(() => { card.style.transition = ''; });
+        });
+      } else {
+        // Zoom-from-far entrance
+        const finalScale = scale, finalTx = tx, finalTy = ty;
+        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        const startScale = finalScale * 0.22;
+        tx = cx - (cx - finalTx) * (startScale / finalScale);
+        ty = cy - (cy - finalTy) * (startScale / finalScale);
+        scale = startScale;
+
+        root.style.opacity = '0';
+        root.style.transition = 'none';
+        applyTransform();
+
+        setTimeout(() => {
+          root.style.opacity = '1';
+          root.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1)';
+          scale = finalScale; tx = finalTx; ty = finalTy;
+          applyTransform();
+          root.addEventListener('transitionend', () => {
+            root.style.transition = '';
+            root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
+          }, { once: true });
+        }, 100);
+      }
 
       // Pan with momentum
       function stopMomentum() {
