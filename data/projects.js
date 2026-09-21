@@ -60,7 +60,7 @@ const projects = [
 
     heroImage: "assets/portfolio/traveloka-hero.mp4",
     sectionImages: [
-      { url: "assets/portfolio/before-after-hotel.jpg", section: "situation" },
+      { url: "assets/portfolio/before-after-hotel.jpg", section: "direction", afterPara: 0 },
       { url: "assets/portfolio/tvlk-fellow.jpg", section: "whatShifted" },
     ]
   },

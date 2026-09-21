@@ -814,6 +814,101 @@
     .pdc-dot, .pdc-band, .pdc-trend { transition: none !important; }
   }
 
+  /* ── Review theme mind map (price-perception / Traveloka case study) ──
+     Radial tree of negative hotel review themes. Nodes and connectors are
+     generated in JS from a data list; this only styles them. Entrance is a
+     staggered draw-in (connectors via pathLength=1 dash, nodes via scale)
+     triggered on scroll-in. The Check-In branch is highlighted in the
+     site accent; every other branch sits lighter. No frame, no interaction. */
+  .rvm-section { margin: 20px 0; }
+  /* A fixed-height window onto the map that pans in both directions
+     (touch or trackpad). JS sizes the SVG and sets the initial scroll so
+     Check-In starts centred; the fade lives on the outer .rvm-window so
+     it stays put while the inner .rvm-scroll moves underneath it. */
+  .rvm-window {
+    position: relative;
+    height: 380px;
+    overflow: hidden;
+  }
+  .rvm-window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to right,  #ffffff 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, #ffffff 100%),
+      linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 22%, rgba(255,255,255,0) 78%, #ffffff 100%);
+  }
+  .rvm-scroll {
+    height: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rvm-scroll::-webkit-scrollbar { display: none; }
+  .rvm-svg { display: block; height: auto; }
+  @media (max-width: 640px) {
+    .rvm-window { height: 320px; }
+  }
+  .rvm-link {
+    fill: none;
+    stroke: #7b89a6;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.7s cubic-bezier(.4,.05,.2,1), stroke 0.3s ease, opacity 0.35s ease;
+    transition-delay: var(--d, 0s), 0s, 0s;
+  }
+  .rvm-link--trunk { stroke-width: 4; }
+  .rvm-node {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.55s cubic-bezier(.34,1.56,.64,1), opacity 0.3s ease;
+    transition-delay: var(--d, 0s);
+  }
+  .rvm-node circle {
+    fill: #7b89a6;
+    stroke: #ffffff;
+    stroke-width: 3;
+  }
+  .rvm-node text {
+    font-family: var(--mono);
+    font-size: 15px;
+    fill: #5b667a;
+  }
+  .rvm-node--cat text { font-size: 17px; }
+  .rvm-floater { animation: rvm-float var(--fdur, 5s) ease-in-out var(--fd, 0s) infinite; }
+  @keyframes rvm-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+  .rvm-hub .rvm-hub-ring { fill: #ffffff; stroke: #7b89a6; stroke-width: 3; }
+  .rvm-hub .rvm-hub-dash { stroke: #7b89a6; stroke-width: 3; stroke-linecap: round; }
+  .rvm-hub .rvm-hub-pill { fill: #7b89a6; }
+  .rvm-hub .rvm-hub-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    fill: #ffffff;
+  }
+  .rvm-svg.is-drawn .rvm-link { stroke-dashoffset: 0; }
+  .rvm-svg.is-drawn .rvm-node { transform: scale(1); opacity: 1; }
+  /* Static focus: the Check-In branch carries the site accent, the rest
+     sits lighter so the eye lands on it first. */
+  .rvm-branch:not(.is-active) { opacity: 0.38; }
+  .rvm-branch.is-active .rvm-node circle { fill: var(--accent, #FF5E32); }
+  .rvm-branch.is-active .rvm-link { stroke: var(--accent, #FF5E32); }
+  .rvm-branch.is-active .rvm-node text { fill: var(--ink, #212121); }
+  @media (prefers-reduced-motion: reduce) {
+    .rvm-link, .rvm-node { transition: none !important; }
+    .rvm-floater { animation: none; }
+  }
+
   /* ── Google Trends embed (product-trends / Casio case study) ── */
   .gt-frame {
     position: relative;
@@ -2254,6 +2349,17 @@
           </div>
         </section>`;
 
+      // Negative review theme mind map — price-perception (Traveloka) only.
+      // Nodes/connectors are built in JS at the bottom of the page.
+      const reviewMapHtml = p.id !== 'price-perception' ? '' : `
+        <div class="rvm-section" aria-label="Negative hotel review themes">
+          <div class="rvm-window">
+            <div class="rvm-scroll">
+              <svg class="rvm-svg" viewBox="0 0 840 830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mind map of negative hotel review themes branching out from a central NEGATIVE node, with the Check-In branch highlighted"></svg>
+            </div>
+          </div>
+        </div>`;
+
       // Service prototyping stage stepper — warehouse-logistics only
       const wpStepperHtml = p.id !== 'warehouse-logistics' ? '' : `
         <section class="ba-section" aria-label="Service prototyping test stages">
@@ -2435,6 +2541,7 @@
           ${sectionPhotosAfter('situation', 0)}
           ${p.insight ? p.insight.split('\n\n').map(para => `<p>${para}</p>`).join('') : ''}
           ${chartHtml}
+          ${reviewMapHtml}
           ${sectionPhotos('situation')}
         </div>` : '';
 
@@ -2870,6 +2977,157 @@
           entries.forEach(function (e) { if (e.isIntersecting) { play(); io.disconnect(); } });
         }, { threshold: 0.2 });
         io.observe(section);
+      } else {
+        play();
+      }
+    })();
+  </script>
+  <script>
+    // Negative review theme mind map — price-perception (Traveloka) only
+    (function () {
+      var svg = document.querySelector('.rvm-svg');
+      if (!svg) return;
+      var NS = 'http://www.w3.org/2000/svg';
+
+      // Positions are hand-placed in an 800x800 box to mirror the source
+      // diagram's composition. lp = label placement relative to the bubble.
+      var HUB = { x: 560, y: 300 };
+      var TREE = [
+        { label: 'Cleanliness', x: 230, y: 170, r: 52, lp: 'right', ldy: -28, kids: [
+          { label: 'Dirty\nBathroom', x: 150, y: 65,  r: 28, lp: 'left' },
+          { label: 'Towels',         x: 215, y: 50,  r: 24, lp: 'above' },
+          { label: 'Dirty\nToilet',  x: 280, y: 70,  r: 22, lp: 'right' },
+          { label: 'Dirty\nCarpet',  x: 125, y: 125, r: 24, lp: 'left' },
+          { label: 'Bad\nSmells',    x: 90,  y: 180, r: 26, lp: 'left' },
+          { label: 'Looks\nRundown', x: 135, y: 225, r: 26, lp: 'below' },
+          { label: 'Dirty\nWalls',   x: 180, y: 280, r: 22, lp: 'below' },
+          { label: 'Broken\nDoors',  x: 245, y: 285, r: 26, lp: 'below' }
+        ]},
+        { label: 'Check-In', x: 440, y: 310, r: 44, lp: 'left', focus: true, kids: [
+          { label: 'Not\nAccommodating', x: 385, y: 235, r: 32, lp: 'above' },
+          { label: 'Inefficient',       x: 355, y: 370, r: 40, lp: 'below' }
+        ]},
+        { label: 'Unexpected\nCosts', x: 525, y: 395, r: 24, lp: 'below' },
+        { label: 'WiFi', x: 530, y: 130, r: 32, lp: 'below', kids: [
+          { label: 'Not\nFree',                x: 470, y: 115, r: 26, lp: 'above' },
+          { label: 'Not Available\nin Lobby',  x: 525, y: 70,  r: 22, lp: 'above' }
+        ]},
+        { label: 'Coffee',           x: 680, y: 60,  r: 24, lp: 'above' },
+        { label: 'Poor\nLighting',   x: 600, y: 180, r: 26, lp: 'right' },
+        { label: 'Uncomfortable\nBed', x: 765, y: 150, r: 28, lp: 'above' },
+        { label: 'Shower\n(No Hot Water)', x: 755, y: 325, r: 40, lp: 'below' },
+        { label: 'Pool', x: 625, y: 455, r: 26, lp: 'right', kids: [
+          { label: 'Cold',   x: 585, y: 505, r: 26, lp: 'below' },
+          { label: 'Closed', x: 675, y: 510, r: 26, lp: 'below' }
+        ]},
+        { label: 'Noise', x: 330, y: 605, r: 54, lp: 'above', kids: [
+          { label: 'Cannot\nSleep', x: 230, y: 580, r: 30, lp: 'above' },
+          { label: 'Street',        x: 240, y: 665, r: 30, lp: 'below' },
+          { label: 'AC',            x: 300, y: 710, r: 24, lp: 'below' },
+          { label: 'Too\nLoud',     x: 375, y: 710, r: 30, lp: 'below' }
+        ]},
+        { label: 'Accessibility', x: 740, y: 655, r: 44, lp: 'above', kids: [
+          { label: 'Different\nRoom', x: 680, y: 700, r: 26, lp: 'left' },
+          { label: 'Too Far\nTo Walk', x: 715, y: 745, r: 24, lp: 'left' },
+          { label: 'Elevator',        x: 785, y: 745, r: 22, lp: 'below' }
+        ]}
+      ];
+
+      function el(name, attrs, parent) {
+        var n = document.createElementNS(NS, name);
+        for (var k in attrs) n.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(n);
+        return n;
+      }
+
+      // Gentle curve from a -> b, bowing perpendicular to the line.
+      function curve(a, b, bow) {
+        var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        var dx = b.x - a.x, dy = b.y - a.y;
+        var len = Math.sqrt(dx * dx + dy * dy) || 1;
+        var cx = mx - (dy / len) * bow, cy = my + (dx / len) * bow;
+        return 'M' + a.x + ',' + a.y + ' Q' + cx + ',' + cy + ' ' + b.x + ',' + b.y;
+      }
+
+      function addLabel(g, node) {
+        var lines = node.label.split('\n');
+        var lh = 18, x = node.x + (node.ldx || 0), y, anchor;
+        if (node.lp === 'above') {
+          anchor = 'middle'; y = node.y - node.r - 8 - (lines.length - 1) * lh;
+        } else if (node.lp === 'below') {
+          anchor = 'middle'; y = node.y + node.r + 17;
+        } else if (node.lp === 'left') {
+          anchor = 'end'; x = node.x - node.r - 8; y = node.y + 5 - ((lines.length - 1) * lh) / 2;
+        } else {
+          anchor = 'start'; x = node.x + node.r + 8; y = node.y + 5 - ((lines.length - 1) * lh) / 2;
+        }
+        y += node.ldy || 0;
+        var t = el('text', { x: x, y: y, 'text-anchor': anchor }, g);
+        lines.forEach(function (line, i) {
+          el('tspan', { x: x, dy: i === 0 ? 0 : lh }, t).textContent = line;
+        });
+      }
+
+      function addNode(parent, node, cls, delay) {
+        var g = el('g', { 'class': 'rvm-node ' + cls }, parent);
+        g.style.setProperty('--d', delay + 'ms');
+        var f = el('g', { 'class': 'rvm-floater' }, g);
+        f.style.setProperty('--fdur', (4 + Math.random() * 3).toFixed(1) + 's');
+        f.style.setProperty('--fd', (-Math.random() * 5).toFixed(1) + 's');
+        el('circle', { cx: node.x, cy: node.y, r: node.r }, f);
+        addLabel(f, node);
+        return g;
+      }
+
+      TREE.forEach(function (cat, i) {
+        var b = el('g', { 'class': 'rvm-branch' + (cat.focus ? ' is-active' : '') }, svg);
+        var t0 = 250 + i * 70;
+        var trunk = el('path', { 'class': 'rvm-link rvm-link--trunk', d: curve(HUB, cat, 22), pathLength: 1 }, b);
+        trunk.style.setProperty('--d', t0 + 'ms');
+        // All connectors first, then bubbles, so no line paints over a circle.
+        (cat.kids || []).forEach(function (kid, j) {
+          var link = el('path', { 'class': 'rvm-link', d: curve(cat, kid, 6), pathLength: 1 }, b);
+          link.style.setProperty('--d', (t0 + 650 + j * 60) + 'ms');
+        });
+        addNode(b, cat, 'rvm-node--cat', t0 + 350);
+        (cat.kids || []).forEach(function (kid, j) {
+          addNode(b, kid, '', t0 + 900 + j * 60);
+        });
+      });
+
+      // Hub drawn last so it sits on top of trunk starts.
+      var hub = el('g', { 'class': 'rvm-node rvm-hub' }, svg);
+      hub.style.setProperty('--d', '0ms');
+      el('circle', { 'class': 'rvm-hub-ring', cx: HUB.x, cy: HUB.y, r: 14 }, hub);
+      el('line', { 'class': 'rvm-hub-dash', x1: HUB.x - 6, y1: HUB.y, x2: HUB.x + 6, y2: HUB.y }, hub);
+      el('rect', { 'class': 'rvm-hub-pill', x: HUB.x - 48, y: HUB.y + 22, width: 96, height: 24, rx: 3 }, hub);
+      el('text', { 'class': 'rvm-hub-label', x: HUB.x, y: HUB.y + 38, 'text-anchor': 'middle' }, hub).textContent = 'NEGATIVE';
+
+      // Size the map, then scroll the window so the focused (Check-In)
+      // bubble starts dead centre. Padding around the SVG lets it be
+      // scrolled far enough that edge nodes can reach the middle too.
+      var scroller = svg.parentElement;
+      var win = scroller.parentElement;
+      var FOCUS = TREE.filter(function (c) { return c.focus; })[0] || HUB;
+      var VB_W = 840;
+      function rvmFit() {
+        var fw = win.clientWidth, fh = win.clientHeight;
+        var w = Math.max(fw * 1.05, 560);
+        var s = w / VB_W;
+        svg.style.width = w + 'px';
+        svg.style.margin = (fh / 2) + 'px ' + (fw / 2) + 'px';
+        scroller.scrollLeft = FOCUS.x * s;
+        scroller.scrollTop = FOCUS.y * s;
+      }
+      rvmFit();
+      window.addEventListener('resize', rvmFit);
+
+      function play() { svg.classList.add('is-drawn'); }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { play(); io.disconnect(); } });
+        }, { threshold: 0.25 });
+        io.observe(win);
       } else {
         play();
       }
