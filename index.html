@@ -326,7 +326,16 @@
     </div>
   </div>
 
-  <!-- Flying banner band — sits between the leaf and the portfolio intro -->
+
+    <!-- Portfolio -->
+    <p class="stack-description home-bio">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
+
+    <section class="section section--stack home-cards" data-track="portfolio_list" style="padding-top: 3rem; margin-bottom: 5rem;">
+      <h2 class="study-case-heading">Study Case</h2>
+      <div class="stack-container" id="portfolio-list"></div>
+    </section>
+
+  <!-- Flying banner band — mobile only, sits after the folder stack -->
   <div class="fly-band" id="fly-band">
     <!-- Vertical tracking lives on this outer wrapper (JS writes only
          transform:translateY here, see updateTop below) — horizontal
@@ -407,14 +416,6 @@
       window.addEventListener('resize', scheduleUpdateTop);
     })();
   </script>
-
-    <!-- Portfolio -->
-    <p class="stack-description home-bio">I've been shaped by experiences in diverse industries focus, stages of company maturity, from Individual contributor to leadership position. I gained my experience across agriculture, travel, supply chain operations, fintech, edtech, and SAAS enterprise.</p>
-
-    <section class="section section--stack home-cards" data-track="portfolio_list" style="padding-top: 3rem; margin-bottom: 5rem;">
-      <h2 class="study-case-heading">Study Case</h2>
-      <div class="stack-container" id="portfolio-list"></div>
-    </section>
 
     <!-- Sits in its own grid row between the action links and the
          Playground section — see .home-grid's "playimg" row. -->
