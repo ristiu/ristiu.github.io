@@ -288,13 +288,47 @@
        lightbox can show every frame. */
     .card--stack .card-media > :first-child { position: relative; z-index: 3; }
     .card--stack .card-media { overflow: visible; }
-    /* Desktop: the deck reads as a single photo plus a count badge —
-       no fanned peek layers behind the front image. Mobile still shows
-       every sheet in normal flow (the max-width: 899px block below
-       forces display back on with !important), so this only hides the
-       desktop-only absolute-positioned peek. */
-    .card--stack .card-media > :nth-child(n+2) {
-      display: none !important;
+    /* Desktop: the deck fans out behind the front image — except when
+       the front image is a transparent PNG (e.g. Kemo(n)!), where the
+       sheets behind it would show through its transparent areas
+       instead of reading as a clean stack. That case falls back to a
+       single photo + count badge instead. Mobile always shows every
+       sheet in normal flow regardless (the max-width: 899px block
+       below forces display back on with !important). */
+    @media (min-width: 900px) {
+      .card--stack .card-media > :nth-child(2),
+      .card--stack .card-media > :nth-child(3) {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0;
+        /* Dimmed (no color wash) so the sheets behind the front photo
+           read as receding into the stack rather than sitting at the
+           same depth. */
+        filter: brightness(0.9);
+      }
+      .card--stack .card-media > :nth-child(2) {
+        z-index: 2;
+        transform: rotate(3.5deg) translate(7px, 5px) scale(0.985);
+      }
+      .card--stack .card-media > :nth-child(3) {
+        z-index: 1;
+        transform: rotate(-3deg) translate(-6px, 9px) scale(0.97);
+      }
+      /* Hover lift is on the card; the deck must not also scale its
+         own layers or the fan collapses. */
+      .card--stack:hover .card-media > :nth-child(n+2) { transform: none; }
+      .card--stack:hover .card-media > :nth-child(2) {
+        transform: rotate(5deg) translate(11px, 6px) scale(0.985);
+      }
+      .card--stack:hover .card-media > :nth-child(3) {
+        transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
+      }
+      /* PNG hero: back to a single photo + count badge, no fanned peek. */
+      .card--stack .card-media > img:first-child[src$=".png"] ~ :nth-child(n+2) {
+        display: none !important;
+      }
     }
 
     /* Sheet count, bottom-right of a deck */
