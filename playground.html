@@ -2008,6 +2008,10 @@
     (function () {
       const bar = document.getElementById('filter-bar');
       if (!bar) return;
+      // Still a work-in-progress feature — visible in local dev only,
+      // hidden on the live site until it's ready to ship.
+      const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
+      if (!isLocalDev) return;
       const categories = ['AI & Vibe Coding', 'Illustration', 'Life Style', 'Prints', 'Wood Working', 'Healthcare'];
 
       function makeButton(label, value) {
