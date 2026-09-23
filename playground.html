@@ -329,6 +329,12 @@
       .card--stack .card-media > img:first-child[src$=".png"] ~ :nth-child(n+2) {
         display: none !important;
       }
+      /* Only the front image plus its two peek sheets show on the
+         thumbnail — a 4th+ sheet (e.g. the small extra context photo)
+         stays lightbox-only, the badge count already covers it. */
+      .card--stack .card-media > :nth-child(n+4) {
+        display: none !important;
+      }
     }
 
     /* Sheet count, bottom-right of a deck */
@@ -597,6 +603,12 @@
       margin: 22px 0 0 -16px;
       --r: 1.7deg;
       z-index: 4;
+    }
+    /* Opt-in smaller tile, e.g. an extra context photo that shouldn't
+       compete with the hero/supporting shots for attention. */
+    .lightbox-panel .card-media--collage > .card-media-small {
+      max-height: min(clamp(70px, 16vh, 150px), calc(var(--nat-h, 100000px) * 1.7)) !important;
+      max-width: 26% !important;
     }
     .lightbox-panel .card-media--collage > :nth-child(n+5) {
       margin: -8px 0 0 -15px;
@@ -1023,6 +1035,7 @@
         <img src="assets/portfolio-playground/playground-pill-routines-hero.jpg" alt="Orange book-shaped pill case and a personalised medication pouch on a yellow background" width="1069" height="1008" style="width:100%;height:auto;display:block;" />
         <img src="assets/portfolio-playground/playground-pill-routines-context.png" alt="User context and emotional design concept for customisable daily pill routines" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
         <img src="assets/portfolio-playground/playground-pill-routines-concept.png" alt="Pill container concept, accessible materials, personalisation and reaction to the design" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
+        <img class="card-media-small" src="assets/portfolio-playground/playground-pill-routines-woman.jpg" alt="A woman sorting her daily medication into a pill organiser" width="1200" height="556" style="width:100%;height:auto;display:block;" />
       </div>
       <p class="card-caption"><strong>How might we make pill intake routines more fun for adults and older adults with polypharmacy?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system, especially for people with high amount daily medication (polypharmacy). Simple approaches of enabling daily schedule customization as well as easy material access would achieve design intent on reducing dreadfulness with ‘form follows fun’ philosophy.</span></span></p>
     </div>
@@ -1113,6 +1126,7 @@
         <img src="assets/portfolio-playground/playground-kemon-hero.png" alt="Kemo(n)! First Chemo Notes Sheet, printed and filled in by hand" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-kemon-context-1.jpg" alt="User context: patients, doctors and nurses during a first chemo consultation" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-kemon-context-2.jpg" alt="Reflection on care communication and reactions to the concept" style="width:100%;display:block;" />
+        <img class="card-media-small" src="assets/portfolio-playground/playground-kemon-waitingroom.jpg" alt="Hospital waiting room during a first chemo visit" style="width:100%;display:block;" />
       </div>
       <p class="card-caption"><strong>How might we make first-time chemotherapy journey more predictable?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - trying to cope with emotional acceptance while grasping the unfamiliar chemotherapy routines reality. To avoid stress-induced memory lapses during doctor&rsquo;s consultation: a simple, shareable, and printable microguide form is introduced to facilitate note-taking that makes chemotherapy steps more predictable.</span></span></p>
     </div>
