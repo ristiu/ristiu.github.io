@@ -239,6 +239,636 @@
       opacity: 1;
     }
 
+    /* ── Thumbnail types ───────────────────────────────────────
+       Three shapes share one card: --photo (one image), --stack
+       (a deck of images, rest peeking behind), and --note (text
+       only, for an article or a thought). Full text lives in
+       .card-body, hidden on the thumbnail and revealed in the
+       lightbox, so the canvas stays scannable. */
+    .card--photo,
+    .card--stack {
+      cursor: pointer;
+      overflow: visible;
+    }
+
+    /* Media frame: white mat + soft drop so a transparent PNG reads
+       as a physical print rather than art floating on the page. */
+    .card-media {
+      position: relative;
+      border-radius: 0;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .card-media img,
+    .card-media video {
+      border-radius: inherit;
+    }
+
+    /* Desktop only: clamp each thumbnail to Instagram's own aspect-
+       ratio range (9:16 tallest, 16:9 widest) instead of showing every
+       source photo at its raw ratio. Anything inside that range keeps
+       its natural shape; a much taller or much wider original gets
+       cropped (object-fit: cover, set globally on .card img/video). */
+    @media (min-width: 900px) {
+      .card--photo .card-media,
+      .card--stack .card-media {
+        container-type: inline-size;
+      }
+      .card--photo .card-media > img,
+      .card--photo .card-media > video,
+      .card--stack .card-media > img,
+      .card--stack .card-media > video {
+        max-height: 177.78cqw;
+        min-height: 56.25cqw;
+      }
+    }
+
+    /* Deck: the first image sits on top, the rest fan out behind it
+       and only their edges show. They stay in the DOM so the
+       lightbox can show every frame. */
+    .card--stack .card-media > :first-child { position: relative; z-index: 3; }
+    .card--stack .card-media { overflow: visible; }
+    .card--stack .card-media > :nth-child(2),
+    .card--stack .card-media > :nth-child(3) {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      /* Dimmed with a wash of the accent orange (see #stack-tint below
+         the <body> tag) so the sheets behind the front photo read as
+         receding into the stack rather than sitting at the same depth. */
+      filter: url(#stack-tint) brightness(0.9);
+    }
+    .card--stack .card-media > :nth-child(2) {
+      z-index: 2;
+      transform: rotate(3.5deg) translate(7px, 5px) scale(0.985);
+    }
+    .card--stack .card-media > :nth-child(3) {
+      z-index: 1;
+      transform: rotate(-3deg) translate(-6px, 9px) scale(0.97);
+    }
+    /* Hover lift is on the card; the deck must not also scale its
+       own layers or the fan collapses. */
+    .card--stack:hover .card-media > :nth-child(n+2) { transform: none; }
+    .card--stack:hover .card-media > :nth-child(2) {
+      transform: rotate(5deg) translate(11px, 6px) scale(0.985);
+    }
+    .card--stack:hover .card-media > :nth-child(3) {
+      transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
+    }
+
+    /* Sheet count, bottom-right of a deck */
+    .card--stack .card-media::after {
+      content: attr(data-count);
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      z-index: 4;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      padding: 4px 6px;
+      /* Matches .stack-card-tag's chip corner on the homepage, not a
+         pill — same tag language across both pages. */
+      border-radius: 2px;
+    }
+
+    /* Caption sits below the photo, clear of it */
+    .card--photo .card-caption,
+    .card--stack .card-caption {
+      position: relative;
+      z-index: 5;
+      margin: 10px 0 0;
+      padding: 9px 0 0;
+      background: transparent;
+      line-height: 1.45;
+      width: fit-content;
+      max-width: calc(100% - 24px);
+    }
+    /* Thumbnails carry the full copy, same as the lightbox. */
+    .card--photo .card-body,
+    .card--stack .card-body { display: inline; }
+    /* A card can opt into a short thumbnail preview + "Read more"
+       instead of the full copy; the lightbox always shows the full
+       text regardless. */
+    .card-body-full { display: none; }
+    .read-more {
+      color: #9A9A9A;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Below 900px there is no popup (see isDesktopViewport() in the
+       lightbox script), so nothing may depend on "tap to see the rest":
+       every sheet in a deck has to be visible on the card itself, in
+       normal flow rather than fanned/hidden behind the first, and the
+       caption has to show its full text rather than a truncated
+       preview. Same breakpoint as the desktop grid/collage compositions
+       further down, so the two stay in sync. */
+    @media (max-width: 899px) {
+      .card--stack .card-media > :nth-child(2),
+      .card--stack .card-media > :nth-child(3) {
+        position: static !important;
+        inset: auto !important;
+        height: auto !important;
+        width: 100% !important;
+        display: block !important;
+        object-fit: initial !important;
+        transform: none !important;
+        filter: none !important;
+        margin-top: 6px;
+      }
+      .card--stack .card-media::after { content: none; }
+      .card-body-preview { display: none; }
+      .card-body-full { display: inline; }
+    }
+
+    /* Text-only card: no media, so the card itself is the sheet. */
+    .card.card--note {
+      cursor: pointer;
+      border-radius: 0;
+    }
+    .card.card--note .card-body { display: inline; }
+
+    /* ── Lightbox ──────────────────────────────────────────────
+       Opens over the canvas with the whole page blurred behind it.
+       Content is cloned from the card on open, so there is one
+       source of truth for each item's media and copy. */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5vh 24px;
+      background: rgba(244, 244, 243, 0.55);
+      backdrop-filter: blur(22px) saturate(120%);
+      -webkit-backdrop-filter: blur(22px) saturate(120%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.32s ease;
+      cursor: default;
+      --lb-w: min(560px, 100%);
+    }
+    .lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* No sheet behind the content: the photos and the caption each
+       float on the blurred canvas as separate objects. */
+    .lightbox-panel {
+      position: relative;
+      width: var(--lb-w);
+      max-height: 90vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: none;
+      /* overflow-y makes this a clipping box, which was slicing the
+         drop shadows off the photos and the caption at its edges. The
+         padding gives those shadows room to render inside it. */
+      padding: 34px 40px 44px;
+      transform: translateY(14px) scale(0.97);
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      scrollbar-width: none;
+    }
+    .lightbox-panel::-webkit-scrollbar { display: none; }
+    .lightbox.is-open .lightbox-panel { transform: none; }
+
+    /* Cloned media stacks vertically at full width — the deck fans
+       out into the full set here. */
+    .lightbox-panel .card-media {
+      overflow: visible;
+      box-shadow: none;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    /* Lone photo still sits slightly off-axis so it reads as placed,
+       not pasted. Height is capped so a tall shot cannot push the
+       caption card out of view — width follows so nothing letterboxes. */
+    .lightbox-panel .card-media:not(.card-media--collage) > * {
+      --r: -1.4deg;
+      width: auto !important;
+      max-width: 100%;
+      max-height: min(46vh, calc(var(--nat-h, 100000px) * 1.7));
+      align-self: center;
+      /* Site-wide rule: every photo shadow in the popup is a
+         drop-shadow, not a box-shadow — it must follow the rendered
+         pixels' own shape, not the element's rectangular box, so a
+         transparent PNG's shadow hugs its actual content instead of a
+         rectangle around its transparent padding. box-shadow: none
+         cancels the generic ".card-media > *" rule further down,
+         which would otherwise still apply its own box-shadow here. */
+      box-shadow: none;
+      filter:
+        drop-shadow(0 2px 5px rgba(0, 0, 0, 0.10))
+        drop-shadow(0 10px 16px rgba(0, 0, 0, 0.22));
+    }
+    .lightbox-panel .card-media::after { content: none; }
+    /* Everything floating in the popup composes its resting tilt (--r,
+       set by the rules below) with a drag offset (--dx/--dy, written by
+       the pointer handler) and a scale (--s, used only for the opening
+       "stack then spread" animation below). One transform, so dragging
+       a photo never throws away the angle it was laid down at. */
+    .lightbox-panel .card-media > *,
+    .lightbox-panel .card-caption {
+      transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1)) !important;
+      /* Four-way move arrows: these pieces are repositionable, and the
+         body's grab hand belongs to the canvas panning behind. */
+      cursor: move;
+      touch-action: none;
+    }
+    /* On open, every piece is momentarily forced to --dx:0/--dy:0/--r:0
+       (see open() in the script below) so they sit stacked on top of
+       each other, then that override is lifted so each piece animates
+       out to its own authored position — reads as the deck spreading,
+       not just fading in already spread. This transition only exists
+       while .is-spreading is present: adding it permanently would make
+       dragging feel laggy instead of 1:1 with the pointer. */
+    #lightbox-content.is-spreading .card-media > *,
+    #lightbox-content.is-spreading .card-caption {
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .lightbox-panel .card-media > *.is-dragging,
+    .lightbox-panel .card-caption.is-dragging {
+      cursor: move;
+      z-index: 20;
+    }
+    .lightbox-panel .card-media > * {
+      position: static !important;
+      inset: auto !important;
+      width: 100%;
+      height: auto !important;
+      --r: 0deg;
+      border-radius: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+    }
+    /* Opened deck: the sheets fan out across the width as square
+       tiles. Sized by height rather than by column width, so they can
+       never run taller than the viewport, and a square crop keeps far
+       more of each photo visible than a wide letterbox strip would.
+       Staggered and tilted so it reads as hand-laid, not a gallery. */
+    .lightbox-panel .card-media--collage {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      padding: 0;
+    }
+    .lightbox-panel .card-media--collage > * {
+      flex: 0 0 auto;
+      /* Each sheet scales down to fit a box rather than being pinned to
+         a fixed height: aspect is preserved, nothing is cropped or
+         letterboxed, and a pair of wide photos still fits on one row
+         instead of wrapping and pushing the caption off screen. */
+      width: auto !important;
+      height: auto !important;
+      max-height: min(clamp(110px, 24vh, 260px), calc(var(--nat-h, 100000px) * 1.7));
+      max-width: 44%;
+      object-fit: contain;
+      border-radius: 0;
+      /* No fill behind the image itself — a plain background-color
+         here would paint solid behind a transparent PNG's own
+         transparent pixels, not just its letterbox bars, hiding the
+         transparency the source image actually has. */
+      background: none;
+      /* drop-shadow, not box-shadow: a transparent PNG's visible shape
+         (the sheet + icon) is smaller than its own rectangular box, and
+         box-shadow always follows that box, not the alpha silhouette —
+         it read as a rectangle of shadow floating around the actual
+         content. drop-shadow follows the rendered pixels themselves.
+         box-shadow must be cancelled explicitly: the generic
+         ".card-media > *" rule above sets one, and since this rule no
+         longer sets that property itself, the generic one would keep
+         winning and draw its rectangle right alongside the filter. */
+      box-shadow: none;
+      filter:
+        drop-shadow(0 2px 5px rgba(0, 0, 0, 0.10))
+        drop-shadow(0 10px 16px rgba(0, 0, 0, 0.22));
+    }
+    /* Each tile after the first tucks against its neighbour and sits a
+       little higher or lower, so the row never reads as a straight line. */
+    /* The lead sheet is the hero, so it runs taller than the rest.
+       Equal heights made a portrait hero look smaller than a landscape
+       supporting shot, which read as the wrong thing being featured. */
+    .lightbox-panel .card-media--collage > :nth-child(1) {
+      max-height: min(clamp(170px, 38vh, 400px), calc(var(--nat-h, 100000px) * 1.7));
+      max-width: 54%;
+      --r: -1.6deg;
+      z-index: 1;
+    }
+    .lightbox-panel .card-media--collage > :nth-child(2) {
+      margin: 30px 0 0 -18px;
+      --r: 2.1deg;
+      z-index: 2;
+    }
+    .lightbox-panel .card-media--collage > :nth-child(3) {
+      margin: -12px 0 0 -14px;
+      --r: -2.4deg;
+      z-index: 3;
+    }
+    .lightbox-panel .card-media--collage > :nth-child(4) {
+      margin: 22px 0 0 -16px;
+      --r: 1.7deg;
+      z-index: 4;
+    }
+    .lightbox-panel .card-media--collage > :nth-child(n+5) {
+      margin: -8px 0 0 -15px;
+      --r: -1.5deg;
+      z-index: 5;
+    }
+
+    /* Caption is the last floating object: a white card tucked under
+       the photos and tilted the other way. */
+    .lightbox-panel .card-caption {
+      position: relative;
+      z-index: 6;
+      margin: 16px 0 0 4px;
+      padding: 14px 16px 15px;
+      background: #ffffff;
+      border-radius: 0;
+      box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.10),
+        0 16px 28px -12px rgba(0, 0, 0, 0.30);
+      width: fit-content;
+      max-width: 88%;
+      font-size: 11px;
+      line-height: 1.75;
+      opacity: 1;
+      --r: 0.9deg;
+    }
+    .lightbox-panel .card-body { display: inline !important; }
+    .lightbox-panel .card-body-preview { display: none !important; }
+    .lightbox-panel .card-body-full { display: inline !important; }
+    .lightbox-panel .card-caption strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    /* Anchored to the lightbox itself, not the panel: the panel scrolls,
+       which makes it a clipping box and was slicing the button.
+       Measured out from the centre rather than pinned to the right edge:
+       the homepage embeds this page in a full-bleed iframe that is wider
+       than the visible viewport, so the iframe's own right edge — and
+       anything sitting on it — falls off the side of the screen. */
+    .lightbox-close {
+      position: absolute;
+      /* A fixed spot, not one derived from each item's own bounds: the
+         compositions differ in size, so measuring per item made the
+         button land somewhere new every time a project was opened.
+         Measured out from the centre rather than pinned to the right
+         edge, which falls off screen inside the homepage's wide iframe. */
+      top: 12vh;
+      right: auto;
+      left: calc(50% + min(380px, 26vw));
+      margin-left: 0;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      /* Dark on purpose: a white chip sat invisible against the pale
+         blurred backdrop, which read as having no close button at all. */
+      background: var(--ink);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+    .lightbox-close:hover { background: #000000; transform: scale(1.06); }
+
+    /* Desktop: there is real horizontal room, so the sheets spread
+       across it side by side instead of stacking into a tall column.
+       Each row holds two, staggered vertically so the arrangement still
+       reads as hand-laid rather than a gallery grid.
+
+       These are the four confirmed default popup compositions, one per
+       photo count/shape — every project's popup falls into one of them
+       automatically from how many <img>/<video> children its .card-media
+       has and their own aspect ratios. None of this is drag state (the
+       modal has no persistence between opens, see the "Item lightbox"
+       script below), so this IS what shows by default:
+         1. 3+ photos, or a genuinely letterbox-shaped second photo that
+            should read as a full band (e.g. Personalize Clock) —
+            .card-media--collage / #lightbox-content.is-pair with
+            "wide wide" spanning both columns beneath hero+caption.
+         2. Exactly 2 photos where the second one should sit in its own
+            column under the caption instead of spanning full width —
+            one portrait hero + one landscape wide (e.g. the original
+            "fan" pair), OR one landscape hero + one square-ish wide
+            (e.g. BTS, Sankey). All opt in via data-layout="fan" (see
+            the pinned override further down) — its own "hero wide"
+            column, scale-1 height caps. The name is historical (the
+            first card it was built for); it is really "second photo
+            gets its own column," not specific to portrait+landscape.
+         3. A single portrait photo/video (e.g. Freestyle Coloring
+            Book) — #lightbox-content.is-single, scale-1 height cap.
+         4. A single landscape/square photo (e.g. Onceover) — same
+            #lightbox-content.is-single rule; the shape just reads
+            differently because the source does.
+       Do not retune these without asking. */
+    @media (min-width: 900px) {
+      /* 78vw, not 94vw: inside the homepage's full-bleed iframe the
+         viewport is wider than the page, so a near-full-width spread
+         runs off both sides of what the visitor can actually see. */
+      .lightbox { --lb-w: min(1360px, 78vw); }
+      .lightbox-panel { padding: 34px 44px 48px; }
+
+      .lightbox-panel .card-media:not(.card-media--collage) > * {
+        max-height: min(62vh, calc(var(--nat-h, 100000px) * 1.7));
+      }
+
+      .lightbox-panel .card-media--collage > * {
+        max-height: min(clamp(150px, 46vh, 500px), calc(var(--nat-h, 100000px) * 1.7));
+        max-width: 38%;
+      }
+      .lightbox-panel .card-media--collage > :nth-child(1) {
+        max-height: min(clamp(260px, 68vh, 720px), calc(var(--nat-h, 100000px) * 1.7));
+        max-width: 56%;
+      }
+      /* Looser spread — the sheets breathe instead of tucking against
+         each other. */
+      .lightbox-panel .card-media--collage > :nth-child(2) { margin: 26px 0 0 -12px; }
+      .lightbox-panel .card-media--collage > :nth-child(3) { margin: -18px 0 0 -10px; }
+      .lightbox-panel .card-media--collage > :nth-child(4) { margin: 20px 0 0 -14px; }
+      .lightbox-panel .card-media--collage > :nth-child(n+5) { margin: -12px 0 0 -11px; }
+
+      /* Caption sits beside the photos rather than under them — one
+         deck or one photo, same composition. That frees the whole
+         height for the images, so they can run large, and it fills the
+         width instead of leaving a column of empty space. */
+      #lightbox-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      #lightbox-content .card-media { flex: 0 1 auto; min-width: 0; }
+      #lightbox-content .card-caption {
+        flex: 0 0 auto;
+        max-width: 280px;
+        margin: 0;
+        --r: 0.9deg;
+      }
+      #lightbox-content.is-single .card-media { flex: 0 1 auto; min-width: 0; }
+      /* Side by side, the photo no longer competes with the caption for
+         vertical room, so it gets most of the height — the ID selector
+         is what lets this beat the short-viewport cap further down,
+         which only exists for the stacked layout. */
+      /* Scale-1 cap (like the pair layouts below): show the photo at
+         its own natural height rather than a flat vh fraction. The vh
+         ceiling itself follows one rule everywhere in this file: how
+         much of the panel's own 90vh a layout can safely give one
+         photo without starving something else that shares the space.
+         A single photo shares its row with only the caption (nothing
+         stacks below it), so it can take nearly the whole panel. */
+      #lightbox-content.is-single .card-media > * {
+        max-height: min(var(--nat-h, 100000px), 88vh) !important;
+        max-width: 100%;
+      }
+      #lightbox-content.is-single .card-caption {
+        flex: 0 0 auto;
+        max-width: 250px;
+        margin: 0;
+        --r: 0.9deg;
+      }
+
+      /* Two photos: borrowed from the editorial layout templates — a
+         tall block and the caption share the top row, and the second
+         photo runs the full width underneath. The wide supporting shots
+         in this set are naturally letterbox-shaped, so a full-width band
+         suits them better than a second column would. Still rotated a
+         degree or two each, so it reads as laid out by hand rather than
+         snapped to a grid. */
+      #lightbox-content.is-pair {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+        grid-template-areas:
+          "hero caption"
+          "wide wide";
+        align-items: center;
+        justify-items: center;
+        /* Tight: the pieces should look dropped next to each other on a
+           desk, not spaced out on a gallery wall. */
+        gap: 4px 12px;
+        width: 100%;
+      }
+      #lightbox-content.is-pair .card-media { display: contents; }
+      /* The rule for every photo's height cap in this file: scale-1
+         (its own natural size) up to a ceiling set by how much of the
+         panel's own 90vh that slot can take without starving whatever
+         shares the space with it. Hero shares its row only with the
+         caption, so it gets the bigger ceiling; wide always has hero's
+         row above it, so its ceiling has to leave hero room too.
+         Sized by height, not cropped: object-fit: cover forced every
+         source into the same band shape regardless of what was in it,
+         which cut off real content (a contact-sheet grid, a chart) —
+         the whole point of the "photo" is to show it, not a slice of
+         it. A more square photo here just won't span edge-to-edge like
+         a true letterbox shot would; that is a difference in the
+         source, not a bug. */
+      #lightbox-content.is-pair .card-media > :nth-child(1) {
+        grid-area: hero;
+        margin: 0;
+        max-width: 100%;
+        max-height: min(var(--nat-h, 100000px), 52vh);
+        --r: -1.9deg;
+        --dx: 12px;
+        --dy: 6px;
+      }
+      #lightbox-content.is-pair .card-media > :nth-child(2) {
+        grid-area: wide;
+        margin: 0;
+        max-width: 100%;
+        max-height: min(var(--nat-h, 100000px), 30vh);
+        --r: 1.3deg;
+        --dx: -34px;
+        --dy: -14px;
+      }
+      #lightbox-content.is-pair .card-caption {
+        grid-area: caption;
+        max-width: 100%;
+        margin: 0;
+        justify-self: start;
+        --r: -1.1deg;
+        --dx: -26px;
+        --dy: 18px;
+      }
+
+      /* Fan: this arrangement was signed off, so it is pinned to the item
+         rather than left riding on the shared two-photo rule above —
+         retuning that rule for another project cannot disturb this one.
+         The rotation/offset values below plus the scale-1 height caps
+         are the confirmed default composition for this card. Nothing
+         here is drag state — the modal has no persistence between
+         opens, it re-clones from the canvas card and reapplies these
+         custom properties every time — so this IS what shows by
+         default. Do not retune without asking. */
+      /* The wide shot sits in its own column, under the caption, rather
+         than spanning both columns and getting centered with a fixed-px
+         offset — that offset was a constant number of pixels while the
+         hero column's width scales with viewport width, so at a wide
+         enough window the offset was no longer enough to clear the
+         hero photo and the two overlapped. Giving wide its own track
+         makes the non-overlap structural instead of viewport-dependent. */
+      #lightbox-content.is-pair[data-layout="fan"] {
+        gap: 4px 12px;
+        grid-template-areas:
+          "hero caption"
+          "hero wide";
+      }
+      /* Capped at the photo's own natural height (scale 1) rather than a
+         small vh fraction — the panel scrolls, so there is room to show
+         it at full size; the vh figure only stops an oversized source
+         from crossing the frame. */
+      #lightbox-content.is-pair[data-layout="fan"] .card-media > :nth-child(1) {
+        --r: -1.9deg; --dx: 12px; --dy: 6px;
+        max-height: min(var(--nat-h, 100000px), 72vh);
+      }
+      #lightbox-content.is-pair[data-layout="fan"] .card-media > :nth-child(2) {
+        --r: 1.3deg; --dx: -8px; --dy: 8px;
+        max-height: min(var(--nat-h, 100000px), 40vh);
+      }
+      #lightbox-content.is-pair[data-layout="fan"] .card-caption {
+        --r: -1.1deg; --dx: -26px; --dy: 18px;
+      }
+    }
+
+    /* The homepage embeds this page in a ~500px-tall iframe, where even
+       the caps above leave the caption card below the scroll fold. */
+    @media (max-height: 620px) {
+      .lightbox-panel .card-media:not(.card-media--collage) > * { max-height: min(38vh, calc(var(--nat-h, 100000px) * 1.7)); }
+      /* Matches the ID-specificity rule in the desktop block, which
+         would otherwise keep its taller cap on a short screen and push
+         the panel into scrolling. */
+      #lightbox-content.is-single .card-media > * { max-height: min(58vh, calc(var(--nat-h, 100000px) * 1.7)) !important; }
+      .lightbox-panel .card-media--collage > * { max-height: min(clamp(100px, 26vh, 200px), calc(var(--nat-h, 100000px) * 1.7)); }
+      .lightbox-panel .card-media--collage > :nth-child(1) { max-height: min(clamp(150px, 42vh, 300px), calc(var(--nat-h, 100000px) * 1.7)); }
+      .lightbox-panel .card-caption { font-size: 10px; padding: 11px 13px 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lightbox, .lightbox-panel { transition: none; }
+    }
+
     /* Section label */
     .canvas-label {
       position: absolute;
@@ -278,6 +908,17 @@
 </head>
 <body>
 
+  <!-- Accent-orange multiply wash for the sheets peeking behind a deck's
+       front photo. Composited back "in" the source so a transparent
+       PNG's empty areas stay empty instead of filling with orange. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="stack-tint" color-interpolation-filters="sRGB">
+      <feFlood flood-color="#FF5E32" flood-opacity="0.5" result="tint" />
+      <feBlend in="tint" in2="SourceGraphic" mode="multiply" result="washed" />
+      <feComposite in="washed" in2="SourceGraphic" operator="in" />
+    </filter>
+  </svg>
+
   <a class="back" href="index.html" aria-label="Back">←</a>
   <div id="scroll-track"><div id="scroll-progress"></div></div>
   <script>
@@ -302,83 +943,124 @@
   <div id="canvas-root">
 
     <!-- Add your cards here. Use left/top to position them on the infinite canvas. -->
-    <!-- Image card example: -->
-    <!--
-    <div class="card" style="left: 200px; top: 160px;">
-      <img src="your-image.jpg" alt="" />
-      <p class="card-caption">Your caption here</p>
-    </div>
-    -->
+    <!-- Card types. Each takes data-col (0-3) and data-rot (degrees).
+         Everything inside .card-body is hidden on the thumbnail and
+         shown when the card is opened, so keep the long copy there.
 
-    <!-- Note card example: -->
-    <!--
-    <div class="card card--note" style="left: 500px; top: 200px;">
-      <p class="card-caption">A short thought or link note here.</p>
+         1. Single photo — the image may be a transparent PNG:
+    <div class="card card--photo" data-col="0" data-rot="-2" style="width:300px;">
+      <div class="card-media">
+        <img src="your-image.png" alt="" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Title</strong><span class="card-tag">Tag</span><span class="card-body"><br>The longer story.</span></p>
+    </div>
+
+         2. Photo stack — first image on top, the rest fan out behind
+            and all of them show once opened:
+    <div class="card card--stack" data-col="1" data-rot="1.5" style="width:300px;">
+      <div class="card-media">
+        <img src="one.jpg" alt="" style="width:100%;display:block;" />
+        <img src="two.jpg" alt="" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Title</strong><span class="card-tag">Tag</span><span class="card-body"><br>The longer story.</span></p>
+    </div>
+
+         3. Caption only — for an article or a thought, no media:
+    <div class="card card--note" data-col="2" data-rot="-1">
+      <p class="card-caption"><strong>Title</strong><span class="card-tag">Tag</span><span class="card-body"><br>The whole note, shown on the card itself.</span></p>
     </div>
     -->
 
     <!-- AI & Vibe Coding cards first -->
 
     <!-- Onceover -->
-    <div class="card" data-col="1" data-rot="-2" style="width:300px;">
-      <img src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Onceover, Chrome Extension for Job Autofills (Unreleased)</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other extension can handle the data fetch, their cold UIs make filling them out feel like a tax return. I realized nobody was addressing the feeling of the experience for job filling form. Onceover taken position from being functional yet delightfull autofills job forms.</p>
+    <div class="card card--photo" data-col="1" data-rot="-2" style="width:300px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Onceover, Chrome Extension for Job Autofills (Unreleased)</strong><span class="card-tag">AI &amp; Vibe Coding</span><span class="card-body"><br><span class="card-body-preview">Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other ... <span class="read-more">Read more</span></span><span class="card-body-full">Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other extension can handle the data fetch, their cold UIs make filling them out feel like a tax return. I realized nobody was addressing the feeling of the experience for job filling form. Onceover taken position from being functional yet delightfull autofills job forms.</span></span></p>
     </div>
 
     <!-- Army Bookmark -->
-    <div class="card" data-col="0" data-rot="-2.5" style="width:300px;">
-      <video src="assets/portfolio-playground/playground-army-bookmark.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Concert Info for BTS</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></p>
+    <div class="card card--stack" data-col="0" data-rot="-2.5" data-layout="fan" style="width:300px;">
+      <div class="card-media">
+        <video src="assets/portfolio-playground/playground-army-bookmark.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
+        <video src="assets/portfolio-playground/playground-army-bookmark-2.mp4" poster="assets/portfolio-playground/playground-army-bookmark-2-static.jpg" muted loop playsinline style="width:100%;display:block;" preload="auto"></video>
+      </div>
+      <p class="card-caption"><strong>Concert Info for BTS</strong><span class="card-tag">AI &amp; Vibe Coding</span><span class="card-body"><br><span class="card-body-preview">A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently ... <span class="read-more">Read more</span></span><span class="card-body-full">A concert info hub for Indonesian ARMY. 419 visitors in 30 days, 35 returning, 1m 45s average session. Zero ad spend. Apparently word travels fast in the fandom.<br><a href="https://army-bookmark.github.io/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">army-bookmark.github.io</a></span></span></p>
     </div>
 
     <!-- Fortune Cookie -->
-    <div class="card" data-col="3" data-rot="2" style="width:300px;">
-      <video src="assets/portfolio-playground/playground-fortune-cookie.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Slice of fortune cookie</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>Design challenge here is to learn vibe coding with zero cost! (no subscription at all only effort!)<br><a href="https://orange-table.github.io/slice-of-fortune-/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">orange-table.github.io/slice-of-fortune</a></p>
+    <div class="card card--photo" data-col="3" data-rot="2" style="width:300px;">
+      <div class="card-media">
+        <video src="assets/portfolio-playground/playground-fortune-cookie.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
+      </div>
+      <p class="card-caption"><strong>Slice of fortune cookie</strong><span class="card-tag">AI &amp; Vibe Coding</span><span class="card-body"><br>Design challenge here is to learn vibe coding with zero cost! (no subscription at all only effort!)<br><a href="https://orange-table.github.io/slice-of-fortune-/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">orange-table.github.io/slice-of-fortune</a></span></p>
     </div>
 
     <!-- Fan -->
-    <div class="card" data-col="3" data-rot="-1.5" style="width:300px;">
-      <img src="assets/portfolio-playground/fan-before.jpg" alt="Fan before — all white factory finish" style="width:100%;display:block;" />
-      <img src="assets/portfolio-playground/fan-after2.jpg" alt="Fan after detail" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>How to make an industrialized product feel less industrial?</strong><span class="card-tag">Analogue Craft</span><br>Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where to buy it.</p>
+    <div class="card card--stack" data-col="3" data-rot="-1.5" data-layout="fan" style="width:300px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/fan-after2.jpg" alt="Fan after detail" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/fan-before.jpg" alt="Fan before — all white factory finish" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>How to make an industrialized product feel less industrial?</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where ... <span class="read-more">Read more</span></span><span class="card-body-full">Before: all white, straight from the factory. After: wood texture added by hand. The real surprise was how many people asked where to buy it.</span></span></p>
     </div>
 
     <!-- Noodle Sankey -->
-    <div class="card" data-col="2" data-rot="-1.8" style="width:340px;">
-      <img src="assets/portfolio-playground/playground-noodle-sankey.jpg" alt="Sankey diagram campaign report" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><span class="card-tag">AI &amp; Vibe Coding</span><br>I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</p>
+    <div class="card card--stack" data-col="2" data-rot="-1.8" data-layout="fan" style="width:340px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/playground-sankey-noodle-chart.jpg" alt="Sankey diagram campaign report, noodle chart" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/playground-sankey-sheets-mockup.png" alt="Sankey diagram campaign report, Google Sheets mockup" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Campaign Report as Sankey Diagram</strong><span class="card-tag">AI &amp; Vibe Coding</span><span class="card-body"><br><span class="card-body-preview">I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a ... <span class="read-more">Read more</span></span><span class="card-body-full">I combined technical report with AI visual design to create playful, engaging campaign reports. Analyzed raw campaign data for a local food distributor into clear Sankey diagrams. Using Google Sheets, Tableau, and Gemini AI.</span></span></p>
     </div>
 
     <!-- Analogue Craft cards -->
 
     <!-- Exhibition -->
-    <div class="card" data-col="1" data-rot="1.8">
-      <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
-      <p class="card-caption" style="opacity:1;"><strong>Design Project Catalogue</strong><span class="card-tag">Analogue Craft</span><br>In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</p>
+    <div class="card card--photo" data-col="1" data-rot="1.8">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption" style="opacity:1;"><strong>Design Project Catalogue</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with ... <span class="read-more">Read more</span></span><span class="card-body-full">In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</span></span></p>
     </div>
 
     <!-- Coloring Book -->
-    <div class="card" data-col="2" data-rot="-1.2">
-      <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><br>6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></p>
+    <div class="card card--photo" data-col="2" data-rot="-1.2">
+      <div class="card-media">
+        <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
+      </div>
+      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color ... <span class="read-more">Read more</span></span><span class="card-body-full">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></span></span></p>
     </div>
 
     <!-- Personalize Clock -->
-    <div class="card" data-col="0" data-rot="-1.5" style="width:300px;">
-      <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
-      <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Personalize clock</strong><span class="card-tag">Analogue Craft</span><br>Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as they want.</p>
+    <div class="card card--stack" data-col="0" data-rot="-1.5" style="width:300px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Personalize clock</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as ... <span class="read-more">Read more</span></span><span class="card-body-full">Upcycle material with collage technique. With personalised concept it gave freedom to the user to change the clock background as they want.</span></span></p>
     </div>
 
     <!-- Wooden Box -->
-    <div class="card" data-col="1" data-rot="-1.4" style="width:300px;">
-      <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
-      <p class="card-caption"><strong>Wooden Box Creation</strong><span class="card-tag">Analogue Craft</span><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</p>
+    <div class="card card--photo" data-col="1" data-rot="-1.4" style="width:300px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>Wooden Box Creation</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</span></p>
     </div>
 
 
   </div>
+  </div>
+
+  <!-- Item lightbox — content is cloned from the clicked card -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Playground item" hidden>
+    <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close">&#10005;</button>
+    <div class="lightbox-panel" id="lightbox-panel">
+      <div id="lightbox-content"></div>
+    </div>
   </div>
 
   <script src="cursor.js"></script>
@@ -400,33 +1082,61 @@
     // column's horizontal clearance.
     function layoutCards() {
       const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
-      const COL_X = [60, 460, 860, 1260];
+      // Everything on the board is laid out at 70% of the sizes the
+      // numbers below are written in, so the authored clearance maths
+      // stays readable while the whole composition tightens up.
+      const SCALE = 1;
+      const COL_GAP = 400;
+      const COL_X = [0, 1, 2, 3].map(i => Math.round(60 * SCALE) + i * COL_GAP);
       // Embedded (homepage) view gets 25px of extra breathing room below
       // the sticky Playground header bar + its drop-shadow, so the top
       // row of cards never sits flush against that edge.
       const embedOffset = document.documentElement.classList.contains('is-embedded') ? 25 : 0;
-      const COL_START = [150, 90, 130, 175].map(v => v + embedOffset);
-      const JITTER    = [-8, 14, -5, 10, -12, 7, -9, 13];
+      const COL_START = [150, 90, 130, 175].map(v => Math.round(v * SCALE) + embedOffset);
+      const JITTER    = [0, 0, 0, 0, 0, 0, 0, 0];
+      // Horizontal nudge + per-card tilt: the columns keep the
+      // composition organized, these make it look hand-placed rather
+      // than auto-packed. Clearance math, worst case between two
+      // adjacent columns: 400 - 340 (widest card) = 60px of gutter,
+      // minus 14 + 14 of opposing nudge = 32px, minus the extra width
+      // a tilt sweeps out at the card's corners (a ~500px-tall card at
+      // 2deg reaches about 9px past its box on each side) = ~14px
+      // still clear. So no two cards touch, at any pan or zoom.
+      const HJITTER   = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      // Just enough lean to break the grid without the composition
+      // reading as scattered — at larger angles the caption pills
+      // overhang their photo and look accidental rather than placed.
+      const TILT_SCALE   = 0;
+      const MAX_TILT_DEG = 0;
       // GAP must absorb the largest |JITTER| value too, since jitter
       // shifts a card's displayed top *after* GAP already set the
       // next slot's baseline — 56 - 14 (max jitter) = 42px worst case,
       // still clearing the requested 40px minimum.
+      // 56 * SCALE would be 39; pulled in further to 32 to close up the
+      // white space between projects.
       const GAP       = 56;
       const COL_Z     = [10, -10, 10, -10];
       const colTops = [...COL_START];
       cards.forEach((card, i) => {
         const col = parseInt(card.dataset.col) || 0;
+        // Authored width is captured once, so re-running the layout
+        // never scales an already-scaled card.
+        if (!card.dataset.w) card.dataset.w = parseFloat(card.style.width) || card.offsetWidth;
+        card.style.width = Math.round(card.dataset.w * SCALE) + 'px';
         const jitter = JITTER[i % JITTER.length];
         const top = colTops[col] + jitter;
-        card.style.left = COL_X[col] + 'px';
+        card.style.left = (COL_X[col] + HJITTER[i % HJITTER.length]) + 'px';
         card.style.top  = top + 'px';
         card.dataset.baseZ = COL_Z[col];
         card.style.setProperty('--cardZ', COL_Z[col] + 'px');
-        // Layout/composition only, per request — no static per-card
-        // tilt (data-rot is intentionally ignored here; --rot stays
-        // at its 0deg fallback). The mousemove rotateX/rotateY
-        // parallax on #canvas-root is untouched, that's a separate
-        // interaction effect, not part of the resting composition.
+        // Resting tilt comes from each card's authored data-rot, clamped
+        // so no card leans far enough to reach its neighbour (see the
+        // clearance note above). The mousemove rotateX/rotateY parallax
+        // on #canvas-root is a separate interaction effect and is
+        // untouched by this.
+        const rot = parseFloat(card.dataset.rot) || 0;
+        const clamped = Math.max(-MAX_TILT_DEG, Math.min(MAX_TILT_DEG, rot * TILT_SCALE));
+        card.style.setProperty('--rot', clamped + 'deg');
         colTops[col] = top + card.offsetHeight + GAP;
       });
     }
@@ -466,27 +1176,30 @@
       root.style.display = 'flex';
       root.style.flexDirection = 'row';
       root.style.alignItems = 'flex-start';
-      root.style.gap = '20px';
+      root.style.gap = '56px';
       root.style.padding = '72px 32px 40px';
       root.style.width = 'max-content';
       root.style.transform = 'none';
       root.style.willChange = 'auto';
 
-      // Position each card in the row
+      // Position each card in the row — straight, no tilt, so the row
+      // reads as a clean grid on a phone.
       const cards = [...root.querySelectorAll('.card')];
-      const TILTS = [-2.5, 1.8, -1.2, 2, -1.5, 1.2, -2, 1.8, -1, 2.2];
-      cards.forEach((card, i) => {
+      cards.forEach(card => {
         card.style.position       = 'relative';
         card.style.left           = '';
         card.style.top            = '';
         card.style.width          = '260px';
         card.style.flexShrink     = '0';
-        card.style.transform      = `rotate(${TILTS[i % TILTS.length]}deg)`;
+        card.style.transform      = 'none';
       });
 
       // Fade in without zoom entrance
       root.style.opacity = '1';
       root.querySelectorAll('.card').forEach(card => card.classList.add('is-visible'));
+      // Every video, including a deck's non-hero one: there is no popup
+      // at this width and the whole deck is laid out inline (already
+      // the "opened" view), so nothing should sit frozen on its poster.
       root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
 
       // Colorful progress bar
@@ -642,8 +1355,22 @@
         root.style.setProperty('--tiltX', (-ny * 2).toFixed(2) + 'deg');
       });
 
-      const canvasCenterX = 600;
-      const canvasCenterY = 260;
+      // Measured from the cards that were actually laid out, rather than
+      // hardcoded: the old fixed 600 was tuned for a wider board, so
+      // after the board tightened it pushed everything right and left a
+      // band of dead space down the left edge.
+      function boardCenter() {
+        const cards = [...root.querySelectorAll('.card[data-col]')];
+        if (!cards.length) return [600, 260];
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        cards.forEach(c => {
+          const l = parseFloat(c.style.left) || 0, t = parseFloat(c.style.top) || 0;
+          minX = Math.min(minX, l); maxX = Math.max(maxX, l + c.offsetWidth);
+          minY = Math.min(minY, t); maxY = Math.max(maxY, t + c.offsetHeight);
+        });
+        return [(minX + maxX) / 2, (minY + maxY) / 2];
+      }
+      const [canvasCenterX, canvasCenterY] = boardCenter();
       tx = window.innerWidth  / 2 - canvasCenterX;
       ty = window.innerHeight / 2 - canvasCenterY;
 
@@ -657,7 +1384,12 @@
         try { settled = sessionStorage.getItem('has_played_hero_animations') === 'true'; } catch (e) {}
       }
 
-      root.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
+      // At 900px+ a deck's non-hero video deliberately omits autoplay so
+      // it stays a static poster behind the front sheet until the popup
+      // plays it — so only [autoplay] ones start here. Below 900px the
+      // deck is already spread inline with no popup, so all of them play.
+      const desktop = window.matchMedia('(min-width: 900px)').matches;
+      root.querySelectorAll(desktop ? 'video[autoplay]' : 'video').forEach(v => v.play().catch(() => {}));
 
       if (settled) {
         root.style.transition = 'none';
@@ -717,6 +1449,9 @@
 
       document.addEventListener('pointerdown', e => {
         if (e.target.closest('a, button')) return;
+        // The popup sits over the canvas: dragging its backdrop (or the
+        // pieces in it) must not pan the board underneath.
+        if (e.target.closest('.lightbox')) return;
         stopMomentum();
         perspEl.style.transition = '';
         dragging = true;
@@ -754,6 +1489,8 @@
 
       // Wheel: pan or zoom
       document.addEventListener('wheel', e => {
+        // Let the popup scroll itself instead of panning the canvas.
+        if (e.target.closest('.lightbox')) return;
         e.preventDefault();
         stopMomentum();
         if ((e.ctrlKey || e.metaKey) && !isEmbedded) {
@@ -837,6 +1574,286 @@
       document.getElementById('zoom-in').addEventListener('click', () => zoomTo(1.25));
       document.getElementById('zoom-out').addEventListener('click', () => zoomTo(0.8));
     }
+  </script>
+  <script>
+    // ── Item lightbox ────────────────────────────────────────────
+    // A card opens into a blurred-backdrop panel showing its full
+    // media set and copy. Content is cloned on open rather than
+    // duplicated in the markup, so each item is authored once.
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const panel = document.getElementById('lightbox-panel');
+      const content = document.getElementById('lightbox-content');
+      const closeBtn = document.getElementById('lightbox-close');
+      if (!lb) return;
+
+      // Below 900px there is no popup at all: every photo in a deck is
+      // shown inline instead of fanned/hidden behind the first (see the
+      // matching CSS further up), and the caption is never truncated,
+      // so a modal that only ever repeats what is already on the card
+      // would add nothing. Matches the same breakpoint the desktop
+      // grid/collage compositions use, so "has the rich layout" and
+      // "opens a popup" stay in sync.
+      const isDesktopViewport = () => window.matchMedia('(min-width: 900px)').matches;
+
+      // Label each deck with its sheet count (drives .card-media::after).
+      document.querySelectorAll('.card--stack .card-media').forEach(m => {
+        m.setAttribute('data-count', m.children.length + ' photos');
+      });
+
+      let lastFocus = null;
+      let closeTimer = null;
+
+
+      // Pieces in the popup can be nudged around by hand. Offsets live
+      // in --dx/--dy so the resting tilt set in CSS survives the drag.
+      let dragEl = null, dragId = null, startX = 0, startY = 0, baseX = 0, baseY = 0, dragMoved = false;
+      const num = v => parseFloat(v) || 0;
+
+      content.addEventListener('pointerdown', e => {
+        // A link inside the caption (e.g. a project URL) must still
+        // navigate on click — capturing the pointer for dragging would
+        // swallow that click before it ever fires.
+        if (e.target.closest('a, button')) return;
+        const el = e.target.closest('.card-media > *, .card-caption');
+        if (!el || !content.contains(el)) return;
+        dragEl = el;
+        dragId = e.pointerId;
+        dragMoved = false;
+        startX = e.clientX; startY = e.clientY;
+        const cs = getComputedStyle(el);
+        baseX = num(cs.getPropertyValue('--dx'));
+        baseY = num(cs.getPropertyValue('--dy'));
+        el.setPointerCapture(e.pointerId);
+        el.classList.add('is-dragging');
+        e.preventDefault();
+      });
+
+      content.addEventListener('pointermove', e => {
+        if (!dragEl || e.pointerId !== dragId) return;
+        const dx = e.clientX - startX, dy = e.clientY - startY;
+        if (!dragMoved && Math.hypot(dx, dy) > 3) dragMoved = true;
+        dragEl.style.setProperty('--dx', (baseX + dx) + 'px');
+        dragEl.style.setProperty('--dy', (baseY + dy) + 'px');
+      });
+
+      const endDrag = e => {
+        if (!dragEl || e.pointerId !== dragId) return;
+        dragEl.classList.remove('is-dragging');
+        dragEl = null; dragId = null;
+      };
+      content.addEventListener('pointerup', endDrag);
+      content.addEventListener('pointercancel', endDrag);
+      content.addEventListener('dragstart', e => e.preventDefault());
+
+      function open(card) {
+        // A close still fading out has a pending cleanup that would
+        // wipe what we are about to put in — cancel it first.
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        content.innerHTML = '';
+        content.classList.remove('is-single', 'is-pair');
+        const media = card.querySelector('.card-media');
+        if (media) {
+          const clone = media.cloneNode(true);
+          // More than one sheet fans out into a collage rather than a
+          // plain vertical list (see .card-media--collage).
+          if (clone.children.length > 1) clone.classList.add('card-media--collage');
+          // Drives the editorial grid templates in CSS.
+          clone.setAttribute('data-n', Math.min(clone.children.length, 4));
+          // One photo sits beside its caption on desktop; a deck spreads
+          // across the width with the caption underneath.
+          content.classList.toggle('is-single', clone.children.length === 1);
+          content.classList.toggle('is-pair', clone.children.length === 2);
+          // An item can pin its own arrangement; see [data-layout] in CSS.
+          if (card.dataset.layout) content.dataset.layout = card.dataset.layout;
+          else delete content.dataset.layout;
+          content.appendChild(clone);
+        }
+        const cap = card.querySelector('.card-caption');
+        if (cap) content.appendChild(cap.cloneNode(true));
+
+        // Cloned <video> elements do not inherit playback state. This
+        // is also why a deck's non-hero video only needs `poster` and
+        // no `autoplay` in its markup (see "Army Bookmark" below) to
+        // read as a static thumbnail on the canvas: this forced .play()
+        // makes it move once it is actually opened in the popup,
+        // regardless of the original element's autoplay attribute. Any
+        // future stack with a video in a non-first position should
+        // follow that same pattern — static on the canvas, playing here.
+        content.querySelectorAll('video').forEach(v => {
+          v.muted = true; v.loop = true; v.playsInline = true;
+          v.play().catch(() => {});
+        });
+
+        // Publish each item's intrinsic height as --nat-h. The sizing
+        // rules cap at min(cap, --nat-h * 1.7): a source may be scaled
+        // up to 70% beyond its own pixels, which still reads as sharp,
+        // but not stretched arbitrarily far just to fill the layout.
+        const setNat = el => {
+          const h = el.naturalHeight || el.videoHeight;
+          if (h) el.style.setProperty('--nat-h', h + 'px');
+        };
+        content.querySelectorAll('img').forEach(setNat);
+        content.querySelectorAll('video').forEach(v => {
+          if (v.videoHeight) setNat(v);
+          else v.addEventListener('loadedmetadata', () => setNat(v), { once: true });
+        });
+
+        lastFocus = document.activeElement;
+        lb.hidden = false;
+
+        // Stack-then-spread: grid/flex puts hero, wide and caption in
+        // separate columns/rows, so zeroing --dx/--dy alone would still
+        // leave them sitting apart in their own cells — not actually
+        // "stacked". Measure where layout actually placed each piece
+        // (now that lb is unhidden and it has been laid out), find the
+        // shared center of that whole composition, then express "move
+        // to that center" as a --dx/--dy override relative to each
+        // piece's own static grid/flex position. Releasing the override
+        // a frame later restores exactly the --dx/--dy/--r each piece's
+        // own composition rule authored (read dynamically, so this
+        // works the same for single/pair/fan/collage).
+        const pieces = [...content.querySelectorAll('.card-media > *, .card-caption')];
+        void content.offsetHeight; // flush layout before measuring
+        const rects = pieces.map(el => el.getBoundingClientRect());
+        const centerX = (Math.min(...rects.map(r => r.left)) + Math.max(...rects.map(r => r.right))) / 2;
+        const centerY = (Math.min(...rects.map(r => r.top)) + Math.max(...rects.map(r => r.bottom))) / 2;
+        const finalState = pieces.map((el, i) => {
+          const cs = getComputedStyle(el);
+          const dx = parseFloat(cs.getPropertyValue('--dx')) || 0;
+          const dy = parseFloat(cs.getPropertyValue('--dy')) || 0;
+          const r = rects[i];
+          return {
+            dx, dy,
+            r: cs.getPropertyValue('--r') || '0deg',
+            toCenterDx: dx - ((r.left + r.right) / 2 - centerX),
+            toCenterDy: dy - ((r.top + r.bottom) / 2 - centerY),
+          };
+        });
+
+        // Jump to the stacked pose FIRST, with no transition class on
+        // the element yet — this must be an instant, un-animated snap.
+        // Only *after* that stacked position has been committed do we
+        // add .is-spreading and set the transition-delay, so the one
+        // and only animated change is the release below (stacked →
+        // final). Adding the transition class before this jump was the
+        // actual bug: the snap-to-center itself would then try to
+        // animate, and get redirected back to the final position on
+        // the very next frame before it had moved anywhere — net
+        // effect, no visible motion at all.
+        pieces.forEach((el, i) => {
+          const f = finalState[i];
+          el.style.setProperty('--dx', f.toCenterDx + 'px');
+          el.style.setProperty('--dy', f.toCenterDy + 'px');
+          el.style.setProperty('--r', '0deg');
+          el.style.setProperty('--s', '0.9');
+        });
+        void content.offsetHeight; // commit the stacked pose before enabling the transition
+        content.classList.add('is-spreading');
+        pieces.forEach((el, i) => { el.style.transitionDelay = (i * 25) + 'ms'; });
+
+        // Next frame so the opacity/transform transition actually runs.
+        // rAF is paused in a background tab, so a timeout guarantees the
+        // panel still becomes visible and clickable rather than sticking
+        // at opacity 0.
+        const reveal = () => {
+          lb.classList.add('is-open');
+          pieces.forEach((el, i) => {
+            const f = finalState[i];
+            el.style.setProperty('--dx', f.dx + 'px');
+            el.style.setProperty('--dy', f.dy + 'px');
+            el.style.setProperty('--r', f.r);
+            el.style.removeProperty('--s');
+          });
+          // Drag must stay 1:1 with the pointer — drop the transition
+          // (and the per-piece delays, and the now-redundant explicit
+          // --dx/--dy/--r) once the spread has finished.
+          setTimeout(() => {
+            content.classList.remove('is-spreading');
+            pieces.forEach(el => {
+              el.style.transitionDelay = '';
+              el.style.removeProperty('--dx');
+              el.style.removeProperty('--dy');
+              el.style.removeProperty('--r');
+            });
+          }, 320 + pieces.length * 25);
+        };
+        requestAnimationFrame(reveal);
+        setTimeout(reveal, 60);
+        panel.scrollTop = 0;
+        closeBtn.focus({ preventScroll: true });
+      }
+
+      function close() {
+        lb.classList.remove('is-open');
+        content.querySelectorAll('video').forEach(v => v.pause());
+        const done = () => {
+          // Reopened while fading out: leave the new content alone.
+          if (lb.classList.contains('is-open')) return;
+          lb.hidden = true;
+          content.innerHTML = '';
+          lb.removeEventListener('transitionend', done);
+        };
+        lb.addEventListener('transitionend', done);
+        // Backstop: transitionend never fires if the tab is hidden.
+        closeTimer = setTimeout(done, 420);
+        if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+      }
+
+      // The canvas pans on pointer drag, so only treat a press as a
+      // click when the pointer barely moved. Capture phase runs before
+      // the canvas handlers.
+      let downX = 0, downY = 0, moved = true;
+      document.addEventListener('pointerdown', e => {
+        downX = e.clientX; downY = e.clientY; moved = false;
+      }, true);
+      document.addEventListener('pointerup', e => {
+        moved = Math.hypot(e.clientX - downX, e.clientY - downY) > 6;
+      }, true);
+
+      document.addEventListener('click', e => {
+        if (!isDesktopViewport()) return;
+        if (lb.contains(e.target)) return;
+        if (moved) return;
+        if (e.target.closest('a, button')) return;
+        const card = e.target.closest('.card');
+        if (!card) return;
+        e.preventDefault();
+        open(card);
+      });
+
+      closeBtn.addEventListener('click', close);
+      lb.addEventListener('click', e => {
+        // The click that ends a drag lands on the backdrop; swallow it once.
+        if (dragMoved) { dragMoved = false; return; }
+        // Anywhere outside the pieces themselves closes. Testing for the
+        // overlay alone was not enough: the panel is a transparent box
+        // covering most of the screen, so the empty space around a
+        // composition belonged to the panel and swallowed the tap.
+        if (e.target.closest('.card-media > *, .card-caption, .lightbox-close')) return;
+        close();
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && lb.classList.contains('is-open')) close();
+      });
+
+      // Keyboard access: cards are divs, so give them a tab stop — but
+      // only where there is actually something for Enter/Space to open.
+      // Below 900px the card already shows everything inline, so it is
+      // not a button at all and should not claim to be one.
+      if (isDesktopViewport()) {
+        document.querySelectorAll('.card--photo, .card--stack, .card--note').forEach(card => {
+          card.tabIndex = 0;
+          card.setAttribute('role', 'button');
+          const t = card.querySelector('.card-caption strong');
+          if (t) card.setAttribute('aria-label', t.textContent.trim());
+          card.addEventListener('keydown', e => {
+            if (!isDesktopViewport()) return;
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card); }
+          });
+        });
+      }
+    })();
   </script>
 </body>
 </html>

@@ -2811,14 +2811,6 @@ ol li, ul li {
   }
 }
 
-/* Flying banner (Playground teaser) — desktop hide, mobile only show. */
-@media (min-width: 1024px) {
-  .fly-band,
-  .fly-banner {
-    display: none !important;
-  }
-}
-
 /* Mobile only — hide the inline Playground cards grid; the "Check my
    playground here" link in the subtext covers navigation to the full
    playground.html instead. Desktop shows the live canvas iframe. */
@@ -2864,6 +2856,65 @@ ol li, ul li {
   flex-direction: column;
   gap: 1.25rem;
   margin-top: 1.75rem;
+}
+
+/* Mobile-only Playground teaser: three pieces from the canvas dropped
+   loosely on a pale frame, linking through to playground.html. Desktop
+   has the live canvas embed instead, so this stays hidden there. */
+.playground-snippet { display: none; }
+@media (max-width: 1023px) {
+  .playground-snippet {
+    display: block;
+    position: relative;
+    height: 220px;
+    margin-top: 1.25rem;
+    background: #F2F2F0;
+    /* Same corner as a portfolio folder card (.stack-card), not a
+       plain white rectangle. */
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .playground-snippet-item {
+    position: absolute;
+    display: block;
+    height: auto;
+    /* Sized to run larger than the frame on purpose — the frame's own
+       rounded corner and overflow:hidden crop them, rather than each
+       piece being scaled down to fit fully inside. */
+    max-width: none;
+  }
+  /* Photos read as prints: soft drop, no mat border — the frame itself
+     now carries the rounded corner instead of a white edge per photo. */
+  .playground-snippet-item--book,
+  .playground-snippet-item--cookie {
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10), 0 10px 18px -8px rgba(0, 0, 0, 0.28);
+  }
+  .playground-snippet-item--book {
+    width: 150px;
+    left: calc(50% - 172px);
+    top: -20px;
+    transform: rotate(-8deg);
+    z-index: 1;
+  }
+  .playground-snippet-item--cookie {
+    width: 190px;
+    left: calc(50% - 110px);
+    top: -25px;
+    transform: rotate(4deg);
+    z-index: 2;
+    object-fit: cover;
+  }
+  /* Transparent PNG: no mat, and a drop-shadow that follows its own
+     shape rather than a box around the transparent padding. */
+  .playground-snippet-item--onceover {
+    width: 220px;
+    left: calc(50% + 10px);
+    top: 60px;
+    transform: rotate(-3deg);
+    z-index: 3;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12)) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.22));
+  }
 }
 
 /* Full playground.html canvas embed — desktop only (see media query
