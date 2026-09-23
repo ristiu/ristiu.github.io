@@ -131,9 +131,9 @@
     }
     .zoom-btn:hover, .zoom-btn:active { opacity: 1; }
 
-    /* Category filter — left edge lines up with the homepage's
-       Playground heading (measured: 87.5px in from the embedded
-       iframe's own left edge), not centered. */
+    /* Category filter — breadcrumb style (plain text + "/" separators,
+       active item bold), not pill buttons. Left edge lines up with the
+       homepage's Playground heading when embedded (see the JS below). */
     .filter-bar {
       position: fixed;
       top: 20px;
@@ -141,42 +141,47 @@
       z-index: 100;
       display: flex;
       flex-wrap: wrap;
+      align-items: baseline;
       justify-content: flex-start;
-      gap: 6px;
+      gap: 0;
       max-width: min(680px, calc(100vw - 88px - 20px));
     }
     .filter-btn {
       font-family: var(--mono);
-      font-size: 10px;
-      line-height: 1;
+      font-size: 11px;
+      line-height: 1.4;
       white-space: nowrap;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: var(--ink);
-      opacity: 0.75;
+      padding: 2px;
+      border: none;
+      background: none;
+      color: var(--ink-muted);
+      font-weight: 400;
       cursor: pointer;
       touch-action: manipulation;
-      transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
+      text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 3px rgba(255,255,255,0.8);
+      transition: color 0.15s;
     }
-    .filter-btn:hover { opacity: 1; }
+    .filter-btn:hover { color: var(--ink); }
     .filter-btn.is-active {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: #ffffff;
-      opacity: 1;
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .filter-sep {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin: 0 8px;
+      text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 3px rgba(255,255,255,0.8);
+      user-select: none;
     }
     /* .card's own transition (further down, opacity/transform/box-shadow)
        already covers this fade — no separate rule needed here. !important
        because .card.is-visible (same specificity, later in source, always
        present by the time filtering happens) would otherwise win and keep
-       filtered-out cards at full opacity. 0.3, not near-zero — dimmed and
-       out of the way, but still visibly there rather than reading as gone. */
+       filtered-out cards at full opacity. Kept high (0.55) on purpose —
+       lower values read as "gone" rather than "de-emphasized". */
     .card.is-filtered-out {
-      opacity: 0.3 !important;
+      opacity: 0.55 !important;
       pointer-events: none;
     }
 
@@ -2014,16 +2019,24 @@
         return btn;
       }
 
+      function addSeparator() {
+        const sep = document.createElement('span');
+        sep.className = 'filter-sep';
+        sep.textContent = '/';
+        sep.setAttribute('aria-hidden', 'true');
+        bar.appendChild(sep);
+      }
+
       const allBtn = makeButton('All Project', '');
       allBtn.classList.add('is-active');
       bar.appendChild(allBtn);
-      categories.forEach(cat => bar.appendChild(makeButton(cat, cat)));
+      categories.forEach(cat => { addSeparator(); bar.appendChild(makeButton(cat, cat)); });
 
       function applyFilter(value) {
         document.querySelectorAll('.card[data-category]').forEach(card => {
           card.classList.toggle('is-filtered-out', !!value && card.dataset.category !== value);
         });
-        [...bar.children].forEach(btn => btn.classList.toggle('is-active', btn.dataset.filter === value));
+        bar.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('is-active', btn.dataset.filter === value));
       }
 
       bar.addEventListener('click', e => {
@@ -2044,12 +2057,15 @@
         if (window.parent === window) return;
         try {
           const parentDoc = window.parent.document;
-          const heading = parentDoc.querySelector('.playground-heading');
+          // Aligned to the subtext paragraph ("It's how I keep the taste
+          // calibrated."), not the "Playground" heading — the two don't
+          // share the same left edge.
+          const subtext = parentDoc.querySelector('.playground-subtext');
           const iframeEl = parentDoc.getElementById('playground-iframe');
-          if (!heading || !iframeEl) return;
-          const headingRect = heading.getBoundingClientRect();
+          if (!subtext || !iframeEl) return;
+          const subtextRect = subtext.getBoundingClientRect();
           const iframeRect = iframeEl.getBoundingClientRect();
-          bar.style.left = (headingRect.left - iframeRect.left) + 'px';
+          bar.style.left = (subtextRect.left - iframeRect.left) + 'px';
         } catch (e) {}
       }
       alignToHeading();
