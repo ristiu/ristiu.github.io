@@ -1721,22 +1721,19 @@
         const media = card.querySelector('.card-media');
         if (media) {
           const clone = media.cloneNode(true);
-          // A PNG hero is usually transparent, so fanning other sheets
-          // behind it (the collage/pair overlap, both negative-margin
-          // stacking) would show through the gaps instead of reading as
-          // a clean deck. Keep those sheets in plain flow instead — one
-          // after another, no overlap — whenever the first sheet is a PNG.
-          const heroImg = clone.children[0];
-          const heroIsPng = !!heroImg && heroImg.tagName === 'IMG' && /\.png(?:[?#]|$)/i.test(heroImg.src);
           // More than one sheet fans out into a collage rather than a
-          // plain vertical list (see .card-media--collage).
-          if (clone.children.length > 1 && !heroIsPng) clone.classList.add('card-media--collage');
+          // plain vertical list (see .card-media--collage). The collage
+          // arranges sheets side by side rather than overlapping them,
+          // so — unlike the card thumbnail's negative-margin peek — a
+          // transparent PNG hero here has nothing behind it to bleed
+          // through; no exception needed.
+          if (clone.children.length > 1) clone.classList.add('card-media--collage');
           // Drives the editorial grid templates in CSS.
           clone.setAttribute('data-n', Math.min(clone.children.length, 4));
           // One photo sits beside its caption on desktop; a deck spreads
           // across the width with the caption underneath.
           content.classList.toggle('is-single', clone.children.length === 1);
-          content.classList.toggle('is-pair', clone.children.length === 2 && !heroIsPng);
+          content.classList.toggle('is-pair', clone.children.length === 2);
           // An item can pin its own arrangement; see [data-layout] in CSS.
           if (card.dataset.layout) content.dataset.layout = card.dataset.layout;
           else delete content.dataset.layout;
