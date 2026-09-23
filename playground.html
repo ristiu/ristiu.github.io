@@ -131,18 +131,19 @@
     }
     .zoom-btn:hover, .zoom-btn:active { opacity: 1; }
 
-    /* Category filter */
+    /* Category filter — left edge lines up with the homepage's
+       Playground heading (measured: 87.5px in from the embedded
+       iframe's own left edge), not centered. */
     .filter-bar {
       position: fixed;
       top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 87.5px;
       z-index: 100;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 6px;
-      max-width: min(680px, calc(100vw - 32px));
+      max-width: min(680px, calc(100vw - 88px - 20px));
     }
     .filter-btn {
       font-family: var(--mono);
@@ -172,9 +173,10 @@
        already covers this fade — no separate rule needed here. !important
        because .card.is-visible (same specificity, later in source, always
        present by the time filtering happens) would otherwise win and keep
-       filtered-out cards at full opacity. */
+       filtered-out cards at full opacity. 0.3, not near-zero — dimmed and
+       out of the way, but still visibly there rather than reading as gone. */
     .card.is-filtered-out {
-      opacity: 0.1 !important;
+      opacity: 0.3 !important;
       pointer-events: none;
     }
 
@@ -2012,7 +2014,7 @@
         return btn;
       }
 
-      const allBtn = makeButton('All', '');
+      const allBtn = makeButton('All Project', '');
       allBtn.classList.add('is-active');
       bar.appendChild(allBtn);
       categories.forEach(cat => bar.appendChild(makeButton(cat, cat)));
@@ -2029,6 +2031,30 @@
         if (!btn) return;
         applyFilter(btn.dataset.filter);
       });
+
+      // Embedded: line the bar's left edge up with the homepage's
+      // Playground heading. A fixed CSS px value can't do this — the
+      // embedded iframe is deliberately wider than the viewport (see
+      // the homepage's own "78vw, not 94vw" comment), so how far its
+      // own left edge sits off-screen varies with window width. Both
+      // documents are same-origin, so measure the heading and the
+      // iframe's own box from the parent's side (same coordinate
+      // space, no cross-origin issue) and derive the offset from that.
+      function alignToHeading() {
+        if (window.parent === window) return;
+        try {
+          const parentDoc = window.parent.document;
+          const heading = parentDoc.querySelector('.playground-heading');
+          const iframeEl = parentDoc.getElementById('playground-iframe');
+          if (!heading || !iframeEl) return;
+          const headingRect = heading.getBoundingClientRect();
+          const iframeRect = iframeEl.getBoundingClientRect();
+          bar.style.left = (headingRect.left - iframeRect.left) + 'px';
+        } catch (e) {}
+      }
+      alignToHeading();
+      window.addEventListener('resize', alignToHeading);
+      window.addEventListener('load', alignToHeading);
     })();
   </script>
 </body>
