@@ -3206,7 +3206,8 @@ ol li, ul li {
      section, with a solid background so the canvas never shows
      through or overlaps the text underneath. */
   .home-playground .playground-sticky-bar {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 20;
     background: #ffffff;
     /* -30px (align with post-it) further shifted -20px to tighten
@@ -3217,26 +3218,6 @@ ol li, ul li {
        Top padding was 12px, reduced by 15px (clamped at 0, can't go
        negative). */
     padding: 0 0 18px;
-  }
-
-  /* JS-driven pin — position:sticky doesn't reliably stick here because
-     the page uses CSS `zoom` for desktop scaling, which breaks native
-     sticky positioning in most browsers (same root cause and fix
-     pattern as .project-sidenav in project.html). The scroll-hint
-     script in index.html toggles this class and sets left/width inline
-     once the bar's natural position would scroll above the viewport
-     top; margin is zeroed since position:fixed offsets add the margin
-     on top of the explicit top/left. */
-  .home-playground .playground-sticky-bar.is-pinned {
-    position: fixed;
-    top: 0;
-    margin: 0;
-  }
-
-  /* Keeps the canvas from jumping up into the gap left when the bar
-     above it switches to position:fixed and leaves the document flow. */
-  .playground-sticky-bar-spacer {
-    display: none;
   }
 
   .home-playground .playground-heading {
