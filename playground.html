@@ -131,6 +131,53 @@
     }
     .zoom-btn:hover, .zoom-btn:active { opacity: 1; }
 
+    /* Category filter */
+    .filter-bar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      max-width: min(680px, calc(100vw - 32px));
+    }
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1;
+      white-space: nowrap;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--ink);
+      opacity: 0.75;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .filter-btn:hover { opacity: 1; }
+    .filter-btn.is-active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #ffffff;
+      opacity: 1;
+    }
+    /* .card's own transition (further down, opacity/transform/box-shadow)
+       already covers this fade — no separate rule needed here. !important
+       because .card.is-visible (same specificity, later in source, always
+       present by the time filtering happens) would otherwise win and keep
+       filtered-out cards at full opacity. */
+    .card.is-filtered-out {
+      opacity: 0.1 !important;
+      pointer-events: none;
+    }
+
     /* Perspective wrapper — desktop 3D tilt context */
     #canvas-perspective {
       position: fixed;
@@ -979,6 +1026,10 @@
 
   <a class="back" href="index.html" aria-label="Back">←</a>
   <div id="scroll-track"><div id="scroll-progress"></div></div>
+
+  <!-- Category filter — buttons are generated from each card's
+       data-category in the script below, "All" first. -->
+  <div class="filter-bar" id="filter-bar"></div>
   <script>
     // Hide the back-to-homepage control when this page is embedded as
     // the homepage's own Playground canvas — going "back" to index.html
@@ -1032,7 +1083,7 @@
     <!-- Featured projects, followed by the rest of the Playground -->
 
     <!-- Pill intake routines -->
-    <div class="card card--stack" data-col="0" data-rot="-1.5" data-layout="pill-routines" style="width:320px;">
+    <div class="card card--stack" data-col="0" data-rot="-1.5" data-layout="pill-routines" data-category="Healthcare" style="width:320px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-pill-routines-hero.jpg" alt="Orange book-shaped pill case and a personalised medication pouch on a yellow background" width="1069" height="1008" style="width:100%;height:auto;display:block;" />
         <img src="assets/portfolio-playground/playground-pill-routines-context.png" alt="User context and emotional design concept for customisable daily pill routines" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
@@ -1043,7 +1094,7 @@
     </div>
 
     <!-- Onceover -->
-    <div class="card card--photo" data-col="1" data-rot="-2" style="width:300px;">
+    <div class="card card--photo" data-col="1" data-rot="-2" data-category="AI &amp; Vibe Coding" style="width:300px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" style="width:100%;display:block;" />
       </div>
@@ -1051,7 +1102,7 @@
     </div>
 
     <!-- Coloring Book -->
-    <div class="card card--photo" data-col="2" data-rot="-1.2">
+    <div class="card card--photo" data-col="2" data-rot="-1.2" data-category="Illustration">
       <div class="card-media">
         <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       </div>
@@ -1059,7 +1110,7 @@
     </div>
 
     <!-- Army Bookmark -->
-    <div class="card card--stack" data-col="0" data-rot="-2.5" data-layout="fan" style="width:300px;">
+    <div class="card card--stack" data-col="0" data-rot="-2.5" data-layout="fan" data-category="AI &amp; Vibe Coding" style="width:300px;">
       <div class="card-media">
         <video src="assets/portfolio-playground/playground-army-bookmark.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
         <video class="army-typing" src="assets/portfolio-playground/playground-army-bookmark-2.mp4" poster="assets/portfolio-playground/playground-army-bookmark-2-static.jpg" muted loop playsinline style="width:100%;display:block;" preload="auto"></video>
@@ -1068,7 +1119,7 @@
     </div>
 
     <!-- Fortune Cookie -->
-    <div class="card card--photo" data-col="3" data-rot="2" style="width:300px;">
+    <div class="card card--photo" data-col="3" data-rot="2" data-category="AI &amp; Vibe Coding" style="width:300px;">
       <div class="card-media">
         <video src="assets/portfolio-playground/playground-fortune-cookie.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       </div>
@@ -1076,7 +1127,7 @@
     </div>
 
     <!-- Fan -->
-    <div class="card card--stack" data-col="3" data-rot="-1.5" data-layout="fan" style="width:300px;">
+    <div class="card card--stack" data-col="3" data-rot="-1.5" data-layout="fan" data-category="Wood Working" style="width:300px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/fan-after2.jpg" alt="Fan after detail" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/fan-before.jpg" alt="Fan before — all white factory finish" style="width:100%;display:block;" />
@@ -1085,7 +1136,7 @@
     </div>
 
     <!-- Noodle Sankey -->
-    <div class="card card--stack" data-col="2" data-rot="-1.8" data-layout="fan" style="width:340px;">
+    <div class="card card--stack" data-col="2" data-rot="-1.8" data-layout="fan" data-category="AI &amp; Vibe Coding" style="width:340px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-sankey-noodle-chart.jpg" alt="Sankey diagram campaign report, noodle chart" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-sankey-sheets-mockup.png" alt="Sankey diagram campaign report, Google Sheets mockup" style="width:100%;display:block;" />
@@ -1096,7 +1147,7 @@
     <!-- Analogue Craft cards -->
 
     <!-- Exhibition -->
-    <div class="card card--photo" data-col="1" data-rot="1.8">
+    <div class="card card--photo" data-col="1" data-rot="1.8" data-category="Prints">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
       </div>
@@ -1104,7 +1155,7 @@
     </div>
 
     <!-- Personalize Clock -->
-    <div class="card card--stack" data-col="0" data-rot="-1.5" style="width:300px;">
+    <div class="card card--stack" data-col="0" data-rot="-1.5" data-category="Life Style" style="width:300px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
@@ -1113,7 +1164,7 @@
     </div>
 
     <!-- Wooden Box -->
-    <div class="card card--photo" data-col="1" data-rot="-1.4" style="width:300px;">
+    <div class="card card--photo" data-col="1" data-rot="-1.4" data-category="Wood Working" style="width:300px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
       </div>
@@ -1123,7 +1174,7 @@
     <!-- Service Design cards -->
 
     <!-- Kemo(n)! -->
-    <div class="card card--stack" data-col="2" data-rot="-1.6" data-layout="kemon" style="width:320px;">
+    <div class="card card--stack" data-col="2" data-rot="-1.6" data-layout="kemon" data-category="Healthcare" style="width:320px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-kemon-hero.png" alt="Kemo(n)! First Chemo Notes Sheet, printed and filled in by hand" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-kemon-context-1.jpg" alt="User context: patients, doctors and nurses during a first chemo consultation" style="width:100%;display:block;" />
@@ -1939,6 +1990,45 @@
           });
         });
       }
+    })();
+  </script>
+
+  <script>
+    // ── Category filter ──────────────────────────────────────────
+    // Dims (rather than removes) cards outside the chosen category, so
+    // canvas positions never shift and nothing needs relayout. Each
+    // card opts in via data-category on the .card element itself.
+    (function () {
+      const bar = document.getElementById('filter-bar');
+      if (!bar) return;
+      const categories = ['AI & Vibe Coding', 'Illustration', 'Life Style', 'Prints', 'Wood Working', 'Healthcare'];
+
+      function makeButton(label, value) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'filter-btn';
+        btn.textContent = label;
+        btn.dataset.filter = value;
+        return btn;
+      }
+
+      const allBtn = makeButton('All', '');
+      allBtn.classList.add('is-active');
+      bar.appendChild(allBtn);
+      categories.forEach(cat => bar.appendChild(makeButton(cat, cat)));
+
+      function applyFilter(value) {
+        document.querySelectorAll('.card[data-category]').forEach(card => {
+          card.classList.toggle('is-filtered-out', !!value && card.dataset.category !== value);
+        });
+        [...bar.children].forEach(btn => btn.classList.toggle('is-active', btn.dataset.filter === value));
+      }
+
+      bar.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        applyFilter(btn.dataset.filter);
+      });
     })();
   </script>
 </body>
