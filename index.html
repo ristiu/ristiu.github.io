@@ -76,6 +76,9 @@
       const isBackNavigation =
         window.navigation?.activation?.navigationType === 'traverse' ||
         (navEntries.length > 0 && navEntry.type === 'back_forward');
+      // Also gates scroll restoration below: a reload should land on top,
+      // only an actual back/forward traversal should resume where you left off.
+      window.__isBackNav = isBackNavigation;
       const hasPlayed = sessionStorage.getItem('has_played_hero_animations') === 'true';
 
       // Once the intro has played in this tab, any return (back/forward
@@ -749,7 +752,11 @@
     const savedY = sessionStorage.getItem('scrollY');
     if (savedY !== null) {
       sessionStorage.removeItem('scrollY');
-      window.scrollTo({ top: parseInt(savedY, 10), behavior: 'instant' });
+      // Only resume the saved position on an actual back/forward traversal —
+      // a plain reload should land on top, not wherever the tab last scrolled.
+      if (window.__isBackNav) {
+        window.scrollTo({ top: parseInt(savedY, 10), behavior: 'instant' });
+      }
     }
     document.documentElement.classList.remove('pre-scroll');
 
