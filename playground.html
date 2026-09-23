@@ -734,19 +734,19 @@
         max-height: min(clamp(260px, 68vh, 720px), calc(var(--nat-h, 100000px) * 1.7));
         max-width: 56%;
       }
-      /* Looser spread — the sheets breathe instead of tucking against
-         each other. */
-      .lightbox-panel .card-media--collage > :nth-child(2) { margin: 26px 0 0 -12px; }
-      .lightbox-panel .card-media--collage > :nth-child(3) { margin: -18px 0 0 -10px; }
-      .lightbox-panel .card-media--collage > :nth-child(4) { margin: 20px 0 0 -14px; }
-      .lightbox-panel .card-media--collage > :nth-child(n+5) { margin: -12px 0 0 -11px; }
+      /* Tucked closer together — denser than the original "breathing"
+         spread. */
+      .lightbox-panel .card-media--collage > :nth-child(2) { margin: 10px 0 0 -18px; }
+      .lightbox-panel .card-media--collage > :nth-child(3) { margin: -20px 0 0 -16px; }
+      .lightbox-panel .card-media--collage > :nth-child(4) { margin: 6px 0 0 -20px; }
+      .lightbox-panel .card-media--collage > :nth-child(n+5) { margin: -16px 0 0 -17px; }
 
       /* Give the healthcare projects' text-heavy second sheets more
          space while keeping their three-photo spreads beside the caption. */
       #lightbox-content[data-layout="pill-routines"] .card-media--collage,
       #lightbox-content[data-layout="kemon"] .card-media--collage {
-        column-gap: clamp(20px, 2vw, 36px);
-        row-gap: clamp(24px, 3vh, 36px);
+        column-gap: clamp(8px, 0.8vw, 14px);
+        row-gap: clamp(8px, 1vh, 14px);
       }
       #lightbox-content[data-layout="pill-routines"] .card-media--collage > :nth-child(1) {
         max-width: 40%;
