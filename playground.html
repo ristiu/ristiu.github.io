@@ -552,11 +552,10 @@
       --r: -2.4deg;
       z-index: 3;
     }
-    /* Kemo(n)!'s third sheet is a wide three-column composite (sheet +
-       reflection + reaction) — the standard 44%-wide collage tile
-       crushes all three columns too small to read, so this one image
-       gets a bigger allowance than the shared collage rule above. */
-    .lightbox-panel .card-media--collage > img[src*="playground-kemon-context-2"] {
+    /* The healthcare projects' third sheets contain several text and
+       image panels, so they get more room than other collage tiles. */
+    .lightbox-panel .card-media--collage > img[src*="playground-kemon-context-2"],
+    .lightbox-panel .card-media--collage > img[src*="playground-pill-routines-concept"] {
       max-height: min(clamp(170px, 44vh, 460px), calc(var(--nat-h, 100000px) * 1.7)) !important;
       max-width: 78% !important;
     }
@@ -693,6 +692,30 @@
       .lightbox-panel .card-media--collage > :nth-child(3) { margin: -18px 0 0 -10px; }
       .lightbox-panel .card-media--collage > :nth-child(4) { margin: 20px 0 0 -14px; }
       .lightbox-panel .card-media--collage > :nth-child(n+5) { margin: -12px 0 0 -11px; }
+
+      /* Give the healthcare projects' text-heavy second sheets more
+         space while keeping their three-photo spreads beside the caption. */
+      #lightbox-content[data-layout="pill-routines"] .card-media--collage,
+      #lightbox-content[data-layout="kemon"] .card-media--collage {
+        column-gap: clamp(20px, 2vw, 36px);
+        row-gap: clamp(24px, 3vh, 36px);
+      }
+      #lightbox-content[data-layout="pill-routines"] .card-media--collage > :nth-child(1) {
+        max-width: 40%;
+      }
+      #lightbox-content[data-layout="kemon"] .card-media--collage > :nth-child(1) {
+        max-width: 36%;
+      }
+      #lightbox-content[data-layout="pill-routines"] .card-media--collage > :nth-child(2),
+      #lightbox-content[data-layout="kemon"] .card-media--collage > :nth-child(2) {
+        max-width: 55%;
+        max-height: min(clamp(180px, 54vh, 560px), calc(var(--nat-h, 100000px) * 1.7));
+        margin: 0;
+      }
+      #lightbox-content[data-layout="pill-routines"] .card-media--collage > :nth-child(3),
+      #lightbox-content[data-layout="kemon"] .card-media--collage > :nth-child(3) {
+        margin: 0;
+      }
 
       /* Caption sits beside the photos rather than under them — one
          deck or one photo, same composition. That frees the whole
@@ -958,7 +981,17 @@
     </div>
     -->
 
-    <!-- AI & Vibe Coding cards first -->
+    <!-- Featured projects, followed by the rest of the Playground -->
+
+    <!-- Pill intake routines -->
+    <div class="card card--stack" data-col="0" data-rot="-1.5" data-layout="pill-routines" style="width:320px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/playground-pill-routines-hero.jpg" alt="Orange book-shaped pill case and a personalised medication pouch on a yellow background" width="1069" height="1008" style="width:100%;height:auto;display:block;" />
+        <img src="assets/portfolio-playground/playground-pill-routines-context.png" alt="User context and emotional design concept for customisable daily pill routines" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
+        <img src="assets/portfolio-playground/playground-pill-routines-concept.png" alt="Pill container concept, accessible materials, personalisation and reaction to the design" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
+      </div>
+      <p class="card-caption"><strong>How might we make pill intake routines more fun for adults and older adults with polypharmacy?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system, especially for people with high amount daily medication (polypharmacy). Simple approaches of enabling daily schedule customization as well as easy material access would achieve design intent on reducing dreadfulness with ‘form follows fun’ philosophy.</span></span></p>
+    </div>
 
     <!-- Onceover -->
     <div class="card card--photo" data-col="1" data-rot="-2" style="width:300px;">
@@ -966,6 +999,14 @@
         <img src="assets/portfolio-playground/Onceover.png" alt="Onceover Chrome extension" style="width:100%;display:block;" />
       </div>
       <p class="card-caption"><strong>Onceover, Chrome Extension for Job Autofills (Unreleased)</strong><span class="card-tag">AI &amp; Vibe Coding</span><span class="card-body"><br><span class="card-body-preview">Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other ... <span class="read-more">Read more</span></span><span class="card-body-full">Applying for jobs is operationally heavy and emotionally draining. While not all job posting provide resume parse, and other extension can handle the data fetch, their cold UIs make filling them out feel like a tax return. I realized nobody was addressing the feeling of the experience for job filling form. Onceover taken position from being functional yet delightfull autofills job forms.</span></span></p>
+    </div>
+
+    <!-- Coloring Book -->
+    <div class="card card--photo" data-col="2" data-rot="-1.2">
+      <div class="card-media">
+        <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
+      </div>
+      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color ... <span class="read-more">Read more</span></span><span class="card-body-full">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></span></span></p>
     </div>
 
     <!-- Army Bookmark -->
@@ -1013,14 +1054,6 @@
       <p class="card-caption" style="opacity:1;"><strong>Design Project Catalogue</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with ... <span class="read-more">Read more</span></span><span class="card-body-full">In collaborative projects, I serve as the lead for layout design and creative direction for Design Exhibition, I partner with illustrators to conceptualize the visual narrative, and also ensuring the final binding and production.</span></span></p>
     </div>
 
-    <!-- Coloring Book -->
-    <div class="card card--photo" data-col="2" data-rot="-1.2">
-      <div class="card-media">
-        <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
-      </div>
-      <p class="card-caption"><strong>Freestyle Coloring Book</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br><span class="card-body-preview">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color ... <span class="read-more">Read more</span></span><span class="card-body-full">6 titles coloring book + book binding myself. It built on one idea: outlines shouldn't dominate, so I sketched them loose, color wherever feels right. Sold 50+ copies without expecting to. ^^<br><a href="https://www.instagram.com/contourgestalt/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">@contourgestalt</a></span></span></p>
-    </div>
-
     <!-- Personalize Clock -->
     <div class="card card--stack" data-col="0" data-rot="-1.5" style="width:300px;">
       <div class="card-media">
@@ -1041,7 +1074,7 @@
     <!-- Service Design cards -->
 
     <!-- Kemo(n)! -->
-    <div class="card card--stack" data-col="2" data-rot="-1.6" style="width:320px;">
+    <div class="card card--stack" data-col="2" data-rot="-1.6" data-layout="kemon" style="width:320px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-kemon-hero.png" alt="Kemo(n)! First Chemo Notes Sheet, printed and filled in by hand" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-kemon-context-1.jpg" alt="User context: patients, doctors and nurses during a first chemo consultation" style="width:100%;display:block;" />
