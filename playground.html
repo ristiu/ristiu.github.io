@@ -1498,21 +1498,16 @@
       // Measured from the cards that were actually laid out, rather than
       // hardcoded: the old fixed 600 was tuned for a wider board, so
       // after the board tightened it pushed everything right and left a
-      // band of dead space down the left edge.
-      function boardCenter() {
-        const cards = [...root.querySelectorAll('.card[data-col]')];
-        if (!cards.length) return [600, 260];
-        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-        cards.forEach(c => {
-          const l = parseFloat(c.style.left) || 0, t = parseFloat(c.style.top) || 0;
-          minX = Math.min(minX, l); maxX = Math.max(maxX, l + c.offsetWidth);
-          minY = Math.min(minY, t); maxY = Math.max(maxY, t + c.offsetHeight);
-        });
-        return [(minX + maxX) / 2, (minY + maxY) / 2];
-      }
-      const [canvasCenterX, canvasCenterY] = boardCenter();
-      tx = window.innerWidth  / 2 - canvasCenterX;
-      ty = window.innerHeight / 2 - canvasCenterY;
+      // band of dead space down the left edge. Horizontal stays centered
+      // on the board; vertical anchors near the top instead of the
+      // board's overall middle, so the default view opens on the first
+      // row of projects instead of scrolled down into the middle of the
+      // whole collection.
+      const initialBounds = computeContentBounds();
+      const canvasCenterX = (initialBounds.minX + initialBounds.maxX) / 2;
+      const TOP_ANCHOR_MARGIN = 60;
+      tx = window.innerWidth / 2 - canvasCenterX;
+      ty = TOP_ANCHOR_MARGIN - initialBounds.minY;
 
       // Embedded on the homepage: the homepage sets this flag once its
       // intro has played in this tab (same origin, so sessionStorage is
