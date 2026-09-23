@@ -288,34 +288,13 @@
        lightbox can show every frame. */
     .card--stack .card-media > :first-child { position: relative; z-index: 3; }
     .card--stack .card-media { overflow: visible; }
-    .card--stack .card-media > :nth-child(2),
-    .card--stack .card-media > :nth-child(3) {
-      position: absolute;
-      inset: 0;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 0;
-      /* Dimmed with a wash of the accent orange (see #stack-tint below
-         the <body> tag) so the sheets behind the front photo read as
-         receding into the stack rather than sitting at the same depth. */
-      filter: url(#stack-tint) brightness(0.9);
-    }
-    .card--stack .card-media > :nth-child(2) {
-      z-index: 2;
-      transform: rotate(3.5deg) translate(7px, 5px) scale(0.985);
-    }
-    .card--stack .card-media > :nth-child(3) {
-      z-index: 1;
-      transform: rotate(-3deg) translate(-6px, 9px) scale(0.97);
-    }
-    /* Hover lift is on the card; the deck must not also scale its
-       own layers or the fan collapses. */
-    .card--stack:hover .card-media > :nth-child(n+2) { transform: none; }
-    .card--stack:hover .card-media > :nth-child(2) {
-      transform: rotate(5deg) translate(11px, 6px) scale(0.985);
-    }
-    .card--stack:hover .card-media > :nth-child(3) {
-      transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
+    /* Desktop: the deck reads as a single photo plus a count badge —
+       no fanned peek layers behind the front image. Mobile still shows
+       every sheet in normal flow (the max-width: 899px block below
+       forces display back on with !important), so this only hides the
+       desktop-only absolute-positioned peek. */
+    .card--stack .card-media > :nth-child(n+2) {
+      display: none !important;
     }
 
     /* Sheet count, bottom-right of a deck */
@@ -328,10 +307,8 @@
       font-family: var(--mono);
       font-size: 9px;
       line-height: 1;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      color: #FFFFFF;
+      background: var(--ink);
       padding: 4px 6px;
       /* Matches .stack-card-tag's chip corner on the homepage, not a
          pill — same tag language across both pages. */
@@ -371,8 +348,7 @@
        preview. Same breakpoint as the desktop grid/collage compositions
        further down, so the two stay in sync. */
     @media (max-width: 899px) {
-      .card--stack .card-media > :nth-child(2),
-      .card--stack .card-media > :nth-child(3) {
+      .card--stack .card-media > :nth-child(n+2) {
         position: static !important;
         inset: auto !important;
         height: auto !important;
@@ -575,6 +551,14 @@
       margin: -12px 0 0 -14px;
       --r: -2.4deg;
       z-index: 3;
+    }
+    /* Kemo(n)!'s third sheet is a wide three-column composite (sheet +
+       reflection + reaction) — the standard 44%-wide collage tile
+       crushes all three columns too small to read, so this one image
+       gets a bigger allowance than the shared collage rule above. */
+    .lightbox-panel .card-media--collage > img[src*="playground-kemon-context-2"] {
+      max-height: min(clamp(170px, 44vh, 460px), calc(var(--nat-h, 100000px) * 1.7)) !important;
+      max-width: 78% !important;
     }
     .lightbox-panel .card-media--collage > :nth-child(4) {
       margin: 22px 0 0 -16px;
@@ -1049,6 +1033,18 @@
         <img src="assets/portfolio-playground/wooden-box.jpg" alt="Wooden boxes with wood joinery" style="width:100%;display:block;" />
       </div>
       <p class="card-caption"><strong>Wooden Box Creation</strong><span class="card-tag">Analogue Craft</span><span class="card-body"><br>Small wooden boxes made without a single drop of glue. Pure wood joinery, exploring different joint types and compositions.</span></p>
+    </div>
+
+    <!-- Service Design cards -->
+
+    <!-- Kemo(n)! -->
+    <div class="card card--stack" data-col="2" data-rot="-1.6" style="width:320px;">
+      <div class="card-media">
+        <img src="assets/portfolio-playground/playground-kemon-hero.png" alt="Kemo(n)! First Chemo Notes Sheet, printed and filled in by hand" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/playground-kemon-context-1.jpg" alt="User context: patients, doctors and nurses during a first chemo consultation" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/playground-kemon-context-2.jpg" alt="Reflection on care communication and reactions to the concept" style="width:100%;display:block;" />
+      </div>
+      <p class="card-caption"><strong>How might we make first-time chemotherapy journey more predictable?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - trying to cope with emotional acceptance while grasping the unfamiliar chemotherapy routines reality. To avoid stress-induced memory lapses during doctor&rsquo;s consultation: a simple, shareable, and printable microguide form is introduced to facilitate note-taking that makes chemotherapy steps more predictable.</span></span></p>
     </div>
 
 
