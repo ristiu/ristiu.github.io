@@ -1042,6 +1042,7 @@
     @media (max-width: 699px) {
       #scroll-track { display: block; }
       .zoom-controls { display: none; }
+      .filter-icon { transform: translateY(2px); }
       /* On mobile the back arrow used its own oversized desktop
          position (top:24/left:28, 2rem glyph) which sat awkwardly
          above-left of the filter row instead of reading as part of
@@ -1053,7 +1054,7 @@
          branch below) so the arrow lines up with the portfolio
          content underneath instead of the filter row above it. */
       .back {
-        top: 17px;
+        top: 15px;
         left: 32px;
         font-size: 1.2rem;
         line-height: 1.4;
@@ -2092,10 +2093,10 @@
     (function () {
       const bar = document.getElementById('filter-bar');
       if (!bar) return;
-      // Still a work-in-progress feature — visible in local dev only,
-      // hidden on the live site until it's ready to ship.
+      // Keep the desktop production canvas as-is; the filter is ready
+      // for mobile and remains available at all sizes in local dev.
       const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
-      if (!isLocalDev) return;
+      if (!isMobile && !isLocalDev) return;
       const categories = ['AI & Vibe Coding', 'Illustration & Prints', 'Wood Working', 'Healthcare'];
 
       function makeButton(label, value) {
