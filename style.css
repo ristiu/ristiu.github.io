@@ -293,11 +293,13 @@ body {
   z-index: 6;
   /* Badge sits at the right edge of this box (near the card's curled
      corner) instead of the left, via a flex end-alignment on the child
-     rather than repositioning the box itself. */
+     rather than repositioning the box itself. This box itself is not
+     animated — the entrance roll lives on .status-badge directly (see
+     below), so it's self-contained and doesn't depend on this box's
+     width or resting translateY (which differs on mobile). */
   display: flex;
   justify-content: flex-end;
   transform: rotate(-1.5deg) translateY(10px);
-  animation: role-stamp-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.35s backwards;
 }
 
 /* Rotating seal badge: green circle, "OPEN TO WORK" + "COLLABORATION"
@@ -316,6 +318,16 @@ body {
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(34, 197, 94, 0.25);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  /* Rolls in from off-screen left once the card has landed (same
+     1.35s delay the old entrance used). `both` (not just `forwards`)
+     so the badge stays hidden off-screen during the delay too —
+     without it, it would flash at its resting spot for 1.35s, then
+     jump out to -100vw only to immediately roll back in. Lives on the
+     badge itself, not the wide .hero-current-role positioning box, so
+     it doesn't care about that box's width or the mobile/desktop
+     resting-position difference — it just ends at its own natural
+     (untransformed) position, wherever the flex layout already put it. */
+  animation: rollIn 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.35s both;
 }
 .status-badge:hover {
   transform: scale(1.08) rotate(5deg);
@@ -376,10 +388,22 @@ body {
   .badge-text-svg, .pulse-ring { animation: none; }
 }
 
-@keyframes role-stamp-in {
-  0%   { opacity: 0; transform: rotate(-1.5deg) scale(1.12) translateY(6px); }
-  70%  { opacity: 1; transform: rotate(-1.5deg) scale(0.99) translateY(10.5px); }
-  100% { opacity: 1; transform: rotate(-1.5deg) scale(1) translateY(10px); }
+@keyframes rollIn {
+  0%   { transform: translateX(-100vw) rotate(-540deg); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+}
+
+/* First-visit-only, like every other hero entrance: html.is-back-nav
+   is set synchronously in <head>, before paint, whenever this tab has
+   already played the intro once (covers a plain reload too, not just
+   true back/forward — see the detector script's comment). The other
+   is-back-nav skip rules on this page live inside a desktop-only
+   (min-width:1024px) block because those elements only animate on
+   desktop; the badge's roll-in runs at every width, so this one is
+   deliberately unscoped. */
+html.is-back-nav .status-badge {
+  animation: none !important;
 }
 
 .hero-note-wrap--settled .hero-current-role {
@@ -1063,7 +1087,10 @@ a:hover { color: var(--accent); }
   /* Drop the "open to work" badge further down on a phone-width card
      so it clears the second bullet's text entirely — overlapping the
      card's own orange background below the text is fine, overlapping
-     the white text itself is not. */
+     the white text itself is not. The roll-in entrance lives on the
+     badge itself (see .status-badge), so it needs no mobile-specific
+     override here — it always ends at the badge's natural position,
+     wherever this translateY places it. */
   .hero-current-role {
     transform: rotate(-1.5deg) translateY(90px);
   }
