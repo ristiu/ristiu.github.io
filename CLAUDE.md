@@ -15,6 +15,7 @@ Read this file before doing anything. Every session starts here.
 - `style.css` — global styles
 - `cursor.js` — custom cursor, do not touch
 - `prompts/` — case study content prompts, written in claude.ai, executed here
+- `design-direction/` — how each page is actually built (typography, color, motion, layout patterns). Read the relevant file there before touching visual/interaction code on that page. Start with `design-direction/00-shared-foundations.md`.
 
 ---
 
