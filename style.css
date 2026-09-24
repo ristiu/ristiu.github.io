@@ -117,9 +117,8 @@ body {
 .hero-card--note {
   background: var(--accent);
   color: #ffffff;
-  border-radius: 4px 4px 0 4px;
+  border-radius: 4px;
   padding: 1.5rem 1.5rem 2rem;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 48px), calc(100% - 48px) 100%, 0 100%);
   /* Ambient lift + tighter contact shadow. filter (not box-shadow) so the
      shadow follows the clipped corner instead of the rectangular box. */
   filter:
@@ -155,21 +154,11 @@ body {
   z-index: 1;
 }
 
-/* Curled corner flap. The card clips its bottom-right 48px triangle
-   away (see clip-path above); the flap lives INSIDE the card so it
-   follows the card's own rotate/scale and can never jut past its edge.
-   The SVG path folds back over the card with a curved lifted edge; the
-   underside gradient runs from crease shadow to paper highlight, and
-   the drop-shadow falls onto the card beneath the lifted paper. */
+/* Curled corner flap — hidden per request; the card is now a plain
+   rectangle (border-radius restored to 4px uniformly above, clip-path
+   removed) with no cut corner for this to fold over. */
 .hero-note-curl {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 48px;
-  height: 48px;
-  z-index: 2;
-  pointer-events: none;
-  filter: drop-shadow(-4px -3px 5px rgba(0, 0, 0, 0.30));
+  display: none;
 }
 .hero-note-curl svg { display: block; width: 100%; height: 100%; }
 
