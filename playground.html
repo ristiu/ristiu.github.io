@@ -140,12 +140,17 @@
       left: 87.5px;
       z-index: 100;
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: baseline;
       justify-content: flex-start;
       gap: 0;
-      max-width: min(680px, calc(100vw - 88px - 20px));
+      max-width: min(900px, calc(100vw - 88px - 20px));
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
     }
+    .filter-bar::-webkit-scrollbar { display: none; }
     .filter-btn {
       font-family: var(--mono);
       font-size: 11px;
@@ -163,7 +168,7 @@
     }
     .filter-btn:hover { color: var(--ink); }
     .filter-btn.is-active {
-      color: var(--ink);
+      color: var(--accent);
       font-weight: 700;
     }
     .filter-sep {
@@ -174,15 +179,21 @@
       text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 3px rgba(255,255,255,0.8);
       user-select: none;
     }
-    /* .card's own transition (further down, opacity/transform/box-shadow)
-       already covers this fade — no separate rule needed here. !important
-       because .card.is-visible (same specificity, later in source, always
-       present by the time filtering happens) would otherwise win and keep
-       filtered-out cards at full opacity. Kept high (0.55) on purpose —
-       lower values read as "gone" rather than "de-emphasized". */
+    .filter-icon {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 6px;
+      color: var(--ink-muted);
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)) drop-shadow(0 0 3px rgba(255,255,255,0.8));
+    }
+    .filter-icon svg { display: block; }
+    /* Non-matching cards are removed from the board entirely (not just
+       dimmed), and layoutCards() (below) re-packs the remaining ones so
+       the columns collapse instead of leaving gaps. !important because
+       .card.is-visible (same specificity, later in source, always
+       present by the time filtering happens) would otherwise win. */
     .card.is-filtered-out {
-      opacity: 0.55 !important;
-      pointer-events: none;
+      display: none !important;
     }
 
     /* Perspective wrapper — desktop 3D tilt context */
@@ -650,8 +661,8 @@
     }
     /* The healthcare projects' third sheets contain several text and
        image panels, so they get more room than other collage tiles. */
-    .lightbox-panel .card-media--collage > img[src*="playground-kemon-context-2"],
-    .lightbox-panel .card-media--collage > img[src*="playground-pill-routines-concept"] {
+    .lightbox-panel .card-media--collage > img[src*="playground-kemon-carecommunication"],
+    .lightbox-panel .card-media--collage > img[src*="playground-pill-routines-formfollowfun"] {
       max-height: min(clamp(170px, 44vh, 460px), calc(var(--nat-h, 100000px) * 1.7)) !important;
       max-width: 78% !important;
     }
@@ -993,11 +1004,21 @@
       pointer-events: none;
     }
 
-    /* Mobile scroll progress bar */
+    /* Mobile scroll progress bar. Left edge lines up with the back
+       arrow's own left edge (32px, matching the mobile card row's own
+       left padding — see the isMobile JS branch below) instead of the
+       filter row, so it reads as anchored to the page's actual left
+       margin. Sits far enough below the filter row (which bottoms out
+       around 40px) to clear it with a visible gap. Width is an explicit
+       100vw-based calc (matching how .filter-bar computes its own
+       max-width above) rather than a `right` inset — a `right` inset on
+       this fixed element was resolving short of the true viewport edge
+       on real mobile browsers. */
     #scroll-track {
       display: none;
       position: fixed;
-      top: 41px; left: 64px; right: 20px;
+      top: 48px; left: 32px;
+      width: calc(100vw - 32px - 12px);
       height: 3px;
       background: rgba(0,0,0,0.08);
       border-radius: 2px;
@@ -1015,6 +1036,33 @@
     @media (max-width: 699px) {
       #scroll-track { display: block; }
       .zoom-controls { display: none; }
+      /* On mobile the back arrow used its own oversized desktop
+         position (top:24/left:28, 2rem glyph) which sat awkwardly
+         above-left of the filter row instead of reading as part of
+         the same header cluster. Shrink and vertically line it up
+         with the funnel icon + "All Project" row (top:20px), a short
+         gap to its left. */
+      /* Left edge matches the mobile card row's own left padding
+         (root.style.padding = '72px 32px 40px' in the isMobile JS
+         branch below) so the arrow lines up with the portfolio
+         content underneath instead of the filter row above it. */
+      .back {
+        top: 17px;
+        left: 32px;
+        font-size: 1.2rem;
+        line-height: 1.4;
+      }
+      /* .card--photo/.card--stack captions cap themselves at
+         calc(100% - 24px) so a caption never touches the next card
+         over on the desktop canvas — on mobile's single-column stack
+         there is no next card, so that cap just makes the text
+         column narrower than the photo sitting directly above it.
+         Let it use the full width instead. */
+      .card--photo .card-caption,
+      .card--stack .card-caption {
+        width: 100%;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -1093,9 +1141,8 @@
     <div class="card card--stack" data-col="0" data-rot="-1.5" data-layout="pill-routines" data-category="Healthcare" style="width:320px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-pill-routines-hero.jpg" alt="Orange book-shaped pill case and a personalised medication pouch on a yellow background" width="1069" height="1008" style="width:100%;height:auto;display:block;" />
-        <img src="assets/portfolio-playground/playground-pill-routines-context.png" alt="User context and emotional design concept for customisable daily pill routines" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
-        <img src="assets/portfolio-playground/playground-pill-routines-concept.png" alt="Pill container concept, accessible materials, personalisation and reaction to the design" width="2500" height="1406" style="width:100%;height:auto;display:block;" />
-        <img class="card-media-small" src="assets/portfolio-playground/playground-pill-routines-woman.jpg" alt="A woman sorting her daily medication into a pill organiser" width="1200" height="556" style="width:100%;height:auto;display:block;" />
+        <img src="assets/portfolio-playground/playground-pill-routines-usercontext.webp" alt="User context: existing pillboxes and what's lacking for high-volume, hard-to-read dosing" style="width:100%;height:auto;display:block;" />
+        <img src="assets/portfolio-playground/playground-pill-routines-formfollowfun.webp" alt="Form follow fun: the book-shaped pill container concept and reaction to it" style="width:100%;height:auto;display:block;" />
       </div>
       <p class="card-caption"><strong>How might we make pill intake routines more fun for adults and older adults with polypharmacy?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing inclusive healthcare. The project aims to make medication routines more engaging, by addressing the lack of a personalisation system, especially for people with high amount daily medication (polypharmacy). Simple approaches of enabling daily schedule customization as well as easy material access would achieve design intent on reducing dreadfulness with ‘form follows fun’ philosophy.</span></span></p>
     </div>
@@ -1109,7 +1156,7 @@
     </div>
 
     <!-- Coloring Book -->
-    <div class="card card--photo" data-col="2" data-rot="-1.2" data-category="Illustration">
+    <div class="card card--photo" data-col="2" data-rot="-1.2" data-category="Illustration &amp; Prints">
       <div class="card-media">
         <video src="assets/portfolio-playground/playground-coloring-book.mp4" muted loop playsinline autoplay style="width:100%;display:block;" preload="auto"></video>
       </div>
@@ -1154,7 +1201,7 @@
     <!-- Analogue Craft cards -->
 
     <!-- Exhibition -->
-    <div class="card card--photo" data-col="1" data-rot="1.8" data-category="Prints">
+    <div class="card card--photo" data-col="1" data-rot="1.8" data-category="Illustration &amp; Prints">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-exhibition.jpg" alt="Exhibition" style="width:100%;display:block;" />
       </div>
@@ -1162,7 +1209,7 @@
     </div>
 
     <!-- Personalize Clock -->
-    <div class="card card--stack" data-col="0" data-rot="-1.5" data-category="Life Style" style="width:300px;">
+    <div class="card card--stack" data-col="0" data-rot="-1.5" data-category="Wood Working" style="width:300px;">
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-clock-1.avif" alt="Personalize clock" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-clock-2.jpg" alt="Personalize clock detail" style="width:100%;display:block;" />
@@ -1185,8 +1232,7 @@
       <div class="card-media">
         <img src="assets/portfolio-playground/playground-kemon-hero.png" alt="Kemo(n)! First Chemo Notes Sheet, printed and filled in by hand" style="width:100%;display:block;" />
         <img src="assets/portfolio-playground/playground-kemon-context-1.jpg" alt="User context: patients, doctors and nurses during a first chemo consultation" style="width:100%;display:block;" />
-        <img src="assets/portfolio-playground/playground-kemon-context-2.jpg" alt="Reflection on care communication and reactions to the concept" style="width:100%;display:block;" />
-        <img class="card-media-small" src="assets/portfolio-playground/playground-kemon-waitingroom.jpg" alt="Hospital waiting room during a first chemo visit" style="width:100%;display:block;" />
+        <img src="assets/portfolio-playground/playground-kemon-carecommunication.webp" alt="Reflection on care communication and reactions to the concept" style="width:100%;display:block;" />
       </div>
       <p class="card-caption"><strong>How might we make first-time chemotherapy journey more predictable?</strong><span class="card-tag">Service Design</span><span class="card-body"><br><span class="card-body-preview">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - ... <span class="read-more">Read more</span></span><span class="card-body-full">This is designing care communication, First time doing chemo treatment, cancer patients and caregivers are usually in limbo - trying to cope with emotional acceptance while grasping the unfamiliar chemotherapy routines reality. To avoid stress-induced memory lapses during doctor&rsquo;s consultation: a simple, shareable, and printable microguide form is introduced to facilitate note-taking that makes chemotherapy steps more predictable.</span></span></p>
     </div>
@@ -1207,6 +1253,10 @@
   <script>
     const root = document.getElementById('canvas-root');
     const isMobile = window.innerWidth < 700;
+    // Shared by the top-clearance tweaks below (both the standalone-page
+    // pan anchor and the embedded-page pan clamp) — the category filter
+    // bar is local-dev only, so extra breathing room only applies there.
+    const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
 
     // ── Column packer — desktop only ─────────────────────────────
     // COL_X spacing (400px) is set so that even the widest card (340px,
@@ -1220,8 +1270,21 @@
     // depths under the canvas's perspective — small enough (±10px)
     // that perspective foreshortening never grows a card past its
     // column's horizontal clearance.
-    function layoutCards() {
-      const cards = [...document.querySelectorAll('#canvas-root .card[data-col]')];
+    function layoutCards(opts) {
+      // Cards hidden by the category filter (see the filter script at
+      // the bottom of this file) are excluded here, not just skipped
+      // visually — leaving them out of the stacking pass is what makes
+      // the remaining cards collapse together instead of leaving a
+      // gap where a hidden one used to be.
+      const cards = [...document.querySelectorAll('#canvas-root .card[data-col]:not(.is-filtered-out)')];
+      // When a category filter is narrowing the board (opts.reindex),
+      // authored data-col would otherwise leave the surviving cards
+      // stranded in their original columns — e.g. two matches in
+      // columns 1 and 3 would leave a big empty gap where columns 0
+      // and 2 used to be. Re-indexing sequentially (0, 1, 2, 3, 0, ...)
+      // repacks them from the top-left instead. The default (unfiltered)
+      // board keeps each card's own hand-authored column.
+      const reindex = !!(opts && opts.reindex);
       // Everything on the board is laid out at 70% of the sizes the
       // numbers below are written in, so the authored clearance maths
       // stays readable while the whole composition tightens up.
@@ -1232,7 +1295,7 @@
       // the sticky Playground header bar + its drop-shadow, so the top
       // row of cards never sits flush against that edge.
       const embedOffset = document.documentElement.classList.contains('is-embedded') ? 25 : 0;
-      const COL_START = [150, 90, 130, 175].map(v => Math.round(v * SCALE) + embedOffset);
+      const COL_START = [150, 150, 150, 150].map(v => Math.round(v * SCALE) + embedOffset);
       const JITTER    = [0, 0, 0, 0, 0, 0, 0, 0];
       // Horizontal nudge + per-card tilt: the columns keep the
       // composition organized, these make it look hand-placed rather
@@ -1258,7 +1321,7 @@
       const COL_Z     = [10, -10, 10, -10];
       const colTops = [...COL_START];
       cards.forEach((card, i) => {
-        const col = parseInt(card.dataset.col) || 0;
+        const col = reindex ? (i % COL_X.length) : (parseInt(card.dataset.col) || 0);
         // Authored width is captured once, so re-running the layout
         // never scales an already-scaled card.
         if (!card.dataset.w) card.dataset.w = parseFloat(card.style.width) || card.offsetWidth;
@@ -1401,8 +1464,11 @@
         const b = computeContentBounds();
         const BUFFER_X = 235;
         // Tighter than BUFFER_X — less blank space above/below the
-        // cards when panned to the top/bottom edge.
-        const BUFFER_Y = 50;
+        // cards when panned to the top/bottom edge. Larger in local dev:
+        // this is also the value that pins how close the top row of
+        // cards can sit to the fixed filter-bar HUD (see TOP_ANCHOR_MARGIN
+        // above) when embedded, since clampPan() overrides that anchor.
+        const BUFFER_Y = isLocalDev ? 80 : 50;
         const containerWidth = window.innerWidth, containerHeight = window.innerHeight;
         const contentWidth = (b.maxX - b.minX) * scale;
         const contentHeight = (b.maxY - b.minY) * scale;
@@ -1438,6 +1504,18 @@
         root.style.transform = `translate(${tx + floatX}px, ${ty + floatY}px) scale(${scale})`;
         perspEl.style.transform = `rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg)`;
       }
+
+      // Exposed on window because tx/computeContentBounds/applyTransform
+      // are block-scoped to this `if (!isMobile)` body — the category
+      // filter script (bottom of file, a separate <script> block) can't
+      // reach them otherwise. Re-centers the horizontal pan on whatever
+      // the filter just left visible, so a narrowed selection doesn't
+      // end up stranded off to one side of the viewport.
+      window.recenterPlaygroundView = function () {
+        const b = computeContentBounds();
+        tx = window.innerWidth / 2 - (b.minX + b.maxX) / 2;
+        applyTransform();
+      };
 
       // Smooth zoom: scale eases toward targetScale each frame instead
       // of jumping straight there, so wheel/pinch/button zoom never
@@ -1505,7 +1583,12 @@
       // whole collection.
       const initialBounds = computeContentBounds();
       const canvasCenterX = (initialBounds.minX + initialBounds.maxX) / 2;
-      const TOP_ANCHOR_MARGIN = 60;
+      // The category filter bar (local dev only, see the script at the
+      // bottom of this file) is a fixed HUD sitting at top:20px above
+      // this anchor. Extra margin here keeps the first row of cards from
+      // rendering underneath it — production (no filter bar) keeps the
+      // original tighter anchor.
+      const TOP_ANCHOR_MARGIN = isLocalDev ? 110 : 60;
       tx = window.innerWidth / 2 - canvasCenterX;
       ty = TOP_ANCHOR_MARGIN - initialBounds.minY;
 
@@ -2007,7 +2090,7 @@
       // hidden on the live site until it's ready to ship.
       const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
       if (!isLocalDev) return;
-      const categories = ['AI & Vibe Coding', 'Illustration', 'Life Style', 'Prints', 'Wood Working', 'Healthcare'];
+      const categories = ['AI & Vibe Coding', 'Illustration & Prints', 'Wood Working', 'Healthcare'];
 
       function makeButton(label, value) {
         const btn = document.createElement('button');
@@ -2026,6 +2109,12 @@
         bar.appendChild(sep);
       }
 
+      const icon = document.createElement('span');
+      icon.className = 'filter-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1.5H11L7.25 6.1V10L4.75 8.8V6.1L1 1.5Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>';
+      bar.appendChild(icon);
+
       const allBtn = makeButton('All Project', '');
       allBtn.classList.add('is-active');
       bar.appendChild(allBtn);
@@ -2036,6 +2125,21 @@
           card.classList.toggle('is-filtered-out', !!value && card.dataset.category !== value);
         });
         bar.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('is-active', btn.dataset.filter === value));
+        // Re-pack the columns now that some cards are display:none —
+        // layoutCards() (defined earlier, global) only walks the cards
+        // still in flow, so the remaining ones collapse together.
+        // reindex: true (only while a specific category is chosen) also
+        // repacks surviving cards into sequential columns starting from
+        // the top-left, instead of leaving them stranded in whichever
+        // column they were hand-placed in for the full board.
+        if (!isMobile && typeof layoutCards === 'function') {
+          layoutCards({ reindex: !!value });
+          // Re-center the horizontal pan on whatever's now visible —
+          // otherwise the pan (set once on load, centered on the full
+          // board) leaves a narrowed selection off to one side, sometimes
+          // mostly off-screen, instead of framed in view.
+          if (typeof window.recenterPlaygroundView === 'function') window.recenterPlaygroundView();
+        }
       }
 
       bar.addEventListener('click', e => {
@@ -2056,15 +2160,19 @@
         if (window.parent === window) return;
         try {
           const parentDoc = window.parent.document;
-          // Aligned to the subtext paragraph ("It's how I keep the taste
-          // calibrated."), not the "Playground" heading — the two don't
-          // share the same left edge.
-          const subtext = parentDoc.querySelector('.playground-subtext');
+          // Aligned to the "Playground" heading's left edge.
+          const heading = parentDoc.querySelector('.playground-heading');
           const iframeEl = parentDoc.getElementById('playground-iframe');
-          if (!subtext || !iframeEl) return;
-          const subtextRect = subtext.getBoundingClientRect();
+          if (!heading || !iframeEl) return;
+          const headingRect = heading.getBoundingClientRect();
           const iframeRect = iframeEl.getBoundingClientRect();
-          bar.style.left = (subtextRect.left - iframeRect.left) + 'px';
+          // The parent applies `zoom: 1.2` at desktop widths (see
+          // 00-shared-foundations.md); this document doesn't, so its own
+          // pixels are 1:1 while rects read from the parent's side come
+          // back pre-scaled by that zoom. Divide it back out, or the bar
+          // lands 20% further right than the heading really is.
+          const parentZoom = parseFloat(getComputedStyle(parentDoc.documentElement).zoom) || 1;
+          bar.style.left = ((headingRect.left - iframeRect.left) / parentZoom) + 'px';
         } catch (e) {}
       }
       alignToHeading();
