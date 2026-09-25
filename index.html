@@ -276,15 +276,6 @@
 
       <iframe class="playground-embed" data-src="playground.html" title="Playground — full interactive canvas" loading="lazy" onload="this.classList.add('is-visible')" id="playground-iframe"></iframe>
 
-      <!-- Desktop only: the canvas is sized to calc(100vh - 260px), so
-           it (plus the footer below) isn't tall enough on its own to
-           let the page scroll far enough for .playground-sticky-bar to
-           ever reach the very top of the viewport — the condition its
-           own pin logic (index.html script) and the paperclip's
-           .is-anchor CSS both wait for. This spacer exists purely to
-           give the page that scroll room back. -->
-      <div class="playground-scroll-spacer" aria-hidden="true"></div>
-
       <div class="playground-grid">
         <a class="playground-grid-item" href="playground.html">
           <img src="assets/portfolio-playground/Onceover.webp" alt="Onceover Chrome extension" />

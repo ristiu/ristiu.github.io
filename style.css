@@ -2972,14 +2972,6 @@ ol li, ul li {
   display: none;
 }
 
-/* Desktop-only scroll room so .playground-sticky-bar can actually
-   reach the top of the viewport and pin — see the comment next to
-   this element in index.html. Hidden on mobile, where the sticky-pin/
-   paperclip mechanism doesn't run at all. */
-.playground-scroll-spacer {
-  display: none;
-}
-
 /* Hidden by default (mobile); shown desktop-only below. */
 .home-cards-play {
   display: none;
@@ -3344,15 +3336,6 @@ ol li, ul li {
 
   .playground-embed.is-visible {
     opacity: 1;
-  }
-
-  /* Measured shortfall (canvas height tracks 100vh, so this holds
-     steady across screen heights): the page could only scroll to
-     ~1073px past the sticky bar's natural top, ~425px short of
-     reaching it. 500px clears that with room to spare. */
-  .playground-scroll-spacer {
-    display: block;
-    height: 500px;
   }
 
   /* ── Sequential entry: post-it drops first (existing sticker-drop,
