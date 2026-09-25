@@ -18,6 +18,12 @@ html {
   scroll-behavior: smooth;
   background-color: #ffffff;
   overflow-x: hidden;
+  /* Trackpad horizontal swipe (or fast scroll near an edge) can chain
+     into the browser's own back/forward navigation gesture — most
+     noticeable scrolling through the wide Playground canvas embed.
+     playground.html already blocks this on its own document; the
+     outer page needs the same guard. */
+  overscroll-behavior-x: none;
 }
 
 /* Desktop-only 120% scale — same mechanism as the browser's own Cmd+ zoom,
@@ -1377,7 +1383,7 @@ a:hover { color: var(--accent); }
   font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
-  color: #FF5E32;
+  color: #22c55e;
   transition: opacity 0.3s ease;
 }
 
