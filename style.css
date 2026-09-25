@@ -1360,27 +1360,25 @@ a:hover { color: var(--accent); }
   50%       { transform: translateY(5px); }
 }
 
-/* "Home ↰" tag — position:absolute so it never affects the down-hint
+/* "HOME" tag — position:absolute so it never affects the down-hint
    SVG's flex centering; invisible (opacity:0) except in the desktop
-   .is-anchor docked state, see the @media block below. */
+   static-visible state, see the @media block below. Sits under the
+   clip (its loop lands at the bottom once flipped 180deg), centered,
+   no shadow — flat against the page rather than a floating pill. */
 .scroll-hint-tag {
   position: absolute;
-  top: 50%;
-  left: 100%;
-  margin-left: 6px;
-  transform: translateY(-50%) translateX(-10px);
+  top: 100%;
+  left: 50%;
+  margin-top: 4px;
+  transform: translateX(-50%);
   opacity: 0;
   pointer-events: none;
   font-family: var(--mono);
   font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
-  color: var(--ink);
-  background: #fff;
-  padding: 5px 10px;
-  border-radius: 2px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: #FF5E32;
+  transition: opacity 0.3s ease;
 }
 
 /* ─── Project two-column layout ─────────────────────────── */
