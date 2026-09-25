@@ -27,11 +27,11 @@ const projects = [
     ],
 
     
-    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.png",
+    strategyCardImage: "assets/portfolio/o2o-strategy-card-opt.webp",
     heroImage: "assets/portfolio/efishery-hero.mp4",
     sectionImages: [
-      { url: "assets/portfolio/ponds.jpg", section: "situation" },
-      { url: "assets/portfolio/wa-app.png", section: "direction", afterPara: 1, caption: "Farmer sentiment when trying to order supply from WA vs App. The report show the comparison that we have to addressed technology based on farmer ability" },
+      { url: "assets/portfolio/ponds.webp", section: "situation" },
+      { url: "assets/portfolio/wa-app.webp", section: "direction", afterPara: 1, caption: "Farmer sentiment when trying to order supply from WA vs App. The report show the comparison that we have to addressed technology based on farmer ability" },
     ],
 
   },
@@ -60,8 +60,8 @@ const projects = [
 
     heroImage: "assets/portfolio/traveloka-hero.mp4",
     sectionImages: [
-      { url: "assets/portfolio/before-after-hotel.jpg", section: "direction", afterPara: 0 },
-      { url: "assets/portfolio/tvlk-fellow.jpg", section: "whatShifted" },
+      { url: "assets/portfolio/before-after-hotel.webp", section: "direction", afterPara: 0 },
+      { url: "assets/portfolio/tvlk-fellow.webp", section: "whatShifted" },
     ]
   },
   {
@@ -205,7 +205,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/armor-ally.jpg",
+            url: "assets/portfolio-leadership/armor-ally.webp",
             caption: "Bridging design and business by engaging non-designers at every level"
           },
           {
@@ -266,7 +266,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/design-data.jpg",
+            url: "assets/portfolio-leadership/design-data.webp",
             caption: "Data & Product Design producing actionable insight, Product Management influencing business strategy with user-focused value"
           },
           {
@@ -318,7 +318,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/goal-setting.jpg",
+            url: "assets/portfolio-leadership/goal-setting.webp",
             caption: "Empowering individual growth through goal setting rooted in personal aspiration"
           },
           {
@@ -365,7 +365,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/high-performing-team.jpg",
+            url: "assets/portfolio-leadership/high-performing-team.webp",
             caption: "Purpose, People, Process, the three principles I use to sustain a high-performing team"
           },
           {
@@ -423,7 +423,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/strength-interest.jpg",
+            url: "assets/portfolio-leadership/strength-interest.webp",
             caption: "Raising the team bar through strength-based growth and collective wins"
           },
           {
@@ -464,7 +464,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/fun-bonding.jpg",
+            url: "assets/portfolio-leadership/fun-bonding.webp",
             caption: "Building culture without borders — remote rituals that keep teams human"
           },
           {
@@ -529,7 +529,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/weather.jpg",
+            url: "assets/portfolio-leadership/weather.webp",
             caption: "Leading through change — humility and resilience as strategy"
           },
           {
@@ -585,7 +585,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/design-workshop.jpg",
+            url: "assets/portfolio-leadership/design-workshop.webp",
             caption: "Cross department design workshop with sales, product, marketing, operations, data, and engineering."
           },
           {
@@ -626,7 +626,7 @@ const projects = [
           },
           {
             type: "image",
-            url: "assets/portfolio-leadership/design-system.jpg",
+            url: "assets/portfolio-leadership/design-system.webp",
             caption: "Hyperlocal design system directing UI consistency across 10 platforms"
           },
           {
