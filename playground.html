@@ -1263,6 +1263,23 @@
     const root = document.getElementById('canvas-root');
     const isMobile = window.innerWidth < 700;
 
+    // isMobile is only ever computed once, at load, but everything
+    // below it (canvas pan/zoom vs. native flex-row scroll, plus the
+    // CSS breakpoints at 899px) assumes it stays true for the page's
+    // whole life. Resizing a desktop browser window across that
+    // threshold — un-maximizing, snapping to a narrower half of the
+    // screen — leaves the JS running the old layout while the CSS
+    // media queries keep responding live, so a card's stacked photos
+    // switch to stacking in normal flow inside a box that's still
+    // absolutely positioned for the old layout, and it overflows over
+    // neighboring cards and the fixed filter bar. Reloading once on
+    // the way across the threshold re-runs this script against the
+    // new width instead of trying to live-migrate two very different
+    // layout engines.
+    window.addEventListener('resize', () => {
+      if ((window.innerWidth < 700) !== isMobile) location.reload();
+    });
+
     // ── Column packer — desktop only ─────────────────────────────
     // COL_X spacing (400px) is set so that even the widest card (340px,
     // see the inline width overrides below) still clears the next
