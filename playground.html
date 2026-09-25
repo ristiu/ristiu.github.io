@@ -378,6 +378,11 @@
            read as receding into the stack rather than sitting at the
            same depth. */
         filter: brightness(0.9);
+        /* Was untransitioned — the fanned peek snapped straight into
+           its offset the instant the card's opacity fade finished (or
+           on hover), which read as an abrupt pop rather than settling
+           into place. Same easing as the card's own transform. */
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
       .card--stack .card-media > :nth-child(2) {
         z-index: 2;
@@ -1273,8 +1278,23 @@
     // the way across the threshold re-runs this script against the
     // new width instead of trying to live-migrate two very different
     // layout engines.
+    // Debounced (settles 200ms after the last resize event) so a live
+    // window-drag — which fires resize continuously — doesn't call
+    // reload() over and over mid-drag; only once the width actually
+    // settles on the other side of the breakpoint. Fades the page out
+    // first instead of cutting straight to the browser's own blank
+    // reload flash, so the transition reads as deliberate rather than
+    // a jarring flicker.
+    let resizeReloadTimer = null;
     window.addEventListener('resize', () => {
-      if ((window.innerWidth < 700) !== isMobile) location.reload();
+      clearTimeout(resizeReloadTimer);
+      resizeReloadTimer = setTimeout(() => {
+        if ((window.innerWidth < 700) !== isMobile) {
+          document.documentElement.style.transition = 'opacity 0.18s ease';
+          document.documentElement.style.opacity = '0';
+          setTimeout(() => location.reload(), 180);
+        }
+      }, 200);
     });
 
     // ── Column packer — desktop only ─────────────────────────────
