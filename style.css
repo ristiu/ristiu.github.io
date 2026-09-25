@@ -3310,9 +3310,16 @@ ol li, ul li {
   .playground-embed {
     display: block;
     width: 100%;
-    /* +20px, matching the 20px trimmed from the header spacing above,
-       so the canvas fills cleanly to the bottom of the viewport. */
-    height: calc(100vh - 260px);
+    /* Was calc(100vh - 260px) — fit exactly to the bottom of the
+       viewport, no extra scroll. But .playground-sticky-bar only pins
+       (and its paperclip docks) once the page can scroll it all the
+       way to the viewport top, and the canvas + footer below weren't
+       tall enough for that — measured ~425px short, consistently
+       across screen heights (canvas height tracks vh, so the shortfall
+       cancels out to a constant). +185px over the old value closes
+       that with a small margin, added to the canvas's own height
+       rather than as a separate blank spacer after it. */
+    height: calc(100vh + 185px);
     overflow: hidden;
     margin-top: 0;
     margin-bottom: 0;
