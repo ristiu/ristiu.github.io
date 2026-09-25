@@ -1401,7 +1401,13 @@ a:hover { color: var(--accent); }
   opacity: 0;
   pointer-events: none;
   font-family: var(--mono);
-  font-size: 0.45rem;
+  /* 10px is the practical floor for legible text on the web (below
+     this, "HOME" stops reading as text and just becomes a smudge) —
+     fixed in px rather than rem so it doesn't shrink further under the
+     root's own font-size. The house icon is sized (see .scroll-hint
+     width/height below) to comfortably fit this, rather than shrinking
+     the text to fit a fixed icon size. */
+  font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
   color: #ffffff;
@@ -3606,8 +3612,8 @@ ol li, ul li {
     right: 80px;
     left: auto;
     bottom: auto;
-    /* Half of the clip's own 38px height, for vertical centering. */
-    margin-top: -19px;
+    /* Half of the clip's own 52px height, for vertical centering. */
+    margin-top: -26px;
     align-items: center;
     animation: none !important;
     transform: translateX(0) !important;
