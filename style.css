@@ -1366,24 +1366,45 @@ a:hover { color: var(--accent); }
   50%       { transform: translateY(5px); }
 }
 
+/* Chimney smoke — three rings drifting up and popping (scale + fade)
+   in sequence rather than one static squiggle. transform-box:fill-box
+   so each ring scales from its own center (cx/cy) instead of the
+   SVG's origin corner. */
+.smoke-bubble {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: smokeBubblePop 2.4s ease-out infinite;
+}
+.smoke-bubble--1 { animation-delay: 0s; }
+.smoke-bubble--2 { animation-delay: 0.8s; }
+.smoke-bubble--3 { animation-delay: 1.6s; }
+
+@keyframes smokeBubblePop {
+  0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+  15%  { opacity: 0.9; }
+  70%  { opacity: 0.5; }
+  100% { transform: translateY(-38px) scale(1.4); opacity: 0; }
+}
+
 /* "HOME" tag — position:absolute so it never affects the down-hint
    SVG's flex centering; invisible (opacity:0) except in the desktop
-   static-visible state, see the @media block below. Sits under the
-   clip (its loop lands at the bottom once flipped 180deg), centered,
-   no shadow — flat against the page rather than a floating pill. */
+   static-visible state, see the @media block below. Centered inside
+   the house icon's body — 66% down its own height rather than a dead
+   50%, so it clears the pitched roof instead of crossing it — no
+   shadow, flat against the page rather than a floating pill. */
 .scroll-hint-tag {
   position: absolute;
-  top: 100%;
+  top: 66%;
   left: 50%;
-  margin-top: 4px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   opacity: 0;
   pointer-events: none;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.55rem;
   font-weight: 700;
   white-space: nowrap;
-  color: #22c55e;
+  color: var(--accent);
   transition: opacity 0.3s ease;
 }
 
@@ -3580,8 +3601,8 @@ ol li, ul li {
     right: 80px;
     left: auto;
     bottom: auto;
-    /* Half of the clip's own 64px height, for vertical centering. */
-    margin-top: -32px;
+    /* Half of the clip's own 48px height, for vertical centering. */
+    margin-top: -24px;
     align-items: center;
     animation: none !important;
     transform: translateX(0) !important;
@@ -3595,17 +3616,13 @@ ol li, ul li {
     cursor: pointer;
   }
 
-  /* Tag sits to the clip's right (its default, unrotated position —
-     see the base .scroll-hint-tag rule). Static like the clip itself
-     now — always visible, not waiting on a .is-anchor dock. */
+  /* "HOME" sits inside the house icon rather than below it — see the
+     base .scroll-hint-tag rule's centered position. Static like the
+     clip itself now — always visible, not waiting on a .is-anchor
+     dock. */
   .scroll-hint .scroll-hint-tag {
     opacity: 1;
     pointer-events: auto;
-  }
-
-  /* Flipped to match the clip's own 180deg rotation below. */
-  .scroll-hint-clip {
-    transform: rotate(180deg);
   }
 }
 
