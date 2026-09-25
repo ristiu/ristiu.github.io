@@ -396,6 +396,26 @@
       .card--stack:hover .card-media > :nth-child(3) {
         transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
       }
+      /* Fan decks (2 sheets, no 3rd) — the second sheet sits static in
+         normal flow under the front photo instead of absolutely
+         peeking out from behind it, and is capped to the same max
+         width as the hero so it never reads wider than the front
+         photo it belongs to. */
+      .card--stack[data-layout="fan"] .card-media > :nth-child(2) {
+        position: static;
+        z-index: auto;
+        inset: auto;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        object-fit: initial;
+        transform: none;
+        filter: none;
+        margin-top: 4px;
+      }
+      .card--stack[data-layout="fan"]:hover .card-media > :nth-child(2) {
+        transform: none;
+      }
       /* PNG hero: back to a single photo + count badge, no fanned peek. */
       .card--stack .card-media > img:first-child[src$=".png"] ~ :nth-child(n+2) {
         display: none !important;
