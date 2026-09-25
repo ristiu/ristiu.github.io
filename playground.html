@@ -1638,14 +1638,42 @@
       // intro has played in this tab (same origin, so sessionStorage is
       // shared). A reload or return then lands the canvas settled
       // instead of zooming in from far again, matching the parent page.
-      // Standalone playground.html always plays its entrance.
       let settled = false;
       if (isEmbedded) {
         try { settled = sessionStorage.getItem('has_played_hero_animations') === 'true'; } catch (e) {}
       }
 
+      // Remember whatever pan/zoom position the user was at, per tab,
+      // so hitting reload lands back there — for standalone
+      // playground.html, instead of replaying the zoom-in-from-far
+      // entrance at the default top-left anchor; for the
+      // homepage-embedded canvas, the existing `settled` flag above
+      // already skips that entrance animation on reload, but it still
+      // left tx/ty at the same default anchor every time — settled
+      // only ever meant "skip the animation," never "remember where I
+      // was." Separate keys since embedded locks zoom to 1x and
+      // standalone doesn't; sharing one could hand a standalone scale
+      // back to the embedded canvas or vice versa. Saved on every
+      // unload (see the pagehide listener further down); read back
+      // here before the default tx/ty/scale above would otherwise
+      // stick.
+      const POS_KEY = isEmbedded ? 'playgroundEmbeddedPos' : 'playgroundStandalonePos';
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(POS_KEY));
+        if (saved && typeof saved.tx === 'number' && typeof saved.ty === 'number' && typeof saved.scale === 'number') {
+          tx = saved.tx; ty = saved.ty; scale = saved.scale; targetScale = scale;
+          settled = true;
+        }
+      } catch (e) {}
+
       // The shared media loader starts visible videos as their cards
       // approach the viewport, including secondary sheets on mobile.
+
+      window.addEventListener('pagehide', () => {
+        try {
+          sessionStorage.setItem(POS_KEY, JSON.stringify({ tx, ty, scale }));
+        } catch (e) {}
+      });
 
       if (settled) {
         root.style.transition = 'none';
