@@ -3574,7 +3574,8 @@ ol li, ul li {
     right: 80px;
     left: auto;
     bottom: auto;
-    margin-top: -45px;
+    /* Half of the clip's own 64px height, for vertical centering. */
+    margin-top: -32px;
     align-items: center;
     animation: none !important;
     transform: translateX(0) !important;
