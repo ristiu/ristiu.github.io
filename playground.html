@@ -1262,10 +1262,6 @@
   <script>
     const root = document.getElementById('canvas-root');
     const isMobile = window.innerWidth < 700;
-    // Shared by the top-clearance tweaks below (both the standalone-page
-    // pan anchor and the embedded-page pan clamp) — the category filter
-    // bar is local-dev only, so extra breathing room only applies there.
-    const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
 
     // ── Column packer — desktop only ─────────────────────────────
     // COL_X spacing (400px) is set so that even the widest card (340px,
@@ -1470,11 +1466,11 @@
         const b = computeContentBounds();
         const BUFFER_X = 235;
         // Tighter than BUFFER_X — less blank space above/below the
-        // cards when panned to the top/bottom edge. Larger in local dev:
-        // this is also the value that pins how close the top row of
-        // cards can sit to the fixed filter-bar HUD (see TOP_ANCHOR_MARGIN
-        // above) when embedded, since clampPan() overrides that anchor.
-        const BUFFER_Y = isLocalDev ? 80 : 50;
+        // cards when panned to the top/bottom edge. Also the value that
+        // pins how close the top row of cards can sit to the fixed
+        // filter-bar HUD (see TOP_ANCHOR_MARGIN above) when embedded,
+        // since clampPan() overrides that anchor.
+        const BUFFER_Y = 80;
         const containerWidth = window.innerWidth, containerHeight = window.innerHeight;
         const contentWidth = (b.maxX - b.minX) * scale;
         const contentHeight = (b.maxY - b.minY) * scale;
@@ -1589,12 +1585,11 @@
       // whole collection.
       const initialBounds = computeContentBounds();
       const canvasCenterX = (initialBounds.minX + initialBounds.maxX) / 2;
-      // The category filter bar (local dev only, see the script at the
-      // bottom of this file) is a fixed HUD sitting at top:20px above
-      // this anchor. Extra margin here keeps the first row of cards from
-      // rendering underneath it — production (no filter bar) keeps the
-      // original tighter anchor.
-      const TOP_ANCHOR_MARGIN = isLocalDev ? 110 : 60;
+      // The category filter bar (see the script at the bottom of this
+      // file) is a fixed HUD sitting at top:20px above this anchor.
+      // Extra margin here keeps the first row of cards from rendering
+      // underneath it.
+      const TOP_ANCHOR_MARGIN = 110;
       tx = window.innerWidth / 2 - canvasCenterX;
       ty = TOP_ANCHOR_MARGIN - initialBounds.minY;
 
