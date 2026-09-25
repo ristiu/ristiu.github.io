@@ -240,8 +240,20 @@
         </div>
         <a class="scroll-hint" href="#main-content" aria-label="Homepage">
           <span class="scroll-hint-tag">HOME</span>
-          <svg class="scroll-hint-clip" width="48" height="48" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g stroke="#FF5E32" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="scroll-hint-clip" width="38" height="38" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Body drawn first (and smaller than the original outline
+                 — scaled toward its own center) so it sits as a solid
+                 red backdrop behind the white chimney/smoke details
+                 drawn after it, instead of covering them. -->
+            <path d="M85 240
+                     L288 72
+                     L435 220
+                     L430 435
+                     L82 452
+                     Z"
+                  transform="translate(258.5,254.5) scale(0.8) translate(-258.5,-254.5)"
+                  fill="#FF5E32" stroke="none" />
+            <g stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
               <circle class="smoke-bubble smoke-bubble--1" cx="150" cy="98" r="20" stroke-width="12" />
               <circle class="smoke-bubble smoke-bubble--2" cx="176" cy="86" r="15" stroke-width="12" />
               <circle class="smoke-bubble smoke-bubble--3" cx="160" cy="72" r="10" stroke-width="12" />
@@ -251,12 +263,6 @@
                        M144 178 L174 174
                        M158 120 L158 138
                        M158 156 L158 176" stroke-width="9" />
-              <path d="M85 240
-                       L288 72
-                       L435 220
-                       L430 435
-                       L82 452
-                       Z" stroke-width="22" />
             </g>
           </svg>
         </a>

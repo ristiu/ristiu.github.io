@@ -1401,10 +1401,10 @@ a:hover { color: var(--accent); }
   opacity: 0;
   pointer-events: none;
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.45rem;
   font-weight: 700;
   white-space: nowrap;
-  color: var(--accent);
+  color: #ffffff;
   transition: opacity 0.3s ease;
 }
 
@@ -3601,8 +3601,8 @@ ol li, ul li {
     right: 80px;
     left: auto;
     bottom: auto;
-    /* Half of the clip's own 48px height, for vertical centering. */
-    margin-top: -24px;
+    /* Half of the clip's own 38px height, for vertical centering. */
+    margin-top: -19px;
     align-items: center;
     animation: none !important;
     transform: translateX(0) !important;
