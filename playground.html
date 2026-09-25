@@ -2081,10 +2081,6 @@
     (function () {
       const bar = document.getElementById('filter-bar');
       if (!bar) return;
-      // Keep the desktop production canvas as-is; the filter is ready
-      // for mobile and remains available at all sizes in local dev.
-      const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
-      if (!isMobile && !isLocalDev) return;
       const categories = ['AI & Vibe Coding', 'Illustration & Prints', 'Wood Working', 'Healthcare'];
 
       function makeButton(label, value) {
