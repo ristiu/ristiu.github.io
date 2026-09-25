@@ -294,8 +294,8 @@ body {
   /* Badge sits at the right edge of this box (near the card's curled
      corner) instead of the left, via a flex end-alignment on the child
      rather than repositioning the box itself. This box itself is not
-     animated — the entrance roll lives on .status-badge directly (see
-     below), so it's self-contained and doesn't depend on this box's
+     animated — the entrance roll lives on the badge or its desktop
+     wrapper, so it's self-contained and doesn't depend on this box's
      width or resting translateY (which differs on mobile). */
   display: flex;
   justify-content: flex-end;
@@ -306,6 +306,7 @@ body {
    spinning around the rim on a circular text path, pulsing dot at the
    center standing in for the old live-status dot. Spin pauses and the
    whole badge lifts on hover — replaces the old paper-strip chip. */
+.status-badge-container { display: contents; }
 .status-badge {
   position: relative;
   width: 112px;
@@ -394,6 +395,25 @@ body {
   100% { transform: translateX(0) rotate(0deg); opacity: 1; }
 }
 
+@media (min-width: 1024px) {
+  /* Animate the wrapper so the badge's hover transform stays independent. */
+  .status-badge-container {
+    display: inline-flex;
+  }
+  .status-badge-container.is-awaiting-roll { opacity: 0; }
+  .status-badge-container.is-rolling {
+    animation: rollAndBounce 1.6s ease-out forwards;
+  }
+  .status-badge { animation: none; }
+
+  @keyframes rollAndBounce {
+    0%   { transform: translateX(-100vw) rotate(-720deg); opacity: 0; }
+    20%  { opacity: 1; }
+    70%  { transform: translateX(var(--badge-overshoot, 0px)) rotate(180deg); }
+    100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+  }
+}
+
 /* First-visit-only, like every other hero entrance: html.is-back-nav
    is set synchronously in <head>, before paint, whenever this tab has
    already played the intro once (covers a plain reload too, not just
@@ -402,7 +422,8 @@ body {
    (min-width:1024px) block because those elements only animate on
    desktop; the badge's roll-in runs at every width, so this one is
    deliberately unscoped. */
-html.is-back-nav .status-badge {
+html.is-back-nav .status-badge,
+html.is-back-nav .status-badge-container {
   animation: none !important;
 }
 
