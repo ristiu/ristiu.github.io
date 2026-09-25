@@ -396,28 +396,16 @@
       .card--stack:hover .card-media > :nth-child(3) {
         transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
       }
-      /* Army Bookmark / BTS card only — its second sheet is a much
-         taller demo recording than its front photo, so the shared fan
-         peek (absolute, cropped to the front photo's own box) let it
-         bleed out past the card. Sits static in normal flow instead,
-         cropped to the hero's own 480:328 aspect ratio so it reads the
-         same size as the front photo rather than spilling below it.
-         Wood fan and Sankey fan keep the normal absolute fan peek. */
+      /* Army Bookmark / BTS card only — same absolute fan-peek stack
+         as every other deck (still reads as a stack, not a plain
+         vertical list), but its own inline style="height:auto" (an
+         inline style always beats a plain stylesheet rule) was
+         overriding the shared height:100% above and letting it grow
+         to its own tall natural size, bleeding out past the card.
+         !important forces the crop back to the hero's own box. */
       .card--stack .card-media > .army-typing {
-        position: static;
-        z-index: auto;
-        inset: auto;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        aspect-ratio: 480 / 328;
+        height: 100% !important;
         object-fit: cover;
-        transform: none;
-        filter: none;
-        margin-top: 4px;
-      }
-      .card--stack:hover .card-media > .army-typing {
-        transform: none;
       }
       /* PNG hero: back to a single photo + count badge, no fanned peek. */
       .card--stack .card-media > img:first-child[src$=".png"] ~ :nth-child(n+2) {
