@@ -396,24 +396,27 @@
       .card--stack:hover .card-media > :nth-child(3) {
         transform: rotate(-4.5deg) translate(-10px, 11px) scale(0.97);
       }
-      /* Fan decks (2 sheets, no 3rd) — the second sheet sits static in
-         normal flow under the front photo instead of absolutely
-         peeking out from behind it, and is capped to the same max
-         width as the hero so it never reads wider than the front
-         photo it belongs to. */
-      .card--stack[data-layout="fan"] .card-media > :nth-child(2) {
+      /* Army Bookmark / BTS card only — its second sheet is a much
+         taller demo recording than its front photo, so the shared fan
+         peek (absolute, cropped to the front photo's own box) let it
+         bleed out past the card. Sits static in normal flow instead,
+         cropped to the hero's own 480:328 aspect ratio so it reads the
+         same size as the front photo rather than spilling below it.
+         Wood fan and Sankey fan keep the normal absolute fan peek. */
+      .card--stack .card-media > .army-typing {
         position: static;
         z-index: auto;
         inset: auto;
         width: 100%;
         max-width: 100%;
         height: auto;
-        object-fit: initial;
+        aspect-ratio: 480 / 328;
+        object-fit: cover;
         transform: none;
         filter: none;
         margin-top: 4px;
       }
-      .card--stack[data-layout="fan"]:hover .card-media > :nth-child(2) {
+      .card--stack:hover .card-media > .army-typing {
         transform: none;
       }
       /* PNG hero: back to a single photo + count badge, no fanned peek. */

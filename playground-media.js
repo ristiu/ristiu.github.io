@@ -42,7 +42,11 @@
         }, { rootMargin: '240px' })
       : null;
 
-    document.querySelectorAll('video[data-src]').forEach(video => {
+    // .army-typing (Army Bookmark/BTS card's second sheet) is excluded
+    // here so it stays a static poster frame on the canvas thumbnail —
+    // the lightbox still plays it, via the direct PlaygroundMedia.play()
+    // call on its cloned video when the popup opens, bypassing this pool.
+    document.querySelectorAll('video[data-src]:not(.army-typing)').forEach(video => {
       videos.add(video);
       video.muted = true;
       video.defaultMuted = true;
