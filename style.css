@@ -3261,11 +3261,6 @@ ol li, ul li {
     /* -30px (align with post-it) further shifted -20px to tighten
        vertical spacing under the hero section = -50px. */
     margin-top: -50px;
-    /* Extra bottom breathing room so the last subtext line never sits
-       flush against (or gets crowded by) the canvas top edge below.
-       Top padding was 12px, reduced by 15px (clamped at 0, can't go
-       negative). */
-    padding: 0 0 18px;
   }
 
   /* JS-driven pin — position:sticky doesn't reliably stick here because
