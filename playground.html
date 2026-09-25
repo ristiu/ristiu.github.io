@@ -1269,6 +1269,16 @@
 
   <script src="cursor.js"></script>
   <script>
+    // Mobile's horizontal card row grows taller as each lazy image/video
+    // finishes loading (cards have no reserved aspect-ratio box beyond
+    // their own width/height attributes). The browser's own scroll
+    // restoration on reload races that: it jumps to the old scroll
+    // offset before layout has settled, then jumps again once it has —
+    // the "wild jump" on mobile reload. Same fix index.html already
+    // uses for the same reason: hand restoration off entirely so a
+    // fresh load just starts clean at the top instead of guessing.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
     const root = document.getElementById('canvas-root');
     const isMobile = window.innerWidth < 700;
 
