@@ -378,17 +378,24 @@
            read as receding into the stack rather than sitting at the
            same depth. */
         filter: brightness(0.9);
-        /* Was untransitioned — the fanned peek snapped straight into
-           its offset the instant the card's opacity fade finished (or
-           on hover), which read as an abrupt pop rather than settling
-           into place. Same easing as the card's own transform. */
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Sits flat/uncollapsed behind the front photo (no rotation)
+           until .is-visible fans it out — see below. Was previously
+           always at its fanned transform, which was already the value
+           at first paint, so it never actually animated in: a CSS
+           transition only plays on a value *change*, and there wasn't
+           one. Same easing as the card's own transform. */
+        transform: rotate(0deg) translate(0, 0) scale(1);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-      .card--stack .card-media > :nth-child(2) {
+      .card--stack.is-visible .card-media > :nth-child(2) {
         z-index: 2;
         transform: rotate(3.5deg) translate(7px, 5px) scale(0.985);
+        /* Staggered a beat behind the 3rd sheet so the deck reads as
+           dealt outward (furthest sheet first) rather than every
+           layer fanning out in lockstep. */
+        transition-delay: 0.08s;
       }
-      .card--stack .card-media > :nth-child(3) {
+      .card--stack.is-visible .card-media > :nth-child(3) {
         z-index: 1;
         transform: rotate(-3deg) translate(-6px, 9px) scale(0.97);
       }
