@@ -42,11 +42,19 @@
         }, { rootMargin: '240px' })
       : null;
 
-    // .army-typing (Army Bookmark/BTS card's second sheet) is excluded
-    // here so it stays a static poster frame on the canvas thumbnail —
-    // the lightbox still plays it, via the direct PlaygroundMedia.play()
-    // call on its cloned video when the popup opens, bypassing this pool.
-    document.querySelectorAll('video[data-src]:not(.army-typing)').forEach(video => {
+    // .army-typing (Army Bookmark/BTS card's second sheet) only skips
+    // the autoplay pool on the desktop canvas (>=900px, the same
+    // breakpoint as the absolute fan-peek CSS it's cropped into) —
+    // there it sits on its poster frame instead of animating inside
+    // that cropped box. On mobile it stacks in normal flow at its own
+    // full height with room to breathe, so it plays like every other
+    // card. The lightbox always plays it regardless, via the direct
+    // PlaygroundMedia.play() call on its cloned video when it opens,
+    // bypassing this pool either way.
+    const skipAutoplay = window.matchMedia('(min-width: 900px)').matches
+      ? 'video[data-src]:not(.army-typing)'
+      : 'video[data-src]';
+    document.querySelectorAll(skipAutoplay).forEach(video => {
       videos.add(video);
       video.muted = true;
       video.defaultMuted = true;
